@@ -35,8 +35,10 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration.Builder(
             setOf(
                 R.id.homeFragment,
-                R.id.favoriteFragment,
-                R.id.aboutFragment,
+               R.id.bookingFragment,
+               R.id.roomFragment,
+               R.id.managementFragment,
+               R.id.profileFragment,
             )
         ).build()
 

@@ -12,14 +12,26 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/favoriteFragment"
-        android:name="com.project.cleaarchitecureboilerplate.features.favorite.FavoriteFragment"
-        android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        android:id="@+id/bookingFragment"
+        android:name="com.project.cleaarchitecureboilerplate.features.dashboard.booking.BookingFragment"
+        android:label="fragment_booking"
+        tools:layout="@layout/fragment_booking" />
 
     <fragment
-        android:id="@+id/aboutFragment"
-        android:name="com.project.cleaarchitecureboilerplate.features.about.AboutFragment"
-        android:label="fragment_about"
-        tools:layout="@layout/fragment_about" />
+        android:id="@+id/roomFragment"
+        android:name="com.project.cleaarchitecureboilerplate.features.dashboard.room.RoomFragment"
+        android:label="fragment_room"
+        tools:layout="@layout/fragment_room" />
+
+    <fragment
+        android:id="@+id/managementFragment"
+        android:name="com.project.cleaarchitecureboilerplate.features.dashboard.management.ManagementFragment"
+        android:label="fragment_management"
+        tools:layout="@layout/fragment_management" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.project.cleaarchitecureboilerplate.features.dashboard.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

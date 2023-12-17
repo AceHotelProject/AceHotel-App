@@ -8,12 +8,20 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:padding="4dp"
+        app:itemTextColor="@drawable/custom_bottom_navbar"
+        app:itemIconTint="@drawable/custom_bottom_navbar"
         android:layout_height="wrap_content"
+        app:itemTextAppearanceActive="@style/BottomNavigationLabelStyle"
+        app:itemTextAppearanceInactive="@style/BottomNavigationLabelStyle"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_bottom_navbar_item"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:itemRippleColor="@color/transparent"
+        app:menu="@menu/menu_bottom_navbar_item" />
 
     <fragment
         android:id="@+id/nav_host_fragment"

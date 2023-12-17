@@ -2,16 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home_24"
-        android:title="Home" />
+        android:icon="@drawable/icons_home"
+        android:title="@string/home" />
 
     <item
-        android:id="@+id/favoriteFragment"
-        android:icon="@drawable/ic_favorite_24"
-        android:title="Favorite" />
+        android:id="@+id/bookingFragment"
+        android:icon="@drawable/icons_room_service"
+        android:title="@string/booking" />
 
     <item
-        android:id="@+id/aboutFragment"
-        android:icon="@drawable/ic_settings_24"
-        android:title="About" />
+        android:id="@+id/roomFragment"
+        android:icon="@drawable/icons_bed"
+        android:title="@string/room" />
+
+    <item
+        android:id="@+id/managementFragment"
+        android:icon="@drawable/icons_manage"
+        android:title="@string/management" />
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/icons_profile"
+        android:title="@string/profile" />
 </menu>
