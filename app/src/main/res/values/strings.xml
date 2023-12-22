@@ -7,4 +7,11 @@
     <string name="room">Kamar</string>
     <string name="management">Manajemen</string>
     <string name="profile">Profil</string>
+    <string name="email">Email</string>
+    <string name="login_account">Masuk ke\nAkun Anda</string>
+    <string name="enter_email">Masukan alamat email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="login">Masuk</string>
+    <string name="have_issues">Memiliki kendala?</string>
+    <string name="contact_us">Hubungi kami</string>
 </resources>
