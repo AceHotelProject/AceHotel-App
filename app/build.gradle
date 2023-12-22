@@ -11,11 +11,11 @@ plugins {
 }
 
 android {
-    namespace 'com.project.cleaarchitecureboilerplate'
+    namespace 'com.project.acehotel'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.project.cleaarchitecureboilerplate"
+        applicationId "com.project.acehotel"
         minSdk 21
         targetSdk 33
         versionCode 1

@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.CleaArchitecureBoilerPlate" parent="Theme.MaterialComponents.Light">
+    <style name="Theme.AceHotel" parent="Theme.MaterialComponents.Light">
 <!--            USING LIGHT THEME (LOCK NIGHT THEME)          -->
 
         <!-- Primary brand color. -->

@@ -9,9 +9,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CleaArchitecureBoilerPlate"
+        android:theme="@style/Theme.AceHotel"
         tools:targetApi="31">
-
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
         <activity
             android:name=".features.dashboard.MainActivity"
             android:exported="true">
