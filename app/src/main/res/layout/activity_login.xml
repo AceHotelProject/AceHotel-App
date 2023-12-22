@@ -4,14 +4,134 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.LoginActivity">
+    tools:context=".features.login.LoginActivity">
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_enter_acc"
+        style="@style/textStyleSemIBold_32"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Masuk ke\nAkun Anda"
-        tools:layout_editor_absoluteX="65dp"
-        tools:layout_editor_absoluteY="86dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/login_account"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/email"
+        style="@style/textStyleMedium_14"
+        app:layout_constraintStart_toStartOf="@+id/tv_enter_acc"
+        app:layout_constraintTop_toBottomOf="@+id/tv_enter_acc" />
+
+    <EditText
+        android:id="@+id/ed_login_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_edit_text"
+        android:drawableStart="@drawable/icons_email"
+        android:drawablePadding="12sp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:padding="16dp"
+        android:hint="@string/enter_email"
+        android:layout_marginStart="16dp"
+        android:textColorHint="@color/dark_grey"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_email"
+        app:layout_constraintTop_toBottomOf="@+id/tv_email" />
+
+    <TextView
+        android:id="@+id/tv_pass"
+        style="@style/textStyleMedium_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/password"
+        app:layout_constraintStart_toStartOf="@+id/tv_enter_acc"
+        app:layout_constraintTop_toBottomOf="@+id/ed_login_email" />
+
+    <EditText
+        android:layout_marginTop="8dp"
+        android:id="@+id/ed_login_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/custom_edit_text"
+        android:drawableStart="@drawable/icons_pass"
+        android:drawableEnd="@drawable/icons_see_pass"
+        android:drawablePadding="12sp"
+        android:ems="10"
+        android:hint="@string/enter_email"
+        android:inputType="textEmailAddress"
+        android:padding="16dp"
+        android:textColorHint="@color/dark_grey"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_email"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pass" />
+
+    <Button
+        android:id="@+id/btn_login"
+        style="@style/textStyleButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/custom_button"
+        android:padding="12dp"
+        android:text="@string/login"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ed_login_pass" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <TextView
+            android:id="@+id/tv_have_issues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="@string/have_issues"
+            android:textColor="@color/dark_grey" />
+
+        <TextView
+            android:id="@+id/tv_contact_us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/contact_us"
+            style="@style/textStyleMedium_custom"
+            android:textColor="@color/blue" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="invisible"
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

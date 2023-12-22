@@ -1,4 +1,4 @@
-package com.project.acehotel.features
+package com.project.acehotel.features.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +13,18 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupActionBar()
 
+        handleButtonLogin()
+    }
+
+    private fun handleButtonLogin() {
+        binding.btnLogin.setOnClickListener {
+
+        }
+    }
+
+    private fun setupActionBar() {
+        supportActionBar?.hide()
     }
 }
