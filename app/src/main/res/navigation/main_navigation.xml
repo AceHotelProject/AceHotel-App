@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.project.acehotel.features.home.HomeFragment"
+        android:name="com.project.acehotel.features.dashboard.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
 

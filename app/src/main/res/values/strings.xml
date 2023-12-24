@@ -18,4 +18,7 @@
     <string name="wrong_email_format">Format email salah</string>
     <string name="wrong_password_format">Password terdiri atas 8 karakter</string>
     <string name="ace_hotel">Ace Hotel</string>
+    <string name="change_stock">Atur Stok</string>
+    <string name="checkout_visitor">Checkout Pengunjung</string>
+    <string name="checkin_visitor">Checkin Pengunjung</string>
 </resources>
