@@ -2,8 +2,8 @@ package com.project.acehotel.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.project.acehotel.core.data.source.local.room.TourismDao
-import com.project.acehotel.core.data.source.local.room.TourismDatabase
+import com.project.acehotel.core.data.source.local.room.UserDao
+import com.project.acehotel.core.data.source.local.room.UserDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,11 +17,11 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context): TourismDatabase = Room.databaseBuilder(
+    fun provideDatabase(@ApplicationContext context: Context): UserDatabase = Room.databaseBuilder(
         context,
-        TourismDatabase::class.java, "Tourism.db"
+        UserDatabase::class.java, "User.db"
     ).fallbackToDestructiveMigration().build()
 
     @Provides
-    fun provideTourismDao(database: TourismDatabase): TourismDao = database.tourismDao()
+    fun provideUserDao(database: UserDatabase): UserDao = database.userDao()
 }

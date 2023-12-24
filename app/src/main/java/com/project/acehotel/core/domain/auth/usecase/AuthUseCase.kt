@@ -6,6 +6,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthUseCase {
 
-    fun loginUser(email: String, password: String) : Flow<Resource<Auth>>
+    fun loginUser(email: String, password: String): Flow<Resource<Auth>>
+
+    suspend fun insertCacheUser(user: Auth)
+
+    fun getUser(): Flow<Auth>
+
+    fun updateUser(user: Auth)
+
+    fun deleteUser(user: Auth)
+
 
 }

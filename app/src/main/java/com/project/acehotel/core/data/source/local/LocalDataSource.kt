@@ -1,22 +1,19 @@
 package com.project.acehotel.core.data.source.local
 
-import com.project.acehotel.core.data.source.local.entity.TourismEntity
-import com.project.acehotel.core.data.source.local.room.TourismDao
+import com.project.acehotel.core.data.source.local.entity.UserEntity
+import com.project.acehotel.core.data.source.local.room.UserDao
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LocalDataSource @Inject constructor(private val tourismDao: TourismDao) {
+class LocalDataSource @Inject constructor(private val userDao: UserDao) {
 
-    fun getAllTourism(): Flow<List<TourismEntity>> = tourismDao.getAllTourism()
+    fun getUser(): Flow<UserEntity> = userDao.getUser()
 
-    fun getFavoriteTourism(): Flow<List<TourismEntity>> = tourismDao.getFavoriteTourism()
+    suspend fun insertUser(user: UserEntity) = userDao.insertUser(user)
 
-    suspend fun insertTourism(tourismList: List<TourismEntity>) = tourismDao.insertTourism(tourismList)
+    fun updateUser(user: UserEntity) = userDao.updateUser(user)
 
-    fun setFavoriteTourism(tourism: TourismEntity, newState: Boolean) {
-        tourism.isFavorite = newState
-        tourismDao.updateFavoriteTourism(tourism)
-    }
+    fun deleteUser(user: UserEntity) = userDao.deleteUser(user)
 }

@@ -2,16 +2,15 @@ package com.project.acehotel.features.login
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
-import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.showLongToast
@@ -106,34 +105,37 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.edLoginEmail.text.toString()
             val password = binding.edLoginPass.text.toString()
 
-            loginViewModel.loginUser(email, password).observe(this){result ->
-                when(result){
-                    is Resource.Error ->{
+            loginViewModel.loginUser(email, password).observe(this) { result ->
+                when (result) {
+                    is Resource.Error -> {
                         showLoading(false)
                         showLongToast(result.message.toString())
                     }
-                    is Resource.Loading ->{
+                    is Resource.Loading -> {
                         showLoading(true)
                     }
                     is Resource.Message -> {
                         showLoading(false)
                         Timber.tag("LoginActivity").d(result.message)
                     }
-                    is Resource.Success ->{
+                    is Resource.Success -> {
                         showLoading(false)
 
-                        if (result.data?.tokens != null){
+                        if (result.data?.tokens != null) {
+                            loginViewModel.insertCacheUser(result.data)
+
                             val intentToMain = Intent(this, MainActivity::class.java)
                             startActivity(intentToMain)
                             finish()
                         }
                     }
+                    else -> {}
                 }
             }
         }
     }
 
-    private fun isButtonEnabled(isEnabled: Boolean){
+    private fun isButtonEnabled(isEnabled: Boolean) {
         binding.btnLogin.isEnabled = isEnabled
     }
 

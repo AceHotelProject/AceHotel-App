@@ -1,4 +1,4 @@
-package com.project.acehotel.core.ui.factory.custom
+package com.project.acehotel.core.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet
