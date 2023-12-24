@@ -1,7 +1,7 @@
 package com.project.acehotel.di
 
-import com.project.acehotel.core.domain.usecase.TourismInteractor
-import com.project.acehotel.core.domain.usecase.TourismUseCase
+import com.project.acehotel.core.domain.auth.interactor.AuthInteractor
+import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,6 +14,6 @@ abstract class AppModule {
 
     @Binds
     @ViewModelScoped
-    abstract fun provideTourismUseCase(tourismInteractor: TourismInteractor): TourismUseCase
+    abstract fun provideAuthUseCase(authInteractor: AuthInteractor): AuthUseCase
 
 }

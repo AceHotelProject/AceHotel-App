@@ -27,10 +27,14 @@ class NetworkModule {
     @Provides
     fun provideApiService(client: OkHttpClient): ApiService {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://tourism-api.dicoding.dev/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
         return retrofit.create(ApiService::class.java)
+    }
+
+    companion object{
+        const val BASE_URL = "http://4.240.114.34/v1/"
     }
 }
