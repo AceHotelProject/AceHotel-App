@@ -21,4 +21,11 @@
     <string name="change_stock">Atur Stok</string>
     <string name="checkout_visitor">Checkout Pengunjung</string>
     <string name="checkin_visitor">Checkin Pengunjung</string>
+    <string name="username">Nama Pengguna</string>
+    <string name="email_template">example@gmail.com</string>
+    <string name="choose_hotel">Pilih Hotel</string>
+    <string name="total_stat">Statistik Total</string>
+    <string name="manage_franchise">Manajemen Cabang</string>
+    <string name="customer_service">Customer Service</string>
+    <string name="logout">Keluar</string>
 </resources>
