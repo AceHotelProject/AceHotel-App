@@ -1,5 +1,6 @@
 package com.project.acehotel.core.utils.datamapper
 
+import com.project.acehotel.core.data.source.local.entity.TokenEntity
 import com.project.acehotel.core.data.source.local.entity.UserEntity
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.domain.auth.model.Auth
@@ -44,31 +45,44 @@ object AuthDataMapper {
     )
 
     fun mapAuthToEntity(input: Auth): UserEntity = UserEntity(
-        userId = input.user.id,
-        role = input.user.role,
-        username = input.user.username,
-        email = input.user.email,
-        accessToken = input.tokens.accessToken.token,
-        accessTokenExpire = input.tokens.accessToken.expires,
-        refreshToken = input.tokens.refreshToken.token,
-        refreshTokenExpire = input.tokens.refreshToken.expires,
+        userId = input.user?.id ?: "",
+        role = input.user?.role,
+        username = input.user?.username,
+        email = input.user?.email,
+        tokenInfo = TokenEntity(
+            accessToken = input.tokens?.accessToken?.token,
+            accessTokenExpire = input.tokens?.accessToken?.expires,
+            refreshToken = input.tokens?.refreshToken?.token,
+            refreshTokenExpire = input.tokens?.refreshToken?.expires,
+        )
     )
 
-    fun mapUserEntityToDomain(input: UserEntity): Auth = Auth(
+    fun mapTokenEntityToDomain(input: TokenEntity): Tokens = Tokens(
+        accessToken = TokensFormat(
+            token = input.accessToken ?: "Empty",
+            expires = input.accessTokenExpire ?: "Empty",
+        ),
+        refreshToken = TokensFormat(
+            token = input.refreshToken ?: "Empty",
+            expires = input.refreshTokenExpire ?: "Empty",
+        )
+    )
+
+    fun mapUserEntityToDomain(input: UserEntity?): Auth = Auth(
         user = User(
-            role = input.role,
-            username = input.username,
-            email = input.email,
-            id = input.userId
+            role = input?.role ?: UserRole.UNDEFINED,
+            username = input?.username ?: "Empty",
+            email = input?.email ?: "Empty",
+            id = input?.userId ?: "Empty"
         ),
         tokens = Tokens(
             accessToken = TokensFormat(
-                token = input.accessToken,
-                expires = input.accessTokenExpire,
+                token = input?.tokenInfo?.accessToken ?: "Empty",
+                expires = input?.tokenInfo?.accessTokenExpire ?: "Empty",
             ),
             refreshToken = TokensFormat(
-                token = input.refreshToken,
-                expires = input.refreshTokenExpire,
+                token = input?.tokenInfo?.refreshToken ?: "Empty",
+                expires = input?.tokenInfo?.refreshTokenExpire ?: "Empty",
             )
         )
     )

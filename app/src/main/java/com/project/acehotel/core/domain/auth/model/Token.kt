@@ -7,10 +7,10 @@ import kotlinx.parcelize.Parcelize
 data class Tokens(
     val accessToken: TokensFormat,
     val refreshToken: TokensFormat,
-): Parcelable
+) : Parcelable
 
 @Parcelize
 data class TokensFormat(
-    val token: String,
-    val expires: String,
-): Parcelable
+    val token: String?,
+    val expires: String?,
+) : Parcelable

@@ -3,6 +3,7 @@ package com.project.acehotel.core.data.source.local.entity
 import android.os.Parcelable
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.project.acehotel.core.utils.constants.UserRole
@@ -11,29 +12,24 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "user")
 data class UserEntity(
-    @PrimaryKey
+
+    @PrimaryKey(autoGenerate = true)
     @NonNull
+    @ColumnInfo(name = "id")
+    var id: Int = 0,
+
     @ColumnInfo(name = "userId")
-    var userId: String,
+    var userId: String? = "",
 
     @ColumnInfo(name = "role")
-    var role: UserRole,
+    var role: UserRole? = UserRole.UNDEFINED,
 
     @ColumnInfo(name = "username")
-    var username: String,
+    var username: String? = "",
 
     @ColumnInfo(name = "email")
-    var email: String,
+    var email: String? = "",
 
-    @ColumnInfo(name = "accessToken")
-    var accessToken: String,
-
-    @ColumnInfo(name = "accessTokenExpire")
-    var accessTokenExpire: String,
-
-    @ColumnInfo(name = "refreshToken")
-    var refreshToken: String,
-
-    @ColumnInfo(name = "refreshTokenExpire")
-    var refreshTokenExpire: String,
+    @Embedded
+    var tokenInfo: TokenEntity
 ) : Parcelable
