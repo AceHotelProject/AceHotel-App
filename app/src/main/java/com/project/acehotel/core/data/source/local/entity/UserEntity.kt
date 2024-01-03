@@ -16,7 +16,7 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "id")
-    var id: Int = 0,
+    var id: Int = 1,
 
     @ColumnInfo(name = "userId")
     var userId: String? = "",
