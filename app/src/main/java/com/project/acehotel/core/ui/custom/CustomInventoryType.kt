@@ -40,11 +40,11 @@ class CustomInventoryType : AppCompatTextView {
     private fun updateStatus() {
         when (status) {
             InventoryType.LINEN.type -> {
-                text = InventoryType.LINEN.type
+                text = "Linen"
                 setBackground(context, R.color.orange)
             }
             InventoryType.BED.type -> {
-                text = InventoryType.BED.type
+                text = "Kasur"
                 setBackground(context, R.color.yellow)
             }
         }

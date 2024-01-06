@@ -10,12 +10,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(private val useCase: AuthUseCase) : ViewModel() {
+class ProfileViewModel @Inject constructor(private val authUseCase: AuthUseCase) : ViewModel() {
 
-    fun getUser() = useCase.getUser().asLiveData()
+    fun getUser() = authUseCase.getUser().asLiveData()
 
     fun deleteUser(user: Auth) = viewModelScope.launch {
-        useCase.deleteUser(user)
+        authUseCase.deleteUser(user)
+    }
+
+    fun deleteToken() = viewModelScope.launch {
+        authUseCase.deleteToken()
     }
 
 }

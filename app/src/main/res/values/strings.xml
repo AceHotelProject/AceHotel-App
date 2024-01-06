@@ -28,4 +28,30 @@
     <string name="manage_franchise">Manajemen Cabang</string>
     <string name="customer_service">Customer Service</string>
     <string name="logout">Keluar</string>
+    <string name="search">Pencarian</string>
+    <string name="tab_finance">Keuangan</string>
+    <string name="tab_visitor">Pengunjung</string>
+    <string name="tab_inventory">Gudang</string>
+    <string name="linen_total">Total Linen</string>
+    <string name="inventory_stat">Statistik Gudang</string>
+    <string name="inventory_list">Daftar Barang</string>
+    <string name="stock">stok</string>
+    <string name="template_number">0</string>
+    <string name="total_bed">Total Kasur</string>
+    <string name="check_internet">Pastikan kembali jaringan internet anda</string>
+    <string name="today_stat">Statistik Hari Ini</string>
+    <string name="income">Pendapatan</string>
+    <string name="visitor_checkin">Tamu Checkin</string>
+    <string name="new_book">Booking Terbaru</string>
+    <string name="room_avail">Kamar Tersedia</string>
+    <string name="new_visitor">Pengunjung Terkini</string>
+    <string name="new_list_book">Daftar Booking Terkini</string>
+    <string name="visitor_name">Nama Pengunjung</string>
+    <string name="item_name">Item Name</string>
+    <string name="item_change">Perubahan: 1 Jan 2024</string>
+    <string name="choose_item">Pilih Barang</string>
+    <string name="detail_item">Detail Barang</string>
+    <string name="add_item">Tambah Barang</string>
+    <string name="item_desc">Deskripsi item</string>
+
 </resources>

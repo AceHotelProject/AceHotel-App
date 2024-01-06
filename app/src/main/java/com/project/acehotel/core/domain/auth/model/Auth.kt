@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Auth(
+    val id: Int,
     val user: User?,
     val tokens: Tokens?,
 ) : Parcelable

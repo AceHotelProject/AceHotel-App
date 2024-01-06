@@ -1,16 +1,12 @@
 package com.project.acehotel.core.data.source.remote.network
 
-import com.project.acehotel.core.data.source.remote.response.ListTourismResponse
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
+import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
+import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
+import retrofit2.http.*
 
 interface ApiService {
-    @GET("list")
-    suspend fun getList(): ListTourismResponse
-
 
     // AUTH
     @FormUrlEncoded
@@ -27,6 +23,25 @@ interface ApiService {
         @Field("password") password: String
     ): AuthResponse
 
+    @FormUrlEncoded
+    @POST("auth/refresh-tokens")
+    suspend fun refreshToken(
+        @Field("refreshToken") refreshToken: String
+    ): RefreshTokenResponse
     // AUTH
 
+    // INVENTORY
+
+    @GET("inventory")
+    suspend fun getListInventory(
+//        @Header("Authorization") token: String,
+    ): InventoryListResponse
+
+    @GET("inventory/{id}")
+    suspend fun getDetailInventory(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): InventoryDetailResponse
+
+    // INVENTORY
 }

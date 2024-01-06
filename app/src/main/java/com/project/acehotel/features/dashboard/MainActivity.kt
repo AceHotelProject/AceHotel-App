@@ -13,7 +13,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,6 +16,18 @@
         android:theme="@style/Theme.AceHotel"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".features.dashboard.management.inventory.additem.AddItemInventoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.management.inventory.changestock.ChangeStockItemInventoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.management.inventory.chooseitem.ChooseItemInventoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.management.inventory.detail.InventoryDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".features.splash.SplashActivity"
             android:exported="true"
@@ -32,6 +45,7 @@
         <activity
             android:name=".features.dashboard.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
     </application>
+
 </manifest>

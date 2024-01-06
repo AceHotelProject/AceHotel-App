@@ -11,6 +11,7 @@
     <color name="light_grey">#FFF8F8F8</color>
 
     <color name="blue">#FF3870F5</color>
+    <color name="blue_low">#FFCDDBFC</color>
     <color name="red">#FFE8254E</color>
     <color name="purple">#FFD561DA</color>
     <color name="pink">#FFFF64A9</color>

@@ -5,12 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewbinding.BuildConfig
 import com.project.acehotel.databinding.ActivitySplashBinding
 import com.project.acehotel.features.dashboard.MainActivity
 import com.project.acehotel.features.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -26,14 +24,24 @@ class SplashActivity : AppCompatActivity() {
 
         setupActionBar()
 
-        initTimber()
-
         checkUserInfo()
     }
 
     private fun checkUserInfo() {
-        splashViewModel.getUser().observe(this) { result ->
-            if (!result.tokens.accessToken.token.isNullOrEmpty()) {
+//        splashViewModel.getUser().observe(this) { result ->
+//            if (!result.tokens?.accessToken?.token.isNullOrEmpty() && result.tokens?.accessToken?.token != "Empty") {
+//                val intentToHome = Intent(this, MainActivity::class.java)
+//                startActivity(intentToHome)
+//                finish()
+//            } else {
+//                val intentToLogin = Intent(this, LoginActivity::class.java)
+//                startActivity(intentToLogin)
+//                finish()
+//            }
+//        }
+
+        splashViewModel.getAccessToken().observe(this) { token ->
+            if (token != "") {
                 val intentToHome = Intent(this, MainActivity::class.java)
                 startActivity(intentToHome)
                 finish()
@@ -42,12 +50,6 @@ class SplashActivity : AppCompatActivity() {
                 startActivity(intentToLogin)
                 finish()
             }
-        }
-    }
-
-    private fun initTimber() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
         }
     }
 

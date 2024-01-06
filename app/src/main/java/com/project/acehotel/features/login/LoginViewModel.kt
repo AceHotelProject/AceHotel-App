@@ -18,4 +18,12 @@ class LoginViewModel @Inject constructor(private val authUseCase: AuthUseCase) :
     fun insertCacheUser(user: Auth) = viewModelScope.launch {
         authUseCase.insertCacheUser(user)
     }
+
+    fun saveAccessToken(token: String) = viewModelScope.launch {
+        authUseCase.saveAccessToken(token)
+    }
+
+    fun saveRefreshToken(token: String) = viewModelScope.launch {
+        authUseCase.saveRefreshToken(token)
+    }
 }

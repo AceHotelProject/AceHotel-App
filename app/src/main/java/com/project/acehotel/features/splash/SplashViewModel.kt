@@ -10,4 +10,6 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(private val authUseCase: AuthUseCase) : ViewModel() {
 
     fun getUser() = authUseCase.getUser().asLiveData()
+
+    fun getAccessToken() = authUseCase.getAccessToken().asLiveData()
 }

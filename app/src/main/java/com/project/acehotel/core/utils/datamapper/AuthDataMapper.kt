@@ -1,5 +1,6 @@
 package com.project.acehotel.core.utils.datamapper
 
+import com.project.acehotel.core.data.source.local.entity.TokenData
 import com.project.acehotel.core.data.source.local.entity.TokenEntity
 import com.project.acehotel.core.data.source.local.entity.UserEntity
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
@@ -12,6 +13,7 @@ import com.project.acehotel.core.utils.constants.UserRole
 object AuthDataMapper {
 
     fun mapAuthResponseToDomain(input: AuthResponse): Auth = Auth(
+        id = 1,
         user = User(
             role = when (input.user?.role) {
                 UserRole.MASTER.role -> {
@@ -38,8 +40,8 @@ object AuthDataMapper {
                 expires = input.tokens?.access?.expires ?: "Empty"
             ),
             refreshToken = TokensFormat(
-                token = input.tokens?.access?.token ?: "Empty",
-                expires = input.tokens?.access?.expires ?: "Empty"
+                token = input.tokens?.refresh?.token ?: "Empty",
+                expires = input.tokens?.refresh?.expires ?: "Empty"
             ),
         )
     )
@@ -57,7 +59,7 @@ object AuthDataMapper {
         )
     )
 
-    fun mapTokenEntityToDomain(input: TokenEntity): Tokens = Tokens(
+    fun mapTokenDataToDomain(input: TokenData): Tokens = Tokens(
         accessToken = TokensFormat(
             token = input.accessToken ?: "Empty",
             expires = input.accessTokenExpire ?: "Empty",
@@ -69,6 +71,7 @@ object AuthDataMapper {
     )
 
     fun mapUserEntityToDomain(input: UserEntity?): Auth = Auth(
+        id = input?.id ?: 1,
         user = User(
             role = input?.role ?: UserRole.UNDEFINED,
             username = input?.username ?: "Empty",

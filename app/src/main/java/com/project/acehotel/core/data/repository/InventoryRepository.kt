@@ -16,19 +16,19 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class InventoryRespository @Inject constructor(
+class InventoryRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
 ) : IInventoryIRepository {
-    override fun getListInventory(token: String): Flow<Resource<List<Inventory>>> {
+    override fun getListInventory(): Flow<Resource<List<Inventory>>> {
         return object : NetworkBoundResource<List<Inventory>, InventoryListResponse>() {
             override suspend fun fetchFromApi(response: InventoryListResponse): List<Inventory> {
                 return InventoryDataMapper.mapInventoryListResponseToDomain(response)
             }
 
             override suspend fun createCall(): Flow<ApiResponse<InventoryListResponse>> {
-                return remoteDataSource.getListInventory(token)
+                return remoteDataSource.getListInventory()
             }
 
         }.asFlow()

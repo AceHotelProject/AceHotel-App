@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import com.project.acehotel.R
 import com.project.acehotel.features.splash.SplashActivity
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class LogoutDialog : DialogFragment() {
@@ -33,24 +32,30 @@ class LogoutDialog : DialogFragment() {
             }
 
             btnLogoutYes?.setOnClickListener {
-                logoutUser()
+                profileViewModel.deleteToken()
+
+                val intentToSplash = Intent(requireContext(), SplashActivity::class.java)
+                startActivity(intentToSplash)
+//                logoutUser()
             }
 
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    private fun logoutUser() {
-        profileViewModel.getUser().observe(this) { user ->
-
-            if (user != null) {
-                Timber.tag("TEST").e(user.toString())
-                profileViewModel.deleteUser(user)
-
-                val intentToSplash = Intent(requireContext(), SplashActivity::class.java)
-                startActivity(intentToSplash)
-                
-            }
-        }
-    }
+//    private fun logoutUser() {
+//        profileViewModel.deleteUser()
+//
+//        profileViewModel.getUser().observe(this) { user ->
+//
+//            if (user != null) {
+//                Timber.tag("TEST").e(user.toString())
+//                profileViewModel.deleteUser(user)
+//
+//                val intentToSplash = Intent(requireContext(), SplashActivity::class.java)
+//                startActivity(intentToSplash)
+//
+//            }
+//        }
+//    }
 }

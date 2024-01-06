@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.AceHotel" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
@@ -18,6 +18,8 @@
         <item name="android:buttonStyle">@style/NotAllCapsButtonStyle</item>
     </style>
 
+    <!-- FOR OTHER CUSTOM   -->
+
     <style name="NotAllCapsButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:textAllCaps">false</item>
     </style>
@@ -26,54 +28,85 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
+        <item name="tabPaddingStart">0dp</item>
+        <item name="tabPaddingTop">0dp</item>
+        <item name="tabPaddingEnd">0dp</item>
+        <item name="tabPaddingBottom">0dp</item>
+    </style>
+
+    <style name="TransparentDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
+    <style name="testStyleAppBar">
+        <item name="fontFamily">@font/poppinsmedium</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- FOR OTHER CUSTOM   -->
+
     <!-- FOR TYPOGRAPHY   -->
 
     <style name="textStyleSemIBold_32">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinssemibold</item>
         <item name="android:textSize">32sp</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="textStyleSemIBold_24">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinssemibold</item>
         <item name="android:textSize">24sp</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="textStyleSemIBold_20">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinssemibold</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="textStyleMedium_20">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinsmedium</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="textStyleSemIBold_16">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinssemibold</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="textStyleMedium_16">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinsmedium</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:includeFontPadding">false</item>
+
     </style>
 
     <style name="textStyleMedium_14">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinsmedium</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="textStyleButton">
         <item name="android:textColor">@color/white</item>
         <item name="fontFamily">@font/poppinssemibold</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- FOR TYPOGRAPHY   -->
@@ -83,11 +116,13 @@
     <style name="textStyleMedium_custom">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinsmedium</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="textStyleSemiBold_custom">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/poppinssemibold</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- FOR CUSTOM GENERAL THEME   -->

@@ -28,15 +28,10 @@ class InventoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fetchListInventory()
-
-//        inventoryViewModel.getTokens().observe(this) {
-//            Timber.tag("TEST").e(it.toString())
-//            Timber.tag("TEST").e("TEST")
-//        }
     }
 
     private fun fetchListInventory() {
-        inventoryViewModel.fetchListInventory().observe(this) { inventory ->
+        inventoryViewModel.getListInventory().observe(this) { inventory ->
             when (inventory) {
                 is Resource.Error -> {
                     showLoading(false)

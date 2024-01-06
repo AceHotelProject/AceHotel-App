@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".features.dashboard.management.inventory.detail.InventoryDetailActivity">
+
+    <ImageView
+        android:id="@+id/btn_inventory_detail_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/icons_button_back"
+        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/textView15"
+        style="@style/textStyleMedium_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/detail_item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/btn_inventory_detail_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/icons_button_more"
+        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView15" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="@+id/btn_inventory_detail_back"
+        app:layout_constraintTop_toBottomOf="@+id/btn_inventory_detail_back">
+
+        <com.project.acehotel.core.ui.custom.CustomInventoryType
+            android:id="@+id/chip_inventory_card_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:textSize="12sp" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tv_inventory_detail_name"
+        style="@style/textStyleSemIBold_24"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:text="@string/item_name"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <TextView
+        android:id="@+id/tv_inventory_detail_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:includeFontPadding="false"
+        android:text="@string/item_change"
+        android:textColor="@color/dark_grey"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+        app:layout_constraintStart_toStartOf="@+id/tv_inventory_detail_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_inventory_detail_name" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_inventory_detail_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cardView">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stock"
+            android:textColor="@color/dark_grey" />
+
+        <TextView
+            android:id="@+id/tv_inventory_card_stock"
+            style="@style/textStyleSemiBold_custom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/template_number"
+            android:textSize="36dp" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/ed_inventory_detail_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_edit_text"
+        android:drawableStart="@drawable/icons_search"
+        android:drawablePadding="12sp"
+        android:ems="10"
+        android:hint="@string/search"
+        android:inputType="text"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="14dp"
+        android:textColorHint="@color/dark_grey"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
+        app:layout_constraintStart_toStartOf="@+id/tv_inventory_detail_desc"
+        app:layout_constraintTop_toBottomOf="@+id/tv_inventory_detail_desc" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list_history_inventory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/grey_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ed_inventory_detail_search"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_inventory_detail_change_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/blue"
+        android:clickable="true"
+        android:focusable="true"
+        app:elevation="0dp"
+        app:fabCustomSize="60dp"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="32dp"
+        app:srcCompat="@drawable/icons_fab_change_stock"
+        app:tint="@color/white" />
+</androidx.constraintlayout.widget.ConstraintLayout>

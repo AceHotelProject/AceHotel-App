@@ -1,6 +1,8 @@
 package com.project.acehotel.core.di
 
 import com.project.acehotel.core.data.source.remote.network.ApiService
+import com.project.acehotel.core.di.interceptor.AuthAuthenticator
+import com.project.acehotel.core.di.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,14 +13,19 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-@Module
+@Module(includes = [DatabaseModule::class])
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        authAuthenticator: AuthAuthenticator
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(authInterceptor)
+            .authenticator(authAuthenticator)
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .build()
@@ -34,7 +41,7 @@ class NetworkModule {
         return retrofit.create(ApiService::class.java)
     }
 
-    companion object{
+    companion object {
         const val BASE_URL = "http://4.240.114.34/v1/"
     }
 }
