@@ -34,12 +34,10 @@ interface ApiService {
 
     @GET("inventory")
     suspend fun getListInventory(
-//        @Header("Authorization") token: String,
     ): InventoryListResponse
 
     @GET("inventory/{id}")
     suspend fun getDetailInventory(
-        @Header("Authorization") token: String,
         @Path("id") id: String
     ): InventoryDetailResponse
 

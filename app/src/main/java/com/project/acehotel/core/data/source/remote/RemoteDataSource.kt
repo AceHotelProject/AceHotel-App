@@ -73,12 +73,11 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     }
 
     suspend fun getDetailInventory(
-        token: String,
         id: String
     ): Flow<ApiResponse<InventoryDetailResponse>> {
         return flow<ApiResponse<InventoryDetailResponse>> {
             try {
-                val response = apiService.getDetailInventory(token, id)
+                val response = apiService.getDetailInventory(id)
 
                 if (response.name != null) {
                     emit(ApiResponse.Success(response))

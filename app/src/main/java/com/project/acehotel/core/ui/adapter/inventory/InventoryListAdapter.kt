@@ -41,8 +41,12 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
         }
 
         holder.itemView.setOnClickListener {
+            onItemCallback.onItemClicked()
+
             val intentToInventoryDetail =
                 Intent(holder.itemView.context, InventoryDetailActivity::class.java)
+            intentToInventoryDetail.putExtra(INVENTORY_ITEM_ID, data?.id)
+
             holder.itemView.context.startActivity(intentToInventoryDetail)
         }
     }
@@ -53,5 +57,9 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
 
     interface OnItemClickCallback {
         fun onItemClicked()
+    }
+
+    companion object {
+        private const val INVENTORY_ITEM_ID = "inventory_item_id"
     }
 }

@@ -13,8 +13,8 @@ class InventoryInteractor @Inject constructor(private val inventoryRepository: I
         return inventoryRepository.getListInventory()
     }
 
-    override fun getDetailInventory(token: String, id: String): Flow<Resource<Inventory>> {
-        return inventoryRepository.getDetailInventory(token, id)
+    override fun getDetailInventory(id: String): Flow<Resource<Inventory>> {
+        return inventoryRepository.getDetailInventory(id)
     }
 
 }

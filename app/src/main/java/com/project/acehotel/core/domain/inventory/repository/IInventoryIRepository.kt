@@ -8,5 +8,5 @@ interface IInventoryIRepository {
 
     fun getListInventory(): Flow<Resource<List<Inventory>>>
 
-    fun getDetailInventory(token: String, id: String): Flow<Resource<Inventory>>
+    fun getDetailInventory(id: String): Flow<Resource<Inventory>>
 }
