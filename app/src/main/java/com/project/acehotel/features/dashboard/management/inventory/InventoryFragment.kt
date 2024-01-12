@@ -1,5 +1,7 @@
 package com.project.acehotel.features.dashboard.management.inventory
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +13,11 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.ui.adapter.inventory.InventoryListAdapter
+import com.project.acehotel.core.utils.constants.InventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentInventoryBinding
+import com.project.acehotel.features.dashboard.management.inventory.detail.InventoryDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -28,6 +32,14 @@ class InventoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fetchListInventory()
+
+        handleRefreshLayout()
+    }
+
+    private fun handleRefreshLayout() {
+        binding.refInventory.setOnRefreshListener {
+            fetchListInventory()
+        }
     }
 
     private fun fetchListInventory() {
@@ -53,8 +65,30 @@ class InventoryFragment : Fragment() {
                     showLoading(false)
 
                     initInventoryRecyclerView(inventory.data)
+
+                    initQuickInfo(inventory.data)
                 }
             }
+        }
+    }
+
+    private fun initQuickInfo(data: List<Inventory>?) {
+        var linenTotal = 0
+        var bedTotal = 0
+
+        if (data != null) {
+            for (i in data.indices) {
+                if (data[i].type == InventoryType.BED.type) {
+                    bedTotal += 1
+                } else {
+                    linenTotal += 1
+                }
+            }
+        }
+
+        binding.apply {
+            tvTotalLinen.text = linenTotal.toString()
+            tvTotalBed.text = bedTotal.toString()
         }
     }
 
@@ -66,8 +100,11 @@ class InventoryFragment : Fragment() {
         binding.rvListInventory.adapter = adapter
 
         adapter.setOnItemClickCallback(object : InventoryListAdapter.OnItemClickCallback {
-            override fun onItemClicked() {
-
+            override fun onItemClicked(context: Context, data: Inventory?) {
+                val intentToInventoryDetail =
+                    Intent(requireContext(), InventoryDetailActivity::class.java)
+                intentToInventoryDetail.putExtra(INVENTORY_ITEM_ID, data.toString())
+                startActivity(intentToInventoryDetail)
             }
         })
     }
@@ -81,6 +118,10 @@ class InventoryFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.refInventory.isRefreshing = isLoading
+    }
+
+    companion object {
+        private const val INVENTORY_ITEM_ID = "inventory_item_id"
     }
 }

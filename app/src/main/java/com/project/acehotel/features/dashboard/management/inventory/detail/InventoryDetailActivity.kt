@@ -1,6 +1,7 @@
 package com.project.acehotel.features.dashboard.management.inventory.detail
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -40,7 +41,11 @@ class InventoryDetailActivity : AppCompatActivity() {
     }
 
     private fun fetchInventoryDetail() {
-        val itemId = intent.getStringExtra(INVENTORY_ITEM_ID)
+        val itemId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(INVENTORY_ITEM_ID, Inventory::class.java)?.id
+        } else {
+            intent.getParcelableExtra<Inventory>(INVENTORY_ITEM_ID)?.id
+        }
 
         if (!itemId.isNullOrEmpty()) {
             inventoryDetailViewModel.getDetailInventory(itemId).observe(this) { inventory ->

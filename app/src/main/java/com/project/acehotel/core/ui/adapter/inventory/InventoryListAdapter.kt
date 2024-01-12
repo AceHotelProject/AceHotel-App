@@ -1,13 +1,12 @@
 package com.project.acehotel.core.ui.adapter.inventory
 
-import android.content.Intent
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.databinding.ItemListInventoryBinding
-import com.project.acehotel.features.dashboard.management.inventory.detail.InventoryDetailActivity
 
 class InventoryListAdapter(private val listInventory: List<Inventory>?) :
     RecyclerView.Adapter<InventoryListAdapter.ViewHolder>() {
@@ -41,13 +40,7 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
         }
 
         holder.itemView.setOnClickListener {
-            onItemCallback.onItemClicked()
-
-            val intentToInventoryDetail =
-                Intent(holder.itemView.context, InventoryDetailActivity::class.java)
-            intentToInventoryDetail.putExtra(INVENTORY_ITEM_ID, data?.id)
-
-            holder.itemView.context.startActivity(intentToInventoryDetail)
+            onItemCallback.onItemClicked(holder.itemView.context, data)
         }
     }
 
@@ -56,7 +49,7 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked()
+        fun onItemClicked(context: Context, data: Inventory?)
     }
 
     companion object {
