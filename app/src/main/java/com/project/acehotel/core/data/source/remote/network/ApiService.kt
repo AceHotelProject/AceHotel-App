@@ -41,5 +41,28 @@ interface ApiService {
         @Path("id") id: String
     ): InventoryDetailResponse
 
+    @POST("inventory")
+    @FormUrlEncoded
+    suspend fun addInventory(
+        @Field("name") name: String,
+        @Field("type") type: String,
+        @Field("stock") stock: Int,
+    ): InventoryDetailResponse
+
+    @PUT("inventory/{id}")
+    @FormUrlEncoded
+    suspend fun updateInventory(
+        @Path("id") id: String,
+        @Field("name") name: String,
+        @Field("type") type: String,
+        @Field("stock") stock: Int,
+        @Field("title") title: String,
+        @Field("description") description: String,
+    ): InventoryDetailResponse
+
+    @DELETE("inventory/{id}")
+    suspend fun deleteInventory(
+        @Path("id") id: String,
+    ): InventoryDetailResponse
     // INVENTORY
 }

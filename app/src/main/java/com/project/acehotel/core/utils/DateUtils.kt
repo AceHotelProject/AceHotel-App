@@ -18,4 +18,10 @@ object DateUtils {
             ""
         }
     }
+
+    fun getCurrentDateTime(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("dd MMM yy", Locale.getDefault())
+        return dateFormat.format(calendar.time)
+    }
 }

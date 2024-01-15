@@ -91,5 +91,63 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun addInventory(
+        name: String,
+        type: String,
+        stock: Int
+    ): Flow<ApiResponse<InventoryDetailResponse>> {
+        return flow {
+            try {
+                val response = apiService.addInventory(name, type, stock)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun updateInventory(
+        id: String,
+        name: String,
+        type: String,
+        stock: Int,
+        title: String,
+        description: String
+    ): Flow<ApiResponse<InventoryDetailResponse>> {
+        return flow {
+            try {
+                val response = apiService.updateInventory(id, name, type, stock, title, description)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun deleteInventory(id: String): Flow<ApiResponse<InventoryDetailResponse>> {
+        return flow<ApiResponse<InventoryDetailResponse>> {
+            try {
+                val response = apiService.deleteInventory(id)
+
+
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
     // INVENTORY
 }

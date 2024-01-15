@@ -100,10 +100,14 @@ class InventoryFragment : Fragment() {
         binding.rvListInventory.adapter = adapter
 
         adapter.setOnItemClickCallback(object : InventoryListAdapter.OnItemClickCallback {
-            override fun onItemClicked(context: Context, data: Inventory?) {
+            override fun onItemClicked(context: Context, id: String, name: String, type: String) {
                 val intentToInventoryDetail =
                     Intent(requireContext(), InventoryDetailActivity::class.java)
-                intentToInventoryDetail.putExtra(INVENTORY_ITEM_ID, data.toString())
+
+                intentToInventoryDetail.putExtra(INVENTORY_ITEM_ID, id)
+                intentToInventoryDetail.putExtra(INVENTORY_ITEM_NAME, name)
+                intentToInventoryDetail.putExtra(INVENTORY_ITEM_TYPE, type)
+
                 startActivity(intentToInventoryDetail)
             }
         })
@@ -123,5 +127,7 @@ class InventoryFragment : Fragment() {
 
     companion object {
         private const val INVENTORY_ITEM_ID = "inventory_item_id"
+        private const val INVENTORY_ITEM_NAME = "inventory_item_name"
+        private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
     }
 }

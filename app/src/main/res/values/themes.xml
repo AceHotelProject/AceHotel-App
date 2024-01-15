@@ -48,6 +48,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <!-- FOR OTHER CUSTOM   -->
 
     <!-- FOR TYPOGRAPHY   -->

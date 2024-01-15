@@ -53,5 +53,7 @@
     <string name="detail_item">Detail Barang</string>
     <string name="add_item">Tambah Barang</string>
     <string name="item_desc">Deskripsi item</string>
+    <string name="save">Simpan</string>
+    <string name="field_cant_empty">Data tidak boleh kosong</string>
 
 </resources>

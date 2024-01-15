@@ -1,5 +1,6 @@
 package com.project.acehotel.features.dashboard
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -13,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.databinding.ActivityMainBinding
+import com.project.acehotel.features.dashboard.management.inventory.chooseitem.ChooseItemInventoryActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,6 +39,11 @@ class MainActivity : AppCompatActivity() {
     private fun handleFab() {
         binding.fabMenu.setOnClickListener {
             onFabMenuClick()
+        }
+
+        binding.fabChangeStock.setOnClickListener {
+            val intentToChooseItem = Intent(this, ChooseItemInventoryActivity::class.java)
+            startActivity(intentToChooseItem)
         }
     }
 

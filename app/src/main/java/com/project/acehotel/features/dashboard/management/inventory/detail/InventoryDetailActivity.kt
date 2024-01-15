@@ -1,7 +1,6 @@
 package com.project.acehotel.features.dashboard.management.inventory.detail
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -41,11 +40,7 @@ class InventoryDetailActivity : AppCompatActivity() {
     }
 
     private fun fetchInventoryDetail() {
-        val itemId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(INVENTORY_ITEM_ID, Inventory::class.java)?.id
-        } else {
-            intent.getParcelableExtra<Inventory>(INVENTORY_ITEM_ID)?.id
-        }
+        val itemId = intent.getStringExtra(INVENTORY_ITEM_ID)
 
         if (!itemId.isNullOrEmpty()) {
             inventoryDetailViewModel.getDetailInventory(itemId).observe(this) { inventory ->
@@ -108,7 +103,15 @@ class InventoryDetailActivity : AppCompatActivity() {
 
     private fun handleFab() {
         binding.fabInventoryDetailChangeStock.setOnClickListener {
+            val itemId = intent.getStringExtra(INVENTORY_ITEM_ID)
+            val itemName = intent.getStringExtra(INVENTORY_ITEM_NAME)
+            val itemType = intent.getStringExtra(INVENTORY_ITEM_TYPE)
+
             val intentToChooseItem = Intent(this, ChooseItemInventoryActivity::class.java)
+            intentToChooseItem.putExtra(INVENTORY_ITEM_ID, itemId)
+            intentToChooseItem.putExtra(INVENTORY_ITEM_NAME, itemName)
+            intentToChooseItem.putExtra(INVENTORY_ITEM_TYPE, itemType)
+
             startActivity(intentToChooseItem)
         }
     }
@@ -123,5 +126,7 @@ class InventoryDetailActivity : AppCompatActivity() {
 
     companion object {
         private const val INVENTORY_ITEM_ID = "inventory_item_id"
+        private const val INVENTORY_ITEM_NAME = "inventory_item_name"
+        private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
     }
 }

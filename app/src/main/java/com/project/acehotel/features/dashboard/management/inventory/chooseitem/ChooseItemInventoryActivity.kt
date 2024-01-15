@@ -3,7 +3,6 @@ package com.project.acehotel.features.dashboard.management.inventory.chooseitem
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +14,7 @@ import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChooseItemInventoryBinding
 import com.project.acehotel.features.dashboard.management.inventory.additem.AddItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.inventory.changestock.ChangeStockItemInventoryActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -37,11 +37,21 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         handleOnRefresh()
 
         handleButtonAddItems()
+
+        showLoading(false)
     }
 
     private fun handleButtonAddItems() {
         binding.btnAddItem.setOnClickListener {
+            val itemId = intent.getStringExtra(INVENTORY_ITEM_ID)
+            val itemName = intent.getStringExtra(INVENTORY_ITEM_NAME)
+            val itemType = intent.getStringExtra(INVENTORY_ITEM_TYPE)
+
             val intentToAddItem = Intent(this, AddItemInventoryActivity::class.java)
+            intentToAddItem.putExtra(INVENTORY_ITEM_ID, itemId)
+            intentToAddItem.putExtra(INVENTORY_ITEM_NAME, itemName)
+            intentToAddItem.putExtra(INVENTORY_ITEM_TYPE, itemType)
+
             startActivity(intentToAddItem)
         }
     }
@@ -72,6 +82,8 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
                     Timber.tag("InventoryDetailActivity").d(item.message)
                 }
                 is Resource.Success -> {
+                    showLoading(false)
+
                     if (item.data != null) {
                         initInventoryItemRecyclerView(item.data)
                     }
@@ -88,19 +100,33 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         binding.rvListItemInventory.layoutManager = layoutManager
 
         adapter.setOnItemClickCallback(object : InventoryListAdapter.OnItemClickCallback {
-            override fun onItemClicked(context: Context) {
-                val intentToAddItem =
-                    Intent(this@ChooseItemInventoryActivity, AddItemInventoryActivity::class.java)
-                startActivity(intentToAddItem)
+            override fun onItemClicked(context: Context, id: String, name: String, type: String) {
+                val intentToChangeStockInventory =
+                    Intent(
+                        this@ChooseItemInventoryActivity,
+                        ChangeStockItemInventoryActivity::class.java
+                    )
+
+                intentToChangeStockInventory.putExtra(INVENTORY_ITEM_ID, id)
+                intentToChangeStockInventory.putExtra(INVENTORY_ITEM_NAME, name)
+                intentToChangeStockInventory.putExtra(INVENTORY_ITEM_TYPE, type)
+
+                startActivity(intentToChangeStockInventory)
             }
         })
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.refInventoryItem.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.refInventoryItem.isRefreshing = isLoading
     }
 
     private fun setupActionBar() {
         supportActionBar?.hide()
+    }
+
+    companion object {
+        private const val INVENTORY_ITEM_ID = "inventory_item_id"
+        private const val INVENTORY_ITEM_NAME = "inventory_item_name"
+        private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
     }
 }

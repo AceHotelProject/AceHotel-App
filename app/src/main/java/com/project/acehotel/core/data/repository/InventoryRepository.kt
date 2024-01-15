@@ -45,4 +45,47 @@ class InventoryRepository @Inject constructor(
             }
         }.asFlow()
     }
+
+    override fun addInventory(name: String, type: String, stock: Int): Flow<Resource<Inventory>> {
+        return object : NetworkBoundResource<Inventory, InventoryDetailResponse>() {
+            override suspend fun fetchFromApi(response: InventoryDetailResponse): Inventory {
+                return InventoryDataMapper.mapInventoryDetailResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<InventoryDetailResponse>> {
+                return remoteDataSource.addInventory(name, type, stock)
+            }
+        }.asFlow()
+    }
+
+    override fun updateInventory(
+        id: String,
+        name: String,
+        type: String,
+        stock: Int,
+        title: String,
+        description: String
+    ): Flow<Resource<Inventory>> {
+        return object : NetworkBoundResource<Inventory, InventoryDetailResponse>() {
+            override suspend fun fetchFromApi(response: InventoryDetailResponse): Inventory {
+                return InventoryDataMapper.mapInventoryDetailResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<InventoryDetailResponse>> {
+                return remoteDataSource.updateInventory(id, name, type, stock, title, description)
+            }
+        }.asFlow()
+    }
+
+    override fun deleteInventory(id: String): Flow<Resource<Inventory>> {
+        return object : NetworkBoundResource<Inventory, InventoryDetailResponse>() {
+            override suspend fun fetchFromApi(response: InventoryDetailResponse): Inventory {
+                return InventoryDataMapper.mapInventoryDetailResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<InventoryDetailResponse>> {
+                return remoteDataSource.deleteInventory(id)
+            }
+        }.asFlow()
+    }
 }

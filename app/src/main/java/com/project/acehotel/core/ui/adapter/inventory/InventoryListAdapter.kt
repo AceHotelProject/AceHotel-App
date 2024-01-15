@@ -40,7 +40,9 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
         }
 
         holder.itemView.setOnClickListener {
-            onItemCallback.onItemClicked(holder.itemView.context, data)
+            if (data != null) {
+                onItemCallback.onItemClicked(holder.itemView.context, data.id, data.name, data.type)
+            }
         }
     }
 
@@ -49,7 +51,7 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(context: Context, data: Inventory?)
+        fun onItemClicked(context: Context, id: String, name: String, type: String)
     }
 
     companion object {

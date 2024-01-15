@@ -17,4 +17,23 @@ class InventoryInteractor @Inject constructor(private val inventoryRepository: I
         return inventoryRepository.getDetailInventory(id)
     }
 
+    override fun addInventory(name: String, type: String, stock: Int): Flow<Resource<Inventory>> {
+        return inventoryRepository.addInventory(name, type, stock)
+    }
+
+    override fun updateInventory(
+        id: String,
+        name: String,
+        type: String,
+        stock: Int,
+        title: String,
+        description: String
+    ): Flow<Resource<Inventory>> {
+        return inventoryRepository.updateInventory(id, name, type, stock, title, description)
+    }
+
+    override fun deleteInventory(id: String): Flow<Resource<Inventory>> {
+        return inventoryRepository.deleteInventory(id)
+    }
+
 }
