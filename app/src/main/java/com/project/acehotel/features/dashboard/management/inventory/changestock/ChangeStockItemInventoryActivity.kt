@@ -3,6 +3,8 @@ package com.project.acehotel.features.dashboard.management.inventory.changestock
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.constants.InventoryType
 import com.project.acehotel.databinding.ActivityChangeStockItemInventoryBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +20,38 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupActionBar()
+
+        handleButtonBack()
+
+        initItemInfo()
+    }
+
+    private fun initItemInfo() {
+        val currentDate = DateUtils.getCurrentDateTime()
+        val itemName = intent.getStringExtra(INVENTORY_ITEM_NAME)
+        val itemType = when (intent.getStringExtra(INVENTORY_ITEM_TYPE)) {
+            InventoryType.LINEN.type -> {
+                InventoryType.LINEN.display
+            }
+            InventoryType.BED.type -> {
+                InventoryType.BED.display
+            }
+            else -> {
+                InventoryType.UNDEFINED.display
+            }
+        }
+
+        binding.apply {
+            edChangeStockItemName.setText(itemName)
+            edChangeStockItemType.setText(itemType)
+            edChangeStockItemDate.setText(currentDate)
+        }
+    }
+
+    private fun handleButtonBack() {
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupActionBar() {

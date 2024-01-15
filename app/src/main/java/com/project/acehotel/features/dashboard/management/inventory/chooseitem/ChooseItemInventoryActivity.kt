@@ -32,6 +32,8 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
 
         setupActionBar()
 
+        handleButtonBack()
+
         fetchInventoryItems()
 
         handleOnRefresh()
@@ -39,6 +41,12 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         handleButtonAddItems()
 
         showLoading(false)
+    }
+
+    private fun handleButtonBack() {
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun handleButtonAddItems() {

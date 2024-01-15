@@ -232,7 +232,7 @@
                 style="@style/textStyleMedium_14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="28dp"
                 android:text="Keterangan"
                 app:layout_constraintStart_toStartOf="@+id/layout_change_stock_item_desc"
                 app:layout_constraintTop_toBottomOf="@+id/btn_increase_stock" />
@@ -287,7 +287,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/custom_button"
