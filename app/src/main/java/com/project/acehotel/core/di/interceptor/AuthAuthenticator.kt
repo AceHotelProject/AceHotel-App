@@ -10,6 +10,7 @@ import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 import javax.inject.Inject
 
 class AuthAuthenticator @Inject constructor(
@@ -21,19 +22,27 @@ class AuthAuthenticator @Inject constructor(
             tokenManager.getRefreshToken().first().toString()
         }
 
+        Timber.tag("TOKEN").d("Ini refresh token " + refreshToken)
+
         return runBlocking {
-            val newRefreshToken = getNewRefreshToken(refreshToken)
+            if (!refreshToken.isNullOrEmpty()) {
+                val newRefreshToken = getNewRefreshToken(refreshToken)
 
-            if (!newRefreshToken.refresh?.token.isNullOrEmpty() || !newRefreshToken.access?.token.isNullOrEmpty()) {
-                tokenManager.deleteToken()
-            }
+                if (newRefreshToken.code?.equals(401) == true) {
+                    tokenManager.deleteToken()
+                }
 
-            newRefreshToken.let {
-                tokenManager.saveAccessToken(newRefreshToken.access?.token.toString())
-                tokenManager.saveRefreshToken(newRefreshToken.refresh?.token.toString())
+                newRefreshToken.let {
+                    tokenManager.saveAccessToken(newRefreshToken.access?.token.toString())
+                    tokenManager.saveRefreshToken(newRefreshToken.refresh?.token.toString())
 
-                response.request.newBuilder()
-                    .header("Authorization", "Bearer ${newRefreshToken.access?.token}").build()
+                    Timber.tag("TOKEN").d(newRefreshToken.access?.token)
+
+                    response.request.newBuilder()
+                        .header("Authorization", "Bearer ${newRefreshToken.access?.token}").build()
+                }
+            } else {
+                response.request.newBuilder().build()
             }
         }
     }

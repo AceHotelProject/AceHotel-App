@@ -42,6 +42,6 @@ class NetworkModule {
     }
 
     companion object {
-        const val BASE_URL = "http://4.240.114.34/v1/"
+        const val BASE_URL = "http://35.202.12.122/v1/"
     }
 }
