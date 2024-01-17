@@ -1,6 +1,7 @@
 package com.project.acehotel.core.di.interceptor
 
 import com.project.acehotel.core.data.source.local.datastore.TokenManager
+import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
 import com.project.acehotel.core.di.NetworkModule
@@ -22,32 +23,40 @@ class AuthAuthenticator @Inject constructor(
             tokenManager.getRefreshToken().first().toString()
         }
 
-        Timber.tag("TOKEN").d("Ini refresh token " + refreshToken)
+        Timber.tag("TOKEN").d("Ini refresh token %s", refreshToken)
 
         return runBlocking {
-            if (!refreshToken.isNullOrEmpty()) {
-                val newRefreshToken = getNewRefreshToken(refreshToken)
+            if (refreshToken.isNotEmpty()) {
+                when (val newRefreshToken = getNewRefreshToken(refreshToken)) {
+                    ApiResponse.Empty -> {
+                        tokenManager.deleteToken()
 
-                if (newRefreshToken.code?.equals(401) == true) {
-                    tokenManager.deleteToken()
-                }
+                        Timber.tag("AuthAuthenticator").e("Empty")
+                        response.request.newBuilder().build()
+                    }
+                    is ApiResponse.Error -> {
+                        tokenManager.deleteToken()
 
-                newRefreshToken.let {
-                    tokenManager.saveAccessToken(newRefreshToken.access?.token.toString())
-                    tokenManager.saveRefreshToken(newRefreshToken.refresh?.token.toString())
+                        Timber.tag("AuthAuthenticator").e(newRefreshToken.errorMessage)
+                        response.request.newBuilder().build()
+                    }
+                    is ApiResponse.Success -> {
+                        tokenManager.saveAccessToken(newRefreshToken.data.access?.token.toString())
+                        tokenManager.saveRefreshToken(newRefreshToken.data.refresh?.token.toString())
 
-                    Timber.tag("TOKEN").d(newRefreshToken.access?.token)
-
-                    response.request.newBuilder()
-                        .header("Authorization", "Bearer ${newRefreshToken.access?.token}").build()
+                        response.request.newBuilder().header(
+                            "Authorization",
+                            "Bearer ${newRefreshToken.data.access?.token}"
+                        ).build()
+                    }
                 }
             } else {
-                response.request.newBuilder().build()
+                null
             }
         }
     }
 
-    private suspend fun getNewRefreshToken(refreshToken: String): RefreshTokenResponse {
+    private suspend fun getNewRefreshToken(refreshToken: String): ApiResponse<RefreshTokenResponse> {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
@@ -57,8 +66,18 @@ class AuthAuthenticator @Inject constructor(
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
-
         val service = retrofit.create(ApiService::class.java)
-        return service.refreshToken(refreshToken)
+
+        return try {
+            val response = service.refreshToken(refreshToken)
+
+            if (response.access != null && response.refresh != null) {
+                ApiResponse.Success(response)
+            } else {
+                ApiResponse.Empty
+            }
+        } catch (e: Exception) {
+            ApiResponse.Error(e.toString())
+        }
     }
 }
