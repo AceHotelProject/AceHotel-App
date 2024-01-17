@@ -13,7 +13,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.utils.showLongToast
+import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityLoginBinding
 import com.project.acehotel.features.dashboard.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        isButtonEnabled(false)
+
         setupActionBar()
 
         handleEditText()
@@ -41,47 +44,29 @@ class LoginActivity : AppCompatActivity() {
     private fun handleEditText() {
         binding.edLoginEmail.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!Patterns.EMAIL_ADDRESS.matcher(p0!!).matches()) {
-                    isButtonEnabled(false)
-                }
+                checkForms()
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!Patterns.EMAIL_ADDRESS.matcher(p0!!).matches()) {
-                    isButtonEnabled(false)
-                }
+                checkForms()
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (Patterns.EMAIL_ADDRESS.matcher(p0!!).matches()) {
-                    isButtonEnabled(true)
-                    binding.layoutLoginEmail.error = null
-                } else {
-                    isButtonEnabled(false)
-                    binding.layoutLoginEmail.error = getString(R.string.wrong_email_format)
-                }
+                checkForms()
             }
         })
 
         binding.edLoginPass.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p0.toString().isEmpty()) {
-                    isButtonEnabled(false)
-                }
+                checkForms()
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+                checkForms()
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (p0.toString().length < 8) {
-                    isButtonEnabled(false)
-                    binding.layoutLoginPass.error = getString(R.string.wrong_password_format)
-                } else {
-                    isButtonEnabled(true)
-                    binding.layoutLoginPass.error = null
-                }
+                checkForms()
             }
         })
 
@@ -109,17 +94,27 @@ class LoginActivity : AppCompatActivity() {
                 when (result) {
                     is Resource.Error -> {
                         showLoading(false)
-                        showLongToast(result.message.toString())
+                        isButtonEnabled(true)
+
+                        if (!isInternetAvailable(this)) {
+                            showToast(getString(R.string.check_internet))
+                        } else {
+                            showToast("Pastikan email dan password telah benar")
+                        }
                     }
                     is Resource.Loading -> {
                         showLoading(true)
+                        isButtonEnabled(false)
                     }
                     is Resource.Message -> {
                         showLoading(false)
+                        isButtonEnabled(true)
+
                         Timber.tag("LoginActivity").d(result.message)
                     }
                     is Resource.Success -> {
                         showLoading(false)
+                        isButtonEnabled(true)
 
                         if (result.data?.tokens != null) {
                             loginViewModel.insertCacheUser(result.data)
@@ -135,6 +130,32 @@ class LoginActivity : AppCompatActivity() {
                     else -> {}
                 }
             }
+        }
+    }
+
+    private fun checkForms() {
+        binding.apply {
+            val email = edLoginEmail.text.toString()
+            val pass = edLoginPass.text.toString()
+
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.layoutLoginEmail.error = getString(R.string.wrong_email_format)
+            } else {
+                binding.layoutLoginEmail.error = null
+            }
+
+            if (pass.length < 8) {
+                binding.layoutLoginPass.error = getString(R.string.wrong_password_format)
+            } else {
+                binding.layoutLoginPass.error = null
+            }
+
+            isButtonEnabled(
+                email.isNotEmpty()
+                        && pass.isNotEmpty()
+                        && pass.length >= 8
+                        && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            )
         }
     }
 
