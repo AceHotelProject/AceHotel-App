@@ -45,7 +45,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 } else {
                     emit(ApiResponse.Empty)
                 }
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(e.toString()))
                 Timber.tag("RemoteDataSource").e(e.toString())
             }

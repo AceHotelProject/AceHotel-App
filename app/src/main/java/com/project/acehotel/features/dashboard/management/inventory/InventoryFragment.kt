@@ -13,6 +13,7 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.ui.adapter.inventory.InventoryListAdapter
+import com.project.acehotel.core.ui.popup.TokenExpiredDialog
 import com.project.acehotel.core.utils.constants.InventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -34,6 +35,22 @@ class InventoryFragment : Fragment() {
         fetchListInventory()
 
         handleRefreshLayout()
+
+        validateToken()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        showLoading(true)
+    }
+
+    private fun validateToken() {
+        inventoryViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isNullOrEmpty()) {
+                TokenExpiredDialog().show(parentFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun handleRefreshLayout() {

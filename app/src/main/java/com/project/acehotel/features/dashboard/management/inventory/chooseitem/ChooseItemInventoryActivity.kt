@@ -40,7 +40,13 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
 
         handleButtonAddItems()
 
-        showLoading(false)
+        showLoading(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        showLoading(true)
     }
 
     private fun handleButtonBack() {
