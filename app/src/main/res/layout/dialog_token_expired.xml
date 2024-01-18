@@ -21,7 +21,8 @@
             style="@style/textStyleMedium_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Apakah anda yakin ingin keluar?" />
+            android:gravity="center"
+            android:text="Sesi anda telah habis\nsilahkan lakukan login ulang" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,31 +39,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_logout_yes"
-            style="@style/textStyleButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button_secondary"
-            android:text="Ya"
-            android:textAllCaps="false"
-            android:textColor="@color/blue"
-            android:textSize="12sp" />
-
         <Button
-            android:id="@+id/btn_logout_no"
+            android:id="@+id/btn_expired_continue"
             style="@style/textStyleButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_weight="1"
             android:background="@drawable/custom_button"
             android:padding="6dp"
-            android:text="Tidak"
+            android:text="Lanjutkan"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
