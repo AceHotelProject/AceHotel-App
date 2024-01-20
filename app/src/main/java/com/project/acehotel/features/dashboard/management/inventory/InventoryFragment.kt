@@ -48,8 +48,14 @@ class InventoryFragment : Fragment() {
     }
 
     private fun handleRefreshLayout() {
-        binding.refInventory.setOnRefreshListener {
-            fetchListInventory()
+        binding.apply {
+            svInventory.viewTreeObserver.addOnScrollChangedListener {
+                refInventory.isEnabled = svInventory.scrollY == 0
+            }
+
+            refInventory.setOnRefreshListener {
+                fetchListInventory()
+            }
         }
     }
 
