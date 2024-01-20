@@ -17,6 +17,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".features.dashboard.profile.manage_franchise.add_franchise.AddFranchiseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.profile.stats.OverallStatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.profile.manage_franchise.ManageFranchiseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.profile.choose_hotel.ChooseHotelActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.management.visitor.detail.VisitorDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.dashboard.management.inventory.additem.AddItemInventoryActivity"
             android:exported="false" />
         <activity

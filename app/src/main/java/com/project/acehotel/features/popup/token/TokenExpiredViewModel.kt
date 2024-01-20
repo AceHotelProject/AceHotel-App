@@ -1,4 +1,4 @@
-package com.project.acehotel.features.popup
+package com.project.acehotel.features.popup.token
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

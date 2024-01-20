@@ -55,5 +55,9 @@
     <string name="item_desc">Deskripsi item</string>
     <string name="save">Simpan</string>
     <string name="field_cant_empty">Data tidak boleh kosong</string>
+    <string name="hotel_name">Nama Hotel</string>
+    <string name="hotel_address">Alamat Hotel</string>
+    <string name="update_data">Perbaharui Data</string>
+    <string name="delete_data">Hapus Data</string>
 
 </resources>

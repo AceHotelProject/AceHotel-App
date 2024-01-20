@@ -13,12 +13,12 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.ui.adapter.inventory.InventoryListAdapter
-import com.project.acehotel.core.ui.popup.TokenExpiredDialog
 import com.project.acehotel.core.utils.constants.InventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentInventoryBinding
 import com.project.acehotel.features.dashboard.management.inventory.detail.InventoryDetailActivity
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -37,12 +37,6 @@ class InventoryFragment : Fragment() {
         handleRefreshLayout()
 
         validateToken()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        showLoading(true)
     }
 
     private fun validateToken() {
@@ -117,7 +111,13 @@ class InventoryFragment : Fragment() {
         binding.rvListInventory.adapter = adapter
 
         adapter.setOnItemClickCallback(object : InventoryListAdapter.OnItemClickCallback {
-            override fun onItemClicked(context: Context, id: String, name: String, type: String) {
+            override fun onItemClicked(
+                context: Context,
+                id: String,
+                name: String,
+                type: String,
+                stock: Int
+            ) {
                 val intentToInventoryDetail =
                     Intent(requireContext(), InventoryDetailActivity::class.java)
 

@@ -114,7 +114,13 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         binding.rvListItemInventory.layoutManager = layoutManager
 
         adapter.setOnItemClickCallback(object : InventoryListAdapter.OnItemClickCallback {
-            override fun onItemClicked(context: Context, id: String, name: String, type: String) {
+            override fun onItemClicked(
+                context: Context,
+                id: String,
+                name: String,
+                type: String,
+                stock: Int
+            ) {
                 val intentToChangeStockInventory =
                     Intent(
                         this@ChooseItemInventoryActivity,
@@ -124,6 +130,7 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
                 intentToChangeStockInventory.putExtra(INVENTORY_ITEM_ID, id)
                 intentToChangeStockInventory.putExtra(INVENTORY_ITEM_NAME, name)
                 intentToChangeStockInventory.putExtra(INVENTORY_ITEM_TYPE, type)
+                intentToChangeStockInventory.putExtra(INVENTORY_ITEM_STOCK, stock)
 
                 startActivity(intentToChangeStockInventory)
             }
@@ -142,5 +149,6 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         private const val INVENTORY_ITEM_ID = "inventory_item_id"
         private const val INVENTORY_ITEM_NAME = "inventory_item_name"
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
+        private const val INVENTORY_ITEM_STOCK = "inventory_item_stock"
     }
 }

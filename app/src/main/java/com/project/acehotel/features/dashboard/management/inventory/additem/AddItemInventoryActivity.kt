@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.DateUtils
-import com.project.acehotel.core.utils.constants.InventoryType
 import com.project.acehotel.core.utils.constants.inventoryTypeList
+import com.project.acehotel.core.utils.constants.mapToInventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityAddItemInventoryBinding
@@ -73,15 +73,7 @@ class AddItemInventoryActivity : AppCompatActivity() {
         binding.apply {
             btnSave.setOnClickListener {
                 val name = edAddItemName.text.toString()
-                val type = when (edAddItemType.text.toString()) {
-                    InventoryType.BED.display -> {
-                        InventoryType.BED.type
-                    }
-                    InventoryType.LINEN.display -> {
-                        InventoryType.LINEN.type
-                    }
-                    else -> InventoryType.UNDEFINED.type
-                }
+                val type = mapToInventoryType(edAddItemType.text.toString())
 
                 addItemInventoryViewModel.addInventory(name, type, stockCount)
                     .observe(this@AddItemInventoryActivity) { inventory ->
@@ -213,5 +205,14 @@ class AddItemInventoryActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        private const val INVENTORY_ITEM_ID = "inventory_item_id"
+        private const val INVENTORY_ITEM_NAME = "inventory_item_name"
+        private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
+        private const val INVENTORY_ITEM_STOCK = "inventory_item_stock"
+
+        private const val FLAG_UPDATE = "inventory_flag_update"
     }
 }

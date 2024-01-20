@@ -9,7 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.DateUtils
-import com.project.acehotel.core.utils.constants.InventoryType
+import com.project.acehotel.core.utils.constants.mapToInventoryDisplay
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChangeStockItemInventoryBinding
@@ -148,22 +148,16 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
     private fun initItemInfo() {
         val currentDate = DateUtils.getCurrentDateTime()
         val itemName = intent.getStringExtra(INVENTORY_ITEM_NAME)
-        val itemType = when (intent.getStringExtra(INVENTORY_ITEM_TYPE)) {
-            InventoryType.LINEN.type -> {
-                InventoryType.LINEN.display
-            }
-            InventoryType.BED.type -> {
-                InventoryType.BED.display
-            }
-            else -> {
-                InventoryType.UNDEFINED.display
-            }
-        }
+        val itemType = mapToInventoryDisplay(intent.getStringExtra(INVENTORY_ITEM_TYPE).toString())
+        val itemStock = intent.getIntExtra(INVENTORY_ITEM_STOCK, 0)
 
         binding.apply {
             edChangeStockItemName.setText(itemName)
             edChangeStockItemType.setText(itemType)
             edChangeStockItemDate.setText(currentDate)
+
+            stockCount = itemStock
+            tvChangeStock.text = (itemStock.toString())
         }
     }
 
@@ -193,5 +187,7 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
         private const val INVENTORY_ITEM_ID = "inventory_item_id"
         private const val INVENTORY_ITEM_NAME = "inventory_item_name"
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
+        private const val INVENTORY_ITEM_STOCK = "inventory_item_stock"
+
     }
 }

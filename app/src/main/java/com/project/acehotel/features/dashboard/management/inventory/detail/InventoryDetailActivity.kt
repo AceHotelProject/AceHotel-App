@@ -3,6 +3,7 @@ package com.project.acehotel.features.dashboard.management.inventory.detail
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,10 +13,13 @@ import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
 import com.project.acehotel.core.ui.adapter.inventory.InventoryHistoryAdapter
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityInventoryDetailBinding
+import com.project.acehotel.features.dashboard.management.inventory.changestock.ChangeStockItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.inventory.chooseitem.ChooseItemInventoryActivity
+import com.project.acehotel.features.popup.delete.DeleteItemDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -23,6 +27,11 @@ import timber.log.Timber
 class InventoryDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInventoryDetailBinding
     private val inventoryDetailViewModel: InventoryDetailViewModel by viewModels()
+
+    private lateinit var itemId: String
+    private lateinit var itemName: String
+    private lateinit var itemType: String
+    private var itemStock: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +43,56 @@ class InventoryDetailActivity : AppCompatActivity() {
 
         handleFab()
 
-        setupBackButton()
+        handleBackButton()
 
         fetchInventoryDetail()
+
+        handleButtonMore()
+
+        getItemInfo()
+    }
+
+    private fun getItemInfo() {
+        if (intent.getStringExtra(INVENTORY_ITEM_ID) != null) {
+            itemId = intent.getStringExtra(INVENTORY_ITEM_ID).toString()
+            itemName = intent.getStringExtra(INVENTORY_ITEM_NAME).toString()
+            itemType = intent.getStringExtra(INVENTORY_ITEM_TYPE).toString()
+        }
+    }
+
+    private fun handleButtonMore() {
+        binding.btnInventoryDetailMore.setOnClickListener {
+            val popUpMenu = PopupMenu(this, binding.btnInventoryDetailMore)
+            popUpMenu.menuInflater.inflate(R.menu.menu_detail_item, popUpMenu.menu)
+
+            popUpMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menuUpdate -> {
+                        val intentToUpdateItem =
+                            Intent(this, ChangeStockItemInventoryActivity::class.java)
+
+                        intentToUpdateItem.putExtra(FLAG_UPDATE, true)
+                        intentToUpdateItem.putExtra(INVENTORY_ITEM_ID, itemId)
+                        intentToUpdateItem.putExtra(INVENTORY_ITEM_NAME, itemName)
+                        intentToUpdateItem.putExtra(INVENTORY_ITEM_TYPE, itemType)
+                        intentToUpdateItem.putExtra(INVENTORY_ITEM_STOCK, itemStock)
+
+                        startActivity(intentToUpdateItem)
+                        true
+                    }
+                    R.id.menuDelete -> {
+                        DeleteItemDialog(DeleteDialogType.INVENTORY_DETAIL, itemId).show(
+                            supportFragmentManager,
+                            "Delete Dialog"
+                        )
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popUpMenu.show()
+        }
     }
 
     private fun fetchInventoryDetail() {
@@ -91,11 +147,13 @@ class InventoryDetailActivity : AppCompatActivity() {
                 tvInventoryDetailDesc.text =
                     "Perubahan " + DateUtils.convertDate(data.historyList.last().date)
                 chipInventoryCardType.setStatus(data.type)
+
+                itemStock = data.stock
             }
         }
     }
 
-    private fun setupBackButton() {
+    private fun handleBackButton() {
         binding.btnInventoryDetailBack.setOnClickListener {
             finish()
         }
@@ -103,10 +161,6 @@ class InventoryDetailActivity : AppCompatActivity() {
 
     private fun handleFab() {
         binding.fabInventoryDetailChangeStock.setOnClickListener {
-            val itemId = intent.getStringExtra(INVENTORY_ITEM_ID)
-            val itemName = intent.getStringExtra(INVENTORY_ITEM_NAME)
-            val itemType = intent.getStringExtra(INVENTORY_ITEM_TYPE)
-
             val intentToChooseItem = Intent(this, ChooseItemInventoryActivity::class.java)
             intentToChooseItem.putExtra(INVENTORY_ITEM_ID, itemId)
             intentToChooseItem.putExtra(INVENTORY_ITEM_NAME, itemName)
@@ -128,5 +182,8 @@ class InventoryDetailActivity : AppCompatActivity() {
         private const val INVENTORY_ITEM_ID = "inventory_item_id"
         private const val INVENTORY_ITEM_NAME = "inventory_item_name"
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
+        private const val INVENTORY_ITEM_STOCK = "inventory_item_stock"
+
+        private const val FLAG_UPDATE = "inventory_flag_update"
     }
 }

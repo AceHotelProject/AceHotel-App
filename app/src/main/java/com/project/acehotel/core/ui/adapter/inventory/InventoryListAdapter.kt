@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.databinding.ItemListInventoryBinding
-import timber.log.Timber
 
 class InventoryListAdapter(private val listInventory: List<Inventory>?) :
     RecyclerView.Adapter<InventoryListAdapter.ViewHolder>() {
@@ -24,8 +23,6 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
     }
 
     override fun getItemCount(): Int {
-        Timber.tag("TEST").d("ini sizenya" + listInventory?.size.toString())
-
         return listInventory?.size ?: 0
     }
 
@@ -44,7 +41,13 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
 
         holder.itemView.setOnClickListener {
             if (data != null) {
-                onItemCallback.onItemClicked(holder.itemView.context, data.id, data.name, data.type)
+                onItemCallback.onItemClicked(
+                    holder.itemView.context,
+                    data.id,
+                    data.name,
+                    data.type,
+                    data.stock
+                )
             }
         }
     }
@@ -54,6 +57,6 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(context: Context, id: String, name: String, type: String)
+        fun onItemClicked(context: Context, id: String, name: String, type: String, stock: Int)
     }
 }
