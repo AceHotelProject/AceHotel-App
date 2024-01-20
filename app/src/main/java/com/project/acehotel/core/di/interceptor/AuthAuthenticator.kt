@@ -24,9 +24,10 @@ class AuthAuthenticator @Inject constructor(
         }
 
         Timber.tag("TOKEN").d("Ini refresh token %s", refreshToken)
+        Timber.tag("TOKEN").d("Ini code %s", response.code)
 
-        return runBlocking {
-            if (refreshToken.isNotEmpty()) {
+        return if (response.code == 401) {
+            runBlocking {
                 when (val newRefreshToken = getNewRefreshToken(refreshToken)) {
                     ApiResponse.Empty -> {
                         tokenManager.deleteToken()
@@ -44,15 +45,18 @@ class AuthAuthenticator @Inject constructor(
                         tokenManager.saveAccessToken(newRefreshToken.data.access?.token.toString())
                         tokenManager.saveRefreshToken(newRefreshToken.data.refresh?.token.toString())
 
+                        Timber.tag("TOKEN")
+                            .d("Ini token baru %s", newRefreshToken.data.refresh?.token.toString())
+
                         response.request.newBuilder().header(
                             "Authorization",
                             "Bearer ${newRefreshToken.data.access?.token}"
                         ).build()
                     }
                 }
-            } else {
-                null
             }
+        } else {
+            null
         }
     }
 
