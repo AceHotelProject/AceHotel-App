@@ -49,7 +49,7 @@ interface ApiService {
         @Field("stock") stock: Int,
     ): InventoryDetailResponse
 
-    @PUT("inventory/{id}")
+    @PATCH("inventory/{id}")
     @FormUrlEncoded
     suspend fun updateInventory(
         @Path("id") id: String,
