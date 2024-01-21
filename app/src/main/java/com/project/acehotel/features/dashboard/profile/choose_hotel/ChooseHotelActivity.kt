@@ -12,5 +12,11 @@ class ChooseHotelActivity : AppCompatActivity() {
 
         binding = ActivityChooseHotelBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupActionBar()
+    }
+
+    private fun setupActionBar() {
+        supportActionBar?.hide()
     }
 }

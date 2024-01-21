@@ -12,5 +12,11 @@ class OverallStatsActivity : AppCompatActivity() {
 
         binding = ActivityOverallStatsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupActionBar()
+    }
+
+    private fun setupActionBar() {
+        supportActionBar?.hide()
     }
 }

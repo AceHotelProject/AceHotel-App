@@ -43,7 +43,7 @@
         android:id="@+id/ref_franchise_hotel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_add_item"
+        app:layout_constraintBottom_toTopOf="@+id/btn_add_franchise_hotel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">

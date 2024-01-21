@@ -165,6 +165,7 @@ class InventoryDetailActivity : AppCompatActivity() {
             intentToChooseItem.putExtra(INVENTORY_ITEM_ID, itemId)
             intentToChooseItem.putExtra(INVENTORY_ITEM_NAME, itemName)
             intentToChooseItem.putExtra(INVENTORY_ITEM_TYPE, itemType)
+            intentToChooseItem.putExtra(INVENTORY_ITEM_STOCK, itemStock)
 
             startActivity(intentToChooseItem)
         }

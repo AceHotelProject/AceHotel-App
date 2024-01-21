@@ -3,13 +3,16 @@ package com.project.acehotel.features.dashboard.management.inventory.changestock
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.constants.inventoryTypeList
 import com.project.acehotel.core.utils.constants.mapToInventoryDisplay
+import com.project.acehotel.core.utils.constants.mapToInventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChangeStockItemInventoryBinding
@@ -29,7 +32,11 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
         binding = ActivityChangeStockItemInventoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        checkIsUpdate()
+
         setupActionBar()
+
+        initInventoryType()
 
         disableRefresh()
 
@@ -46,12 +53,42 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
         handleButtonSave()
     }
 
+    private fun checkIsUpdate() {
+        if (intent.getBooleanExtra(FLAG_UPDATE, false)) {
+            binding.apply {
+                edChangeStockItemName.isEnabled = true
+                layoutChangeStockItemType.isClickable = true
+            }
+        }
+    }
+
+    private fun initInventoryType() {
+        val adapter = ArrayAdapter(this, R.layout.drop_inventory_item, inventoryTypeList)
+
+        binding.edChangeStockItemType.apply {
+            setAdapter(adapter)
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    binding.layoutChangeStockItemType.isHintEnabled = p0.isNullOrEmpty()
+                }
+            })
+        }
+    }
+
     private fun handleButtonSave() {
         binding.apply {
             btnSave.setOnClickListener {
                 val id = intent.getStringExtra(INVENTORY_ITEM_ID)!!
                 val name = edChangeStockItemName.text.toString()
-                val type = edChangeStockItemType.text.toString()
+                val type = mapToInventoryType(edChangeStockItemType.text.toString())
                 val stock = stockCount
                 val title = edChangeStockItemTitle.text.toString()
                 val desc = edChangeStockItemDesc.text.toString()
@@ -189,5 +226,6 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
         private const val INVENTORY_ITEM_STOCK = "inventory_item_stock"
 
+        private const val FLAG_UPDATE = "inventory_flag_update"
     }
 }

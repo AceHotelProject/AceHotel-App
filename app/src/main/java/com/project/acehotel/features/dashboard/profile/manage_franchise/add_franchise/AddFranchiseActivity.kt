@@ -12,5 +12,11 @@ class AddFranchiseActivity : AppCompatActivity() {
 
         binding = ActivityAddFranchiseBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupActionBar()
+    }
+
+    private fun setupActionBar() {
+        supportActionBar?.hide()
     }
 }
