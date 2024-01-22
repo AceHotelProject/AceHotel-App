@@ -1,4 +1,4 @@
-package com.project.acehotel.features.dashboard.profile.manage_franchise.add_franchise
+package com.project.acehotel.features.dashboard.profile.add_franchise
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

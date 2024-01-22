@@ -14,7 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.databinding.ActivityMainBinding
-import com.project.acehotel.features.dashboard.management.inventory.chooseitem.ChooseItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

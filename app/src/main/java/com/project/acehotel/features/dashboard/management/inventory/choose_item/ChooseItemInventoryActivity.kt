@@ -1,4 +1,4 @@
-package com.project.acehotel.features.dashboard.management.inventory.chooseitem
+package com.project.acehotel.features.dashboard.management.inventory.choose_item
 
 import android.content.Context
 import android.content.Intent
@@ -13,8 +13,8 @@ import com.project.acehotel.core.ui.adapter.inventory.InventoryListAdapter
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChooseItemInventoryBinding
-import com.project.acehotel.features.dashboard.management.inventory.additem.AddItemInventoryActivity
-import com.project.acehotel.features.dashboard.management.inventory.changestock.ChangeStockItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.inventory.add_item.AddItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.inventory.change_stock.ChangeStockItemInventoryActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

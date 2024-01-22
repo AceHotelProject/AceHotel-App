@@ -1,4 +1,4 @@
-package com.project.acehotel.features.dashboard.management.inventory.additem
+package com.project.acehotel.features.dashboard.management.inventory.add_item
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData

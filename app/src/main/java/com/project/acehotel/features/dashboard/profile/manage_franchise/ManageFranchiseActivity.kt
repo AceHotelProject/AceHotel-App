@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.project.acehotel.databinding.ActivityManageFranchiseBinding
-import com.project.acehotel.features.dashboard.profile.manage_franchise.add_franchise.AddFranchiseActivity
+import com.project.acehotel.features.dashboard.profile.add_franchise.AddFranchiseActivity
 
 class ManageFranchiseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityManageFranchiseBinding

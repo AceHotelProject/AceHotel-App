@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.dashboard.management.inventory.changestock.ChangeStockItemInventoryActivity">
+    tools:context=".features.dashboard.management.inventory.change_stock.ChangeStockItemInventoryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

@@ -17,8 +17,8 @@ import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityInventoryDetailBinding
-import com.project.acehotel.features.dashboard.management.inventory.changestock.ChangeStockItemInventoryActivity
-import com.project.acehotel.features.dashboard.management.inventory.chooseitem.ChooseItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.inventory.change_stock.ChangeStockItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.dashboard.management.inventory.additem.AddItemInventoryActivity">
+    tools:context=".features.dashboard.management.inventory.add_item.AddItemInventoryActivity">
 
     <ImageView
         android:id="@+id/btn_back"

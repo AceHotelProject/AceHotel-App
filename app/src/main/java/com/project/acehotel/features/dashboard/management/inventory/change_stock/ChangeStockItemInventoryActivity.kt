@@ -1,4 +1,4 @@
-package com.project.acehotel.features.dashboard.management.inventory.changestock
+package com.project.acehotel.features.dashboard.management.inventory.change_stock
 
 import android.os.Bundle
 import android.text.Editable

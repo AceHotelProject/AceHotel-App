@@ -1,4 +1,4 @@
-package com.project.acehotel.features.dashboard.management.inventory.chooseitem
+package com.project.acehotel.features.dashboard.management.inventory.choose_item
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
