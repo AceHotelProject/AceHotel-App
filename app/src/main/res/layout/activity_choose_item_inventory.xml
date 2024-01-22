@@ -24,19 +24,40 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:src="@drawable/icons_button_back"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/textView31"
             style="@style/textStyleSemIBold_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/choose_item"
-            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintBottom_toBottomOf="@+id/btn_back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/btn_back" />
+
+        <EditText
+            android:id="@+id/ed_inventory_item_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/custom_edit_text"
+            android:drawableStart="@drawable/icons_search"
+            android:drawablePadding="12sp"
+            android:ems="10"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="14dp"
+            android:textColorHint="@color/dark_grey"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_back" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
