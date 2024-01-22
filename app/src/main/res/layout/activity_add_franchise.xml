@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.dashboard.profile.manage_franchise.add_franchise.AddFranchiseActivity">
+    tools:context=".features.dashboard.profile.add_franchise.AddFranchiseActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Nama Hotel"
+                    android:hint="Masukkan nama hotel"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Alamat Hotel"
+                    android:hint="Masukkan alamat hotel"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
@@ -173,8 +173,53 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Jumlah Kamar Reguler"
+                    android:hint="Masukkan jumlah kamar reguler"
                     android:inputType="textEmailAddress"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="16dp"
+                    android:textColorHint="@color/dark_grey"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView24"
+                style="@style/textStyleMedium_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Jumlah Kamar Reguler"
+                app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_address"
+                app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_regular_count" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_add_franchise_room_regular_price"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:errorIconTint="@color/red"
+                app:errorTextColor="@color/red"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_add_franchise_room_regular_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_edit_text"
+                    android:drawableStart="@drawable/icons_rupiah"
+                    android:drawablePadding="12sp"
+                    android:ems="10"
+                    android:hint="Masukkan harga kamar reguler"
+                    android:inputType="number"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
                     android:textColorHint="@color/dark_grey"
@@ -189,7 +234,7 @@
                 android:layout_marginTop="12dp"
                 android:text="Foto Kamar Reguler"
                 app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_room_regular_count"
-                app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_regular_count" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_regular_price" />
 
             <HorizontalScrollView
                 android:id="@+id/horizontalLayout"
@@ -284,6 +329,51 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/textView25"
+                style="@style/textStyleMedium_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Jumlah Kamar Reguler"
+                app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_address"
+                app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_exclusive_count" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_add_franchise_room_exclusive_price"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:errorIconTint="@color/red"
+                app:errorTextColor="@color/red"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView25">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_add_franchise_room_exclusive_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_edit_text"
+                    android:drawableStart="@drawable/icons_rupiah"
+                    android:drawablePadding="12sp"
+                    android:ems="10"
+                    android:hint="Masukkan harga kamar exclusivee"
+                    android:inputType="number"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="16dp"
+                    android:textColorHint="@color/dark_grey"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
                 android:id="@+id/textView6"
                 style="@style/textStyleMedium_14"
                 android:layout_width="wrap_content"
@@ -343,6 +433,51 @@
             </HorizontalScrollView>
 
             <TextView
+                android:id="@+id/textView26"
+                style="@style/textStyleMedium_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Harga Kasur Tambahan"
+                app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_address"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalLayout2" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_add_franchise_bed_price"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null"
+                app:errorIconTint="@color/red"
+                app:errorTextColor="@color/red"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView26">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_add_franchise_room_bed_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_edit_text"
+                    android:drawableStart="@drawable/icons_rupiah"
+                    android:drawablePadding="12sp"
+                    android:ems="10"
+                    android:hint="Masukkan harga kasur tambahan"
+                    android:inputType="number"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="16dp"
+                    android:textColorHint="@color/dark_grey"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
                 android:id="@+id/textView7"
                 style="@style/textStyleMedium_14"
                 android:layout_width="wrap_content"
@@ -350,7 +485,7 @@
                 android:layout_marginTop="12dp"
                 android:text="Nama Owner"
                 app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
-                app:layout_constraintTop_toBottomOf="@+id/horizontalLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_bed_price" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_add_franchise_owner_name"
@@ -377,7 +512,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Nama Owner"
+                    android:hint="Masukkan nama owner"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
@@ -556,7 +691,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Nama Resepsionis"
+                    android:hint="Masukkan nama resepsionis"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
@@ -599,7 +734,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Email Resepsionis"
+                    android:hint="Masukkan email resepsionis"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
@@ -734,7 +869,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Nama Pegawai Gudang"
+                    android:hint="Masukkan nama pegawai gudang"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
@@ -777,7 +912,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Email Pegawai Gudang"
+                    android:hint="Masukkan email pegawai gudang"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
@@ -912,7 +1047,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Nama Cleaning Service"
+                    android:hint="Masukkan nama cleaning service"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
@@ -955,7 +1090,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:hint="Masukkan Email Cleaning Service"
+                    android:hint="Masukkan email cleaning service"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
