@@ -40,12 +40,16 @@ class CustomRoomType : AppCompatTextView {
     private fun updateStatus() {
         when (status) {
             RoomType.REGULAR.type -> {
-                text = RoomType.REGULAR.type
+                text = RoomType.REGULAR.display
                 setBackground(context, R.color.blue)
             }
             RoomType.EXCLUSIVE.type -> {
-                text = RoomType.EXCLUSIVE.type
+                text = RoomType.EXCLUSIVE.display
                 setBackground(context, R.color.dark_purple)
+            }
+            else -> {
+                text = RoomType.UNDEFINED.display
+                setBackground(context, R.color.dark_grey)
             }
         }
     }
