@@ -24,7 +24,34 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".features.dashboard.profile.manage_franchise.add_franchise.AddFranchiseActivity"
+            android:name=".features.dashboard.booking.detail.BookingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.booking.confirm.ConfirmBookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.booking.add_booking.AddBookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.booking.choose_visitor.ChooseVisitorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.booking.add_visitor.AddVisitorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.room.detail.RoomDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.room.checkout.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.room.checkin.CheckinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.room.change_price.ChangePriceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.dashboard.profile.add_franchise.AddFranchiseActivity"
             android:exported="false" />
         <activity
             android:name=".features.dashboard.profile.stats.OverallStatsActivity"
@@ -39,13 +66,13 @@
             android:name=".features.dashboard.management.visitor.detail.VisitorDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".features.dashboard.management.inventory.additem.AddItemInventoryActivity"
+            android:name=".features.dashboard.management.inventory.add_item.AddItemInventoryActivity"
             android:exported="false" />
         <activity
-            android:name=".features.dashboard.management.inventory.changestock.ChangeStockItemInventoryActivity"
+            android:name=".features.dashboard.management.inventory.change_stock.ChangeStockItemInventoryActivity"
             android:exported="false" />
         <activity
-            android:name=".features.dashboard.management.inventory.chooseitem.ChooseItemInventoryActivity"
+            android:name=".features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity"
             android:exported="false" />
         <activity
             android:name=".features.dashboard.management.inventory.detail.InventoryDetailActivity"

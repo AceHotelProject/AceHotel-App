@@ -1,4 +1,4 @@
-package com.project.acehotel.core.ui.custom
+package com.project.acehotel.core.ui.custom.chips
 
 import android.content.Context
 import android.util.AttributeSet
