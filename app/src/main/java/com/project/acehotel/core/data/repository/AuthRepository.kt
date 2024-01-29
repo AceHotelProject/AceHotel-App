@@ -8,7 +8,6 @@ import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.domain.auth.model.Auth
-import com.project.acehotel.core.domain.auth.model.Tokens
 import com.project.acehotel.core.domain.auth.repository.IAuthRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.AuthDataMapper
@@ -73,12 +72,6 @@ class AuthRepository @Inject constructor(
             GlobalScope.launch(Dispatchers.IO) {
                 localDataSource.deleteUser(userEntity)
             }
-        }
-    }
-
-    override fun getTokens(): Flow<Tokens> {
-        return localDataSource.getTokens().map {
-            AuthDataMapper.mapTokenDataToDomain(it)
         }
     }
 

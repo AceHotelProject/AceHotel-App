@@ -1,6 +1,5 @@
 package com.project.acehotel.core.utils.datamapper
 
-import com.project.acehotel.core.data.source.local.entity.TokenData
 import com.project.acehotel.core.data.source.local.entity.TokenEntity
 import com.project.acehotel.core.data.source.local.entity.UserEntity
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
@@ -9,6 +8,7 @@ import com.project.acehotel.core.domain.auth.model.Tokens
 import com.project.acehotel.core.domain.auth.model.TokensFormat
 import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.utils.constants.UserRole
+import org.json.JSONArray
 
 object AuthDataMapper {
 
@@ -32,7 +32,8 @@ object AuthDataMapper {
             },
             username = input.user?.username ?: "Empty",
             email = input.user?.email ?: "Empty",
-            id = input.user?.id ?: "Empty"
+            id = input.user?.id ?: "Empty",
+            hotelId = input.user?.hotelId
         ),
         tokens = Tokens(
             accessToken = TokensFormat(
@@ -59,24 +60,14 @@ object AuthDataMapper {
         )
     )
 
-    fun mapTokenDataToDomain(input: TokenData): Tokens = Tokens(
-        accessToken = TokensFormat(
-            token = input.accessToken ?: "Empty",
-            expires = input.accessTokenExpire ?: "Empty",
-        ),
-        refreshToken = TokensFormat(
-            token = input.refreshToken ?: "Empty",
-            expires = input.refreshTokenExpire ?: "Empty",
-        )
-    )
-
     fun mapUserEntityToDomain(input: UserEntity?): Auth = Auth(
         id = input?.id ?: 1,
         user = User(
             role = input?.role ?: UserRole.UNDEFINED,
             username = input?.username ?: "Empty",
             email = input?.email ?: "Empty",
-            id = input?.userId ?: "Empty"
+            id = input?.userId ?: "Empty",
+            hotelId = convertStringToList(input?.hotelId.toString())
         ),
         tokens = Tokens(
             accessToken = TokensFormat(
@@ -89,4 +80,15 @@ object AuthDataMapper {
             )
         )
     )
+
+    private fun convertStringToList(input: String): List<String> {
+        val jsonArray = JSONArray(input)
+
+        val outputList = mutableListOf<String>()
+        for (i in 0 until jsonArray.length()) {
+            outputList.add(jsonArray.getString(i))
+        }
+
+        return outputList
+    }
 }

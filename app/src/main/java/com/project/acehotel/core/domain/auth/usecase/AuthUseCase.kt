@@ -2,7 +2,6 @@ package com.project.acehotel.core.domain.auth.usecase
 
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.model.Auth
-import com.project.acehotel.core.domain.auth.model.Tokens
 import kotlinx.coroutines.flow.Flow
 
 interface AuthUseCase {
@@ -16,8 +15,6 @@ interface AuthUseCase {
     suspend fun updateUser(user: Auth)
 
     suspend fun deleteUser(user: Auth)
-
-    fun getTokens(): Flow<Tokens>
 
     suspend fun saveAccessToken(token: String)
 

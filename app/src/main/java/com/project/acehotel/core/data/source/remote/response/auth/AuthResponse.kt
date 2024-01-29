@@ -59,5 +59,8 @@ data class User(
     val email: String? = null,
 
     @field:SerializedName("username")
-    val username: String? = null
+    val username: String? = null,
+
+    @field:SerializedName("hotel_id")
+    val hotelId: List<String>? = null
 )

@@ -3,7 +3,6 @@ package com.project.acehotel.core.domain.auth.interactor
 import com.project.acehotel.core.data.repository.AuthRepository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.model.Auth
-import com.project.acehotel.core.domain.auth.model.Tokens
 import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -20,7 +19,6 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
 
     override suspend fun deleteUser(user: Auth) = authRepository.deleteUser(user)
 
-    override fun getTokens(): Flow<Tokens> = authRepository.getTokens()
     override suspend fun saveAccessToken(token: String) = authRepository.saveAccessToken(token)
 
     override suspend fun saveRefreshToken(token: String) = authRepository.saveRefreshToken(token)
