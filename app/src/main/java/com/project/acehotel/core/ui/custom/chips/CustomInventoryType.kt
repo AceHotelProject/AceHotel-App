@@ -1,4 +1,4 @@
-package com.project.acehotel.core.ui.custom
+package com.project.acehotel.core.ui.custom.chips
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.InventoryType
+import com.project.acehotel.core.utils.constants.RoomType
 
 class CustomInventoryType : AppCompatTextView {
     private var status: String = InventoryType.UNDEFINED.type
@@ -40,12 +41,16 @@ class CustomInventoryType : AppCompatTextView {
     private fun updateStatus() {
         when (status) {
             InventoryType.LINEN.type -> {
-                text = "Linen"
+                text = InventoryType.LINEN.display
                 setBackground(context, R.color.orange)
             }
             InventoryType.BED.type -> {
-                text = "Kasur"
+                text = InventoryType.BED.display
                 setBackground(context, R.color.yellow)
+            }
+            else -> {
+                text = RoomType.UNDEFINED.display
+                setBackground(context, R.color.dark_grey)
             }
         }
     }

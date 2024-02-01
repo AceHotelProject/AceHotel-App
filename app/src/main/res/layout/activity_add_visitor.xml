@@ -6,27 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".features.dashboard.booking.add_visitor.AddVisitorActivity">
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/btn_back"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:layout_marginTop="24dp"-->
-    <!--        android:src="@drawable/icons_button_back"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView0"-->
-    <!--        style="@style/textStyleMedium_16"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Tambah Pengunjung"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/btn_back"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="@+id/btn_back" />-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
