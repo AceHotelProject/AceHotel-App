@@ -30,6 +30,9 @@ data class UserEntity(
     @ColumnInfo(name = "email")
     var email: String? = "",
 
+    @ColumnInfo(name = "hotel_id")
+    var hotelId: String? = "",
+
     @Embedded
     var tokenInfo: TokenEntity
 ) : Parcelable

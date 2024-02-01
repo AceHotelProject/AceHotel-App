@@ -1,6 +1,5 @@
 package com.project.acehotel.core.data.source.local
 
-import com.project.acehotel.core.data.source.local.entity.TokenData
 import com.project.acehotel.core.data.source.local.entity.UserEntity
 import com.project.acehotel.core.data.source.local.room.UserDao
 import kotlinx.coroutines.flow.Flow
@@ -18,9 +17,5 @@ class LocalDataSource @Inject constructor(private val userDao: UserDao) {
 
     suspend fun deleteUser(user: UserEntity) {
         return userDao.deleteUser(user)
-    }
-
-    fun getTokens(): Flow<TokenData> {
-        return userDao.getTokens()
     }
 }
