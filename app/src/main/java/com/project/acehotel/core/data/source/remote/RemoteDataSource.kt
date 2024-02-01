@@ -4,12 +4,16 @@ import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import okhttp3.MultipartBody
+import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -136,12 +140,16 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun deleteInventory(id: String): Flow<ApiResponse<InventoryDetailResponse>> {
-        return flow<ApiResponse<InventoryDetailResponse>> {
+    suspend fun deleteInventory(id: String): Flow<ApiResponse<Response<InventoryDetailResponse>>> {
+        return flow<ApiResponse<Response<InventoryDetailResponse>>> {
             try {
                 val response = apiService.deleteInventory(id)
 
-
+                if (response.isSuccessful) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
             } catch (e: Exception) {
                 emit(ApiResponse.Error(e.toString()))
                 Timber.tag("RemoteDataSource").e(e.toString())
@@ -150,4 +158,182 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     }
 
     // INVENTORY
+
+    // HOTEL
+
+    suspend fun addHotel(
+        name: String,
+        address: String,
+        contact: String,
+
+        regularRoomCount: Int,
+        regularRoomImage: MultipartBody.Part,
+        exclusiveRoomCount: Int,
+        exclusiveRoomImage: MultipartBody.Part,
+        regularRoomPrice: Int,
+        exclusiveRoomPrice: Int,
+        extraBedPrice: Int,
+
+        ownerName: String,
+        ownerEmail: String,
+        ownerPassword: String,
+
+        receptionistName: String,
+        receptionistEmail: String,
+        receptionistPassword: String,
+
+        cleaningName: String,
+        cleaningEmail: String,
+        cleaningPassword: String,
+
+        inventoryName: String,
+        inventoryEmail: String,
+        inventoryPassword: String,
+    ): Flow<ApiResponse<HotelResponse>> {
+        return flow<ApiResponse<HotelResponse>> {
+            try {
+                val response =
+                    apiService.addHotel(
+                        name,
+                        address,
+                        contact,
+                        regularRoomCount,
+                        regularRoomImage,
+                        exclusiveRoomCount,
+                        exclusiveRoomImage,
+                        regularRoomPrice,
+                        exclusiveRoomPrice,
+                        extraBedPrice,
+                        ownerName,
+                        ownerEmail,
+                        ownerPassword,
+                        receptionistName,
+                        receptionistEmail,
+                        receptionistPassword,
+                        cleaningName,
+                        cleaningEmail,
+                        cleaningPassword,
+                        inventoryName,
+                        inventoryEmail,
+                        inventoryPassword
+                    )
+
+                if (!response.ownerId.isNullOrEmpty()) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getHotels(): Flow<ApiResponse<ListHotelResponse>> {
+        return flow<ApiResponse<ListHotelResponse>> {
+            try {
+                val response = apiService.getHotels()
+
+                if (response.results != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun updateHotel(
+        id: String,
+
+        name: String,
+        address: String,
+        contact: String,
+
+        regularRoomCount: Int,
+        regularRoomImage: MultipartBody.Part,
+        exclusiveRoomCount: Int,
+        exclusiveRoomImage: MultipartBody.Part,
+        regularRoomPrice: Int,
+        exclusiveRoomPrice: Int,
+        extraBedPrice: Int,
+
+        ownerName: String,
+        ownerEmail: String,
+        ownerPassword: String,
+
+        receptionistName: String,
+        receptionistEmail: String,
+        receptionistPassword: String,
+
+        cleaningName: String,
+        cleaningEmail: String,
+        cleaningPassword: String,
+
+        inventoryName: String,
+        inventoryEmail: String,
+        inventoryPassword: String,
+    ): Flow<ApiResponse<HotelResponse>> {
+        return flow<ApiResponse<HotelResponse>> {
+            try {
+                val response = apiService.updateHotel(
+                    id,
+                    name,
+                    address,
+                    contact,
+                    regularRoomCount,
+                    regularRoomImage,
+                    exclusiveRoomCount,
+                    exclusiveRoomImage,
+                    regularRoomPrice,
+                    exclusiveRoomPrice,
+                    extraBedPrice,
+                    ownerName,
+                    ownerEmail,
+                    ownerPassword,
+                    receptionistName,
+                    receptionistEmail,
+                    receptionistPassword,
+                    cleaningName,
+                    cleaningEmail,
+                    cleaningPassword,
+                    inventoryName,
+                    inventoryEmail,
+                    inventoryPassword
+                )
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun deleteHotel(id: String): Flow<ApiResponse<Response<HotelResponse>>> {
+        return flow<ApiResponse<Response<HotelResponse>>> {
+            try {
+                val response = apiService.deleteHotel(id)
+
+                if (response.isSuccessful) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    // HOTEL
 }

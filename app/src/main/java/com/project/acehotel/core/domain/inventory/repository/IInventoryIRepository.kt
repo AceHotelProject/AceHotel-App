@@ -27,5 +27,5 @@ interface IInventoryIRepository {
 
     fun deleteInventory(
         id: String
-    ): Flow<Resource<Inventory>>
+    ): Flow<Resource<Int>>
 }

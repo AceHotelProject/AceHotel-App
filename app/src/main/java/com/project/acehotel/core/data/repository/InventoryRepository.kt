@@ -12,6 +12,7 @@ import com.project.acehotel.core.domain.inventory.repository.IInventoryIReposito
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.InventoryDataMapper
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -77,15 +78,35 @@ class InventoryRepository @Inject constructor(
         }.asFlow()
     }
 
-    override fun deleteInventory(id: String): Flow<Resource<Inventory>> {
-        return object : NetworkBoundResource<Inventory, InventoryDetailResponse>() {
-            override suspend fun fetchFromApi(response: InventoryDetailResponse): Inventory {
-                return InventoryDataMapper.mapInventoryDetailResponseToDomain(response)
+    override fun deleteInventory(id: String): Flow<Resource<Int>> {
+        return object : NetworkBoundResource<Int, Response<InventoryDetailResponse>>() {
+            override suspend fun fetchFromApi(response: Response<InventoryDetailResponse>): Int {
+                return response.code()
             }
 
-            override suspend fun createCall(): Flow<ApiResponse<InventoryDetailResponse>> {
+            override suspend fun createCall(): Flow<ApiResponse<Response<InventoryDetailResponse>>> {
                 return remoteDataSource.deleteInventory(id)
             }
         }.asFlow()
     }
+
+//    override fun deleteInventory(id: String): Flow<Resource<Int>> {
+////        return object : NetworkBoundResource<Inventory, Response<InventoryDetailResponse>>() {
+////            //            override suspend fun fetchFromApi(response: InventoryDetailResponse): Inventory {
+//////                return InventoryDataMapper.mapInventoryDetailResponseToDomain(response)
+//////            }
+//////
+//////            override suspend fun createCall(): Flow<ApiResponse<InventoryDetailResponse>> {
+//////                return remoteDataSource.deleteInventory(id)
+//////            }
+////            override suspend fun fetchFromApi(response: Response<InventoryDetailResponse>): Inventory {
+////
+////                return InventoryDataMapper.mapInventoryDetailResponseToDomain(response)
+////            }
+////
+////            override suspend fun createCall(): Flow<ApiResponse<Response<InventoryDetailResponse>>> {
+////                TODO("Not yet implemented")
+////            }
+////        }.asFlow()
+//    }
 }
