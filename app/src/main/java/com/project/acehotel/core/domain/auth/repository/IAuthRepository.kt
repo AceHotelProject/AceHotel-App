@@ -16,7 +16,6 @@ interface IAuthRepository {
 
     suspend fun deleteUser(user: Auth)
 
-
     suspend fun saveAccessToken(token: String)
 
     suspend fun saveRefreshToken(token: String)
