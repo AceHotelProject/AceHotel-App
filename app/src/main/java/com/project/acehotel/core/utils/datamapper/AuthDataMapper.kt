@@ -52,6 +52,7 @@ object AuthDataMapper {
         role = input.user?.role,
         username = input.user?.username,
         email = input.user?.email,
+        hotelId = input.user?.hotelId.toString(),
         tokenInfo = TokenEntity(
             accessToken = input.tokens?.accessToken?.token,
             accessTokenExpire = input.tokens?.accessToken?.expires,

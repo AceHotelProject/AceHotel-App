@@ -26,7 +26,7 @@ class AuthAuthenticator @Inject constructor(
         Timber.tag("TOKEN").d("Ini refresh token %s", refreshToken)
         Timber.tag("TOKEN").d("Ini code %s", response.code)
 
-        return if (response.code == 401) {
+        return if (response.code == 401 && refreshToken.isNotEmpty()) {
             runBlocking {
                 when (val newRefreshToken = getNewRefreshToken(refreshToken)) {
                     ApiResponse.Empty -> {
