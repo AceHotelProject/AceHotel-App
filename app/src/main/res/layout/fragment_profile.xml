@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout">
 
-            <com.project.acehotel.core.ui.custom.CustomUserRole
+            <com.project.acehotel.core.ui.custom.chips.CustomUserRole
                 android:id="@+id/chip_user_role"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

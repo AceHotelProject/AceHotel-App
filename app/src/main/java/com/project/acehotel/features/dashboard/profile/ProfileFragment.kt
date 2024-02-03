@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentProfileBinding
 import com.project.acehotel.features.dashboard.profile.choose_hotel.ChooseHotelActivity
@@ -17,6 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+
+    private val profileViewModel: ProfileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +33,18 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         handleMenu()
+
+        initUserInfo()
+    }
+
+    private fun initUserInfo() {
+        binding.apply {
+            profileViewModel.getUser().observe(this@ProfileFragment) { user ->
+                tvUserEmail.text = user.user?.email
+                tvUsername.text = user.user?.username
+                chipUserRole.setStatus(user.user?.role?.role ?: "role")
+            }
+        }
     }
 
     private fun handleMenu() {

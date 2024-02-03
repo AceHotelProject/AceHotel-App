@@ -15,7 +15,5 @@ class LocalDataSource @Inject constructor(private val userDao: UserDao) {
 
     suspend fun updateUser(user: UserEntity) = userDao.updateUser(user)
 
-    suspend fun deleteUser(user: UserEntity) {
-        return userDao.deleteUser(user)
-    }
+    suspend fun deleteUser(user: UserEntity) = userDao.deleteUser(user)
 }
