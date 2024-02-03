@@ -3,6 +3,7 @@ package com.project.acehotel.core.data.repository
 import com.project.acehotel.core.data.source.NetworkBoundResource
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.data.source.local.LocalDataSource
+import com.project.acehotel.core.data.source.local.datastore.UserManager
 import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
@@ -20,7 +21,8 @@ import javax.inject.Singleton
 class HotelRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors
+    private val appExecutors: AppExecutors,
+    private val userManager: UserManager
 ) : IHotelRepository {
     override fun addHotel(
         name: String,
@@ -152,4 +154,14 @@ class HotelRepository @Inject constructor(
             }
         }.asFlow()
     }
+
+    override fun getSelectedHotel(): Flow<String> {
+        return userManager.getCurrentHotelId()
+    }
+
+    override suspend fun saveSelectedHotel(id: String) {
+        return userManager.saveCurrentHotelId(id)
+    }
+
+
 }

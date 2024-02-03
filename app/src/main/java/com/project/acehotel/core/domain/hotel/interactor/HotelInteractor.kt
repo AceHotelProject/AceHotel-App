@@ -115,4 +115,8 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
             inventoryPassword
         )
     }
+
+    override fun getSelectedHotel(): Flow<String> = hotelRepository.getSelectedHotel()
+
+    override suspend fun saveSelectedHotel(id: String) = hotelRepository.saveSelectedHotel(id)
 }

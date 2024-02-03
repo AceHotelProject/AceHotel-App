@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TokenManager @Inject constructor(private val dataStore: DataStore<Preferences>) {
+class UserManager @Inject constructor(private val dataStore: DataStore<Preferences>) {
 
     suspend fun saveAccessToken(token: String) {
         dataStore.edit { preferences ->
@@ -43,8 +43,22 @@ class TokenManager @Inject constructor(private val dataStore: DataStore<Preferen
         }
     }
 
+    suspend fun saveCurrentHotelId(id: String) {
+        dataStore.edit { preferences ->
+            preferences[CURRENT_HOTEL_ID] = id
+        }
+    }
+
+    fun getCurrentHotelId(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[CURRENT_HOTEL_ID] ?: ""
+        }
+    }
+
     companion object {
         private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token_key")
         private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token_key")
+
+        private val CURRENT_HOTEL_ID = stringPreferencesKey("current_hotel_id")
     }
 }

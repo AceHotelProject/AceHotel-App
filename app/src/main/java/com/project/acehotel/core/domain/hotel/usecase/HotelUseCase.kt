@@ -70,4 +70,8 @@ interface HotelUseCase {
         inventoryEmail: String,
         inventoryPassword: String,
     ): Flow<Resource<Hotel>>
+
+    fun getSelectedHotel(): Flow<String>
+
+    suspend fun saveSelectedHotel(id: String)
 }

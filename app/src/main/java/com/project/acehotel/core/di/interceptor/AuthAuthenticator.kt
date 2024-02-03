@@ -1,6 +1,6 @@
 package com.project.acehotel.core.di.interceptor
 
-import com.project.acehotel.core.data.source.local.datastore.TokenManager
+import com.project.acehotel.core.data.source.local.datastore.UserManager
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
@@ -15,12 +15,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class AuthAuthenticator @Inject constructor(
-    private val tokenManager: TokenManager,
+    private val userManager: UserManager,
 ) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         val refreshToken = runBlocking {
-            tokenManager.getRefreshToken().first().toString()
+            userManager.getRefreshToken().first().toString()
         }
 
         Timber.tag("TOKEN").d("Ini refresh token %s", refreshToken)
@@ -30,20 +30,20 @@ class AuthAuthenticator @Inject constructor(
             runBlocking {
                 when (val newRefreshToken = getNewRefreshToken(refreshToken)) {
                     ApiResponse.Empty -> {
-                        tokenManager.deleteToken()
+                        userManager.deleteToken()
 
                         Timber.tag("AuthAuthenticator").e("Empty")
                         response.request.newBuilder().build()
                     }
                     is ApiResponse.Error -> {
-                        tokenManager.deleteToken()
+                        userManager.deleteToken()
 
                         Timber.tag("AuthAuthenticator").e(newRefreshToken.errorMessage)
                         response.request.newBuilder().build()
                     }
                     is ApiResponse.Success -> {
-                        tokenManager.saveAccessToken(newRefreshToken.data.access?.token.toString())
-                        tokenManager.saveRefreshToken(newRefreshToken.data.refresh?.token.toString())
+                        userManager.saveAccessToken(newRefreshToken.data.access?.token.toString())
+                        userManager.saveRefreshToken(newRefreshToken.data.refresh?.token.toString())
 
                         Timber.tag("TOKEN")
                             .d("Ini token baru %s", newRefreshToken.data.refresh?.token.toString())
