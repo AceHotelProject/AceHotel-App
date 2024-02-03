@@ -23,60 +23,93 @@
         android:theme="@style/Theme.AceHotel"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        
+        <service
+            android:name="com.google.android.gms.metadata.ModuleDependencies"
+            android:enabled="false"
+            android:exported="false"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+            </intent-filter>
+
+            <meta-data
+                android:name="photopicker_activity:0:required"
+                android:value="" />
+        </service>
+
         <activity
             android:name=".features.dashboard.booking.detail.BookingDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.booking.confirm.ConfirmBookingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.booking.add_booking.AddBookingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".features.dashboard.booking.choose_visitor.ChooseVisitorActivity"
-            android:exported="false" />
+            android:name=".features.dashboard.management.visitor.choose.ChooseVisitorActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".features.dashboard.booking.add_visitor.AddVisitorActivity"
-            android:exported="false" />
+            android:name=".features.dashboard.management.visitor.add.AddVisitorActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.room.detail.RoomDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.room.checkout.CheckoutActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.room.checkin.CheckinActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.room.change_price.ChangePriceActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.profile.add_franchise.AddFranchiseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.profile.stats.OverallStatsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.profile.manage_franchise.ManageFranchiseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.profile.choose_hotel.ChooseHotelActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.management.visitor.detail.VisitorDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.management.inventory.add_item.AddItemInventoryActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.management.inventory.change_stock.ChangeStockItemInventoryActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.dashboard.management.inventory.detail.InventoryDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.splash.SplashActivity"
             android:exported="true"
