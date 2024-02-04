@@ -28,15 +28,24 @@ class InventoryFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
+    private var hotelId: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        getHotelId()
 
         fetchListInventory()
 
         handleRefreshLayout()
 
         validateToken()
+    }
+
+    private fun getHotelId() {
+        inventoryViewModel.getSelectedHotel().observe(this) { hotel ->
+            hotelId = hotel
+        }
     }
 
     private fun validateToken() {
@@ -60,7 +69,7 @@ class InventoryFragment : Fragment() {
     }
 
     private fun fetchListInventory() {
-        inventoryViewModel.getListInventory().observe(this) { inventory ->
+        inventoryViewModel.getListInventory(hotelId).observe(this) { inventory ->
             when (inventory) {
                 is Resource.Error -> {
                     showLoading(false)

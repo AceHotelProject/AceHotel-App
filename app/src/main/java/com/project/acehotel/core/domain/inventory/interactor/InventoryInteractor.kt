@@ -9,11 +9,11 @@ import javax.inject.Inject
 
 class InventoryInteractor @Inject constructor(private val inventoryRepository: InventoryRepository) :
     InventoryUseCase {
-    override fun getListInventory(): Flow<Resource<List<Inventory>>> {
-        return inventoryRepository.getListInventory()
+    override fun getListInventory(hotelId: String): Flow<Resource<List<Inventory>>> {
+        return inventoryRepository.getListInventory(hotelId)
     }
 
-    override fun getDetailInventory(id: String): Flow<Resource<Inventory>> {
+    override fun getDetailInventory(id: String, hotelId: String): Flow<Resource<Inventory>> {
         return inventoryRepository.getDetailInventory(id)
     }
 

@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface IInventoryIRepository {
 
-    fun getListInventory(): Flow<Resource<List<Inventory>>>
+    fun getListInventory(hotelId: String): Flow<Resource<List<Inventory>>>
 
-    fun getDetailInventory(id: String): Flow<Resource<Inventory>>
+    fun getDetailInventory(id: String, hotelId: String): Flow<Resource<Inventory>>
 
     fun addInventory(
         name: String,

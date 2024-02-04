@@ -39,11 +39,13 @@ interface ApiService {
 
     @GET("inventory")
     suspend fun getListInventory(
+        @Query("hotel_id") hotelId: String,
     ): InventoryListResponse
 
     @GET("inventory/{id}")
     suspend fun getDetailInventory(
-        @Path("id") id: String
+        @Path("id") id: String,
+        @Query("hotel_id") hotelId: String,
     ): InventoryDetailResponse
 
     @POST("inventory")

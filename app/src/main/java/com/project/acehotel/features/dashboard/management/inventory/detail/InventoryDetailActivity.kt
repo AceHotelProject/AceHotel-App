@@ -28,6 +28,8 @@ class InventoryDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInventoryDetailBinding
     private val inventoryDetailViewModel: InventoryDetailViewModel by viewModels()
 
+    private var hotelId: String = ""
+
     private lateinit var itemId: String
     private lateinit var itemName: String
     private lateinit var itemType: String
@@ -43,6 +45,8 @@ class InventoryDetailActivity : AppCompatActivity() {
 
         handleFab()
 
+        getHotelId()
+
         handleBackButton()
 
         fetchInventoryDetail()
@@ -50,6 +54,12 @@ class InventoryDetailActivity : AppCompatActivity() {
         handleButtonMore()
 
         getItemInfo()
+    }
+
+    private fun getHotelId() {
+        inventoryDetailViewModel.getSelectedHotel().observe(this) { hotel ->
+            hotelId = hotel
+        }
     }
 
     private fun getItemInfo() {
@@ -99,35 +109,36 @@ class InventoryDetailActivity : AppCompatActivity() {
         val itemId = intent.getStringExtra(INVENTORY_ITEM_ID)
 
         if (!itemId.isNullOrEmpty()) {
-            inventoryDetailViewModel.getDetailInventory(itemId).observe(this) { inventory ->
-                when (inventory) {
-                    is Resource.Error -> {
-                        showLoading(false)
+            inventoryDetailViewModel.getDetailInventory(itemId, hotelId)
+                .observe(this) { inventory ->
+                    when (inventory) {
+                        is Resource.Error -> {
+                            showLoading(false)
 
-                        if (!isInternetAvailable(this)) {
-                            showToast(getString(R.string.check_internet))
-                        } else {
-                            showToast(inventory.message.toString())
+                            if (!isInternetAvailable(this)) {
+                                showToast(getString(R.string.check_internet))
+                            } else {
+                                showToast(inventory.message.toString())
+                            }
                         }
-                    }
-                    is Resource.Loading -> {
-                        showLoading(true)
-                    }
-                    is Resource.Message -> {
-                        showLoading(false)
-                        Timber.tag("InventoryDetailActivity").d(inventory.message)
-                    }
-                    is Resource.Success -> {
-                        showLoading(false)
+                        is Resource.Loading -> {
+                            showLoading(true)
+                        }
+                        is Resource.Message -> {
+                            showLoading(false)
+                            Timber.tag("InventoryDetailActivity").d(inventory.message)
+                        }
+                        is Resource.Success -> {
+                            showLoading(false)
 
-                        if (inventory.data != null) {
-                            setupDetailInfo(inventory.data)
+                            if (inventory.data != null) {
+                                setupDetailInfo(inventory.data)
 
-                            initInventoryHistoryRecyclerView(inventory.data.historyList)
+                                initInventoryHistoryRecyclerView(inventory.data.historyList)
+                            }
                         }
                     }
                 }
-            }
         }
     }
 
