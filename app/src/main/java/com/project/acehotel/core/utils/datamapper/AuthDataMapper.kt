@@ -22,13 +22,11 @@ object AuthDataMapper {
                 UserRole.FRANCHISE.role -> {
                     UserRole.FRANCHISE
                 }
-                UserRole.EMPLOYEE.role -> {
-                    UserRole.EMPLOYEE
-                }
+
                 UserRole.ADMIN.role -> {
                     UserRole.ADMIN
                 }
-                else -> UserRole.EMPLOYEE
+                else -> UserRole.UNDEFINED
             },
             username = input.user?.username ?: "Empty",
             email = input.user?.email ?: "Empty",

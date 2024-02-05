@@ -3,6 +3,7 @@ package com.project.acehotel.core.domain.auth.usecase
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.model.Auth
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
 
 interface AuthUseCase {
 
@@ -25,4 +26,6 @@ interface AuthUseCase {
     fun getRefreshToken(): Flow<String>
 
     suspend fun deleteToken()
+
+    fun uploadImage(image: MultipartBody.Part): Flow<Resource<List<String>>>
 }

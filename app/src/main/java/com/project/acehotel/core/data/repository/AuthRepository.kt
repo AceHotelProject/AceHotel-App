@@ -7,6 +7,7 @@ import com.project.acehotel.core.data.source.local.datastore.UserManager
 import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
+import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.domain.auth.model.Auth
 import com.project.acehotel.core.domain.auth.repository.IAuthRepository
 import com.project.acehotel.core.utils.AppExecutors
@@ -16,6 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -93,5 +95,17 @@ class AuthRepository @Inject constructor(
 
     override suspend fun deleteToken() {
         return userManager.deleteToken()
+    }
+
+    override fun uploadImage(image: MultipartBody.Part): Flow<Resource<List<String>>> {
+        return object : NetworkBoundResource<List<String>, UploadImagesResponse>() {
+            override suspend fun fetchFromApi(response: UploadImagesResponse): List<String> {
+                return response.url ?: listOf()
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<UploadImagesResponse>> {
+                return remoteDataSource.uploadImage(image)
+            }
+        }.asFlow()
     }
 }

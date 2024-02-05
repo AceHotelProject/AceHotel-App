@@ -4,6 +4,7 @@ import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResponse
+import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
 import okhttp3.MultipartBody
@@ -84,7 +85,7 @@ interface ApiService {
         @Part("regular_room_count") regularRoomCount: Int,
         @Part regularRoomImage: MultipartBody.Part,
         @Part("exclusive_room_count") exclusiveRoomCount: Int,
-        @Part("exclusive_room_image") exclusiveRoomImage: MultipartBody.Part,
+        @Part exclusiveRoomImage: MultipartBody.Part,
         @Part("regular_room_price") regularRoomPrice: Int,
         @Part("exclusive_room_price") exclusiveRoomPrice: Int,
         @Part("extra_bed_price") extraBedPrice: Int,
@@ -114,7 +115,7 @@ interface ApiService {
         @Path("id") id: String
     ): HotelResponse
 
-    @FormUrlEncoded
+    @Multipart
     @PATCH("hotels/{id}")
     suspend fun updateHotel(
         @Path("id") id: String,
@@ -153,4 +154,14 @@ interface ApiService {
         @Path("id") id: String
     ): Response<HotelResponse>
     // HOTELS
+
+    // IMAGES
+
+    @Multipart
+    @POST("uploads")
+    suspend fun uploadImage(
+        @Part image: MultipartBody.Part
+    ): UploadImagesResponse
+
+    // IMAGES
 }

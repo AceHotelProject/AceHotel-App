@@ -9,13 +9,25 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.project.acehotel.R
+import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.utils.reduceFileImage
+import com.project.acehotel.core.utils.showToast
+import com.project.acehotel.core.utils.uriToFile
 import com.project.acehotel.databinding.ActivityAddFranchiseBinding
+import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import timber.log.Timber
+import java.io.File
 
+@AndroidEntryPoint
 class AddFranchiseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddFranchiseBinding
+    private val addFranchiseViewModel: AddFranchiseViewModel by viewModels()
 
     private var flagImgReg = 0
     private var flagImgExc = 0
@@ -28,19 +40,22 @@ class AddFranchiseActivity : AppCompatActivity() {
     private var exc2ImgUri: Uri? = null
     private var exc3ImgUri: Uri? = null
 
+    private var getFileRegular: File? = null
+    private var getFileExclusive: File? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAddFranchiseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        isButtonEnabled(false)
+        isButtonEnabled(true)
 
         setupActionBar()
 
         handleButtonBack()
 
-        handleEditText()
+//        handleEditText()
 
         handlePickImages()
 
@@ -55,6 +70,8 @@ class AddFranchiseActivity : AppCompatActivity() {
                 1 -> {
                     exc1ImgUri = uri
                     binding.addFranchisePhotoExclusive1.setImageURI(exc1ImgUri)
+
+                    getFileExclusive = uriToFile(exc1ImgUri!!, this)
                 }
                 2 -> {
                     exc2ImgUri = uri
@@ -70,6 +87,8 @@ class AddFranchiseActivity : AppCompatActivity() {
                 1 -> {
                     reg1ImgUri = uri
                     binding.addFranchisePhotoRegular1.setImageURI(reg1ImgUri)
+
+                    getFileRegular = uriToFile(reg1ImgUri!!, this)
                 }
                 2 -> {
                     reg2ImgUri = uri
@@ -127,7 +146,7 @@ class AddFranchiseActivity : AppCompatActivity() {
         binding.apply {
             edAddFranchiseName.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -141,7 +160,7 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             edAddFranchiseAddress.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -155,7 +174,7 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             edAddFranchiseRoomRegularCount.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -169,7 +188,7 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             edAddFranchiseRoomRegularPrice.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -183,7 +202,7 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             edAddFranchiseRoomExclusiveCount.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -197,7 +216,7 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             edAddFranchiseRoomExclusivePrice.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -211,7 +230,7 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             edAddFranchiseRoomBedPrice.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -225,7 +244,7 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             edAddFranchiseOwnerName.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -313,7 +332,7 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             edAddFranchiseReceptionistName.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -401,125 +420,254 @@ class AddFranchiseActivity : AppCompatActivity() {
                 )
             }
 
-//            edAddFranchiseInventoryName.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun afterTextChanged(p0: Editable?) {
-//                    checkForms()
-//                }
-//            })
-//
-//            edAddFranchiseInventoryEmail.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            edAddFranchiseInventoryName.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-//                }
-//
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun afterTextChanged(p0: Editable?) {
-//                    checkForms()
-//                }
-//            })
-//
-//            edAddFranchiseInventoryPass.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
 
-//                }
-//
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun afterTextChanged(p0: Editable?) {
-//                    checkForms()
-//                }
-//            })
-//
-//            edAddFranchiseInventoryPassConfirm.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkForms()
+                }
 
-//                }
-//
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun afterTextChanged(p0: Editable?) {
-//                    checkForms()
-//                }
-//            })
+                override fun afterTextChanged(p0: Editable?) {
+                    checkForms()
+                }
+            })
 
-//            edAddFranchiseCleaningName.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun afterTextChanged(p0: Editable?) {
-//                    checkForms()
-//                }
-//            })
-//
-//            edAddFranchiseCleaningEmail.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            edAddFranchiseInventoryEmail.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-//                }
-//
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun afterTextChanged(p0: Editable?) {
-//                    checkForms()
-//                }
-//            })
-//
-//            edAddFranchiseCleaningPass.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
 
-//                }
-//
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun afterTextChanged(p0: Editable?) {
-//                    checkForms()
-//                }
-//            })
-//
-//            edAddFranchiseCleaningPassConfirm.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkForms()
+                }
 
-//                }
-//
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    checkForms()
-//                }
-//
-//                override fun afterTextChanged(p0: Editable?) {
-//                    checkForms()
-//                }
-//            })
+                override fun afterTextChanged(p0: Editable?) {
+                    checkForms()
+                }
+            })
+
+            edAddFranchiseInventoryPass.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkForms()
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    checkForms()
+                }
+            })
+
+            edAddFranchiseInventoryPassConfirm.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkForms()
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    checkForms()
+                }
+            })
+
+            edAddFranchiseCleaningName.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkForms()
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    checkForms()
+                }
+            })
+
+            edAddFranchiseCleaningEmail.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkForms()
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    checkForms()
+                }
+            })
+
+            edAddFranchiseCleaningPass.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkForms()
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    checkForms()
+                }
+            })
+
+            edAddFranchiseCleaningPassConfirm.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkForms()
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    checkForms()
+                }
+            })
         }
     }
 
     private fun handleSaveButton() {
-        checkForms()
+        binding.apply {
+            btnSave.setOnClickListener {
+                val hotelName = edAddFranchiseName.text.toString()
+                val hotelAddress = edAddFranchiseAddress.text.toString()
+                val hotelContact = edAddFranchiseContact.text.toString()
 
-        binding.btnSave.setOnClickListener {
+                val regularCount =
+                    if (edAddFranchiseRoomRegularCount.text.toString() == "") 0
+                    else edAddFranchiseRoomRegularCount.text.toString().toInt()
+                val regularPrice =
+                    if (edAddFranchiseRoomRegularPrice.text.toString() == "") 0
+                    else edAddFranchiseRoomRegularPrice.text.toString().toInt()
+                val exclusiveCount =
+                    if (edAddFranchiseRoomExclusiveCount.text.toString() == "") 0
+                    else edAddFranchiseRoomExclusiveCount.text.toString().toInt()
+                val exclusivePrice =
+                    if (edAddFranchiseRoomExclusivePrice.text.toString() == "") 0
+                    else edAddFranchiseRoomExclusivePrice.text.toString().toInt()
+                val bedPrice =
+                    if (edAddFranchiseRoomBedPrice.text.toString() == "") 0
+                    else edAddFranchiseRoomBedPrice.text.toString().toInt()
 
+                val ownerName = edAddFranchiseOwnerName.text.toString()
+                val ownerEmail = edAddFranchiseOwnerEmail.text.toString()
+                val ownerPass = edAddFranchiseOwnerPass.text.toString()
+
+                val receptionistName = edAddFranchiseReceptionistName.text.toString()
+                val receptionistEmail = edAddFranchiseReceptionistEmail.text.toString()
+                val receptionistPass = edAddFranchiseReceptionistPass.text.toString()
+
+                val inventoryName = edAddFranchiseInventoryName.text.toString()
+                val inventoryEmail = edAddFranchiseInventoryEmail.text.toString()
+                val inventoryPass = edAddFranchiseInventoryPass.text.toString()
+
+                val cleaningName = edAddFranchiseCleaningName.text.toString()
+                val cleaningEmail = edAddFranchiseCleaningEmail.text.toString()
+                val cleaningPass = edAddFranchiseCleaningPass.text.toString()
+
+//                val fileExclusive = reduceFileImage(getFileExclusive as File)
+//                val requestImageFileExclusive =
+//                    fileExclusive.asRequestBody("image/jpeg".toMediaType())
+//                val imageMultipartExclusive: MultipartBody.Part = MultipartBody.Part.createFormData(
+//                    EXCLUSIVE_PHOTO,
+//                    "Exclusive Room Photo",
+//                    requestImageFileExclusive
+//                )
+
+                val fileRegular = reduceFileImage(getFileRegular as File)
+                val requestImageFileRegular = fileRegular.asRequestBody("image/jpeg".toMediaType())
+                val imageMultipartRegular: MultipartBody.Part = MultipartBody.Part.createFormData(
+                    REGULAR_PHOTO,
+                    "Regular Room Photo",
+                    requestImageFileRegular
+                )
+
+                addFranchiseViewModel.uploadImage(imageMultipartRegular)
+                    .observe(this@AddFranchiseActivity) { image ->
+                        when (image) {
+                            is Resource.Error -> {
+                                showLoading(false)
+                            }
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Message -> {
+                                showLoading(false)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+
+                                showToast(image.data?.get(1) ?: "")
+                            }
+                        }
+                    }
+            }
+
+//            btnSave.setOnClickListener {
+//                addFranchiseViewModel.addHotel(
+//                    hotelName,
+//                    hotelAddress,
+//                    hotelContact,
+//                    regularCount,
+//                    imageMultipartRegular,
+//                    exclusiveCount,
+//                    imageMultipartExclusive,
+//                    regularPrice,
+//                    exclusivePrice,
+//                    bedPrice,
+//                    ownerName,
+//                    ownerEmail,
+//                    ownerPass,
+//                    receptionistName,
+//                    receptionistEmail,
+//                    receptionistPass,
+//                    cleaningName,
+//                    cleaningEmail,
+//                    cleaningPass,
+//                    inventoryName,
+//                    inventoryEmail,
+//                    inventoryPass
+//                ).observe(this@AddFranchiseActivity) { hotel ->
+//                    when (hotel) {
+//                        is Resource.Error -> {
+//                            showLoading(false)
+//
+//                            if (!isInternetAvailable(this@AddFranchiseActivity)) {
+//                                showToast(getString(R.string.check_internet))
+//                            } else {
+//                                showToast(hotel.message.toString())
+//                            }
+//                        }
+//                        is Resource.Loading -> {
+//                            showLoading(true)
+//                        }
+//                        is Resource.Message -> {
+//                            showLoading(false)
+//                            Timber.tag("AddFranchiseActivity").d(hotel.message)
+//                        }
+//                        is Resource.Success -> {
+//                            showLoading(false)
+//
+//                            showToast("Cabang hotel baru telah berhasil ditambahkan")
+//
+//                            val intentToManageFranchise = Intent(
+//                                this@AddFranchiseActivity,
+//                                ManageFranchiseActivity::class.java
+//                            )
+//                            startActivity(intentToManageFranchise)
+//                            finish()
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 
@@ -527,22 +675,23 @@ class AddFranchiseActivity : AppCompatActivity() {
         binding.apply {
             val hotelName = edAddFranchiseName.text.toString()
             val hotelAddress = edAddFranchiseAddress.text.toString()
-            val regularCount =
-                if (edAddFranchiseRoomRegularCount.text.toString() == "") 0 else edAddFranchiseRoomRegularCount.text.toString()
-                    .toInt()
-            val regularPrice =
-                if (edAddFranchiseRoomRegularPrice.text.toString() == "") 0 else edAddFranchiseRoomRegularPrice.text.toString()
-                    .toInt()
+            val hotelContact = edAddFranchiseContact.text.toString()
 
+            val regularCount =
+                if (edAddFranchiseRoomRegularCount.text.toString() == "") 0
+                else edAddFranchiseRoomRegularCount.text.toString().toInt()
+            val regularPrice =
+                if (edAddFranchiseRoomRegularPrice.text.toString() == "") 0
+                else edAddFranchiseRoomRegularPrice.text.toString().toInt()
             val exclusiveCount =
-                if (edAddFranchiseRoomExclusiveCount.text.toString() == "") 0 else edAddFranchiseRoomExclusiveCount.text.toString()
-                    .toInt()
+                if (edAddFranchiseRoomExclusiveCount.text.toString() == "") 0
+                else edAddFranchiseRoomExclusiveCount.text.toString().toInt()
             val exclusivePrice =
-                if (edAddFranchiseRoomExclusivePrice.text.toString() == "") 0 else edAddFranchiseRoomExclusivePrice.text.toString()
-                    .toInt()
+                if (edAddFranchiseRoomExclusivePrice.text.toString() == "") 0
+                else edAddFranchiseRoomExclusivePrice.text.toString().toInt()
             val bedPrice =
-                if (edAddFranchiseRoomBedPrice.text.toString() == "") 0 else edAddFranchiseRoomBedPrice.text.toString()
-                    .toInt()
+                if (edAddFranchiseRoomBedPrice.text.toString() == "") 0
+                else edAddFranchiseRoomBedPrice.text.toString().toInt()
 
             val ownerName = edAddFranchiseOwnerName.text.toString()
             val ownerEmail = edAddFranchiseOwnerEmail.text.toString()
@@ -554,15 +703,15 @@ class AddFranchiseActivity : AppCompatActivity() {
             val receptionistPass = edAddFranchiseReceptionistPass.text.toString()
             val receptionistPassConfirm = edAddFranchiseReceptionistPassConfirm.text.toString()
 
-//            val inventoryName = edAddFranchiseInventoryName.text.toString()
-//            val inventoryEmail = edAddFranchiseInventoryEmail.text.toString()
-//            val inventoryPass = edAddFranchiseInventoryPass.text.toString()
-//            val inventoryPassConfirm = edAddFranchiseInventoryPassConfirm.text.toString()
-//
-//            val cleaningName = edAddFranchiseCleaningName.text.toString()
-//            val cleaningEmail = edAddFranchiseCleaningEmail.text.toString()
-//            val cleaningPass = edAddFranchiseCleaningPass.text.toString()
-//            val cleaningPassConfirm = edAddFranchiseCleaningPassConfirm.text.toString()
+            val inventoryName = edAddFranchiseInventoryName.text.toString()
+            val inventoryEmail = edAddFranchiseInventoryEmail.text.toString()
+            val inventoryPass = edAddFranchiseInventoryPass.text.toString()
+            val inventoryPassConfirm = edAddFranchiseInventoryPassConfirm.text.toString()
+
+            val cleaningName = edAddFranchiseCleaningName.text.toString()
+            val cleaningEmail = edAddFranchiseCleaningEmail.text.toString()
+            val cleaningPass = edAddFranchiseCleaningPass.text.toString()
+            val cleaningPassConfirm = edAddFranchiseCleaningPassConfirm.text.toString()
 
 
             // OWNER
@@ -592,7 +741,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                     binding.layoutAddFranchiseOwnerPassConfirm.error = null
                 }
             }
-
             // OWNER
 
             // RECEPTIONIST
@@ -628,9 +776,77 @@ class AddFranchiseActivity : AppCompatActivity() {
             }
             // RECEPTIONIST
 
+            // INVENTORY
+            if (!Patterns.EMAIL_ADDRESS.matcher(inventoryEmail)
+                    .matches() && inventoryEmail != ""
+            ) {
+                binding.layoutAddFranchiseInventoryEmail.error =
+                    getString(R.string.wrong_email_format)
+            } else {
+                binding.layoutAddFranchiseInventoryEmail.error = null
+            }
+
+            if (inventoryPass.length < 8) {
+                binding.layoutAddFranchiseInventoryPass.error =
+                    getString(R.string.wrong_password_format)
+            } else {
+                binding.layoutAddFranchiseInventoryPass.error = null
+            }
+
+            if (inventoryPassConfirm.length < 8) {
+                binding.layoutAddFranchiseInventoryPass.error =
+                    getString(R.string.wrong_password_format)
+            } else {
+                if (inventoryPass != inventoryPassConfirm) {
+                    binding.layoutAddFranchiseInventoryPass.error =
+                        getString(R.string.diff_password)
+                    binding.layoutAddFranchiseInventoryPassConfirm.error =
+                        getString(R.string.diff_password)
+                } else {
+                    binding.layoutAddFranchiseInventoryPass.error = null
+                    binding.layoutAddFranchiseInventoryPassConfirm.error = null
+                }
+            }
+            // INVENTORY
+
+            // CLEANING
+            if (!Patterns.EMAIL_ADDRESS.matcher(cleaningEmail)
+                    .matches() && cleaningEmail != ""
+            ) {
+                binding.layoutAddFranchiseCleaningEmail.error =
+                    getString(R.string.wrong_email_format)
+            } else {
+                binding.layoutAddFranchiseCleaningEmail.error = null
+            }
+
+            if (cleaningPass.length < 8) {
+                binding.layoutAddFranchiseCleaningPass.error =
+                    getString(R.string.wrong_password_format)
+            } else {
+                binding.layoutAddFranchiseCleaningPass.error = null
+            }
+
+            if (cleaningPassConfirm.length < 8) {
+                binding.layoutAddFranchiseCleaningPassConfirm.error =
+                    getString(R.string.wrong_password_format)
+            } else {
+                if (cleaningPass != cleaningPassConfirm) {
+                    binding.layoutAddFranchiseCleaningPass.error =
+                        getString(R.string.diff_password)
+                    binding.layoutAddFranchiseCleaningPassConfirm.error =
+                        getString(R.string.diff_password)
+                } else {
+                    binding.layoutAddFranchiseCleaningPass.error = null
+                    binding.layoutAddFranchiseCleaningPassConfirm.error = null
+                }
+            }
+            // CLEANING
+
             isButtonEnabled(
-                hotelName.isNotEmpty() && hotelAddress.isNotEmpty() && regularCount > 0 && regularPrice > 1000 && exclusiveCount > 0 && exclusivePrice > 1000 && bedPrice > 1000 &&
-                        ownerName.isNotEmpty() && ownerEmail.isNotEmpty() && ownerPass.isNotEmpty() && receptionistName.isNotEmpty() && receptionistEmail.isNotEmpty() && receptionistPass.isNotEmpty()
+                hotelName.isNotEmpty() && hotelAddress.isNotEmpty() && hotelContact.isNotEmpty() && regularCount > 0 && regularPrice > 1000 && exclusiveCount > 0 && exclusivePrice > 1000 && bedPrice > 1000 &&
+                        ownerName.isNotEmpty() && ownerEmail.isNotEmpty() && ownerPass.isNotEmpty() && receptionistName.isNotEmpty() && receptionistEmail.isNotEmpty() && receptionistPass.isNotEmpty() &&
+                        inventoryName.isNotEmpty() && inventoryEmail.isNotEmpty() && inventoryPass.isNotEmpty() && cleaningName.isNotEmpty() && cleaningEmail.isNotEmpty() && cleaningPass.isNotEmpty() &&
+                        getFileRegular != null && getFileExclusive != null
             )
         }
     }
@@ -645,7 +861,16 @@ class AddFranchiseActivity : AppCompatActivity() {
         binding.btnSave.isEnabled = isEnabled
     }
 
+    private fun showLoading(isLoading: Boolean) {
+        binding.refAddFranchise.isRefreshing = isLoading
+    }
+
     private fun setupActionBar() {
         supportActionBar?.hide()
+    }
+
+    companion object {
+        private const val REGULAR_PHOTO = "image"
+        private const val EXCLUSIVE_PHOTO = "image"
     }
 }

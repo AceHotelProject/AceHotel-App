@@ -5,6 +5,7 @@ import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.model.Auth
 import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class AuthInteractor @Inject constructor(private val authRepository: AuthRepository) : AuthUseCase {
@@ -28,4 +29,6 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
     override fun getRefreshToken(): Flow<String> = authRepository.getRefreshToken()
 
     override suspend fun deleteToken() = authRepository.deleteToken()
+    override fun uploadImage(image: MultipartBody.Part): Flow<Resource<List<String>>> =
+        authRepository.uploadImage(image)
 }
