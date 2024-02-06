@@ -7,6 +7,8 @@ import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResp
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
+import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
+import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -108,7 +110,7 @@ interface ApiService {
     ): HotelResponse
 
     @GET("hotels")
-    suspend fun getHotels(): ListHotelResponse
+    suspend fun getListHotel(): ListHotelResponse
 
     @GET("hotels/{id}")
     suspend fun getHotel(
@@ -153,6 +155,20 @@ interface ApiService {
     suspend fun deleteHotel(
         @Path("id") id: String
     ): Response<HotelResponse>
+
+    // HOTELS
+
+
+    // HOTELS
+
+    @GET("visitors")
+    suspend fun getListVisitor(): ListVisitorResponse
+
+    @GET("visitors/{id}")
+    suspend fun getDetailVisitor(
+        @Path("id") id: String
+    ): VisitorResponse
+
     // HOTELS
 
     // IMAGES
@@ -164,4 +180,6 @@ interface ApiService {
     ): UploadImagesResponse
 
     // IMAGES
+
+
 }

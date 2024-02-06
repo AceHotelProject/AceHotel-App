@@ -6,8 +6,11 @@ import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResponse
+import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
+import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
+import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -60,10 +63,10 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     // INVENTORY
 
-    suspend fun getListInventory(): Flow<ApiResponse<InventoryListResponse>> {
+    suspend fun getListInventory(hotelId: String): Flow<ApiResponse<InventoryListResponse>> {
         return flow<ApiResponse<InventoryListResponse>> {
             try {
-                val response = apiService.getListInventory()
+                val response = apiService.getListInventory(hotelId)
 
                 if (!response.results.isNullOrEmpty()) {
                     emit(ApiResponse.Success(response))
@@ -78,11 +81,12 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     }
 
     suspend fun getDetailInventory(
-        id: String
+        id: String,
+        hotelId: String
     ): Flow<ApiResponse<InventoryDetailResponse>> {
         return flow<ApiResponse<InventoryDetailResponse>> {
             try {
-                val response = apiService.getDetailInventory(id)
+                val response = apiService.getDetailInventory(id, hotelId)
 
                 if (response.name != null) {
                     emit(ApiResponse.Success(response))
@@ -231,10 +235,10 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getHotels(): Flow<ApiResponse<ListHotelResponse>> {
+    suspend fun getListHotel(): Flow<ApiResponse<ListHotelResponse>> {
         return flow<ApiResponse<ListHotelResponse>> {
             try {
-                val response = apiService.getHotels()
+                val response = apiService.getListHotel()
 
                 if (response.results != null) {
                     emit(ApiResponse.Success(response))
@@ -337,4 +341,64 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     }
 
     // HOTEL
+
+    // VISITOR
+
+    suspend fun getListVisitor(): Flow<ApiResponse<ListVisitorResponse>> {
+        return flow<ApiResponse<ListVisitorResponse>> {
+            try {
+                val response = apiService.getListVisitor()
+
+                if (response.results != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getDetailVisitor(id: String): Flow<ApiResponse<VisitorResponse>> {
+        return flow<ApiResponse<VisitorResponse>> {
+            try {
+                val response = apiService.getDetailVisitor(id)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+
+    // VISITOR
+
+    //IMAGES
+
+    suspend fun uploadImage(image: MultipartBody.Part): Flow<ApiResponse<UploadImagesResponse>> {
+        return flow<ApiResponse<UploadImagesResponse>> {
+            try {
+                val response = apiService.uploadImage(image)
+
+                if (response.url != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    //IMAGES
 }
