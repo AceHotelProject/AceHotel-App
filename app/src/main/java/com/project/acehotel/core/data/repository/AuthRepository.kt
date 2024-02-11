@@ -97,10 +97,10 @@ class AuthRepository @Inject constructor(
         return userManager.deleteToken()
     }
 
-    override fun uploadImage(image: MultipartBody.Part): Flow<Resource<List<String>>> {
+    override fun uploadImage(image: List<MultipartBody.Part>): Flow<Resource<List<String>>> {
         return object : NetworkBoundResource<List<String>, UploadImagesResponse>() {
             override suspend fun fetchFromApi(response: UploadImagesResponse): List<String> {
-                return response.url ?: listOf()
+                return (response.path ?: listOf()) as List<String>
             }
 
             override suspend fun createCall(): Flow<ApiResponse<UploadImagesResponse>> {

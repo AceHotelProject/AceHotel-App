@@ -29,6 +29,6 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
     override fun getRefreshToken(): Flow<String> = authRepository.getRefreshToken()
 
     override suspend fun deleteToken() = authRepository.deleteToken()
-    override fun uploadImage(image: MultipartBody.Part): Flow<Resource<List<String>>> =
+    override fun uploadImage(image: List<MultipartBody.Part>): Flow<Resource<List<String>>> =
         authRepository.uploadImage(image)
 }

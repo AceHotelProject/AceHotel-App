@@ -14,7 +14,7 @@ class AddFranchiseViewModel @Inject constructor(
     private val hotelUseCase: HotelUseCase,
 ) : ViewModel() {
 
-    fun uploadImage(image: MultipartBody.Part) = authUseCase.uploadImage(image).asLiveData()
+    fun uploadImage(image: List<MultipartBody.Part>) = authUseCase.uploadImage(image).asLiveData()
 
     fun addHotel(
         name: String,
