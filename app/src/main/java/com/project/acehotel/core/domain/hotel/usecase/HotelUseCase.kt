@@ -1,7 +1,7 @@
 package com.project.acehotel.core.domain.hotel.usecase
 
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.domain.hotel.model.ListHotel
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 
@@ -35,9 +35,9 @@ interface HotelUseCase {
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
-    ): Flow<Resource<ListHotel>>
+    ): Flow<Resource<ManageHotel>>
 
-    fun getListHotel(): Flow<Resource<List<ListHotel>>>
+    fun getListHotel(): Flow<Resource<List<ManageHotel>>>
 
     fun updateHotel(
         id: String,
@@ -69,7 +69,7 @@ interface HotelUseCase {
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
-    ): Flow<Resource<ListHotel>>
+    ): Flow<Resource<ManageHotel>>
 
     fun getSelectedHotel(): Flow<String>
 

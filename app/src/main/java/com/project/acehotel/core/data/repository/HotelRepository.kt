@@ -8,7 +8,7 @@ import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResultItem
-import com.project.acehotel.core.domain.hotel.model.ListHotel
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.repository.IHotelRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.HotelDataMapper
@@ -47,9 +47,9 @@ class HotelRepository @Inject constructor(
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String
-    ): Flow<Resource<ListHotel>> {
-        return object : NetworkBoundResource<ListHotel, ListHotelResultItem>() {
-            override suspend fun fetchFromApi(response: ListHotelResultItem): ListHotel {
+    ): Flow<Resource<ManageHotel>> {
+        return object : NetworkBoundResource<ManageHotel, ListHotelResultItem>() {
+            override suspend fun fetchFromApi(response: ListHotelResultItem): ManageHotel {
                 return HotelDataMapper.mapListHotelResponseToDomain(response)
             }
 
@@ -83,9 +83,9 @@ class HotelRepository @Inject constructor(
         }.asFlow()
     }
 
-    override fun getListHotel(): Flow<Resource<List<ListHotel>>> {
-        return object : NetworkBoundResource<List<ListHotel>, ListHotelResponse>() {
-            override suspend fun fetchFromApi(response: ListHotelResponse): List<ListHotel> {
+    override fun getListHotel(): Flow<Resource<List<ManageHotel>>> {
+        return object : NetworkBoundResource<List<ManageHotel>, ListHotelResponse>() {
+            override suspend fun fetchFromApi(response: ListHotelResponse): List<ManageHotel> {
                 return HotelDataMapper.mapListListHotelResponseToDomain(response)
             }
 
@@ -119,9 +119,9 @@ class HotelRepository @Inject constructor(
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String
-    ): Flow<Resource<ListHotel>> {
-        return object : NetworkBoundResource<ListHotel, ListHotelResultItem>() {
-            override suspend fun fetchFromApi(response: ListHotelResultItem): ListHotel {
+    ): Flow<Resource<ManageHotel>> {
+        return object : NetworkBoundResource<ManageHotel, ListHotelResultItem>() {
+            override suspend fun fetchFromApi(response: ListHotelResultItem): ManageHotel {
                 return HotelDataMapper.mapListHotelResponseToDomain(response)
             }
 

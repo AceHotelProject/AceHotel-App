@@ -2,7 +2,7 @@ package com.project.acehotel.core.domain.hotel.interactor
 
 import com.project.acehotel.core.data.repository.HotelRepository
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.domain.hotel.model.ListHotel
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
@@ -33,7 +33,7 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String
-    ): Flow<Resource<ListHotel>> {
+    ): Flow<Resource<ManageHotel>> {
         return hotelRepository.addHotel(
             name,
             address,
@@ -60,7 +60,7 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         )
     }
 
-    override fun getListHotel(): Flow<Resource<List<ListHotel>>> {
+    override fun getListHotel(): Flow<Resource<List<ManageHotel>>> {
         return hotelRepository.getListHotel()
     }
 
@@ -88,7 +88,7 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String
-    ): Flow<Resource<ListHotel>> {
+    ): Flow<Resource<ManageHotel>> {
         return hotelRepository.updateHotel(
             id,
             name,

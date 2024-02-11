@@ -3,10 +3,10 @@ package com.project.acehotel.core.ui.adapter.hotel
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.project.acehotel.core.domain.hotel.model.ListHotel
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.databinding.ItemListHotelFranchiseBinding
 
-class ManageHotelListAdapter(private val listHotel: List<ListHotel>?) :
+class ManageHotelListAdapter(private val manageHotel: List<ManageHotel>?) :
     RecyclerView.Adapter<ManageHotelListAdapter.ViewHolder>() {
 
     private lateinit var onItemCallback: HotelListAdapter.OnItemClickCallback
@@ -23,10 +23,10 @@ class ManageHotelListAdapter(private val listHotel: List<ListHotel>?) :
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = listHotel?.size ?: 0
+    override fun getItemCount(): Int = manageHotel?.size ?: 0
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = listHotel?.get(position)
+        val data = manageHotel?.get(position)
 
         holder.binding.apply {
             tvFranchiseHotelName.text = data?.name

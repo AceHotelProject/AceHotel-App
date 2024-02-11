@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.hotel.model.ChooseHotel
-import com.project.acehotel.core.domain.hotel.model.ListHotel
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.databinding.ItemListChooseHotelBinding
 
-class HotelListAdapter(private val listHotel: List<ListHotel>?, private val selectedHotel: String) :
+class HotelListAdapter(
+    private val manageHotel: List<ManageHotel>?,
+    private val selectedHotel: String
+) :
     RecyclerView.Adapter<HotelListAdapter.ViewHolder>() {
 
     private lateinit var onItemCallback: OnItemClickCallback
-    private var chooseHotelData = listHotel?.map { hotel ->
+    private var chooseHotelData = manageHotel?.map { hotel ->
         ChooseHotel(hotel, selectedHotel == hotel.id)
     } ?: emptyList()
 
@@ -25,7 +28,7 @@ class HotelListAdapter(private val listHotel: List<ListHotel>?, private val sele
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = listHotel?.size ?: 0
+    override fun getItemCount(): Int = manageHotel?.size ?: 0
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
