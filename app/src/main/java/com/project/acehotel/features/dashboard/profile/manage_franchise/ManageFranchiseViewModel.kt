@@ -12,5 +12,5 @@ class ManageFranchiseViewModel @Inject constructor(
     private val authUseCase: HotelUseCase,
 ) : ViewModel() {
 
-    fun getHotels() = hotelUseCase.getHotels().asLiveData()
+    fun getHotels() = hotelUseCase.getListHotel().asLiveData()
 }

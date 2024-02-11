@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.ListHotel
 import com.project.acehotel.core.ui.adapter.hotel.HotelListAdapter
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -44,6 +44,7 @@ class ChooseHotelActivity : AppCompatActivity() {
 
     private fun checkSelectedHotel() {
         chooseHotelViewModel.getSelectedHotel().observe(this) { hotel ->
+
             selectedHotel = hotel
         }
     }
@@ -76,7 +77,7 @@ class ChooseHotelActivity : AppCompatActivity() {
         }
     }
 
-    private fun initInventoryRecyclerView(data: List<Hotel>?) {
+    private fun initInventoryRecyclerView(data: List<ListHotel>?) {
         val layoutManager = LinearLayoutManager(this)
         binding.rvListChooseHotel.layoutManager = layoutManager
 

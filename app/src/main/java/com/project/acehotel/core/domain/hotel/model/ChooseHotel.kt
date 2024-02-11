@@ -5,6 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ChooseHotel(
-    val hotel: Hotel,
+    val hotel: ListHotel,
     var isChecked: Boolean,
 ) : Parcelable

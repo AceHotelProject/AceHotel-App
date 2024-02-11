@@ -3,10 +3,10 @@ package com.project.acehotel.core.ui.adapter.hotel
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.ListHotel
 import com.project.acehotel.databinding.ItemListHotelFranchiseBinding
 
-class ManageHotelListAdapter(private val listHotel: List<Hotel>?) :
+class ManageHotelListAdapter(private val listHotel: List<ListHotel>?) :
     RecyclerView.Adapter<ManageHotelListAdapter.ViewHolder>() {
 
     private lateinit var onItemCallback: HotelListAdapter.OnItemClickCallback

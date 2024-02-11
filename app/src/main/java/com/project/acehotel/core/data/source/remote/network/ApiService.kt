@@ -4,6 +4,7 @@ import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResultItem
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
@@ -107,7 +108,7 @@ interface ApiService {
         @Part("inventory_name") inventoryName: String,
         @Part("inventory_email") inventoryEmail: String,
         @Part("inventory_password") inventoryPassword: String,
-    ): HotelResponse
+    ): ListHotelResultItem
 
     @GET("hotels")
     suspend fun getListHotel(): ListHotelResponse
@@ -149,12 +150,12 @@ interface ApiService {
         @Field("inventory_name") inventoryName: String,
         @Field("inventory_email") inventoryEmail: String,
         @Field("inventory_password") inventoryPassword: String,
-    ): HotelResponse
+    ): ListHotelResultItem
 
-    @DELETE("hotels/{id}")
-    suspend fun deleteHotel(
-        @Path("id") id: String
-    ): Response<HotelResponse>
+//    @DELETE("hotels/{id}")
+//    suspend fun deleteHotel(
+//        @Path("id") id: String
+//    ): Response<HotelResponse>
 
     // HOTELS
 
@@ -176,7 +177,7 @@ interface ApiService {
     @Multipart
     @POST("uploads")
     suspend fun uploadImage(
-        @Part image: MultipartBody.Part
+        @Part image: List<MultipartBody.Part>
     ): UploadImagesResponse
 
     // IMAGES

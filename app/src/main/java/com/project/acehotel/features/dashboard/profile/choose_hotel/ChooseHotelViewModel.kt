@@ -15,7 +15,7 @@ class ChooseHotelViewModel @Inject constructor(
     private val authUseCase: AuthUseCase,
 ) : ViewModel() {
 
-    fun getHotels() = hotelUseCase.getHotels().asLiveData()
+    fun getHotels() = hotelUseCase.getListHotel().asLiveData()
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 

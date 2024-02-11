@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.hotel.model.ChooseHotel
-import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.ListHotel
 import com.project.acehotel.databinding.ItemListChooseHotelBinding
 
-class HotelListAdapter(private val listHotel: List<Hotel>?, private val selectedHotel: String) :
+class HotelListAdapter(private val listHotel: List<ListHotel>?, private val selectedHotel: String) :
     RecyclerView.Adapter<HotelListAdapter.ViewHolder>() {
 
     private lateinit var onItemCallback: OnItemClickCallback

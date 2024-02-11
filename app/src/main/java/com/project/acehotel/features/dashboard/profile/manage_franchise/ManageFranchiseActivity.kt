@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.ListHotel
 import com.project.acehotel.core.ui.adapter.hotel.ManageHotelListAdapter
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -72,7 +72,7 @@ class ManageFranchiseActivity : AppCompatActivity() {
         }
     }
 
-    private fun initFranchiseRecyclerView(data: List<Hotel>?) {
+    private fun initFranchiseRecyclerView(data: List<ListHotel>?) {
         val layoutManager = LinearLayoutManager(this)
         binding.rvListFranchise.layoutManager = layoutManager
 

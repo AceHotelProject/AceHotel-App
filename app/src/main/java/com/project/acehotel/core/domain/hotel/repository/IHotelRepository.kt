@@ -1,7 +1,7 @@
 package com.project.acehotel.core.domain.hotel.repository
 
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.ListHotel
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 
@@ -35,9 +35,9 @@ interface IHotelRepository {
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
-    ): Flow<Resource<Hotel>>
+    ): Flow<Resource<ListHotel>>
 
-    fun getHotels(): Flow<Resource<List<Hotel>>>
+    fun getListHotel(): Flow<Resource<List<ListHotel>>>
 
     fun updateHotel(
         id: String,
@@ -69,7 +69,7 @@ interface IHotelRepository {
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
-    ): Flow<Resource<Hotel>>
+    ): Flow<Resource<ListHotel>>
 
     fun getSelectedHotel(): Flow<String>
 

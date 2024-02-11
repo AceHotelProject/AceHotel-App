@@ -4,8 +4,8 @@ import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResultItem
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
@@ -194,8 +194,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
-    ): Flow<ApiResponse<HotelResponse>> {
-        return flow<ApiResponse<HotelResponse>> {
+    ): Flow<ApiResponse<ListHotelResultItem>> {
+        return flow<ApiResponse<ListHotelResultItem>> {
             try {
                 val response =
                     apiService.addHotel(
@@ -223,7 +223,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                         inventoryPassword
                     )
 
-                if (!response.ownerId.isNullOrEmpty()) {
+                if (response.ownerId != null) {
                     emit(ApiResponse.Success(response))
                 } else {
                     emit(ApiResponse.Empty)
@@ -240,7 +240,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
             try {
                 val response = apiService.getListHotel()
 
-                if (response.results != null) {
+                if (response.result != null) {
                     emit(ApiResponse.Success(response))
                 } else {
                     emit(ApiResponse.Empty)
@@ -282,8 +282,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
-    ): Flow<ApiResponse<HotelResponse>> {
-        return flow<ApiResponse<HotelResponse>> {
+    ): Flow<ApiResponse<ListHotelResultItem>> {
+        return flow<ApiResponse<ListHotelResultItem>> {
             try {
                 val response = apiService.updateHotel(
                     id,
@@ -323,22 +323,22 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun deleteHotel(id: String): Flow<ApiResponse<Response<HotelResponse>>> {
-        return flow<ApiResponse<Response<HotelResponse>>> {
-            try {
-                val response = apiService.deleteHotel(id)
-
-                if (response.isSuccessful) {
-                    emit(ApiResponse.Success(response))
-                } else {
-                    emit(ApiResponse.Empty)
-                }
-            } catch (e: Exception) {
-                emit(ApiResponse.Error(e.toString()))
-                Timber.tag("RemoteDataSource").e(e.toString())
-            }
-        }.flowOn(Dispatchers.IO)
-    }
+//    suspend fun deleteHotel(id: String): Flow<ApiResponse<Response<HotelResponse>>> {
+//        return flow<ApiResponse<Response<HotelResponse>>> {
+//            try {
+//                val response = apiService.deleteHotel(id)
+//
+//                if (response.isSuccessful) {
+//                    emit(ApiResponse.Success(response))
+//                } else {
+//                    emit(ApiResponse.Empty)
+//                }
+//            } catch (e: Exception) {
+//                emit(ApiResponse.Error(e.toString()))
+//                Timber.tag("RemoteDataSource").e(e.toString())
+//            }
+//        }.flowOn(Dispatchers.IO)
+//    }
 
     // HOTEL
 
@@ -383,12 +383,12 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     //IMAGES
 
-    suspend fun uploadImage(image: MultipartBody.Part): Flow<ApiResponse<UploadImagesResponse>> {
+    suspend fun uploadImage(image: List<MultipartBody.Part>): Flow<ApiResponse<UploadImagesResponse>> {
         return flow<ApiResponse<UploadImagesResponse>> {
             try {
                 val response = apiService.uploadImage(image)
 
-                if (response.url != null) {
+                if (response.path != null) {
                     emit(ApiResponse.Success(response))
                 } else {
                     emit(ApiResponse.Empty)
