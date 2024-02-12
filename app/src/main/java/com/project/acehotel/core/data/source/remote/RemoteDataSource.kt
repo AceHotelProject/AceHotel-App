@@ -4,8 +4,9 @@ import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResultItem
+import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
@@ -172,9 +173,9 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         contact: String,
 
         regularRoomCount: Int,
-        regularRoomImage: MultipartBody.Part,
+        regularRoomImage: String,
         exclusiveRoomCount: Int,
-        exclusiveRoomImage: MultipartBody.Part,
+        exclusiveRoomImage: String,
         regularRoomPrice: Int,
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,
@@ -194,8 +195,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
-    ): Flow<ApiResponse<ListHotelResultItem>> {
-        return flow<ApiResponse<ListHotelResultItem>> {
+    ): Flow<ApiResponse<CreateHotelResponse>> {
+        return flow<ApiResponse<CreateHotelResponse>> {
             try {
                 val response =
                     apiService.addHotel(
@@ -235,8 +236,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getListHotel(): Flow<ApiResponse<ListHotelResponse>> {
-        return flow<ApiResponse<ListHotelResponse>> {
+    suspend fun getListHotel(): Flow<ApiResponse<ManageHotelResponse>> {
+        return flow<ApiResponse<ManageHotelResponse>> {
             try {
                 val response = apiService.getListHotel()
 
@@ -260,9 +261,9 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         contact: String,
 
         regularRoomCount: Int,
-        regularRoomImage: MultipartBody.Part,
+        regularRoomImage: String,
         exclusiveRoomCount: Int,
-        exclusiveRoomImage: MultipartBody.Part,
+        exclusiveRoomImage: String,
         regularRoomPrice: Int,
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,
@@ -282,8 +283,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
-    ): Flow<ApiResponse<ListHotelResultItem>> {
-        return flow<ApiResponse<ListHotelResultItem>> {
+    ): Flow<ApiResponse<ManageHotelResultItem>> {
+        return flow<ApiResponse<ManageHotelResultItem>> {
             try {
                 val response = apiService.updateHotel(
                     id,

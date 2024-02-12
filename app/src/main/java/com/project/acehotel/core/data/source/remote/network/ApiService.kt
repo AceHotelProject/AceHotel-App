@@ -2,9 +2,10 @@ package com.project.acehotel.core.data.source.remote.network
 
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ListHotelResultItem
+import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
@@ -78,47 +79,47 @@ interface ApiService {
     // INVENTORY
 
     // HOTELS
-    @Multipart
+    @FormUrlEncoded
     @POST("hotels")
     suspend fun addHotel(
-        @Part("name") name: String,
-        @Part("address") address: String,
-        @Part("contact") contact: String,
+        @Field("name") name: String,
+        @Field("address") address: String,
+        @Field("contact") contact: String,
 
-        @Part("regular_room_count") regularRoomCount: Int,
-        @Part regularRoomImage: MultipartBody.Part,
-        @Part("exclusive_room_count") exclusiveRoomCount: Int,
-        @Part exclusiveRoomImage: MultipartBody.Part,
-        @Part("regular_room_price") regularRoomPrice: Int,
-        @Part("exclusive_room_price") exclusiveRoomPrice: Int,
-        @Part("extra_bed_price") extraBedPrice: Int,
+        @Field("regular_room_count") regularRoomCount: Int,
+        @Field("regular_room_image") regularRoomImage: String,
+        @Field("exclusive_room_count") exclusiveRoomCount: Int,
+        @Field("exclusive_room_image") exclusiveRoomImage: String,
+        @Field("regular_room_price") regularRoomPrice: Int,
+        @Field("exclusive_room_price") exclusiveRoomPrice: Int,
+        @Field("extra_bed_price") extraBedPrice: Int,
 
-        @Part("owner_name") ownerName: String,
-        @Part("owner_email") ownerEmail: String,
-        @Part("owner_password") ownerPassword: String,
+        @Field("owner_name") ownerName: String,
+        @Field("owner_email") ownerEmail: String,
+        @Field("owner_password") ownerPassword: String,
 
-        @Part("receptionist_name") receptionistName: String,
-        @Part("receptionist_email") receptionistEmail: String,
-        @Part("receptionist_password") receptionistPassword: String,
+        @Field("receptionist_name") receptionistName: String,
+        @Field("receptionist_email") receptionistEmail: String,
+        @Field("receptionist_password") receptionistPassword: String,
 
-        @Part("cleaning_name") cleaningName: String,
-        @Part("cleaning_email") cleaningEmail: String,
-        @Part("cleaning_password") cleaningPassword: String,
+        @Field("cleaning_staff_name") cleaningName: String,
+        @Field("cleaning_staff_email") cleaningEmail: String,
+        @Field("cleaning_staff_password") cleaningPassword: String,
 
-        @Part("inventory_name") inventoryName: String,
-        @Part("inventory_email") inventoryEmail: String,
-        @Part("inventory_password") inventoryPassword: String,
-    ): ListHotelResultItem
+        @Field("inventory_staff_name") inventoryName: String,
+        @Field("inventory_staff_email") inventoryEmail: String,
+        @Field("inventory_staff_password") inventoryPassword: String,
+    ): CreateHotelResponse
 
     @GET("hotels")
-    suspend fun getListHotel(): ListHotelResponse
+    suspend fun getListHotel(): ManageHotelResponse
 
     @GET("hotels/{id}")
     suspend fun getHotel(
         @Path("id") id: String
     ): HotelResponse
 
-    @Multipart
+    @FormUrlEncoded
     @PATCH("hotels/{id}")
     suspend fun updateHotel(
         @Path("id") id: String,
@@ -128,9 +129,9 @@ interface ApiService {
         @Field("contact") contact: String,
 
         @Field("regular_room_count") regularRoomCount: Int,
-        @Field("regular_room_image") regularRoomImage: MultipartBody.Part,
+        @Field("regular_room_image") regularRoomImage: String,
         @Field("exclusive_room_count") exclusiveRoomCount: Int,
-        @Field("exclusive_room_image") exclusiveRoomImage: MultipartBody.Part,
+        @Field("exclusive_room_image") exclusiveRoomImage: String,
         @Field("regular_room_price") regularRoomPrice: Int,
         @Field("exclusive_room_price") exclusiveRoomPrice: Int,
         @Field("extra_bed_price") extraBedPrice: Int,
@@ -150,7 +151,7 @@ interface ApiService {
         @Field("inventory_name") inventoryName: String,
         @Field("inventory_email") inventoryEmail: String,
         @Field("inventory_password") inventoryPassword: String,
-    ): ListHotelResultItem
+    ): ManageHotelResultItem
 
 //    @DELETE("hotels/{id}")
 //    suspend fun deleteHotel(

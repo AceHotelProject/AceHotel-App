@@ -24,15 +24,19 @@ data class ManageHotel(
     val roomId: List<String>,
     val inventoryId: List<String>,
 
+    val ownerId: String,
     val ownerName: String,
     val ownerEmail: String,
 
+    val receptionistId: String,
     val receptionistName: String,
     val receptionistEmail: String,
 
+    val cleaningStaffId: String,
     val cleaningStaffName: String,
     val cleaningStaffEmail: String,
 
+    val inventoryStaffId: String,
     val inventoryStaffName: String,
     val inventoryStaffEmail: String,
 

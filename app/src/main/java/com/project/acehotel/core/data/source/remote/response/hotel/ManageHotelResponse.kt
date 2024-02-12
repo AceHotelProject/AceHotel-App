@@ -2,10 +2,10 @@ package com.project.acehotel.core.data.source.remote.response.hotel
 
 import com.google.gson.annotations.SerializedName
 
-data class ListHotelResponse(
+data class ManageHotelResponse(
 
     @field:SerializedName("result")
-    val result: List<ListHotelResultItem?>? = null
+    val result: List<ManageHotelResultItem?>? = null
 )
 
 data class OwnerId(
@@ -29,7 +29,7 @@ data class OwnerId(
     val username: String? = null
 )
 
-data class ListHotelResultItem(
+data class ManageHotelResultItem(
 
     @field:SerializedName("room_id")
     val roomId: List<String?>? = null,

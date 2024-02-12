@@ -27,6 +27,6 @@ interface IAuthRepository {
 
     suspend fun deleteToken()
 
-    fun uploadImage(image: MultipartBody.Part): Flow<Resource<List<String>>>
+    fun uploadImage(image: List<MultipartBody.Part>): Flow<Resource<List<String>>>
 
 }

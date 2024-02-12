@@ -5,7 +5,6 @@ import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import kotlinx.coroutines.flow.Flow
-import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepository) :
@@ -15,9 +14,9 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         address: String,
         contact: String,
         regularRoomCount: Int,
-        regularRoomImage: MultipartBody.Part,
+        regularRoomImage: String,
         exclusiveRoomCount: Int,
-        exclusiveRoomImage: MultipartBody.Part,
+        exclusiveRoomImage: String,
         regularRoomPrice: Int,
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,
@@ -70,9 +69,9 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         address: String,
         contact: String,
         regularRoomCount: Int,
-        regularRoomImage: MultipartBody.Part,
+        regularRoomImage: String,
         exclusiveRoomCount: Int,
-        exclusiveRoomImage: MultipartBody.Part,
+        exclusiveRoomImage: String,
         regularRoomPrice: Int,
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,

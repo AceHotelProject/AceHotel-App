@@ -31,6 +31,14 @@ class ManageHotelListAdapter(private val manageHotel: List<ManageHotel>?) :
         holder.binding.apply {
             tvFranchiseHotelName.text = data?.name
             tvFranchiseHotelAddress.text = data?.address
+
+            tvFranchiseHotelOwner.text = "${data?.ownerName} - ${data?.ownerEmail}"
+            tvFranchiseHotelReceptionist.text =
+                "${data?.receptionistName} - ${data?.receptionistEmail}"
+            tvFranchiseHotelInventory.text =
+                "${data?.inventoryStaffName} - ${data?.inventoryStaffEmail}"
+            tvFranchiseHotelCleaning.text =
+                "${data?.cleaningStaffName} - ${data?.cleaningStaffEmail}"
         }
     }
 }

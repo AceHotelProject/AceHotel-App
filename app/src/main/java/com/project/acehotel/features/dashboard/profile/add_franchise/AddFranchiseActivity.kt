@@ -1,5 +1,6 @@
 package com.project.acehotel.features.dashboard.profile.add_franchise
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -13,10 +14,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.reduceFileImage
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.core.utils.uriToFile
 import com.project.acehotel.databinding.ActivityAddFranchiseBinding
+import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -33,15 +36,10 @@ class AddFranchiseActivity : AppCompatActivity() {
     private var flagImgExc = 0
 
     private var reg1ImgUri: Uri? = null
-    private var reg2ImgUri: Uri? = null
-    private var reg3ImgUri: Uri? = null
-
     private var exc1ImgUri: Uri? = null
-    private var exc2ImgUri: Uri? = null
-    private var exc3ImgUri: Uri? = null
 
-    private var getFileRegular: File? = null
-    private var getFileExclusive: File? = null
+    private var getFileRegular1: File? = null
+    private var getFileExclusive1: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +47,13 @@ class AddFranchiseActivity : AppCompatActivity() {
         binding = ActivityAddFranchiseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        isButtonEnabled(true)
+        isButtonEnabled(false)
 
         setupActionBar()
 
         handleButtonBack()
 
-//        handleEditText()
+        handleEditText()
 
         handlePickImages()
 
@@ -71,16 +69,20 @@ class AddFranchiseActivity : AppCompatActivity() {
                     exc1ImgUri = uri
                     binding.addFranchisePhotoExclusive1.setImageURI(exc1ImgUri)
 
-                    getFileExclusive = uriToFile(exc1ImgUri!!, this)
+                    getFileExclusive1 = uriToFile(exc1ImgUri!!, this)
                 }
-                2 -> {
-                    exc2ImgUri = uri
-                    binding.addFranchisePhotoExclusive2.setImageURI(exc2ImgUri)
-                }
-                3 -> {
-                    exc3ImgUri = uri
-                    binding.addFranchisePhotoExclusive3.setImageURI(exc3ImgUri)
-                }
+//                2 -> {
+//                    exc2ImgUri = uri
+//                    binding.addFranchisePhotoExclusive2.setImageURI(exc2ImgUri)
+//
+//                    getFileExclusive2 = uriToFile(exc2ImgUri!!, this)
+//                }
+//                3 -> {
+//                    exc3ImgUri = uri
+//                    binding.addFranchisePhotoExclusive3.setImageURI(exc3ImgUri)
+//
+//                    getFileExclusive3 = uriToFile(exc3ImgUri!!, this)
+//                }
             }
 
             when (flagImgReg) {
@@ -88,16 +90,20 @@ class AddFranchiseActivity : AppCompatActivity() {
                     reg1ImgUri = uri
                     binding.addFranchisePhotoRegular1.setImageURI(reg1ImgUri)
 
-                    getFileRegular = uriToFile(reg1ImgUri!!, this)
+                    getFileRegular1 = uriToFile(reg1ImgUri!!, this)
                 }
-                2 -> {
-                    reg2ImgUri = uri
-                    binding.addFranchisePhotoRegular2.setImageURI(reg2ImgUri)
-                }
-                3 -> {
-                    reg3ImgUri = uri
-                    binding.addFranchisePhotoRegular3.setImageURI(reg3ImgUri)
-                }
+//                2 -> {
+//                    reg2ImgUri = uri
+//                    binding.addFranchisePhotoRegular2.setImageURI(reg2ImgUri)
+//
+//                    getFileRegular2 = uriToFile(reg2ImgUri!!, this)
+//                }
+//                3 -> {
+//                    reg3ImgUri = uri
+//                    binding.addFranchisePhotoRegular3.setImageURI(reg3ImgUri)
+//
+//                    getFileRegular3 = uriToFile(reg3ImgUri!!, this)
+//                }
             }
         } else {
             Timber.tag("Photo Picker").d("No media selected")
@@ -115,30 +121,30 @@ class AddFranchiseActivity : AppCompatActivity() {
                 startGallery()
             }
 
-            addFranchisePhotoRegular2.setOnClickListener {
-                flagImgReg = 2
-                startGallery()
-            }
-
-            addFranchisePhotoRegular3.setOnClickListener {
-                flagImgReg = 3
-                startGallery()
-            }
+//            addFranchisePhotoRegular2.setOnClickListener {
+//                flagImgReg = 2
+//                startGallery()
+//            }
+//
+//            addFranchisePhotoRegular3.setOnClickListener {
+//                flagImgReg = 3
+//                startGallery()
+//            }
 
             addFranchisePhotoExclusive1.setOnClickListener {
                 flagImgExc = 1
                 startGallery()
             }
 
-            addFranchisePhotoExclusive2.setOnClickListener {
-                flagImgExc = 2
-                startGallery()
-            }
-
-            addFranchisePhotoExclusive3.setOnClickListener {
-                flagImgExc = 3
-                startGallery()
-            }
+//            addFranchisePhotoExclusive2.setOnClickListener {
+//                flagImgExc = 2
+//                startGallery()
+//            }
+//
+//            addFranchisePhotoExclusive3.setOnClickListener {
+//                flagImgExc = 3
+//                startGallery()
+//            }
         }
     }
 
@@ -462,6 +468,22 @@ class AddFranchiseActivity : AppCompatActivity() {
                 }
             })
 
+            layoutAddFranchiseInventoryPass.setEndIconOnClickListener {
+                if (edAddFranchiseInventoryPass.transformationMethod == PasswordTransformationMethod.getInstance()) {
+                    edAddFranchiseInventoryPass.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
+                    layoutAddFranchiseInventoryPass.endIconDrawable =
+                        getDrawable(R.drawable.icons_no_see_pass)
+                } else {
+                    edAddFranchiseInventoryPass.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
+                    layoutAddFranchiseInventoryPass.endIconDrawable =
+                        getDrawable(R.drawable.icons_see_pass)
+                }
+
+                edAddFranchiseInventoryPass.setSelection(edAddFranchiseInventoryPass.text!!.length)
+            }
+
             edAddFranchiseInventoryPassConfirm.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -475,6 +497,22 @@ class AddFranchiseActivity : AppCompatActivity() {
                     checkForms()
                 }
             })
+
+            layoutAddFranchiseInventoryPassConfirm.setEndIconOnClickListener {
+                if (edAddFranchiseInventoryPassConfirm.transformationMethod == PasswordTransformationMethod.getInstance()) {
+                    edAddFranchiseInventoryPassConfirm.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
+                    layoutAddFranchiseInventoryPassConfirm.endIconDrawable =
+                        getDrawable(R.drawable.icons_no_see_pass)
+                } else {
+                    edAddFranchiseInventoryPassConfirm.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
+                    layoutAddFranchiseInventoryPassConfirm.endIconDrawable =
+                        getDrawable(R.drawable.icons_see_pass)
+                }
+
+                edAddFranchiseInventoryPassConfirm.setSelection(edAddFranchiseInventoryPassConfirm.text!!.length)
+            }
 
             edAddFranchiseCleaningName.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -518,6 +556,22 @@ class AddFranchiseActivity : AppCompatActivity() {
                 }
             })
 
+            layoutAddFranchiseCleaningPass.setEndIconOnClickListener {
+                if (edAddFranchiseCleaningPass.transformationMethod == PasswordTransformationMethod.getInstance()) {
+                    edAddFranchiseCleaningPass.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
+                    layoutAddFranchiseCleaningPass.endIconDrawable =
+                        getDrawable(R.drawable.icons_no_see_pass)
+                } else {
+                    edAddFranchiseCleaningPass.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
+                    layoutAddFranchiseCleaningPass.endIconDrawable =
+                        getDrawable(R.drawable.icons_see_pass)
+                }
+
+                edAddFranchiseCleaningPass.setSelection(edAddFranchiseCleaningPass.text!!.length)
+            }
+
             edAddFranchiseCleaningPassConfirm.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -531,12 +585,31 @@ class AddFranchiseActivity : AppCompatActivity() {
                     checkForms()
                 }
             })
+
+            layoutAddFranchiseCleaningPassConfirm.setEndIconOnClickListener {
+                if (edAddFranchiseCleaningPassConfirm.transformationMethod == PasswordTransformationMethod.getInstance()) {
+                    edAddFranchiseCleaningPassConfirm.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
+                    layoutAddFranchiseCleaningPassConfirm.endIconDrawable =
+                        getDrawable(R.drawable.icons_no_see_pass)
+                } else {
+                    edAddFranchiseCleaningPassConfirm.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
+                    layoutAddFranchiseCleaningPassConfirm.endIconDrawable =
+                        getDrawable(R.drawable.icons_see_pass)
+                }
+
+                edAddFranchiseCleaningPassConfirm.setSelection(edAddFranchiseCleaningPassConfirm.text!!.length)
+            }
         }
     }
 
     private fun handleSaveButton() {
         binding.apply {
             btnSave.setOnClickListener {
+                isButtonEnabled(false)
+                showLoading(true)
+
                 val hotelName = edAddFranchiseName.text.toString()
                 val hotelAddress = edAddFranchiseAddress.text.toString()
                 val hotelContact = edAddFranchiseContact.text.toString()
@@ -573,101 +646,92 @@ class AddFranchiseActivity : AppCompatActivity() {
                 val cleaningEmail = edAddFranchiseCleaningEmail.text.toString()
                 val cleaningPass = edAddFranchiseCleaningPass.text.toString()
 
-//                val fileExclusive = reduceFileImage(getFileExclusive as File)
-//                val requestImageFileExclusive =
-//                    fileExclusive.asRequestBody("image/jpeg".toMediaType())
-//                val imageMultipartExclusive: MultipartBody.Part = MultipartBody.Part.createFormData(
-//                    EXCLUSIVE_PHOTO,
-//                    "Exclusive Room Photo",
-//                    requestImageFileExclusive
-//                )
+                val fileExclusive1 = reduceFileImage(getFileExclusive1 as File)
+                val requestImageFileExclusive1 =
+                    fileExclusive1.asRequestBody("image/jpeg".toMediaType())
+                val imageMultipartExclusive1: MultipartBody.Part =
+                    MultipartBody.Part.createFormData(
+                        EXCLUSIVE_PHOTO,
+                        "Exclusive_Room_Photo",
+                        requestImageFileExclusive1
+                    )
 
-                val fileRegular = reduceFileImage(getFileRegular as File)
-                val requestImageFileRegular = fileRegular.asRequestBody("image/jpeg".toMediaType())
-                val imageMultipartRegular: MultipartBody.Part = MultipartBody.Part.createFormData(
-                    REGULAR_PHOTO,
-                    "Regular Room Photo",
-                    requestImageFileRegular
-                )
+                val fileRegular1 = reduceFileImage(getFileRegular1 as File)
+                val requestImageFileRegular1 =
+                    fileRegular1.asRequestBody("image/jpeg".toMediaType())
+                val imageMultipartRegular1: MultipartBody.Part =
+                    MultipartBody.Part.createFormData(
+                        REGULAR_PHOTO,
+                        "Regular_Room_Photo",
+                        requestImageFileRegular1
+                    )
 
-                addFranchiseViewModel.uploadImage(imageMultipartRegular)
-                    .observe(this@AddFranchiseActivity) { image ->
-                        when (image) {
-                            is Resource.Error -> {
-                                showLoading(false)
-                            }
-                            is Resource.Loading -> {
-                                showLoading(true)
-                            }
-                            is Resource.Message -> {
-                                showLoading(false)
-                            }
-                            is Resource.Success -> {
-                                showLoading(false)
+                val listOfRoomImage =
+                    listOf(
+                        imageMultipartRegular1,
+                        imageMultipartExclusive1
+                    )
 
-                                showToast(image.data?.get(1) ?: "")
+                addFranchiseViewModel.addHotel(
+                    listOfRoomImage, hotelName,
+                    hotelAddress,
+                    hotelContact,
+                    regularCount,
+                    exclusiveCount,
+                    regularPrice,
+                    exclusivePrice,
+                    bedPrice,
+                    ownerName,
+                    ownerEmail,
+                    ownerPass,
+                    receptionistName,
+                    receptionistEmail,
+                    receptionistPass,
+                    cleaningName,
+                    cleaningEmail,
+                    cleaningPass,
+                    inventoryName,
+                    inventoryEmail,
+                    inventoryPass
+                ).observe(this@AddFranchiseActivity) { hotel ->
+                    when (hotel) {
+                        is Resource.Error -> {
+                            showLoading(false)
+
+                            if (!isInternetAvailable(this@AddFranchiseActivity)) {
+                                showToast(getString(R.string.check_internet))
+                            } else {
+                                showToast(hotel.message.toString())
                             }
+
+                            isButtonEnabled(true)
+                        }
+                        is Resource.Loading -> {
+                            showLoading(true)
+                            isButtonEnabled(false)
+                        }
+                        is Resource.Message -> {
+                            showLoading(false)
+                            isButtonEnabled(true)
+
+                            Timber.tag("AddFranchiseActivity").d(hotel.message)
+                        }
+                        is Resource.Success -> {
+                            showLoading(false)
+                            isButtonEnabled(true)
+
+                            showToast("Cabang hotel baru telah berhasil ditambahkan")
+
+                            val intentToManageFranchise = Intent(
+                                this@AddFranchiseActivity,
+                                ManageFranchiseActivity::class.java
+                            )
+                            startActivity(intentToManageFranchise)
+                            finish()
                         }
                     }
+                }
             }
-
-//            btnSave.setOnClickListener {
-//                addFranchiseViewModel.addHotel(
-//                    hotelName,
-//                    hotelAddress,
-//                    hotelContact,
-//                    regularCount,
-//                    imageMultipartRegular,
-//                    exclusiveCount,
-//                    imageMultipartExclusive,
-//                    regularPrice,
-//                    exclusivePrice,
-//                    bedPrice,
-//                    ownerName,
-//                    ownerEmail,
-//                    ownerPass,
-//                    receptionistName,
-//                    receptionistEmail,
-//                    receptionistPass,
-//                    cleaningName,
-//                    cleaningEmail,
-//                    cleaningPass,
-//                    inventoryName,
-//                    inventoryEmail,
-//                    inventoryPass
-//                ).observe(this@AddFranchiseActivity) { hotel ->
-//                    when (hotel) {
-//                        is Resource.Error -> {
-//                            showLoading(false)
-//
-//                            if (!isInternetAvailable(this@AddFranchiseActivity)) {
-//                                showToast(getString(R.string.check_internet))
-//                            } else {
-//                                showToast(hotel.message.toString())
-//                            }
-//                        }
-//                        is Resource.Loading -> {
-//                            showLoading(true)
-//                        }
-//                        is Resource.Message -> {
-//                            showLoading(false)
-//                            Timber.tag("AddFranchiseActivity").d(hotel.message)
-//                        }
-//                        is Resource.Success -> {
-//                            showLoading(false)
-//
-//                            showToast("Cabang hotel baru telah berhasil ditambahkan")
-//
-//                            val intentToManageFranchise = Intent(
-//                                this@AddFranchiseActivity,
-//                                ManageFranchiseActivity::class.java
-//                            )
-//                            startActivity(intentToManageFranchise)
-//                            finish()
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 
@@ -716,29 +780,29 @@ class AddFranchiseActivity : AppCompatActivity() {
 
             // OWNER
             if (!Patterns.EMAIL_ADDRESS.matcher(ownerEmail).matches() && ownerEmail != "") {
-                binding.layoutAddFranchiseOwnerEmail.error = getString(R.string.wrong_email_format)
+                layoutAddFranchiseOwnerEmail.error = getString(R.string.wrong_email_format)
             } else {
-                binding.layoutAddFranchiseOwnerEmail.error = null
+                layoutAddFranchiseOwnerEmail.error = null
             }
 
             if (ownerPass.length < 8) {
-                binding.layoutAddFranchiseOwnerPass.error =
+                layoutAddFranchiseOwnerPass.error =
                     getString(R.string.wrong_password_format)
             } else {
-                binding.layoutAddFranchiseOwnerPass.error = null
+                layoutAddFranchiseOwnerPass.error = null
             }
 
             if (ownerPassConfirm.length < 8) {
-                binding.layoutAddFranchiseOwnerPassConfirm.error =
+                layoutAddFranchiseOwnerPassConfirm.error =
                     getString(R.string.wrong_password_format)
             } else {
                 if (ownerPass != ownerPassConfirm) {
-                    binding.layoutAddFranchiseOwnerPass.error = getString(R.string.diff_password)
-                    binding.layoutAddFranchiseOwnerPassConfirm.error =
+                    layoutAddFranchiseOwnerPass.error = getString(R.string.diff_password)
+                    layoutAddFranchiseOwnerPassConfirm.error =
                         getString(R.string.diff_password)
                 } else {
-                    binding.layoutAddFranchiseOwnerPass.error = null
-                    binding.layoutAddFranchiseOwnerPassConfirm.error = null
+                    layoutAddFranchiseOwnerPass.error = null
+                    layoutAddFranchiseOwnerPassConfirm.error = null
                 }
             }
             // OWNER
@@ -747,31 +811,31 @@ class AddFranchiseActivity : AppCompatActivity() {
             if (!Patterns.EMAIL_ADDRESS.matcher(receptionistEmail)
                     .matches() && receptionistEmail != ""
             ) {
-                binding.layoutAddFranchiseReceptionistEmail.error =
+                layoutAddFranchiseReceptionistEmail.error =
                     getString(R.string.wrong_email_format)
             } else {
-                binding.layoutAddFranchiseReceptionistEmail.error = null
+                layoutAddFranchiseReceptionistEmail.error = null
             }
 
             if (receptionistPass.length < 8) {
-                binding.layoutAddFranchiseReceptionistPass.error =
+                layoutAddFranchiseReceptionistPass.error =
                     getString(R.string.wrong_password_format)
             } else {
-                binding.layoutAddFranchiseReceptionistPass.error = null
+                layoutAddFranchiseReceptionistPass.error = null
             }
 
             if (receptionistPassConfirm.length < 8) {
-                binding.layoutAddFranchiseReceptionistPassConfirm.error =
+                layoutAddFranchiseReceptionistPassConfirm.error =
                     getString(R.string.wrong_password_format)
             } else {
                 if (receptionistPass != receptionistPassConfirm) {
-                    binding.layoutAddFranchiseReceptionistPass.error =
+                    layoutAddFranchiseReceptionistPass.error =
                         getString(R.string.diff_password)
-                    binding.layoutAddFranchiseReceptionistPassConfirm.error =
+                    layoutAddFranchiseReceptionistPassConfirm.error =
                         getString(R.string.diff_password)
                 } else {
-                    binding.layoutAddFranchiseReceptionistPass.error = null
-                    binding.layoutAddFranchiseReceptionistPassConfirm.error = null
+                    layoutAddFranchiseReceptionistPass.error = null
+                    layoutAddFranchiseReceptionistPassConfirm.error = null
                 }
             }
             // RECEPTIONIST
@@ -780,31 +844,31 @@ class AddFranchiseActivity : AppCompatActivity() {
             if (!Patterns.EMAIL_ADDRESS.matcher(inventoryEmail)
                     .matches() && inventoryEmail != ""
             ) {
-                binding.layoutAddFranchiseInventoryEmail.error =
+                layoutAddFranchiseInventoryEmail.error =
                     getString(R.string.wrong_email_format)
             } else {
-                binding.layoutAddFranchiseInventoryEmail.error = null
+                layoutAddFranchiseInventoryEmail.error = null
             }
 
             if (inventoryPass.length < 8) {
-                binding.layoutAddFranchiseInventoryPass.error =
+                layoutAddFranchiseInventoryPass.error =
                     getString(R.string.wrong_password_format)
             } else {
-                binding.layoutAddFranchiseInventoryPass.error = null
+                layoutAddFranchiseInventoryPass.error = null
             }
 
             if (inventoryPassConfirm.length < 8) {
-                binding.layoutAddFranchiseInventoryPass.error =
+                layoutAddFranchiseInventoryPassConfirm.error =
                     getString(R.string.wrong_password_format)
             } else {
                 if (inventoryPass != inventoryPassConfirm) {
-                    binding.layoutAddFranchiseInventoryPass.error =
+                    layoutAddFranchiseInventoryPass.error =
                         getString(R.string.diff_password)
-                    binding.layoutAddFranchiseInventoryPassConfirm.error =
+                    layoutAddFranchiseInventoryPassConfirm.error =
                         getString(R.string.diff_password)
                 } else {
-                    binding.layoutAddFranchiseInventoryPass.error = null
-                    binding.layoutAddFranchiseInventoryPassConfirm.error = null
+                    layoutAddFranchiseInventoryPass.error = null
+                    layoutAddFranchiseInventoryPassConfirm.error = null
                 }
             }
             // INVENTORY
@@ -813,40 +877,58 @@ class AddFranchiseActivity : AppCompatActivity() {
             if (!Patterns.EMAIL_ADDRESS.matcher(cleaningEmail)
                     .matches() && cleaningEmail != ""
             ) {
-                binding.layoutAddFranchiseCleaningEmail.error =
+                layoutAddFranchiseCleaningEmail.error =
                     getString(R.string.wrong_email_format)
             } else {
-                binding.layoutAddFranchiseCleaningEmail.error = null
+                layoutAddFranchiseCleaningEmail.error = null
             }
 
             if (cleaningPass.length < 8) {
-                binding.layoutAddFranchiseCleaningPass.error =
+                layoutAddFranchiseCleaningPass.error =
                     getString(R.string.wrong_password_format)
             } else {
-                binding.layoutAddFranchiseCleaningPass.error = null
+                layoutAddFranchiseCleaningPass.error = null
             }
 
             if (cleaningPassConfirm.length < 8) {
-                binding.layoutAddFranchiseCleaningPassConfirm.error =
+                layoutAddFranchiseCleaningPassConfirm.error =
                     getString(R.string.wrong_password_format)
             } else {
                 if (cleaningPass != cleaningPassConfirm) {
-                    binding.layoutAddFranchiseCleaningPass.error =
+                    layoutAddFranchiseCleaningPass.error =
                         getString(R.string.diff_password)
-                    binding.layoutAddFranchiseCleaningPassConfirm.error =
+                    layoutAddFranchiseCleaningPassConfirm.error =
                         getString(R.string.diff_password)
                 } else {
-                    binding.layoutAddFranchiseCleaningPass.error = null
-                    binding.layoutAddFranchiseCleaningPassConfirm.error = null
+                    layoutAddFranchiseCleaningPass.error = null
+                    layoutAddFranchiseCleaningPassConfirm.error = null
                 }
             }
             // CLEANING
 
             isButtonEnabled(
-                hotelName.isNotEmpty() && hotelAddress.isNotEmpty() && hotelContact.isNotEmpty() && regularCount > 0 && regularPrice > 1000 && exclusiveCount > 0 && exclusivePrice > 1000 && bedPrice > 1000 &&
-                        ownerName.isNotEmpty() && ownerEmail.isNotEmpty() && ownerPass.isNotEmpty() && receptionistName.isNotEmpty() && receptionistEmail.isNotEmpty() && receptionistPass.isNotEmpty() &&
-                        inventoryName.isNotEmpty() && inventoryEmail.isNotEmpty() && inventoryPass.isNotEmpty() && cleaningName.isNotEmpty() && cleaningEmail.isNotEmpty() && cleaningPass.isNotEmpty() &&
-                        getFileRegular != null && getFileExclusive != null
+                hotelName.isNotEmpty() && layoutAddFranchiseName.error == null &&
+                        hotelAddress.isNotEmpty() && layoutAddFranchiseAddress.error == null &&
+                        hotelContact.isNotEmpty() && layoutAddFranchiseContact.error == null &&
+                        regularCount >= MIN_ROOM_COUNT && regularCount <= MAX_ROOM_COUNT &&
+                        regularPrice >= MIN_ROOM_PRICE && regularPrice <= MAX_ROOM_PRICE &&
+                        exclusiveCount > MIN_ROOM_COUNT && exclusiveCount <= MAX_ROOM_COUNT &&
+                        exclusivePrice >= MIN_ROOM_PRICE && exclusivePrice <= MAX_ROOM_PRICE &&
+                        bedPrice >= MIN_BED_PRICE && bedPrice <= MAX_BED_PRICE &&
+                        ownerName.isNotEmpty() && layoutAddFranchiseOwnerName.error == null &&
+                        ownerEmail.isNotEmpty() && layoutAddFranchiseOwnerEmail.error == null &&
+                        ownerPass.isNotEmpty() && layoutAddFranchiseOwnerPass.error == null &&
+                        receptionistName.isNotEmpty() && layoutAddFranchiseReceptionistName.error == null &&
+                        receptionistEmail.isNotEmpty() && layoutAddFranchiseReceptionistEmail.error == null &&
+                        receptionistPass.isNotEmpty() && layoutAddFranchiseReceptionistPass.error == null &&
+                        inventoryName.isNotEmpty() && layoutAddFranchiseInventoryName.error == null &&
+                        inventoryEmail.isNotEmpty() && layoutAddFranchiseInventoryEmail.error == null &&
+                        inventoryPass.isNotEmpty() && layoutAddFranchiseInventoryPass.error == null &&
+                        cleaningName.isNotEmpty() && layoutAddFranchiseCleaningName.error == null &&
+                        cleaningEmail.isNotEmpty() && layoutAddFranchiseCleaningEmail.error == null &&
+                        cleaningPass.isNotEmpty() && layoutAddFranchiseCleaningPass.error == null &&
+                        getFileRegular1 != null &&
+                        getFileExclusive1 != null
             )
         }
     }
@@ -872,5 +954,17 @@ class AddFranchiseActivity : AppCompatActivity() {
     companion object {
         private const val REGULAR_PHOTO = "image"
         private const val EXCLUSIVE_PHOTO = "image"
+
+        private const val EXCLUSIVE_FILENAME = "exclusive_room_photo"
+        private const val REGULAR_FILENAME = "regular_room_photo"
+
+        private const val MIN_ROOM_COUNT = 1
+        private const val MAX_ROOM_COUNT = 30
+
+        private const val MIN_ROOM_PRICE = 10000
+        private const val MAX_ROOM_PRICE = 1000000
+
+        private const val MIN_BED_PRICE = 10000
+        private const val MAX_BED_PRICE = 500000
     }
 }
