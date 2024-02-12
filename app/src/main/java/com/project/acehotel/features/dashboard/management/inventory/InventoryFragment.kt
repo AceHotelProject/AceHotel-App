@@ -40,12 +40,6 @@ class InventoryFragment : Fragment() {
         validateToken()
     }
 
-    private fun getHotelId() {
-        inventoryViewModel.getSelectedHotel().observe(this) { hotel ->
-            hotelId = hotel
-        }
-    }
-
     private fun validateToken() {
         inventoryViewModel.getRefreshToken().observe(this) { token ->
             if (token.isNullOrEmpty()) {
@@ -94,34 +88,6 @@ class InventoryFragment : Fragment() {
                 }
             }
         }
-
-//        inventoryViewModel.getListInventory(hotelId).observe(this) { inventory ->
-//            when (inventory) {
-//                is Resource.Error -> {
-//                    showLoading(false)
-//
-//                    if (!isInternetAvailable(requireContext())) {
-//                        activity?.showToast(getString(R.string.check_internet))
-//                    } else {
-//                        activity?.showToast(inventory.message.toString())
-//                    }
-//                }
-//                is Resource.Loading -> {
-//                    showLoading(true)
-//                }
-//                is Resource.Message -> {
-//                    showLoading(false)
-//                    Timber.tag("InventoryFragment").d(inventory.message)
-//                }
-//                is Resource.Success -> {
-//                    showLoading(false)
-//
-//                    initInventoryRecyclerView(inventory.data)
-//
-//                    initQuickInfo(inventory.data)
-//                }
-//            }
-//        }
     }
 
     private fun initQuickInfo(data: List<Inventory>?) {

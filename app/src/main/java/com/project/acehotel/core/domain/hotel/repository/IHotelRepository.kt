@@ -3,7 +3,6 @@ package com.project.acehotel.core.domain.hotel.repository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import kotlinx.coroutines.flow.Flow
-import okhttp3.MultipartBody
 
 interface IHotelRepository {
 
@@ -13,9 +12,9 @@ interface IHotelRepository {
         contact: String,
 
         regularRoomCount: Int,
-        regularRoomImage: MultipartBody.Part,
+        regularRoomImage: String,
         exclusiveRoomCount: Int,
-        exclusiveRoomImage: MultipartBody.Part,
+        exclusiveRoomImage: String,
         regularRoomPrice: Int,
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,
@@ -47,9 +46,9 @@ interface IHotelRepository {
         contact: String,
 
         regularRoomCount: Int,
-        regularRoomImage: MultipartBody.Part,
+        regularRoomImage: String,
         exclusiveRoomCount: Int,
-        exclusiveRoomImage: MultipartBody.Part,
+        exclusiveRoomImage: String,
         regularRoomPrice: Int,
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,

@@ -11,6 +11,7 @@ interface InventoryUseCase {
     fun getDetailInventory(id: String, hotelId: String): Flow<Resource<Inventory>>
 
     fun addInventory(
+        hotelId: String,
         name: String,
         type: String,
         stock: Int
@@ -18,6 +19,7 @@ interface InventoryUseCase {
 
     fun updateInventory(
         id: String,
+        hotelId: String,
         name: String,
         type: String,
         stock: Int,
@@ -26,6 +28,7 @@ interface InventoryUseCase {
     ): Flow<Resource<Inventory>>
 
     fun deleteInventory(
-        id: String
+        id: String,
+        hotelId: String,
     ): Flow<Resource<Int>>
 }

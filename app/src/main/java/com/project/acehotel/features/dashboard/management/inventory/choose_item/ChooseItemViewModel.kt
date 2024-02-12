@@ -1,9 +1,12 @@
 package com.project.acehotel.features.dashboard.management.inventory.choose_item
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
+import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,9 +18,19 @@ class ChooseItemViewModel @Inject constructor(
     private val authUseCase: AuthUseCase
 ) : ViewModel() {
 
-    fun getListInventory(hotelId: String) = inventoryUseCase.getListInventory(hotelId).asLiveData()
+    private fun getListInventory(hotelId: String) =
+        inventoryUseCase.getListInventory(hotelId).asLiveData()
 
     fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
+
+    fun fetchListInventory(): MediatorLiveData<Resource<List<Inventory>>> =
+        MediatorLiveData<Resource<List<Inventory>>>().apply {
+            addSource(getSelectedHotel()) { hotel ->
+                addSource(getListInventory(hotel)) { inventory ->
+                    value = inventory
+                }
+            }
+        }
 }

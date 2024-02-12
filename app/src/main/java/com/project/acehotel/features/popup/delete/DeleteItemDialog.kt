@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.project.acehotel.R
+import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.constants.DeleteDialogType
+import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,10 +36,33 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                 DeleteDialogType.INVENTORY_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus barang ini?"
                     btnYes.setOnClickListener {
-                        deleteItemViewModel.deleteInventory(id).observe(this) {
-                            activity?.showToast("Barang telah berhasi dihapus")
-                            activity?.finish()
-                            dismiss()
+//                        deleteItemViewModel.deleteInventory(id).observe(this) {
+//                            activity?.showToast("Barang telah berhasi dihapus")
+//                            activity?.finish()
+//                            dismiss()
+//                        }
+
+                        deleteItemViewModel.executeDeleteInventory(id).observe(this) { result ->
+                            when (result) {
+                                is Resource.Error -> {
+                                    if (!isInternetAvailable(requireContext())) {
+                                        activity?.showToast(getString(R.string.check_internet))
+                                    } else {
+                                        activity?.showToast(result.message.toString())
+                                    }
+                                }
+                                is Resource.Loading -> {
+
+                                }
+                                is Resource.Message -> {
+
+                                }
+                                is Resource.Success -> {
+                                    activity?.showToast("Barang telah berhasi dihapus")
+                                    activity?.finish()
+                                    dismiss()
+                                }
+                            }
                         }
                     }
                     btnNo.setOnClickListener {

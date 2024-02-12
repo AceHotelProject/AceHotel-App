@@ -102,13 +102,14 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     }
 
     suspend fun addInventory(
+        hotelId: String,
         name: String,
         type: String,
         stock: Int
     ): Flow<ApiResponse<InventoryDetailResponse>> {
         return flow {
             try {
-                val response = apiService.addInventory(name, type, stock)
+                val response = apiService.addInventory(hotelId, name, type, stock)
 
                 if (response.id != null) {
                     emit(ApiResponse.Success(response))
@@ -124,6 +125,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     suspend fun updateInventory(
         id: String,
+        hotelId: String,
         name: String,
         type: String,
         stock: Int,
@@ -132,7 +134,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     ): Flow<ApiResponse<InventoryDetailResponse>> {
         return flow {
             try {
-                val response = apiService.updateInventory(id, name, type, stock, title, description)
+                val response =
+                    apiService.updateInventory(id, hotelId, name, type, stock, title, description)
 
                 if (response.id != null) {
                     emit(ApiResponse.Success(response))
@@ -146,10 +149,13 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun deleteInventory(id: String): Flow<ApiResponse<Response<InventoryDetailResponse>>> {
+    suspend fun deleteInventory(
+        id: String,
+        hotelId: String
+    ): Flow<ApiResponse<Response<InventoryDetailResponse>>> {
         return flow<ApiResponse<Response<InventoryDetailResponse>>> {
             try {
-                val response = apiService.deleteInventory(id)
+                val response = apiService.deleteInventory(id, hotelId)
 
                 if (response.isSuccessful) {
                     emit(ApiResponse.Success(response))

@@ -19,6 +19,7 @@ import retrofit2.http.*
 interface ApiService {
 
     // AUTH
+
     @FormUrlEncoded
     @POST("auth/register")
     suspend fun registerUser(
@@ -38,6 +39,7 @@ interface ApiService {
     suspend fun refreshToken(
         @Field("refreshToken") refreshToken: String
     ): RefreshTokenResponse
+
     // AUTH
 
     // INVENTORY
@@ -56,6 +58,7 @@ interface ApiService {
     @POST("inventory")
     @FormUrlEncoded
     suspend fun addInventory(
+        @Query("hotel_id") hotelId: String,
         @Field("name") name: String,
         @Field("type") type: String,
         @Field("stock") stock: Int,
@@ -65,6 +68,7 @@ interface ApiService {
     @FormUrlEncoded
     suspend fun updateInventory(
         @Path("id") id: String,
+        @Query("hotel_id") hotelId: String,
         @Field("name") name: String,
         @Field("type") type: String,
         @Field("stock") stock: Int,
@@ -74,11 +78,14 @@ interface ApiService {
 
     @DELETE("inventory/{id}")
     suspend fun deleteInventory(
+        @Query("hotel_id") hotelId: String,
         @Path("id") id: String,
     ): Response<InventoryDetailResponse>
+
     // INVENTORY
 
     // HOTELS
+
     @FormUrlEncoded
     @POST("hotels")
     suspend fun addHotel(
@@ -161,7 +168,7 @@ interface ApiService {
     // HOTELS
 
 
-    // HOTELS
+    // VISITOR
 
     @GET("visitors")
     suspend fun getListVisitor(): ListVisitorResponse
@@ -171,7 +178,7 @@ interface ApiService {
         @Path("id") id: String
     ): VisitorResponse
 
-    // HOTELS
+    // VISITOR
 
     // IMAGES
 

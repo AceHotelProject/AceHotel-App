@@ -35,8 +35,6 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
 
         handleButtonBack()
 
-        getHotelId()
-
         fetchInventoryItems()
 
         handleOnRefresh()
@@ -86,7 +84,7 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
     }
 
     private fun fetchInventoryItems() {
-        chooseItemViewModel.getListInventory(hotelId).observe(this) { item ->
+        chooseItemViewModel.fetchListInventory().observe(this) { item ->
             when (item) {
                 is Resource.Error -> {
                     showLoading(false)

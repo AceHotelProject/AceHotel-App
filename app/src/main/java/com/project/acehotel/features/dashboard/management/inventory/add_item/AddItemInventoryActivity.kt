@@ -75,12 +75,12 @@ class AddItemInventoryActivity : AppCompatActivity() {
                 val name = edAddItemName.text.toString()
                 val type = mapToInventoryType(edAddItemType.text.toString())
 
-                addItemInventoryViewModel.addInventory(name, type, stockCount)
+                addItemInventoryViewModel.executeAddInventory(name, type, stockCount)
                     .observe(this@AddItemInventoryActivity) { inventory ->
                         when (inventory) {
                             is Resource.Error -> {
-                                isButtonEnabled(true)
                                 showLoading(false)
+                                isButtonEnabled(true)
 
                                 if (!isInternetAvailable(this@AddItemInventoryActivity)) {
                                     showToast(getString(R.string.check_internet))
@@ -89,18 +89,18 @@ class AddItemInventoryActivity : AppCompatActivity() {
                                 }
                             }
                             is Resource.Loading -> {
-                                isButtonEnabled(false)
                                 showLoading(true)
+                                isButtonEnabled(false)
                             }
                             is Resource.Message -> {
-                                isButtonEnabled(true)
                                 showLoading(false)
+                                isButtonEnabled(true)
 
                                 Timber.tag("AddItemInventoryActivity").d(inventory.message)
                             }
                             is Resource.Success -> {
-                                isButtonEnabled(true)
                                 showLoading(false)
+                                isButtonEnabled(true)
 
                                 showToast("Barang telah berhasil ditambahkan")
                                 finish()
@@ -183,8 +183,6 @@ class AddItemInventoryActivity : AppCompatActivity() {
             val type = edAddItemType.text.toString()
 
             isButtonEnabled(name.isNotEmpty() && type.isNotEmpty())
-            Timber.tag("TEST")
-                .d((name.isNotEmpty() && type.isNotEmpty()).toString())
         }
     }
 

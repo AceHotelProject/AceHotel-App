@@ -17,7 +17,6 @@ import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChangeStockItemInventoryBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ChangeStockItemInventoryActivity : AppCompatActivity() {
@@ -93,29 +92,32 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
                 val title = edChangeStockItemTitle.text.toString()
                 val desc = edChangeStockItemDesc.text.toString()
 
-                changeStockItemViewModel.updateInventory(id, name, type, stock, title, desc)
+                changeStockItemViewModel.executeUpdateInventory(id, name, type, stock, title, desc)
                     .observe(this@ChangeStockItemInventoryActivity) { inventory ->
                         when (inventory) {
                             is Resource.Error -> {
                                 showLoading(false)
+                                isButtonEnabled(true)
+
                                 if (!isInternetAvailable(this@ChangeStockItemInventoryActivity)) {
                                     showToast(getString(R.string.check_internet))
                                 } else {
-                                    Timber.tag("ChangeStockItemInventoryActivity")
-                                        .e(inventory.message)
+                                    showToast(inventory.message.toString())
                                 }
                             }
                             is Resource.Loading -> {
                                 showLoading(true)
+                                isButtonEnabled(false)
                             }
                             is Resource.Message -> {
                                 showLoading(false)
-                                Timber.tag("ChangeStockItemInventoryActivity").d(inventory.message)
+                                isButtonEnabled(true)
                             }
                             is Resource.Success -> {
                                 showLoading(false)
-                                showToast("Stok barang berhasil diperbaharui")
+                                isButtonEnabled(true)
 
+                                showToast("Barang telah berhasil diperbaharui")
                                 finish()
                             }
                         }
