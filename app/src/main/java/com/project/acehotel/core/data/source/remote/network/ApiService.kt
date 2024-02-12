@@ -78,8 +78,8 @@ interface ApiService {
 
     @DELETE("inventory/{id}")
     suspend fun deleteInventory(
+        @Query("inventory_id") inventoryId: String,
         @Query("hotel_id") hotelId: String,
-        @Path("id") id: String,
     ): Response<InventoryDetailResponse>
 
     // INVENTORY

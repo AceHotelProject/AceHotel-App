@@ -150,12 +150,12 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     }
 
     suspend fun deleteInventory(
-        id: String,
+        inventoryId: String,
         hotelId: String
     ): Flow<ApiResponse<Response<InventoryDetailResponse>>> {
         return flow<ApiResponse<Response<InventoryDetailResponse>>> {
             try {
-                val response = apiService.deleteInventory(id, hotelId)
+                val response = apiService.deleteInventory(hotelId, inventoryId)
 
                 if (response.isSuccessful) {
                     emit(ApiResponse.Success(response))

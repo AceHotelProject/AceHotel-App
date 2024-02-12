@@ -36,9 +36,9 @@ class InventoryHistoryAdapter(private val listInventoryHistory: List<InventoryHi
             tvInventoryHistoryStock.text = data.stockChange.toString()
 
             if (data.stockChange < 0) {
-                ivInventoryHistoryStockStatus.setBackgroundResource(R.drawable.icons_inventory_history_decreased)
+                ivInventoryHistoryStockStatus.setImageResource(R.drawable.icons_inventory_history_decreased)
             } else {
-                ivInventoryHistoryStockStatus.setBackgroundResource(R.drawable.icons_inventory_history_increased)
+                ivInventoryHistoryStockStatus.setImageResource(R.drawable.icons_inventory_history_increased)
             }
         }
     }
