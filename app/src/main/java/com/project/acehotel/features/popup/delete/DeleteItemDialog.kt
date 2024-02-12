@@ -36,12 +36,6 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                 DeleteDialogType.INVENTORY_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus barang ini?"
                     btnYes.setOnClickListener {
-//                        deleteItemViewModel.deleteInventory(id).observe(this) {
-//                            activity?.showToast("Barang telah berhasi dihapus")
-//                            activity?.finish()
-//                            dismiss()
-//                        }
-
                         deleteItemViewModel.executeDeleteInventory(id).observe(this) { result ->
                             when (result) {
                                 is Resource.Error -> {

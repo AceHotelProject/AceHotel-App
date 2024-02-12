@@ -76,7 +76,7 @@ class ManageFranchiseActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         binding.rvListFranchise.layoutManager = layoutManager
 
-        val adapter = ManageHotelListAdapter(data)
+        val adapter = ManageHotelListAdapter(data, supportFragmentManager)
         binding.rvListFranchise.adapter = adapter
     }
 

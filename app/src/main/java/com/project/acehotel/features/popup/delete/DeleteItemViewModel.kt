@@ -18,7 +18,7 @@ class DeleteItemViewModel @Inject constructor(
 
     fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
 
-    fun deleteInventory(id: String, hotelId: String) =
+    private fun deleteInventory(id: String, hotelId: String) =
         inventoryUseCase.deleteInventory(id, hotelId).asLiveData()
 
     fun executeDeleteInventory(id: String): MediatorLiveData<Resource<Int>> =
