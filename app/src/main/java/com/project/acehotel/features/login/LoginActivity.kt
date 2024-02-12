@@ -117,6 +117,8 @@ class LoginActivity : AppCompatActivity() {
                         isButtonEnabled(true)
 
                         if (result.data?.tokens != null) {
+                            Timber.tag("TEST").e(result.data.user?.hotelId.toString())
+
                             loginViewModel.insertCacheUser(result.data)
 
                             loginViewModel.saveAccessToken(result.data.tokens.accessToken.token.toString())

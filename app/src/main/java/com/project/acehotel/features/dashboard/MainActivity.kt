@@ -15,6 +15,7 @@ import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseVisitorActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,6 +45,11 @@ class MainActivity : AppCompatActivity() {
         binding.fabChangeStock.setOnClickListener {
             val intentToChooseItem = Intent(this, ChooseItemInventoryActivity::class.java)
             startActivity(intentToChooseItem)
+        }
+
+        binding.fabAddBooking.setOnClickListener {
+            val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
+            startActivity(intentToChooseVisitor)
         }
     }
 

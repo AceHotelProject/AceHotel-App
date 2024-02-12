@@ -40,8 +40,8 @@ class ChangeStockItemInventoryViewModel @Inject constructor(
         addSource(getSelectedHotel()) { hotel ->
             addSource(
                 updateInventory(
-                    hotel,
                     id,
+                    hotel,
                     name,
                     type,
                     stock,

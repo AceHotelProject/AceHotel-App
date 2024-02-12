@@ -17,6 +17,7 @@ import com.project.acehotel.core.utils.constants.InventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentInventoryBinding
+import com.project.acehotel.features.dashboard.management.inventory.add_item.AddItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.inventory.detail.InventoryDetailActivity
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +39,16 @@ class InventoryFragment : Fragment() {
         handleRefreshLayout()
 
         validateToken()
+
+        handleButtonAddInventory()
+    }
+
+    private fun handleButtonAddInventory() {
+        binding.btnAddInventory.setOnClickListener {
+            val intentToAddInventory =
+                Intent(requireContext(), AddItemInventoryActivity::class.java)
+            startActivity(intentToAddInventory)
+        }
     }
 
     private fun validateToken() {

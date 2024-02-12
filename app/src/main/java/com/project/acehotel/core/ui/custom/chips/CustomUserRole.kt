@@ -40,23 +40,31 @@ class CustomUserRole : AppCompatTextView {
     private fun updateStatus() {
         when (status) {
             UserRole.ADMIN.role -> {
-                text = UserRole.ADMIN.role
+                text = UserRole.ADMIN.display
                 setBackground(context, R.color.red)
             }
-            UserRole.FRANCHISE.role -> {
-                text = UserRole.FRANCHISE.role
-                setBackground(context, R.color.dark_purple)
-            }
-            UserRole.EMPLOYEE.role -> {
-                text = UserRole.EMPLOYEE.role
-                setBackground(context, R.color.purple)
-            }
             UserRole.MASTER.role -> {
-                text = UserRole.ADMIN.role
+                text = UserRole.MASTER.display
                 setBackground(context, R.color.blue)
             }
+            UserRole.FRANCHISE.role -> {
+                text = UserRole.FRANCHISE.display
+                setBackground(context, R.color.dark_purple)
+            }
+            UserRole.RECEPTIONIST.role -> {
+                text = UserRole.RECEPTIONIST.display
+                setBackground(context, R.color.purple)
+            }
+            UserRole.INVENTORY_STAFF.role -> {
+                text = UserRole.INVENTORY_STAFF.display
+                setBackground(context, R.color.orange)
+            }
+            UserRole.CLEANING_STAFF.role -> {
+                text = UserRole.CLEANING_STAFF.display
+                setBackground(context, R.color.green)
+            }
             UserRole.UNDEFINED.role -> {
-                text = UserRole.UNDEFINED.role
+                text = UserRole.UNDEFINED.display
                 setBackground(context, R.color.dark_grey)
             }
         }

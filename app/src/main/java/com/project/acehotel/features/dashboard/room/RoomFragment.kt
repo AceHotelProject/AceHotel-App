@@ -13,7 +13,6 @@ class RoomFragment : Fragment() {
     private var _binding: FragmentRoomBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

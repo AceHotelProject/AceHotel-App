@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
-import com.project.acehotel.core.data.source.local.datastore.TokenManager
+import com.project.acehotel.core.data.source.local.datastore.UserManager
 import com.project.acehotel.core.data.source.local.room.UserDao
 import com.project.acehotel.core.data.source.local.room.UserDatabase
 import dagger.Module
@@ -39,17 +39,19 @@ class DatabaseModule {
     @Singleton
     @Provides
     fun provideSharedPreferences(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(corruptionHandler = ReplaceFileCorruptionHandler(
-            produceNewData = { emptyPreferences() }
-        ),
+        return PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { emptyPreferences() }
+            ),
             migrations = listOf(SharedPreferencesMigration(context, TOKEN_MANAGER)),
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = { context.preferencesDataStoreFile(TOKEN_MANAGER) })
+            produceFile = { context.preferencesDataStoreFile(TOKEN_MANAGER) }
+        )
     }
 
     @Provides
-    fun provideTokenManager(dataStore: DataStore<Preferences>): TokenManager =
-        TokenManager(dataStore)
+    fun provideTokenManager(dataStore: DataStore<Preferences>): UserManager =
+        UserManager(dataStore)
 
     companion object {
         const val TOKEN_MANAGER = "token_manager"
