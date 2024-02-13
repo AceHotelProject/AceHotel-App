@@ -47,6 +47,7 @@ interface ApiService {
     @GET("inventory")
     suspend fun getListInventory(
         @Query("hotel_id") hotelId: String,
+        @QueryMap filters: Map<String, String>
     ): InventoryListResponse
 
     @GET("inventory/{id}")
@@ -76,7 +77,7 @@ interface ApiService {
         @Field("description") description: String,
     ): InventoryDetailResponse
 
-    @DELETE("inventory/{id}")
+    @DELETE("inventory")
     suspend fun deleteInventory(
         @Query("inventory_id") inventoryId: String,
         @Query("hotel_id") hotelId: String,

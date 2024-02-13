@@ -64,10 +64,22 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     // INVENTORY
 
-    suspend fun getListInventory(hotelId: String): Flow<ApiResponse<InventoryListResponse>> {
+    suspend fun getListInventory(
+        hotelId: String,
+        name: String,
+        type: String
+    ): Flow<ApiResponse<InventoryListResponse>> {
         return flow<ApiResponse<InventoryListResponse>> {
             try {
-                val response = apiService.getListInventory(hotelId)
+                val inventoryFilters = mutableMapOf<String, String>()
+                if (name.isNotEmpty()) {
+                    inventoryFilters["name"] = name
+                }
+                if (type.isNotEmpty()) {
+                    inventoryFilters["type"] = type
+                }
+
+                val response = apiService.getListInventory(hotelId, inventoryFilters)
 
                 if (!response.results.isNullOrEmpty()) {
                     emit(ApiResponse.Success(response))
@@ -155,7 +167,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     ): Flow<ApiResponse<Response<InventoryDetailResponse>>> {
         return flow<ApiResponse<Response<InventoryDetailResponse>>> {
             try {
-                val response = apiService.deleteInventory(hotelId, inventoryId)
+                val response = apiService.deleteInventory(inventoryId, hotelId)
 
                 if (response.isSuccessful) {
                     emit(ApiResponse.Success(response))

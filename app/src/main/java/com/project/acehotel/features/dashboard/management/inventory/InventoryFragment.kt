@@ -72,7 +72,7 @@ class InventoryFragment : Fragment() {
     }
 
     private fun fetchListInventory() {
-        inventoryViewModel.fetchListInventory().observe(this) { inventory ->
+        inventoryViewModel.fetchListInventory("", "").observe(this) { inventory ->
             when (inventory) {
                 is Resource.Error -> {
                     showLoading(false)

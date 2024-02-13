@@ -18,17 +18,20 @@ class ChooseItemViewModel @Inject constructor(
     private val authUseCase: AuthUseCase
 ) : ViewModel() {
 
-    private fun getListInventory(hotelId: String) =
-        inventoryUseCase.getListInventory(hotelId).asLiveData()
+    private fun getListInventory(hotelId: String, name: String, type: String) =
+        inventoryUseCase.getListInventory(hotelId, name, type).asLiveData()
 
     fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 
-    fun fetchListInventory(): MediatorLiveData<Resource<List<Inventory>>> =
+    fun fetchListInventory(
+        name: String,
+        type: String
+    ): MediatorLiveData<Resource<List<Inventory>>> =
         MediatorLiveData<Resource<List<Inventory>>>().apply {
             addSource(getSelectedHotel()) { hotel ->
-                addSource(getListInventory(hotel)) { inventory ->
+                addSource(getListInventory(hotel, name, type)) { inventory ->
                     value = inventory
                 }
             }

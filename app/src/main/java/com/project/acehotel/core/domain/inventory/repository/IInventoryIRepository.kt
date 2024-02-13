@@ -6,7 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface IInventoryIRepository {
 
-    fun getListInventory(hotelId: String): Flow<Resource<List<Inventory>>>
+    fun getListInventory(
+        hotelId: String,
+        name: String,
+        type: String
+    ): Flow<Resource<List<Inventory>>>
 
     fun getDetailInventory(id: String, hotelId: String): Flow<Resource<Inventory>>
 

@@ -22,14 +22,18 @@ class InventoryRepository @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
 ) : IInventoryIRepository {
-    override fun getListInventory(hotelId: String): Flow<Resource<List<Inventory>>> {
+    override fun getListInventory(
+        hotelId: String,
+        name: String,
+        type: String
+    ): Flow<Resource<List<Inventory>>> {
         return object : NetworkBoundResource<List<Inventory>, InventoryListResponse>() {
             override suspend fun fetchFromApi(response: InventoryListResponse): List<Inventory> {
                 return InventoryDataMapper.mapInventoryListResponseToDomain(response)
             }
 
             override suspend fun createCall(): Flow<ApiResponse<InventoryListResponse>> {
-                return remoteDataSource.getListInventory(hotelId)
+                return remoteDataSource.getListInventory(hotelId, name, type)
             }
 
         }.asFlow()

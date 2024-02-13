@@ -3,6 +3,9 @@ package com.project.acehotel.features.dashboard.management.inventory.choose_item
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,13 +38,41 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
 
         handleButtonBack()
 
-        fetchInventoryItems()
+        fetchInventoryItems("")
 
         handleOnRefresh()
 
         handleButtonAddItems()
 
+        setupSearch()
+
         showLoading(true)
+    }
+
+    private fun setupSearch() {
+        binding.edInventoryItemSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                fetchInventoryItems(p0.toString())
+            }
+
+        })
+
+        binding.edInventoryItemSearch.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                fetchInventoryItems(binding.edInventoryItemSearch.text.toString())
+                true // consume the action
+            } else {
+                false // pass on to other listeners.
+            }
+        }
     }
 
     private fun getHotelId() {
@@ -79,12 +110,23 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
 
     private fun handleOnRefresh() {
         binding.refInventoryItem.setOnRefreshListener {
-            fetchInventoryItems()
+            fetchInventoryItems("")
         }
     }
 
-    private fun fetchInventoryItems() {
-        chooseItemViewModel.fetchListInventory().observe(this) { item ->
+    private fun fetchInventoryItems(filter: String) {
+        var type = ""
+        var name = ""
+
+        if (filter == "linen" || filter == "Linen") {
+            type = "linen"
+        } else if (filter == "Kasur" || filter == "kasur") {
+            type = "kasur"
+        } else {
+            name = filter
+        }
+
+        chooseItemViewModel.fetchListInventory(name, type).observe(this) { item ->
             when (item) {
                 is Resource.Error -> {
                     showLoading(false)
