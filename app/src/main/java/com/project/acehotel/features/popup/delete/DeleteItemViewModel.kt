@@ -29,4 +29,6 @@ class DeleteItemViewModel @Inject constructor(
                 }
             }
         }
+
+    fun executeDeleteHotel(id: String) = hotelUseCase.deleteHotel(id).asLiveData()
 }

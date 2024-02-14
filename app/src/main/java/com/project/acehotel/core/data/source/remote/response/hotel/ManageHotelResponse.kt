@@ -4,7 +4,19 @@ import com.google.gson.annotations.SerializedName
 
 data class ManageHotelResponse(
 
-    @field:SerializedName("result")
+    @field:SerializedName("totalResults")
+    val totalResults: Int? = null,
+
+    @field:SerializedName("limit")
+    val limit: Int? = null,
+
+    @field:SerializedName("totalPages")
+    val totalPages: Int? = null,
+
+    @field:SerializedName("page")
+    val page: Int? = null,
+
+    @field:SerializedName("results")
     val result: List<ManageHotelResultItem?>? = null
 )
 

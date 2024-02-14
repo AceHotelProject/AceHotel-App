@@ -51,6 +51,16 @@ class MainActivity : AppCompatActivity() {
             val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
             startActivity(intentToChooseVisitor)
         }
+
+        binding.fabCheckin.setOnClickListener {
+            val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
+            startActivity(intentToChooseVisitor)
+        }
+        
+        binding.fabCheckout.setOnClickListener {
+            val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
+            startActivity(intentToChooseVisitor)
+        }
     }
 
     private fun onFabMenuClick() {

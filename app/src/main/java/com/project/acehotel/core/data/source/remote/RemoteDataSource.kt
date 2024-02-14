@@ -342,22 +342,22 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-//    suspend fun deleteHotel(id: String): Flow<ApiResponse<Response<HotelResponse>>> {
-//        return flow<ApiResponse<Response<HotelResponse>>> {
-//            try {
-//                val response = apiService.deleteHotel(id)
-//
-//                if (response.isSuccessful) {
-//                    emit(ApiResponse.Success(response))
-//                } else {
-//                    emit(ApiResponse.Empty)
-//                }
-//            } catch (e: Exception) {
-//                emit(ApiResponse.Error(e.toString()))
-//                Timber.tag("RemoteDataSource").e(e.toString())
-//            }
-//        }.flowOn(Dispatchers.IO)
-//    }
+    suspend fun deleteHotel(id: String): Flow<ApiResponse<Response<ManageHotelResultItem>>> {
+        return flow<ApiResponse<Response<ManageHotelResultItem>>> {
+            try {
+                val response = apiService.deleteHotel(id)
+
+                if (response.isSuccessful) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
 
     // HOTEL
 

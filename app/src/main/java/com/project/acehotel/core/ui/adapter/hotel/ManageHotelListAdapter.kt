@@ -68,7 +68,7 @@ class ManageHotelListAdapter(
                     }
                     R.id.menuDelete -> {
                         if (data != null) {
-                            DeleteItemDialog(DeleteDialogType.INVENTORY_DETAIL, data.id).show(
+                            DeleteItemDialog(DeleteDialogType.MANAGE_HOTEL, data.id).show(
                                 supportFragmentManager,
                                 "Delete Dialog"
                             )

@@ -14,6 +14,7 @@ import com.project.acehotel.core.domain.hotel.repository.IHotelRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.HotelDataMapper
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -155,150 +156,25 @@ class HotelRepository @Inject constructor(
         }.asFlow()
     }
 
-//    override fun addHotel(
-//        name: String,
-//        address: String,
-//        contact: String,
-//        regularRoomCount: Int,
-//        regularRoomImage: MultipartBody.Part,
-//        exclusiveRoomCount: Int,
-//        exclusiveRoomImage: MultipartBody.Part,
-//        regularRoomPrice: Int,
-//        exclusiveRoomPrice: Int,
-//        extraBedPrice: Int,
-//        ownerName: String,
-//        ownerEmail: String,
-//        ownerPassword: String,
-//        receptionistName: String,
-//        receptionistEmail: String,
-//        receptionistPassword: String,
-//        cleaningName: String,
-//        cleaningEmail: String,
-//        cleaningPassword: String,
-//        inventoryName: String,
-//        inventoryEmail: String,
-//        inventoryPassword: String
-//    ): Flow<Resource<ListHotel>> {
-//        return object : NetworkBoundResource<ListHotel, ListHotelResponse>() {
-//            //            override suspend fun fetchFromApi(response: ListHotelResponse): ListHotel {
-////                return HotelDataMapper.mapListHotelResponseToDomain(response)
-////            }
-////
-////            override suspend fun createCall(): Flow<ApiResponse<ListHotelResponse>> {
-////                return remoteDataSource.addHotel(
-////                    name,
-////                    address,
-////                    contact,
-////                    regularRoomCount,
-////                    regularRoomImage,
-////                    exclusiveRoomCount,
-////                    exclusiveRoomImage,
-////                    regularRoomPrice,
-////                    exclusiveRoomPrice,
-////                    extraBedPrice,
-////                    ownerName,
-////                    ownerEmail,
-////                    ownerPassword,
-////                    receptionistName,
-////                    receptionistEmail,
-////                    receptionistPassword,
-////                    cleaningName,
-////                    cleaningEmail,
-////                    cleaningPassword,
-////                    inventoryName,
-////                    inventoryEmail,
-////                    inventoryPassword
-////                )
-////            }
-//            override suspend fun fetchFromApi(response: ListHotelResponse): ListHotel {
-//                return HotelDataMapper.mapListHotelResponseToDomain(response)
-//            }
-//
-//            override suspend fun createCall(): Flow<ApiResponse<ListHotelResponse>> {
-//                TODO("Not yet implemented")
-//            }
-//
-//        }.asFlow()
-//    }
-//
-//    override fun getListHotel(): Flow<Resource<List<ListHotel>>> {
-//        return object : NetworkBoundResource<List<ListHotel>, ListHotelResponse>() {
-//            override suspend fun fetchFromApi(response: ListHotelResponse): List<ListHotel> {
-//                return HotelDataMapper.mapListListHotelResponseToDomain(response)
-//            }
-//
-//            override suspend fun createCall(): Flow<ApiResponse<ListHotelResponse>> {
-//                return remoteDataSource.getListHotel()
-//            }
-//        }.asFlow()
-//    }
-//
-//    override fun updateHotel(
-//        id: String,
-//        name: String,
-//        address: String,
-//        contact: String,
-//        regularRoomCount: Int,
-//        regularRoomImage: MultipartBody.Part,
-//        exclusiveRoomCount: Int,
-//        exclusiveRoomImage: MultipartBody.Part,
-//        regularRoomPrice: Int,
-//        exclusiveRoomPrice: Int,
-//        extraBedPrice: Int,
-//        ownerName: String,
-//        ownerEmail: String,
-//        ownerPassword: String,
-//        receptionistName: String,
-//        receptionistEmail: String,
-//        receptionistPassword: String,
-//        cleaningName: String,
-//        cleaningEmail: String,
-//        cleaningPassword: String,
-//        inventoryName: String,
-//        inventoryEmail: String,
-//        inventoryPassword: String
-//    ): Flow<Resource<ListHotel>> {
-//        return object : NetworkBoundResource<ListHotel, HotelResponse>() {
-//            override suspend fun fetchFromApi(response: HotelResponse): ListHotel {
-//                return HotelDataMapper.mapHotelResponseToDomain(response)
-//            }
-//
-//            override suspend fun createCall(): Flow<ApiResponse<HotelResponse>> {
-//                return remoteDataSource.updateHotel(
-//                    id,
-//                    name,
-//                    address,
-//                    contact,
-//                    regularRoomCount,
-//                    regularRoomImage,
-//                    exclusiveRoomCount,
-//                    exclusiveRoomImage,
-//                    regularRoomPrice,
-//                    exclusiveRoomPrice,
-//                    extraBedPrice,
-//                    ownerName,
-//                    ownerEmail,
-//                    ownerPassword,
-//                    receptionistName,
-//                    receptionistEmail,
-//                    receptionistPassword,
-//                    cleaningName,
-//                    cleaningEmail,
-//                    cleaningPassword,
-//                    inventoryName,
-//                    inventoryEmail,
-//                    inventoryPassword
-//                )
-//            }
-//        }.asFlow()
-//    }
-
     override fun getSelectedHotel(): Flow<String> {
         return userManager.getCurrentHotelId()
     }
 
     override suspend fun saveSelectedHotel(id: String) {
         return userManager.saveCurrentHotelId(id)
+    }
+
+    override fun deleteHotel(id: String): Flow<Resource<Int>> {
+        return object : NetworkBoundResource<Int, Response<ManageHotelResultItem>>() {
+            override suspend fun fetchFromApi(response: Response<ManageHotelResultItem>): Int {
+                return response.code()
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<Response<ManageHotelResultItem>>> {
+                return remoteDataSource.deleteHotel(id)
+            }
+
+        }.asFlow()
     }
 
 

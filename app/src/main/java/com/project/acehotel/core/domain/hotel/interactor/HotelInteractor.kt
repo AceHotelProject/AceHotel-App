@@ -115,6 +115,8 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         )
     }
 
+    override fun deleteHotel(id: String): Flow<Resource<Int>> = hotelRepository.deleteHotel(id)
+
     override fun getSelectedHotel(): Flow<String> = hotelRepository.getSelectedHotel()
 
     override suspend fun saveSelectedHotel(id: String) = hotelRepository.saveSelectedHotel(id)

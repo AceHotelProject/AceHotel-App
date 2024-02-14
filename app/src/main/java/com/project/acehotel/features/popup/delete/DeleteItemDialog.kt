@@ -32,6 +32,10 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
             val btnYes = view.findViewById<Button>(R.id.btn_delete_yes)
             val btnNo = view.findViewById<Button>(R.id.btn_delete_no)
 
+            btnNo.setOnClickListener {
+                dismiss()
+            }
+
             when (deleteDialogType) {
                 DeleteDialogType.INVENTORY_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus barang ini?"
@@ -59,26 +63,44 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                             }
                         }
                     }
-                    btnNo.setOnClickListener {
-                        dismiss()
-                    }
                 }
                 DeleteDialogType.VISITOR_DETAIL -> {
-                    tvDesc.text = "Apakah Anda yakin ingin menghapus barang ini?"
+                    tvDesc.text = "Apakah Anda yakin ingin menghapus pengunjung ini?"
                     btnYes.setOnClickListener {
 
-                    }
-                    btnNo.setOnClickListener {
-                        dismiss()
                     }
                 }
                 DeleteDialogType.BOOKING_DETAIL -> {
-                    tvDesc.text = "Apakah Anda yakin ingin menghapus barang ini?"
+                    tvDesc.text = "Apakah Anda yakin ingin menghapus booking ini?"
                     btnYes.setOnClickListener {
 
                     }
-                    btnNo.setOnClickListener {
-                        dismiss()
+                }
+                DeleteDialogType.MANAGE_HOTEL -> {
+                    tvDesc.text = "Apakah Anda yakin ingin menghapus cabang hotel ini?"
+                    btnYes.setOnClickListener {
+                        deleteItemViewModel.executeDeleteHotel(id).observe(this) { result ->
+                            when (result) {
+                                is Resource.Error -> {
+                                    if (!isInternetAvailable(requireContext())) {
+                                        activity?.showToast(getString(R.string.check_internet))
+                                    } else {
+                                        activity?.showToast(result.message.toString())
+                                    }
+                                }
+                                is Resource.Loading -> {
+
+                                }
+                                is Resource.Message -> {
+
+                                }
+                                is Resource.Success -> {
+                                    activity?.showToast("Cabang hotel telah berhasi dihapus")
+                                    activity?.finish()
+                                    dismiss()
+                                }
+                            }
+                        }
                     }
                 }
             }
