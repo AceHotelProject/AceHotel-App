@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,11 +17,14 @@ import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseVisitorActivity
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     private var fabMenuState: FabMenuState = FabMenuState.COLLAPSED
 
@@ -35,6 +39,16 @@ class MainActivity : AppCompatActivity() {
         setupActionBar()
 
         handleFab()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        mainViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isNullOrEmpty()) {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun handleFab() {
@@ -56,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
             startActivity(intentToChooseVisitor)
         }
-        
+
         binding.fabCheckout.setOnClickListener {
             val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
             startActivity(intentToChooseVisitor)

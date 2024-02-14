@@ -15,7 +15,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.project.acehotel.R
 import com.project.acehotel.core.ui.adapter.tabs.ManagementPagerAdapter
 import com.project.acehotel.databinding.FragmentManagementBinding
-import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,8 +29,6 @@ class ManagementFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupTabs()
-
-        validateToken()
 
         setupSearch()
     }
@@ -66,14 +63,6 @@ class ManagementFragment : Fragment() {
             childFragmentManager.findFragmentByTag("f${binding.viewPager.currentItem}")
         if (currentFragment is IManagementSearch) {
             currentFragment.onSearchQuery(query)
-        }
-    }
-
-    private fun validateToken() {
-        managementViewModel.getRefreshToken().observe(this) { token ->
-            if (token.isNullOrEmpty()) {
-                TokenExpiredDialog().show(parentFragmentManager, "Token Expired Dialog")
-            }
         }
     }
 

@@ -79,6 +79,12 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                 DeleteDialogType.MANAGE_HOTEL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus cabang hotel ini?"
                     btnYes.setOnClickListener {
+                        deleteItemViewModel.getSelectedHotel().observe(this) { saveId ->
+                            if (id == saveId) {
+                                deleteItemViewModel.saveSelectedHotel("")
+                            }
+                        }
+
                         deleteItemViewModel.executeDeleteHotel(id).observe(this) { result ->
                             when (result) {
                                 is Resource.Error -> {

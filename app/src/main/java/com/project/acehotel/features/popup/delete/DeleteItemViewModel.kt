@@ -3,10 +3,12 @@ package com.project.acehotel.features.popup.delete
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,4 +33,8 @@ class DeleteItemViewModel @Inject constructor(
         }
 
     fun executeDeleteHotel(id: String) = hotelUseCase.deleteHotel(id).asLiveData()
+
+    fun saveSelectedHotel(id: String) = viewModelScope.launch {
+        hotelUseCase.saveSelectedHotel(id)
+    }
 }

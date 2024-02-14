@@ -33,12 +33,12 @@
     <string name="tab_finance">Keuangan</string>
     <string name="tab_visitor">Pengunjung</string>
     <string name="tab_inventory">Gudang</string>
-    <string name="linen_total">Total Linen</string>
+    <string name="linen_total">Tipe Linen</string>
     <string name="inventory_stat">Statistik Gudang</string>
     <string name="inventory_list">Daftar Barang</string>
     <string name="stock">stok</string>
     <string name="template_number">0</string>
-    <string name="total_bed">Total Kasur</string>
+    <string name="total_bed">Tipe Kasur</string>
     <string name="check_internet">Pastikan kembali jaringan internet anda</string>
     <string name="today_stat">Statistik Hari Ini</string>
     <string name="income">Pendapatan</string>
