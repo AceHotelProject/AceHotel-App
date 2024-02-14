@@ -17,28 +17,25 @@ import com.project.acehotel.core.utils.constants.InventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentInventoryBinding
+import com.project.acehotel.features.dashboard.management.IManagementSearch
 import com.project.acehotel.features.dashboard.management.inventory.add_item.AddItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.inventory.detail.InventoryDetailActivity
-import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class InventoryFragment : Fragment() {
+class InventoryFragment : Fragment(), IManagementSearch {
     private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
 
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
-    private var hotelId: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchListInventory()
+        fetchInventoryItems("")
 
-        handleRefreshLayout()
-
-        validateToken()
+        handleRefreshLayout("")
 
         handleButtonAddInventory()
     }
@@ -51,36 +48,39 @@ class InventoryFragment : Fragment() {
         }
     }
 
-    private fun validateToken() {
-        inventoryViewModel.getRefreshToken().observe(this) { token ->
-            if (token.isNullOrEmpty()) {
-                TokenExpiredDialog().show(parentFragmentManager, "Token Expired Dialog")
-            }
-        }
-    }
-
-    private fun handleRefreshLayout() {
+    private fun handleRefreshLayout(filter: String) {
         binding.apply {
             svInventory.viewTreeObserver.addOnScrollChangedListener {
                 refInventory.isEnabled = svInventory.scrollY == 0
             }
 
             refInventory.setOnRefreshListener {
-                fetchListInventory()
+                fetchInventoryItems(filter)
             }
         }
     }
 
-    private fun fetchListInventory() {
-        inventoryViewModel.fetchListInventory("", "").observe(this) { inventory ->
-            when (inventory) {
+    private fun fetchInventoryItems(query: String) {
+        var type = ""
+        var name = ""
+
+        if (query == "linen" || query == "Linen") {
+            type = "linen"
+        } else if (query == "Kasur" || query == "kasur") {
+            type = "kasur"
+        } else {
+            name = query
+        }
+
+        inventoryViewModel.fetchListInventory(name, type).observe(this) { item ->
+            when (item) {
                 is Resource.Error -> {
                     showLoading(false)
 
                     if (!isInternetAvailable(requireContext())) {
                         activity?.showToast(getString(R.string.check_internet))
                     } else {
-                        activity?.showToast(inventory.message.toString())
+                        activity?.showToast(item.message.toString())
                     }
                 }
                 is Resource.Loading -> {
@@ -88,14 +88,18 @@ class InventoryFragment : Fragment() {
                 }
                 is Resource.Message -> {
                     showLoading(false)
-                    Timber.tag("InventoryFragment").d(inventory.message)
+                    Timber.tag("InventoryDetailActivity").d(item.message)
+
+                    initInventoryRecyclerView(item.data)
+
+                    initQuickInfo(item.data)
                 }
                 is Resource.Success -> {
                     showLoading(false)
 
-                    initInventoryRecyclerView(inventory.data)
+                    initInventoryRecyclerView(item.data)
 
-                    initQuickInfo(inventory.data)
+                    initQuickInfo(item.data)
                 }
             }
         }
@@ -164,5 +168,9 @@ class InventoryFragment : Fragment() {
         private const val INVENTORY_ITEM_ID = "inventory_item_id"
         private const val INVENTORY_ITEM_NAME = "inventory_item_name"
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
+    }
+
+    override fun onSearchQuery(query: String) {
+        fetchInventoryItems(query)
     }
 }

@@ -26,6 +26,7 @@
             android:drawablePadding="12sp"
             android:ems="10"
             android:hint="@string/search"
+            android:imeOptions="actionSearch"
             android:inputType="text"
             android:paddingHorizontal="12dp"
             android:paddingVertical="14dp"
