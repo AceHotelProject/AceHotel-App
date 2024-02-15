@@ -9,8 +9,13 @@ import javax.inject.Inject
 
 class VisitorInteractor @Inject constructor(private val visitorRepository: VisitorRepository) :
     VisitorUseCase {
-    override fun getVisitorList(): Flow<Resource<List<Visitor>>> {
-        return visitorRepository.getVisitorList()
+    override fun getVisitorList(
+        hotelId: String,
+        name: String,
+        email: String,
+        identityNum: String
+    ): Flow<Resource<List<Visitor>>> {
+        return visitorRepository.getVisitorList(hotelId, name, email, identityNum)
     }
 
     override fun getVisitorDetail(id: String): Flow<Resource<Visitor>> {

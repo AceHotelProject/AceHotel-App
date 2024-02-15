@@ -1,13 +1,13 @@
 package com.project.acehotel.features.dashboard.profile
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentProfileBinding
 import com.project.acehotel.features.dashboard.profile.choose_hotel.ChooseHotelActivity
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
@@ -63,7 +63,13 @@ class ProfileFragment : Fragment() {
                 startActivity(intentToManageFranchise)
             }
             btnProfileCustomerService.setOnClickListener {
-                activity?.showToast("Customer Service")
+//               wa link provided by: https://create.wa.link/
+                val intentToOpenBrowser = Intent(
+                    Intent.ACTION_VIEW, Uri.parse(
+                        CUSTOMER_SERVICE_PHONE
+                    )
+                )
+                activity?.startActivity(intentToOpenBrowser)
             }
             binding.btnProfileLogout.setOnClickListener {
                 LogoutDialog().show(parentFragmentManager, "Logout Dialog")
@@ -75,5 +81,9 @@ class ProfileFragment : Fragment() {
         super.onDestroyView()
 
         _binding = null
+    }
+
+    companion object {
+        private const val CUSTOMER_SERVICE_PHONE = "https://wa.link/anszxf"
     }
 }

@@ -19,14 +19,19 @@ class VisitorRepository @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
 ) : IVisitorRepository {
-    override fun getVisitorList(): Flow<Resource<List<Visitor>>> {
+    override fun getVisitorList(
+        hotelId: String,
+        name: String,
+        email: String,
+        identityNum: String
+    ): Flow<Resource<List<Visitor>>> {
         return object : NetworkBoundResource<List<Visitor>, ListVisitorResponse>() {
             override suspend fun fetchFromApi(response: ListVisitorResponse): List<Visitor> {
                 return VisitorDataMapper.mapVisitorListResponseToDomain(response)
             }
 
             override suspend fun createCall(): Flow<ApiResponse<ListVisitorResponse>> {
-                return remoteDataSource.getListVisitor()
+                return remoteDataSource.getListVisitor(hotelId, name, email, identityNum)
             }
         }.asFlow()
     }

@@ -14,56 +14,77 @@ import com.project.acehotel.core.ui.adapter.visitor.VisitorListAdapter
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentVisitorBinding
+import com.project.acehotel.features.dashboard.management.IManagementSearch
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class VisitorFragment : Fragment() {
+class VisitorFragment : Fragment(), IManagementSearch {
     private var _binding: FragmentVisitorBinding? = null
     private val binding get() = _binding!!
 
     private val visitorViewModel: VisitorViewModel by activityViewModels()
+    private var storedQuery = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchVisitorList()
+        fetchVisitorList("")
 
         handleRefresh()
     }
 
     private fun handleRefresh() {
         binding.refVisitor.setOnRefreshListener {
-            fetchVisitorList()
+            fetchVisitorList(storedQuery)
         }
     }
 
-    private fun fetchVisitorList() {
-        visitorViewModel.getVisitorList().observe(this) { visitor ->
-            when (visitor) {
-                is Resource.Error -> {
-                    showLoading(false)
+    private fun fetchVisitorList(
+        query: String
+    ) {
+        var name = ""
+        var email = ""
+        var identityNum = ""
 
-                    if (!isInternetAvailable(requireContext())) {
-                        activity?.showToast(getString(R.string.check_internet))
-                    } else {
-                        activity?.showToast(visitor.message.toString())
+        if (query.contains("@gmail.com", ignoreCase = true)) {
+            email = query
+        } else if (query.all { it.isDigit() }) {
+            identityNum = query
+        } else {
+            name = query
+        }
+
+        visitorViewModel.executeGetVisitorList(name, email, identityNum)
+            .observe(this) { visitor ->
+                when (visitor) {
+                    is Resource.Error -> {
+                        showLoading(false)
+
+                        if (!isInternetAvailable(requireContext())) {
+                            activity?.showToast(getString(R.string.check_internet))
+                        } else {
+                            if (visitor.message?.contains("404", false) == true) {
+                                initVisitorRecyclerView(listOf())
+                            } else {
+                                activity?.showToast(visitor.message.toString())
+                            }
+                        }
+                    }
+                    is Resource.Loading -> {
+                        showLoading(true)
+                    }
+                    is Resource.Message -> {
+                        showLoading(false)
+                        Timber.tag("VisitorFragment").d(visitor.message)
+                    }
+                    is Resource.Success -> {
+                        showLoading(false)
+
+                        initVisitorRecyclerView(visitor.data)
                     }
                 }
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
-                is Resource.Message -> {
-                    showLoading(false)
-                    Timber.tag("VisitorFragment").d(visitor.message)
-                }
-                is Resource.Success -> {
-                    showLoading(false)
-
-                    initVisitorRecyclerView(visitor.data)
-                }
             }
-        }
     }
 
     private fun initVisitorRecyclerView(data: List<Visitor>?) {
@@ -84,5 +105,11 @@ class VisitorFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.refVisitor.isRefreshing = isLoading
+    }
+
+    override fun onSearchQuery(query: String) {
+        storedQuery = query
+
+        fetchVisitorList(storedQuery)
     }
 }

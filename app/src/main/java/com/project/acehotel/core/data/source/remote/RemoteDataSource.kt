@@ -363,10 +363,29 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     // VISITOR
 
-    suspend fun getListVisitor(): Flow<ApiResponse<ListVisitorResponse>> {
+    suspend fun getListVisitor(
+        hotelId: String,
+        name: String,
+        email: String,
+        identityNum: String
+    ): Flow<ApiResponse<ListVisitorResponse>> {
         return flow<ApiResponse<ListVisitorResponse>> {
             try {
-                val response = apiService.getListVisitor()
+                val visitorFilters = mutableMapOf<String, String>()
+                if (hotelId.isNotEmpty()) {
+                    visitorFilters["hotel_id"] = hotelId
+                }
+                if (name.isNotEmpty()) {
+                    visitorFilters["name"] = name
+                }
+                if (email.isNotEmpty()) {
+                    visitorFilters["email"] = email
+                }
+                if (identityNum.isNotEmpty()) {
+                    visitorFilters["identity_num"] = identityNum
+                }
+
+                val response = apiService.getListVisitor(visitorFilters)
 
                 if (response.results != null) {
                     emit(ApiResponse.Success(response))

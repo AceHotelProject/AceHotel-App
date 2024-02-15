@@ -161,10 +161,10 @@ interface ApiService {
         @Field("inventory_password") inventoryPassword: String,
     ): ManageHotelResultItem
 
-//    @DELETE("hotels/{id}")
-//    suspend fun deleteHotel(
-//        @Path("id") id: String
-//    ): Response<HotelResponse>
+    @DELETE("hotels/{id}")
+    suspend fun deleteHotel(
+        @Path("id") id: String
+    ): Response<ManageHotelResultItem>
 
     // HOTELS
 
@@ -172,11 +172,13 @@ interface ApiService {
     // VISITOR
 
     @GET("visitors")
-    suspend fun getListVisitor(): ListVisitorResponse
+    suspend fun getListVisitor(
+        @QueryMap filters: Map<String, String>
+    ): ListVisitorResponse
 
     @GET("visitors/{id}")
     suspend fun getDetailVisitor(
-        @Path("id") id: String
+        @Path("id") id: String,
     ): VisitorResponse
 
     // VISITOR
