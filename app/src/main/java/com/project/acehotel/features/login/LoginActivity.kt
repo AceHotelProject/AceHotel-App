@@ -2,6 +2,7 @@ package com.project.acehotel.features.login
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -38,6 +39,20 @@ class LoginActivity : AppCompatActivity() {
         handleEditText()
 
         handleButtonLogin()
+
+        handleContactButton()
+    }
+
+    private fun handleContactButton() {
+        binding.tvContactUs.setOnClickListener {
+            //               wa link provided by: https://create.wa.link/
+            val intentToOpenBrowser = Intent(
+                Intent.ACTION_VIEW, Uri.parse(
+                    CUSTOMER_SERVICE_PHONE
+                )
+            )
+            startActivity(intentToOpenBrowser)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -171,5 +186,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupActionBar() {
         supportActionBar?.hide()
+    }
+
+    companion object {
+        private const val CUSTOMER_SERVICE_PHONE = "https://wa.link/anszxf"
     }
 }
