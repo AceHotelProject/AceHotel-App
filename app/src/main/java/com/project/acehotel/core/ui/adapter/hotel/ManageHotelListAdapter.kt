@@ -60,9 +60,12 @@ class ManageHotelListAdapter(
                 when (item.itemId) {
                     R.id.menuUpdate -> {
                         holder.itemView.context.apply {
-                            val intentToAddFranchiseActivity =
+                            val intentToAUpdateHotel =
                                 Intent(this, AddFranchiseActivity::class.java)
-                            startActivity(intentToAddFranchiseActivity)
+                            intentToAUpdateHotel.putExtra(FLAG_HOTEL_UI, FLAG_HOTEL_UPDATE)
+                            intentToAUpdateHotel.putExtra(HOTEL_ID, data?.id)
+
+                            startActivity(intentToAUpdateHotel)
                         }
                         true
                     }
@@ -86,6 +89,9 @@ class ManageHotelListAdapter(
             holder.itemView.context.apply {
                 val intentToManageHotelDetail =
                     Intent(this, AddFranchiseActivity::class.java)
+                intentToManageHotelDetail.putExtra(FLAG_HOTEL_UI, FLAG_HOTEL_DETAIL)
+                intentToManageHotelDetail.putExtra(HOTEL_ID, data?.id)
+
                 startActivity(intentToManageHotelDetail)
             }
         }
@@ -97,5 +103,13 @@ class ManageHotelListAdapter(
 
     interface OnItemClickCallback {
         fun onItemClicked(context: Context, id: String)
+    }
+
+    companion object {
+        private const val FLAG_HOTEL_UI = "flag_hotel_UI"
+        private const val FLAG_HOTEL_DETAIL = "hotel_detail"
+        private const val FLAG_HOTEL_UPDATE = "hotel_update"
+
+        private const val HOTEL_ID = "hotel_id"
     }
 }

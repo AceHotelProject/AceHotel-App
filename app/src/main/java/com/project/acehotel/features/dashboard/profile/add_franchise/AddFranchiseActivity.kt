@@ -8,18 +8,24 @@ import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
+import android.view.View
+import android.widget.PopupMenu
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.google.android.material.textfield.TextInputEditText
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.reduceFileImage
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.core.utils.uriToFile
 import com.project.acehotel.databinding.ActivityAddFranchiseBinding
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
+import com.project.acehotel.features.popup.delete.DeleteItemDialog
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -58,6 +64,252 @@ class AddFranchiseActivity : AppCompatActivity() {
         handlePickImages()
 
         handleSaveButton()
+
+        setupUI()
+    }
+
+    private fun setupUI() {
+        val hotelId = intent.getStringExtra(HOTEL_ID) ?: ""
+
+        when (intent.getStringExtra(FLAG_HOTEL_UI)) {
+            FLAG_HOTEL_DETAIL -> {
+                binding.apply {
+                    fetchHotelInfo(hotelId)
+
+                    isEditable(false)
+
+                    setupButtonMore(hotelId)
+                }
+            }
+            FLAG_HOTEL_UPDATE -> {
+                binding.apply {
+                    fetchHotelInfo(hotelId)
+
+                    isEditable(true)
+                }
+            }
+        }
+    }
+
+    private fun isEditable(editable: Boolean) {
+        binding.apply {
+            if (editable) {
+                btnFranchiseDetailMore.visibility = View.INVISIBLE
+                constraintLayout5.visibility = View.VISIBLE
+
+                isEditTextEditable(edAddFranchiseName, editable)
+                isEditTextEditable(edAddFranchiseAddress, editable)
+                isEditTextEditable(edAddFranchiseContact, editable)
+
+                isEditTextEditable(edAddFranchiseRoomRegularCount, editable)
+                isEditTextEditable(edAddFranchiseRoomRegularPrice, editable)
+                isEditTextEditable(edAddFranchiseRoomExclusiveCount, editable)
+                isEditTextEditable(edAddFranchiseRoomExclusivePrice, editable)
+                isEditTextEditable(edAddFranchiseRoomBedPrice, editable)
+
+                isEditTextEditable(edAddFranchiseOwnerName, editable)
+                isEditTextEditable(edAddFranchiseOwnerEmail, editable)
+                isEditTextEditable(edAddFranchiseOwnerPass, editable)
+                isEditTextEditable(edAddFranchiseOwnerPassConfirm, editable)
+
+                textView9.visibility = View.VISIBLE
+                textView10.visibility = View.VISIBLE
+                layoutAddFranchiseOwnerPass.visibility = View.VISIBLE
+                layoutAddFranchiseOwnerPassConfirm.visibility = View.VISIBLE
+
+                isEditTextEditable(edAddFranchiseReceptionistName, editable)
+                isEditTextEditable(edAddFranchiseReceptionistEmail, editable)
+                isEditTextEditable(edAddFranchiseReceptionistPass, editable)
+                isEditTextEditable(edAddFranchiseReceptionistPassConfirm, editable)
+
+                textView13.visibility = View.VISIBLE
+                textView14.visibility = View.VISIBLE
+                layoutAddFranchiseReceptionistPass.visibility = View.VISIBLE
+                layoutAddFranchiseReceptionistPassConfirm.visibility = View.VISIBLE
+
+                isEditTextEditable(edAddFranchiseInventoryName, editable)
+                isEditTextEditable(edAddFranchiseInventoryEmail, editable)
+                isEditTextEditable(edAddFranchiseInventoryPass, editable)
+                isEditTextEditable(edAddFranchiseInventoryPassConfirm, editable)
+
+                textView17.visibility = View.VISIBLE
+                textView18.visibility = View.VISIBLE
+                layoutAddFranchiseInventoryPass.visibility = View.VISIBLE
+                layoutAddFranchiseInventoryPassConfirm.visibility = View.VISIBLE
+
+                isEditTextEditable(edAddFranchiseCleaningName, editable)
+                isEditTextEditable(edAddFranchiseCleaningEmail, editable)
+                isEditTextEditable(edAddFranchiseCleaningPass, editable)
+                isEditTextEditable(edAddFranchiseCleaningPassConfirm, editable)
+
+                textView21.visibility = View.VISIBLE
+                textView22.visibility = View.VISIBLE
+                layoutAddFranchiseCleaningPass.visibility = View.VISIBLE
+                layoutAddFranchiseCleaningPassConfirm.visibility = View.VISIBLE
+
+                addFranchisePhotoRegular1.isClickable = editable
+                addFranchisePhotoExclusive1.isClickable = editable
+            } else {
+                btnFranchiseDetailMore.visibility = View.VISIBLE
+                constraintLayout5.visibility = View.GONE
+
+                isEditTextEditable(edAddFranchiseName, editable)
+                isEditTextEditable(edAddFranchiseAddress, editable)
+                isEditTextEditable(edAddFranchiseContact, editable)
+
+                isEditTextEditable(edAddFranchiseRoomRegularCount, editable)
+                isEditTextEditable(edAddFranchiseRoomRegularPrice, editable)
+                isEditTextEditable(edAddFranchiseRoomExclusiveCount, editable)
+                isEditTextEditable(edAddFranchiseRoomExclusivePrice, editable)
+                isEditTextEditable(edAddFranchiseRoomBedPrice, editable)
+
+                isEditTextEditable(edAddFranchiseOwnerName, editable)
+                isEditTextEditable(edAddFranchiseOwnerEmail, editable)
+                isEditTextEditable(edAddFranchiseOwnerPass, editable)
+                isEditTextEditable(edAddFranchiseOwnerPassConfirm, editable)
+
+                textView9.visibility = View.GONE
+                textView10.visibility = View.GONE
+                layoutAddFranchiseOwnerPass.visibility = View.GONE
+                layoutAddFranchiseOwnerPassConfirm.visibility = View.GONE
+
+                isEditTextEditable(edAddFranchiseReceptionistName, editable)
+                isEditTextEditable(edAddFranchiseReceptionistEmail, editable)
+                isEditTextEditable(edAddFranchiseReceptionistPass, editable)
+                isEditTextEditable(edAddFranchiseReceptionistPassConfirm, editable)
+
+                textView13.visibility = View.GONE
+                textView14.visibility = View.GONE
+                layoutAddFranchiseReceptionistPass.visibility = View.GONE
+                layoutAddFranchiseReceptionistPassConfirm.visibility = View.GONE
+
+                isEditTextEditable(edAddFranchiseInventoryName, editable)
+                isEditTextEditable(edAddFranchiseInventoryEmail, editable)
+                isEditTextEditable(edAddFranchiseInventoryPass, editable)
+                isEditTextEditable(edAddFranchiseInventoryPassConfirm, editable)
+
+                textView17.visibility = View.GONE
+                textView18.visibility = View.GONE
+                layoutAddFranchiseInventoryPass.visibility = View.GONE
+                layoutAddFranchiseInventoryPassConfirm.visibility = View.GONE
+
+                isEditTextEditable(edAddFranchiseCleaningName, editable)
+                isEditTextEditable(edAddFranchiseCleaningEmail, editable)
+                isEditTextEditable(edAddFranchiseCleaningPass, editable)
+                isEditTextEditable(edAddFranchiseCleaningPassConfirm, editable)
+
+                textView21.visibility = View.GONE
+                textView22.visibility = View.GONE
+                layoutAddFranchiseCleaningPass.visibility = View.GONE
+                layoutAddFranchiseCleaningPassConfirm.visibility = View.GONE
+
+                addFranchisePhotoRegular1.isClickable = editable
+                addFranchisePhotoExclusive1.isClickable = editable
+            }
+        }
+    }
+
+    private fun isEditTextEditable(editText: TextInputEditText, isEditable: Boolean) {
+        editText.isFocusable = isEditable
+        editText.isClickable = isEditable
+        editText.isFocusableInTouchMode = isEditable
+        editText.isCursorVisible = isEditable
+    }
+
+    private fun setupButtonMore(hotelId: String) {
+        binding.btnFranchiseDetailMore.setOnClickListener {
+            val popUpMenu = PopupMenu(this, binding.btnFranchiseDetailMore)
+            popUpMenu.menuInflater.inflate(R.menu.menu_detail_item, popUpMenu.menu)
+
+            popUpMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menuUpdate -> {
+                        val intentToAUpdateHotel =
+                            Intent(this, AddFranchiseActivity::class.java)
+                        intentToAUpdateHotel.putExtra(
+                            FLAG_HOTEL_UI,
+                            FLAG_HOTEL_UPDATE
+                        )
+                        intentToAUpdateHotel.putExtra(HOTEL_ID, hotelId)
+
+                        startActivity(intentToAUpdateHotel)
+                        true
+                    }
+                    R.id.menuDelete -> {
+                        DeleteItemDialog(DeleteDialogType.MANAGE_HOTEL, hotelId).show(
+                            supportFragmentManager,
+                            "Delete Dialog"
+                        )
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popUpMenu.show()
+        }
+    }
+
+    private fun fetchHotelInfo(hotelId: String) {
+        addFranchiseViewModel.getHotel(hotelId).observe(this) { hotel ->
+            when (hotel) {
+                is Resource.Error -> {
+                    showLoading(false)
+
+                    if (!isInternetAvailable(this@AddFranchiseActivity)) {
+                        showToast(getString(R.string.check_internet))
+                    } else {
+                        showToast(hotel.message.toString())
+                    }
+
+                    isButtonEnabled(true)
+                }
+                is Resource.Loading -> {
+                    showLoading(true)
+                    isButtonEnabled(false)
+                }
+                is Resource.Message -> {
+                    showLoading(false)
+                    isButtonEnabled(true)
+
+                    Timber.tag("AddFranchiseActivity").d(hotel.message)
+                }
+                is Resource.Success -> {
+                    showLoading(false)
+                    isButtonEnabled(true)
+
+                    binding.apply {
+                        hotel.data?.apply {
+                            edAddFranchiseName.setText(name)
+                            edAddFranchiseAddress.setText(address)
+                            edAddFranchiseContact.setText(contact)
+
+                            edAddFranchiseRoomRegularCount.setText(regularRoomCount.toString())
+                            edAddFranchiseRoomRegularPrice.setText(regularRoomPrice.toString())
+                            Glide.with(this@AddFranchiseActivity).load(regularRoomImage)
+                                .into(addFranchisePhotoRegular1)
+                            edAddFranchiseRoomExclusiveCount.setText(exclusiveRoomCount.toString())
+                            edAddFranchiseRoomExclusivePrice.setText(exclusiveRoomPrice.toString())
+                            Glide.with(this@AddFranchiseActivity).load(exclusiveRoomImage)
+                                .into(addFranchisePhotoExclusive1)
+                            edAddFranchiseRoomBedPrice.setText(extraBedPrice.toString())
+
+                            edAddFranchiseOwnerName.setText(owner.username)
+                            edAddFranchiseOwnerEmail.setText(owner.email)
+
+                            edAddFranchiseReceptionistName.setText(owner.username)
+                            edAddFranchiseReceptionistEmail.setText(owner.email)
+
+                            edAddFranchiseInventoryName.setText(owner.username)
+                            edAddFranchiseInventoryEmail.setText(owner.email)
+
+                            edAddFranchiseCleaningName.setText(owner.username)
+                            edAddFranchiseCleaningEmail.setText(owner.email)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private val launcherGallery = registerForActivityResult(
@@ -71,18 +323,6 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                     getFileExclusive1 = uriToFile(exc1ImgUri!!, this)
                 }
-//                2 -> {
-//                    exc2ImgUri = uri
-//                    binding.addFranchisePhotoExclusive2.setImageURI(exc2ImgUri)
-//
-//                    getFileExclusive2 = uriToFile(exc2ImgUri!!, this)
-//                }
-//                3 -> {
-//                    exc3ImgUri = uri
-//                    binding.addFranchisePhotoExclusive3.setImageURI(exc3ImgUri)
-//
-//                    getFileExclusive3 = uriToFile(exc3ImgUri!!, this)
-//                }
             }
 
             when (flagImgReg) {
@@ -92,18 +332,6 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                     getFileRegular1 = uriToFile(reg1ImgUri!!, this)
                 }
-//                2 -> {
-//                    reg2ImgUri = uri
-//                    binding.addFranchisePhotoRegular2.setImageURI(reg2ImgUri)
-//
-//                    getFileRegular2 = uriToFile(reg2ImgUri!!, this)
-//                }
-//                3 -> {
-//                    reg3ImgUri = uri
-//                    binding.addFranchisePhotoRegular3.setImageURI(reg3ImgUri)
-//
-//                    getFileRegular3 = uriToFile(reg3ImgUri!!, this)
-//                }
             }
         } else {
             Timber.tag("Photo Picker").d("No media selected")
@@ -121,30 +349,10 @@ class AddFranchiseActivity : AppCompatActivity() {
                 startGallery()
             }
 
-//            addFranchisePhotoRegular2.setOnClickListener {
-//                flagImgReg = 2
-//                startGallery()
-//            }
-//
-//            addFranchisePhotoRegular3.setOnClickListener {
-//                flagImgReg = 3
-//                startGallery()
-//            }
-
             addFranchisePhotoExclusive1.setOnClickListener {
                 flagImgExc = 1
                 startGallery()
             }
-
-//            addFranchisePhotoExclusive2.setOnClickListener {
-//                flagImgExc = 2
-//                startGallery()
-//            }
-//
-//            addFranchisePhotoExclusive3.setOnClickListener {
-//                flagImgExc = 3
-//                startGallery()
-//            }
         }
     }
 
@@ -966,5 +1174,11 @@ class AddFranchiseActivity : AppCompatActivity() {
 
         private const val MIN_BED_PRICE = 10000
         private const val MAX_BED_PRICE = 500000
+
+        private const val FLAG_HOTEL_UI = "flag_hotel_UI"
+        private const val FLAG_HOTEL_DETAIL = "hotel_detail"
+        private const val FLAG_HOTEL_UPDATE = "hotel_update"
+
+        private const val HOTEL_ID = "hotel_id"
     }
 }

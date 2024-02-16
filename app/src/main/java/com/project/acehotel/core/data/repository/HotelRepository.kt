@@ -7,8 +7,10 @@ import com.project.acehotel.core.data.source.local.datastore.UserManager
 import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
+import com.project.acehotel.core.domain.hotel.model.Hotel
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.repository.IHotelRepository
 import com.project.acehotel.core.utils.AppExecutors
@@ -96,6 +98,19 @@ class HotelRepository @Inject constructor(
         }.asFlow()
     }
 
+    override fun getHotel(id: String): Flow<Resource<Hotel>> {
+        return object : NetworkBoundResource<Hotel, HotelResponse>() {
+            override suspend fun fetchFromApi(response: HotelResponse): Hotel {
+                return HotelDataMapper.mapHotelResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<HotelResponse>> {
+                return remoteDataSource.getHotel(id)
+            }
+        }.asFlow()
+    }
+
+
     override fun updateHotel(
         id: String,
         name: String,
@@ -173,7 +188,6 @@ class HotelRepository @Inject constructor(
             override suspend fun createCall(): Flow<ApiResponse<Response<ManageHotelResultItem>>> {
                 return remoteDataSource.deleteHotel(id)
             }
-
         }.asFlow()
     }
 

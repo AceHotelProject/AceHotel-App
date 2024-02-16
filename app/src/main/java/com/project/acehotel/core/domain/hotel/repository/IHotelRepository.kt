@@ -1,6 +1,7 @@
 package com.project.acehotel.core.domain.hotel.repository
 
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.hotel.model.Hotel
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import kotlinx.coroutines.flow.Flow
 
@@ -37,6 +38,8 @@ interface IHotelRepository {
     ): Flow<Resource<ManageHotel>>
 
     fun getListHotel(): Flow<Resource<List<ManageHotel>>>
+
+    fun getHotel(id: String): Flow<Resource<Hotel>>
 
     fun updateHotel(
         id: String,

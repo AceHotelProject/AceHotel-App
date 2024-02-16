@@ -2,6 +2,7 @@ package com.project.acehotel.core.domain.hotel.interactor
 
 import com.project.acehotel.core.data.repository.HotelRepository
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.hotel.model.Hotel
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import kotlinx.coroutines.flow.Flow
@@ -61,6 +62,10 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
 
     override fun getListHotel(): Flow<Resource<List<ManageHotel>>> {
         return hotelRepository.getListHotel()
+    }
+
+    override fun getHotel(id: String): Flow<Resource<Hotel>> {
+        return hotelRepository.getHotel(id)
     }
 
     override fun updateHotel(
