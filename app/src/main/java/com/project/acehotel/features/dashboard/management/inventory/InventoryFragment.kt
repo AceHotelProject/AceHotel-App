@@ -20,6 +20,7 @@ import com.project.acehotel.databinding.FragmentInventoryBinding
 import com.project.acehotel.features.dashboard.management.IManagementSearch
 import com.project.acehotel.features.dashboard.management.inventory.add_item.AddItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.inventory.detail.InventoryDetailActivity
+import com.project.acehotel.features.dashboard.management.inventory.edit_reader.EditReaderActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -38,6 +39,15 @@ class InventoryFragment : Fragment(), IManagementSearch {
         handleRefreshLayout("")
 
         handleButtonAddInventory()
+
+        handleButtonEditReader()
+    }
+
+    private fun handleButtonEditReader() {
+        binding.btnEditReader.setOnClickListener {
+            val intentToEditReader = Intent(requireContext(), EditReaderActivity::class.java)
+            startActivity(intentToEditReader)
+        }
     }
 
     private fun handleButtonAddInventory() {
