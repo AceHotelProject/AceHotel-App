@@ -123,25 +123,14 @@ class HotelRepository @Inject constructor(
         regularRoomPrice: Int,
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,
-        ownerName: String,
-        ownerEmail: String,
-        ownerPassword: String,
-        receptionistName: String,
-        receptionistEmail: String,
-        receptionistPassword: String,
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
-        inventoryName: String,
-        inventoryEmail: String,
-        inventoryPassword: String
-    ): Flow<Resource<ManageHotel>> {
-        return object : NetworkBoundResource<ManageHotel, ManageHotelResultItem>() {
-            override suspend fun fetchFromApi(response: ManageHotelResultItem): ManageHotel {
-                return HotelDataMapper.mapManageHotelResponseToDomain(response)
+
+        ): Flow<Resource<Hotel>> {
+        return object : NetworkBoundResource<Hotel, HotelResponse>() {
+            override suspend fun fetchFromApi(response: HotelResponse): Hotel {
+                return HotelDataMapper.mapHotelResponseToDomain(response)
             }
 
-            override suspend fun createCall(): Flow<ApiResponse<ManageHotelResultItem>> {
+            override suspend fun createCall(): Flow<ApiResponse<HotelResponse>> {
                 return remoteDataSource.updateHotel(
                     id,
                     name,
@@ -153,19 +142,7 @@ class HotelRepository @Inject constructor(
                     exclusiveRoomImage,
                     regularRoomPrice,
                     exclusiveRoomPrice,
-                    extraBedPrice,
-                    ownerName,
-                    ownerEmail,
-                    ownerPassword,
-                    receptionistName,
-                    receptionistEmail,
-                    receptionistPassword,
-                    cleaningName,
-                    cleaningEmail,
-                    cleaningPassword,
-                    inventoryName,
-                    inventoryEmail,
-                    inventoryPassword
+                    extraBedPrice
                 )
             }
         }.asFlow()

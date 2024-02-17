@@ -56,22 +56,7 @@ interface IHotelRepository {
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,
 
-        ownerName: String,
-        ownerEmail: String,
-        ownerPassword: String,
-
-        receptionistName: String,
-        receptionistEmail: String,
-        receptionistPassword: String,
-
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
-
-        inventoryName: String,
-        inventoryEmail: String,
-        inventoryPassword: String,
-    ): Flow<Resource<ManageHotel>>
+        ): Flow<Resource<Hotel>>
 
     fun getSelectedHotel(): Flow<String>
 

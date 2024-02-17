@@ -1,6 +1,7 @@
 package com.project.acehotel.core.domain.hotel.usecase
 
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.hotel.model.Hotel
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import kotlinx.coroutines.flow.Flow
 
@@ -38,6 +39,8 @@ interface HotelUseCase {
 
     fun getListHotel(): Flow<Resource<List<ManageHotel>>>
 
+    fun getHotel(id: String): Flow<Resource<Hotel>>
+
     fun updateHotel(
         id: String,
 
@@ -52,23 +55,7 @@ interface HotelUseCase {
         regularRoomPrice: Int,
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,
-
-        ownerName: String,
-        ownerEmail: String,
-        ownerPassword: String,
-
-        receptionistName: String,
-        receptionistEmail: String,
-        receptionistPassword: String,
-
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
-
-        inventoryName: String,
-        inventoryEmail: String,
-        inventoryPassword: String,
-    ): Flow<Resource<ManageHotel>>
+    ): Flow<Resource<Hotel>>
 
     fun deleteHotel(
         id: String

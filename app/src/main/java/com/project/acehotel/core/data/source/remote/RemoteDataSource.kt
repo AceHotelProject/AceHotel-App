@@ -304,23 +304,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         exclusiveRoomPrice: Int,
         extraBedPrice: Int,
 
-        ownerName: String,
-        ownerEmail: String,
-        ownerPassword: String,
-
-        receptionistName: String,
-        receptionistEmail: String,
-        receptionistPassword: String,
-
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
-
-        inventoryName: String,
-        inventoryEmail: String,
-        inventoryPassword: String,
-    ): Flow<ApiResponse<ManageHotelResultItem>> {
-        return flow<ApiResponse<ManageHotelResultItem>> {
+        ): Flow<ApiResponse<HotelResponse>> {
+        return flow<ApiResponse<HotelResponse>> {
             try {
                 val response = apiService.updateHotel(
                     id,
@@ -334,18 +319,6 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                     regularRoomPrice,
                     exclusiveRoomPrice,
                     extraBedPrice,
-                    ownerName,
-                    ownerEmail,
-                    ownerPassword,
-                    receptionistName,
-                    receptionistEmail,
-                    receptionistPassword,
-                    cleaningName,
-                    cleaningEmail,
-                    cleaningPassword,
-                    inventoryName,
-                    inventoryEmail,
-                    inventoryPassword
                 )
 
                 if (response.id != null) {
