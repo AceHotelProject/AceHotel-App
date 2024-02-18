@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.DateUtils
@@ -17,6 +16,7 @@ import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChangeStockItemInventoryBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ChangeStockItemInventoryActivity : AppCompatActivity() {
@@ -24,6 +24,7 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
     private val changeStockItemViewModel: ChangeStockItemInventoryViewModel by viewModels()
 
     private var stockCount = 0
+    private var tempStockCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,10 +128,10 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
     }
 
     private fun handleEditText() {
-        binding.edChangeStockItemTitle.addTextChangedListener {
-            object : TextWatcher {
+        binding.apply {
+            edChangeStockItemTitle.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -140,13 +141,11 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
                 override fun afterTextChanged(p0: Editable?) {
                     checkForms()
                 }
-            }
-        }
+            })
 
-        binding.edChangeStockItemDesc.addTextChangedListener {
-            object : TextWatcher {
+            edChangeStockItemDesc.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
+
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -156,7 +155,7 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
                 override fun afterTextChanged(p0: Editable?) {
                     checkForms()
                 }
-            }
+            })
         }
     }
 
@@ -181,7 +180,11 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
     }
 
     private fun checkForms() {
-        isButtonEnabled(stockCount > 0 && !binding.edChangeStockItemDesc.text.isNullOrEmpty() && !binding.edChangeStockItemTitle.text.isNullOrEmpty())
+        Timber.tag("TEST").e("Stok" + (stockCount != tempStockCount).toString())
+        Timber.tag("TEST").e("Desc" + (!binding.edChangeStockItemDesc.text.isNullOrEmpty()))
+        Timber.tag("TEST").e("Title" + !binding.edChangeStockItemTitle.text.isNullOrEmpty())
+
+        isButtonEnabled(stockCount != tempStockCount && !binding.edChangeStockItemDesc.text.isNullOrEmpty() && !binding.edChangeStockItemTitle.text.isNullOrEmpty())
     }
 
     private fun initItemInfo() {
@@ -196,6 +199,8 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
             edChangeStockItemDate.setText(currentDate)
 
             stockCount = itemStock
+            tempStockCount = itemStock
+
             tvChangeStock.text = (itemStock.toString())
         }
     }

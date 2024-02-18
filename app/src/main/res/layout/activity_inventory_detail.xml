@@ -37,6 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView15" />
 
+    
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
@@ -47,7 +48,7 @@
         app:layout_constraintStart_toStartOf="@+id/btn_inventory_detail_back"
         app:layout_constraintTop_toBottomOf="@+id/btn_inventory_detail_back">
 
-        <com.project.acehotel.core.ui.custom.CustomInventoryType
+        <com.project.acehotel.core.ui.custom.chips.CustomInventoryType
             android:id="@+id/chip_inventory_card_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_bg"
-    tools:context=".features.dashboard.booking.choose_visitor.ChooseVisitorActivity">
+    tools:context=".features.dashboard.management.visitor.choose.ChooseVisitorActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
@@ -63,7 +63,7 @@
         android:id="@+id/ref_choose_visitor"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_add_item"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
@@ -72,9 +72,23 @@
             android:id="@+id/rv_choose_visitor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="16dp">
-
-
-        </androidx.recyclerview.widget.RecyclerView>
+            android:paddingTop="16dp" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ImageButton
+        android:id="@+id/btn_add_visitor"
+        style="@style/textStyleButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/custom_button"
+        android:elevation="0dp"
+        android:padding="13dp"
+        android:src="@drawable/icons_add"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,7 +26,6 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChooseItemInventoryBinding
 
     private val chooseItemViewModel: ChooseItemViewModel by viewModels()
-    private var hotelId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,12 +71,6 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
             } else {
                 false // pass on to other listeners.
             }
-        }
-    }
-
-    private fun getHotelId() {
-        chooseItemViewModel.getSelectedHotel().observe(this) { hotel ->
-            hotelId = hotel
         }
     }
 
