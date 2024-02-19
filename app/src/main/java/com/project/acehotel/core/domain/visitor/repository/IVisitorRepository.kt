@@ -13,4 +13,31 @@ interface IVisitorRepository {
     ): Flow<Resource<List<Visitor>>>
 
     fun getVisitorDetail(id: String): Flow<Resource<Visitor>>
+
+    fun addVisitor(
+        id: String,
+        hotelId: String,
+        name: String,
+        address: String,
+        phone: String,
+        email: String,
+        identityNum: String,
+        pathIdentityImage: String,
+    ): Flow<Resource<Visitor>>
+
+    fun updateVisitor(
+        id: String,
+        hotelId: String,
+        name: String,
+        address: String,
+        phone: String,
+        email: String,
+        identityNum: String,
+        pathIdentityImage: String,
+    ): Flow<Resource<Visitor>>
+
+    fun deleteVisitor(
+        id: String,
+        hotelId: String,
+    ): Flow<Resource<Int>>
 }

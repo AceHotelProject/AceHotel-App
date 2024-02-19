@@ -66,21 +66,37 @@ class InventoryDetailActivity : AppCompatActivity() {
     private fun setupSearch() {
         binding.edInventoryDetailSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0.isNullOrEmpty()) {
+                    initInventoryHistoryRecyclerView(savedHistoryData)
+                } else {
+                    Timber.tag("TEST").e("Ini query" + p0.toString())
+                    Timber.tag("TEST").e("Ini isi" + savedHistoryData.toString())
 
+                    initInventoryHistoryRecyclerView(savedHistoryData)
+                }
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (!p0.isNullOrEmpty()) {
+                    fetchInventoryHistoryList(p0.toString())
+                } else {
+                    Timber.tag("TEST").e("Ini query" + p0.toString())
+                    Timber.tag("TEST").e("Ini isi" + savedHistoryData.toString())
 
+                    initInventoryHistoryRecyclerView(savedHistoryData)
+                }
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 if (!p0.isNullOrEmpty()) {
                     fetchInventoryHistoryList(p0.toString())
                 } else {
+                    Timber.tag("TEST").e("Ini query" + p0.toString())
+                    Timber.tag("TEST").e("Ini isi" + savedHistoryData.toString())
+
                     initInventoryHistoryRecyclerView(savedHistoryData)
                 }
             }
-
         })
 
         binding.edInventoryDetailSearch.setOnEditorActionListener { v, actionId, event ->

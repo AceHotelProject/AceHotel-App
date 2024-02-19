@@ -14,6 +14,14 @@ class EditReaderActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupActionBar()
+
+        handleButtonBack()
+    }
+
+    private fun handleButtonBack() {
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupActionBar() {

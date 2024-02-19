@@ -428,6 +428,112 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun addVisitor(
+        id: String,
+        hotelId: String,
+        name: String,
+        address: String,
+        phone: String,
+        email: String,
+        identityNum: String,
+        pathIdentityImage: String
+    ): Flow<ApiResponse<VisitorResponse>> {
+        return flow {
+            try {
+                val response = apiService.addVisitor(
+                    id,
+                    hotelId,
+                    name,
+                    address,
+                    phone,
+                    email,
+                    identityNum,
+                    pathIdentityImage
+                )
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun updateVisitor(
+        id: String,
+        hotelId: String,
+        name: String,
+        address: String,
+        phone: String,
+        email: String,
+        identityNum: String,
+        pathIdentityImage: String
+    ): Flow<ApiResponse<VisitorResponse>> {
+        return flow {
+            try {
+                val response = apiService.updateVisitor(
+                    id,
+                    hotelId,
+                    name,
+                    address,
+                    phone,
+                    email,
+                    identityNum,
+                    pathIdentityImage
+                )
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun deleteVisitor(
+        id: String,
+        hotelId: String
+    ): Flow<ApiResponse<Response<VisitorResponse>>> {
+        return flow {
+            try {
+                val response = apiService.deleteHotel(id, hotelId)
+
+                if (response.isSuccessful) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+//    suspend fun deleteHotel(id: String): Flow<ApiResponse<Response<ManageHotelResultItem>>> {
+//        return flow<ApiResponse<Response<ManageHotelResultItem>>> {
+//            try {
+//                val response = apiService.deleteHotel(id)
+//
+//                if (response.isSuccessful) {
+//                    emit(ApiResponse.Success(response))
+//                } else {
+//                    emit(ApiResponse.Empty)
+//                }
+//            } catch (e: Exception) {
+//                emit(ApiResponse.Error(e.toString()))
+//                Timber.tag("RemoteDataSource").e(e.toString())
+//            }
+//        }.flowOn(Dispatchers.IO)
+//    }
 
     // VISITOR
 

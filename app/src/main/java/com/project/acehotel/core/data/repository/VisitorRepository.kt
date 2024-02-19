@@ -12,6 +12,8 @@ import com.project.acehotel.core.domain.visitor.repository.IVisitorRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.VisitorDataMapper
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
+
 import javax.inject.Inject
 
 class VisitorRepository @Inject constructor(
@@ -44,6 +46,78 @@ class VisitorRepository @Inject constructor(
 
             override suspend fun createCall(): Flow<ApiResponse<VisitorResponse>> {
                 return remoteDataSource.getDetailVisitor(id)
+            }
+        }.asFlow()
+    }
+
+    override fun addVisitor(
+        id: String,
+        hotelId: String,
+        name: String,
+        address: String,
+        phone: String,
+        email: String,
+        identityNum: String,
+        pathIdentityImage: String
+    ): Flow<Resource<Visitor>> {
+        return object : NetworkBoundResource<Visitor, VisitorResponse>() {
+            override suspend fun fetchFromApi(response: VisitorResponse): Visitor {
+                return VisitorDataMapper.mapVisitorResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<VisitorResponse>> {
+                return remoteDataSource.addVisitor(
+                    id,
+                    hotelId,
+                    name,
+                    address,
+                    phone,
+                    email,
+                    identityNum,
+                    pathIdentityImage
+                )
+            }
+        }.asFlow()
+    }
+
+    override fun updateVisitor(
+        id: String,
+        hotelId: String,
+        name: String,
+        address: String,
+        phone: String,
+        email: String,
+        identityNum: String,
+        pathIdentityImage: String
+    ): Flow<Resource<Visitor>> {
+        return object : NetworkBoundResource<Visitor, VisitorResponse>() {
+            override suspend fun fetchFromApi(response: VisitorResponse): Visitor {
+                return VisitorDataMapper.mapVisitorResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<VisitorResponse>> {
+                return remoteDataSource.updateVisitor(
+                    id,
+                    hotelId,
+                    name,
+                    address,
+                    phone,
+                    email,
+                    identityNum,
+                    pathIdentityImage
+                )
+            }
+        }.asFlow()
+    }
+
+    override fun deleteVisitor(id: String, hotelId: String): Flow<Resource<Int>> {
+        return object : NetworkBoundResource<Int, Response<VisitorResponse>>() {
+            override suspend fun fetchFromApi(response: Response<VisitorResponse>): Int {
+                return response.code()
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<Response<VisitorResponse>>> {
+                return remoteDataSource.deleteVisitor(id, hotelId)
             }
         }.asFlow()
     }

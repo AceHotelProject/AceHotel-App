@@ -22,4 +22,52 @@ class VisitorInteractor @Inject constructor(private val visitorRepository: Visit
         return visitorRepository.getVisitorDetail(id)
     }
 
+    override fun addVisitor(
+        id: String,
+        hotelId: String,
+        name: String,
+        address: String,
+        phone: String,
+        email: String,
+        identityNum: String,
+        pathIdentityImage: String
+    ): Flow<Resource<Visitor>> {
+        return visitorRepository.addVisitor(
+            id,
+            hotelId,
+            name,
+            address,
+            phone,
+            email,
+            identityNum,
+            pathIdentityImage
+        )
+    }
+
+    override fun updateVisitor(
+        id: String,
+        hotelId: String,
+        name: String,
+        address: String,
+        phone: String,
+        email: String,
+        identityNum: String,
+        pathIdentityImage: String
+    ): Flow<Resource<Visitor>> {
+        return visitorRepository.updateVisitor(
+            id,
+            hotelId,
+            name,
+            address,
+            phone,
+            email,
+            identityNum,
+            pathIdentityImage
+        )
+    }
+
+    override fun deleteVisitor(id: String, hotelId: String): Flow<Resource<Int>> {
+        return visitorRepository.deleteVisitor(id, hotelId)
+    }
+
 }

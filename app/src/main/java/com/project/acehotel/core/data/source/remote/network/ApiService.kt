@@ -172,6 +172,40 @@ interface ApiService {
         @Path("id") id: String,
     ): VisitorResponse
 
+    @POST("visitors")
+    @FormUrlEncoded
+    suspend fun addVisitor(
+        @Field("id") id: String,
+        @Field("hotel_id") hotelId: String,
+        
+        @Field("name") name: String,
+        @Field("address") address: String,
+        @Field("phone") phone: String,
+        @Field("email") email: String,
+        @Field("identity_num") identityNum: String,
+        @Field("path_identity_image") pathIdentityImage: String,
+    ): VisitorResponse
+
+    @PATCH("visitors/{id}")
+    @FormUrlEncoded
+    suspend fun updateVisitor(
+        @Path("id") id: String,
+        @Query("hotel_id") hotelId: String,
+
+        @Field("name") name: String,
+        @Field("address") address: String,
+        @Field("phone") phone: String,
+        @Field("email") email: String,
+        @Field("identity_num") identityNum: String,
+        @Field("path_identity_image") pathIdentityImage: String,
+    ): VisitorResponse
+
+    @DELETE("hotels/{id}")
+    suspend fun deleteHotel(
+        @Path("id") id: String,
+        @Query("hotel_id") hotelId: String,
+    ): Response<VisitorResponse>
+
     // VISITOR
 
     // IMAGES
