@@ -2,6 +2,7 @@ package com.project.acehotel.core.utils.datamapper
 
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
+import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
 
@@ -41,4 +42,16 @@ object InventoryDataMapper {
             )
         } ?: listOf()
     )
+
+    fun mapListInventoryHistoryToDomain(input: List<InventoryUpdateHistoryItem?>?): List<InventoryHistory> =
+        input?.map { inventoryHistory ->
+            InventoryHistory(
+                historyId = inventoryHistory?.id ?: "Empty",
+                title = inventoryHistory?.title ?: "Empty",
+                desc = inventoryHistory?.description ?: "Empty",
+                stockChange = inventoryHistory?.stockChange ?: 0,
+                date = inventoryHistory?.date ?: "Empty"
+
+            )
+        } ?: listOf()
 }

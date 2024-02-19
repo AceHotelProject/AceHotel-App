@@ -22,4 +22,7 @@ class InventoryDetailViewModel @Inject constructor(
     fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
+
+    fun getInventoryHistoryList(id: String, key: String) =
+        inventoryUseCase.getInventoryHistoryList(id, key).asLiveData()
 }

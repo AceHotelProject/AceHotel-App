@@ -11,6 +11,7 @@ import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelRe
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
+import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import kotlinx.coroutines.Dispatchers
@@ -103,6 +104,26 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 val response = apiService.getDetailInventory(id, hotelId)
 
                 if (response.name != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getInventoryHistoryList(
+        id: String,
+        key: String
+    ): Flow<ApiResponse<List<InventoryUpdateHistoryItem?>?>> {
+        return flow<ApiResponse<List<InventoryUpdateHistoryItem?>?>> {
+            try {
+                val response = apiService.getInventoryHistoryList(id, key)
+
+                if (!response.isNullOrEmpty()) {
                     emit(ApiResponse.Success(response))
                 } else {
                     emit(ApiResponse.Empty)

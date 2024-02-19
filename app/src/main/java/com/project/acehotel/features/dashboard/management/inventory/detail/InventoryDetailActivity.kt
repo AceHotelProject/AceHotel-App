@@ -2,7 +2,10 @@ package com.project.acehotel.features.dashboard.management.inventory.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +38,8 @@ class InventoryDetailActivity : AppCompatActivity() {
     private lateinit var itemType: String
     private var itemStock: Int = 0
 
+    private var savedHistoryData: List<InventoryHistory> = listOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,6 +59,38 @@ class InventoryDetailActivity : AppCompatActivity() {
         handleButtonMore()
 
         getItemInfo()
+
+        setupSearch()
+    }
+
+    private fun setupSearch() {
+        binding.edInventoryDetailSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (!p0.isNullOrEmpty()) {
+                    fetchInventoryHistoryList(p0.toString())
+                } else {
+                    initInventoryHistoryRecyclerView(savedHistoryData)
+                }
+            }
+
+        })
+
+        binding.edInventoryDetailSearch.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                fetchInventoryHistoryList(binding.edInventoryDetailSearch.text.toString())
+                true // consume the action
+            } else {
+                false // pass on to other listeners.
+            }
+        }
     }
 
     private fun getHotelId() {
@@ -135,6 +172,47 @@ class InventoryDetailActivity : AppCompatActivity() {
                                 setupDetailInfo(inventory.data)
 
                                 initInventoryHistoryRecyclerView(inventory.data.historyList)
+
+                                savedHistoryData = inventory.data.historyList
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun fetchInventoryHistoryList(key: String) {
+        val itemId = intent.getStringExtra(INVENTORY_ITEM_ID)
+
+        if (!itemId.isNullOrEmpty()) {
+            inventoryDetailViewModel.getInventoryHistoryList(itemId, key)
+                .observe(this) { inventoryHistory ->
+                    when (inventoryHistory) {
+                        is Resource.Error -> {
+                            showLoading(false)
+
+                            if (!isInternetAvailable(this)) {
+                                showToast(getString(R.string.check_internet))
+                            } else {
+                                showToast(inventoryHistory.message.toString())
+                            }
+
+                            if (inventoryHistory.message == "History not found") {
+                                initInventoryHistoryRecyclerView(listOf())
+                            }
+                        }
+                        is Resource.Loading -> {
+                            showLoading(true)
+                        }
+                        is Resource.Message -> {
+                            showLoading(false)
+                            Timber.tag("InventoryDetailActivity").d(inventoryHistory.message)
+                        }
+                        is Resource.Success -> {
+                            showLoading(false)
+
+                            if (inventoryHistory.data != null) {
+                                initInventoryHistoryRecyclerView(inventoryHistory.data)
                             }
                         }
                     }

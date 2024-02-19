@@ -3,6 +3,7 @@ package com.project.acehotel.core.domain.inventory.interactor
 import com.project.acehotel.core.data.repository.InventoryRepository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
+import com.project.acehotel.core.domain.inventory.model.InventoryHistory
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -15,6 +16,13 @@ class InventoryInteractor @Inject constructor(private val inventoryRepository: I
         type: String
     ): Flow<Resource<List<Inventory>>> {
         return inventoryRepository.getListInventory(hotelId, name, type)
+    }
+
+    override fun getInventoryHistoryList(
+        id: String,
+        key: String
+    ): Flow<Resource<List<InventoryHistory>>> {
+        return inventoryRepository.getInventoryHistoryList(id, key)
     }
 
     override fun getDetailInventory(id: String, hotelId: String): Flow<Resource<Inventory>> {

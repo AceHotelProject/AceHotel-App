@@ -7,7 +7,9 @@ import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
+import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
 import com.project.acehotel.core.domain.inventory.model.Inventory
+import com.project.acehotel.core.domain.inventory.model.InventoryHistory
 import com.project.acehotel.core.domain.inventory.repository.IInventoryIRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.InventoryDataMapper
@@ -36,6 +38,22 @@ class InventoryRepository @Inject constructor(
                 return remoteDataSource.getListInventory(hotelId, name, type)
             }
 
+        }.asFlow()
+    }
+
+    override fun getInventoryHistoryList(
+        id: String,
+        key: String
+    ): Flow<Resource<List<InventoryHistory>>> {
+        return object :
+            NetworkBoundResource<List<InventoryHistory>, List<InventoryUpdateHistoryItem?>?>() {
+            override suspend fun fetchFromApi(response: List<InventoryUpdateHistoryItem?>?): List<InventoryHistory> {
+                return InventoryDataMapper.mapListInventoryHistoryToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<List<InventoryUpdateHistoryItem?>?>> {
+                return remoteDataSource.getInventoryHistoryList(id, key)
+            }
         }.asFlow()
     }
 
