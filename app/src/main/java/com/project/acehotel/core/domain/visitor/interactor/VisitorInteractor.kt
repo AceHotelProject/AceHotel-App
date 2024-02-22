@@ -23,7 +23,6 @@ class VisitorInteractor @Inject constructor(private val visitorRepository: Visit
     }
 
     override fun addVisitor(
-        id: String,
         hotelId: String,
         name: String,
         address: String,
@@ -33,7 +32,6 @@ class VisitorInteractor @Inject constructor(private val visitorRepository: Visit
         pathIdentityImage: String
     ): Flow<Resource<Visitor>> {
         return visitorRepository.addVisitor(
-            id,
             hotelId,
             name,
             address,

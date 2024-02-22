@@ -51,7 +51,6 @@ class VisitorRepository @Inject constructor(
     }
 
     override fun addVisitor(
-        id: String,
         hotelId: String,
         name: String,
         address: String,
@@ -67,7 +66,6 @@ class VisitorRepository @Inject constructor(
 
             override suspend fun createCall(): Flow<ApiResponse<VisitorResponse>> {
                 return remoteDataSource.addVisitor(
-                    id,
                     hotelId,
                     name,
                     address,

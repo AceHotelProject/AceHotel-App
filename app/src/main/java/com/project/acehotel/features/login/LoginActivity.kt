@@ -132,11 +132,10 @@ class LoginActivity : AppCompatActivity() {
                         isButtonEnabled(true)
 
                         if (result.data?.tokens != null) {
-                            Timber.tag("TEST").e(result.data.user?.hotelId.toString())
-
                             loginViewModel.insertCacheUser(result.data)
 
                             loginViewModel.saveAccessToken(result.data.tokens.accessToken.token.toString())
+
                             loginViewModel.saveRefreshToken(result.data.tokens.refreshToken.token.toString())
 
                             val intentToMain = Intent(this, MainActivity::class.java)

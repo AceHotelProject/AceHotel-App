@@ -175,7 +175,6 @@ interface ApiService {
     @POST("visitors")
     @FormUrlEncoded
     suspend fun addVisitor(
-        @Field("id") id: String,
         @Field("hotel_id") hotelId: String,
         
         @Field("name") name: String,

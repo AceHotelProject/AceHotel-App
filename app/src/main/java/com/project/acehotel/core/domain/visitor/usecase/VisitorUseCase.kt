@@ -16,7 +16,6 @@ interface VisitorUseCase {
     fun getVisitorDetail(id: String): Flow<Resource<Visitor>>
 
     fun addVisitor(
-        id: String,
         hotelId: String,
         name: String,
         address: String,

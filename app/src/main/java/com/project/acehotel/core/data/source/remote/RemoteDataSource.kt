@@ -429,7 +429,6 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     }
 
     suspend fun addVisitor(
-        id: String,
         hotelId: String,
         name: String,
         address: String,
@@ -441,7 +440,6 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         return flow {
             try {
                 val response = apiService.addVisitor(
-                    id,
                     hotelId,
                     name,
                     address,

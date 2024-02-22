@@ -1,5 +1,6 @@
 package com.project.acehotel.features.dashboard.management.visitor
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentVisitorBinding
 import com.project.acehotel.features.dashboard.management.IManagementSearch
+import com.project.acehotel.features.dashboard.management.visitor.detail.VisitorDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -93,6 +95,14 @@ class VisitorFragment : Fragment(), IManagementSearch {
 
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvListVisitor.layoutManager = layoutManager
+
+        adapter.setOnItemClickCallback(object : VisitorListAdapter.OnItemClickCallback {
+            override fun onItemClicked(id: String) {
+                val intentToVisitorDetail =
+                    Intent(requireContext(), VisitorDetailActivity::class.java)
+                startActivity(intentToVisitorDetail)
+            }
+        })
     }
 
     override fun onCreateView(

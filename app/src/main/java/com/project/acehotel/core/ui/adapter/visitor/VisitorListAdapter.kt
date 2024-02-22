@@ -9,6 +9,8 @@ import com.project.acehotel.databinding.ItemListVisitorBinding
 class VisitorListAdapter(private val listVisitor: List<Visitor>?) :
     RecyclerView.Adapter<VisitorListAdapter.ViewHolder>() {
 
+    private lateinit var onItemCallback: OnItemClickCallback
+
     inner class ViewHolder(val binding: ItemListVisitorBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -26,7 +28,19 @@ class VisitorListAdapter(private val listVisitor: List<Visitor>?) :
         holder.binding.apply {
             tvVisitorCardName.text = data?.name
         }
+
+        holder.itemView.setOnClickListener {
+            if (data != null) {
+                onItemCallback.onItemClicked(data.id)
+            }
+        }
     }
 
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemCallback = onItemClickCallback
+    }
 
+    interface OnItemClickCallback {
+        fun onItemClicked(id: String)
+    }
 }
