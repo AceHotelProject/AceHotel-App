@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
+import com.project.acehotel.core.domain.visitor.usecase.VisitorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DeleteItemViewModel @Inject constructor(
     private val inventoryUseCase: InventoryUseCase,
-    private val hotelUseCase: HotelUseCase
+    private val hotelUseCase: HotelUseCase,
+    private val visitorUseCase: VisitorUseCase,
 ) :
     ViewModel() {
 
@@ -37,4 +39,16 @@ class DeleteItemViewModel @Inject constructor(
     fun saveSelectedHotel(id: String) = viewModelScope.launch {
         hotelUseCase.saveSelectedHotel(id)
     }
+
+    private fun deleteVisitor(id: String, hotelId: String) =
+        visitorUseCase.deleteVisitor(id, hotelId).asLiveData()
+
+    fun executeDeleteVisitor(id: String): MediatorLiveData<Resource<Int>> =
+        MediatorLiveData<Resource<Int>>().apply {
+            addSource(getSelectedHotel()) { hotelId ->
+                addSource(deleteVisitor(id, hotelId)) { visitor ->
+                    value = visitor
+                }
+            }
+        }
 }

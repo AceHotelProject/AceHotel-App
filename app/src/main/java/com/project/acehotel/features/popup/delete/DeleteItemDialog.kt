@@ -67,7 +67,28 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                 DeleteDialogType.VISITOR_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus pengunjung ini?"
                     btnYes.setOnClickListener {
+                        deleteItemViewModel.executeDeleteVisitor(id).observe(this) { result ->
+                            when (result) {
+                                is Resource.Error -> {
+                                    if (!isInternetAvailable(requireContext())) {
+                                        activity?.showToast(getString(R.string.check_internet))
+                                    } else {
+                                        activity?.showToast(result.message.toString())
+                                    }
+                                }
+                                is Resource.Loading -> {
 
+                                }
+                                is Resource.Message -> {
+
+                                }
+                                is Resource.Success -> {
+                                    activity?.showToast("Pengunjung telah berhasi dihapus")
+                                    activity?.finish()
+                                    dismiss()
+                                }
+                            }
+                        }
                     }
                 }
                 DeleteDialogType.BOOKING_DETAIL -> {
