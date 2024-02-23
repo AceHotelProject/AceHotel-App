@@ -8,6 +8,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.isInternetAvailable
@@ -43,11 +44,64 @@ class AddVisitorActivity : AppCompatActivity() {
 
         setupActionBar()
 
-        handleSaveButton()
-
         handleEditText()
 
-        handleEditText()
+        handlePickImages()
+
+        setupUI()
+    }
+
+    private fun setupUI() {
+        val isUpdate = intent.getBooleanExtra(VISITOR_UPDATE, false)
+
+        if (isUpdate) {
+            fetchVisitorInfo(intent.getStringExtra(VISITOR_ID) ?: "")
+        } else {
+            handleSaveButton()
+        }
+    }
+
+    private fun fetchVisitorInfo(id: String) {
+        addVisitorViewModel.getVisitorDetail(id).observe(this) { visitor ->
+            when (visitor) {
+                is Resource.Error -> {
+                    showLoading(false)
+
+                    if (!isInternetAvailable(this@AddVisitorActivity)) {
+                        showToast(getString(R.string.check_internet))
+                    } else {
+                        showToast(visitor.message.toString())
+                    }
+
+                    isButtonEnabled(true)
+                }
+                is Resource.Loading -> {
+                    showLoading(true)
+                    isButtonEnabled(false)
+                }
+                is Resource.Message -> {
+                    showLoading(false)
+                    isButtonEnabled(true)
+
+                    Timber.tag("AddVisitorActivity").d(visitor.message)
+                }
+                is Resource.Success -> {
+                    showLoading(false)
+                    isButtonEnabled(true)
+
+                    binding.apply {
+                        edAddVisitorName.setText(visitor.data?.name)
+                        edAddVisitorNik.setText(visitor.data?.identity_num)
+                        edAddVisitorPhone.setText(visitor.data?.phone)
+                        edAddVisitorEmail.setText(visitor.data?.email)
+                        edAddVisitorAddress.setText(visitor.data?.address)
+
+                        Glide.with(this@AddVisitorActivity).load(visitor.data?.identityImage)
+                            .into(ivVisitorKtp)
+                    }
+                }
+            }
+        }
     }
 
     private fun handleEditText() {
@@ -151,6 +205,8 @@ class AddVisitorActivity : AppCompatActivity() {
     private fun handleSaveButton() {
         binding.apply {
             btnSave.setOnClickListener {
+                isButtonEnabled(false)
+
                 val name = edAddVisitorName.text.toString()
                 val nik = edAddVisitorNik.text.toString()
                 val phone = edAddVisitorPhone.text.toString()
@@ -224,6 +280,8 @@ class AddVisitorActivity : AppCompatActivity() {
             binding.ivVisitorKtp.setImageURI(imgUri)
 
             getFile = uriToFile(imgUri!!, this)
+
+            checkForms()
         } else {
             Timber.tag("Photo Picker").d("No media selected")
         }
@@ -258,6 +316,8 @@ class AddVisitorActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val VISITOR_PHOTO = "path_identity_image"
+        private const val VISITOR_PHOTO = "image"
+        private const val VISITOR_ID = "visitor_id"
+        private const val VISITOR_UPDATE = "visitor_update"
     }
 }

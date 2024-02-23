@@ -83,4 +83,6 @@ class AddVisitorViewModel @Inject constructor(
             }
         }
     }
+
+    fun getVisitorDetail(id: String) = visitorUseCase.getVisitorDetail(id).asLiveData()
 }

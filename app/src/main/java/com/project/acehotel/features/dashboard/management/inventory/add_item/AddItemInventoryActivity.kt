@@ -192,7 +192,6 @@ class AddItemInventoryActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setupActionBar() {
         supportActionBar?.hide()
     }
@@ -202,7 +201,7 @@ class AddItemInventoryActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.refAddInventory.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {

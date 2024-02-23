@@ -47,6 +47,9 @@ class AddFranchiseActivity : AppCompatActivity() {
     private var getFileRegular1: File? = null
     private var getFileExclusive1: File? = null
 
+    private var savedRegularRoomImage: String = ""
+    private var savedExclusiveRoomImage: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,17 +66,17 @@ class AddFranchiseActivity : AppCompatActivity() {
 
         handlePickImages()
 
-        handleSaveButton()
-
         setupUI()
     }
 
     private fun setupUI() {
         val hotelId = intent.getStringExtra(HOTEL_ID) ?: ""
 
-        when (intent.getStringExtra(FLAG_HOTEL_UI)) {
+        when (intent.getStringExtra(FLAG_HOTEL_UI) ?: "") {
             FLAG_HOTEL_DETAIL -> {
                 binding.apply {
+                    binding.tvTitle.text = "Detail Hotel"
+
                     fetchHotelInfo(hotelId)
 
                     isEditable(false)
@@ -83,9 +86,313 @@ class AddFranchiseActivity : AppCompatActivity() {
             }
             FLAG_HOTEL_UPDATE -> {
                 binding.apply {
+                    binding.tvTitle.text = "Perbaharui Hotel"
+
                     fetchHotelInfo(hotelId)
 
                     isEditable(true)
+
+                    handleUpdateHotelSaveButton(hotelId)
+                }
+            }
+            else -> {
+                binding.tvTitle.text = "Tambah Hotel"
+
+
+                handleAddHotelSaveButton()
+            }
+        }
+    }
+
+    private fun handleUpdateHotelSaveButton(hotelId: String) {
+        binding.apply {
+            btnSave.setOnClickListener {
+                isButtonEnabled(false)
+                showLoading(true)
+
+                val hotelName = edAddFranchiseName.text.toString()
+                val hotelAddress = edAddFranchiseAddress.text.toString()
+                val hotelContact = edAddFranchiseContact.text.toString()
+
+                val regularCount =
+                    if (edAddFranchiseRoomRegularCount.text.toString() == "") 0
+                    else edAddFranchiseRoomRegularCount.text.toString().toInt()
+                val regularPrice =
+                    if (edAddFranchiseRoomRegularPrice.text.toString() == "") 0
+                    else edAddFranchiseRoomRegularPrice.text.toString().toInt()
+                val exclusiveCount =
+                    if (edAddFranchiseRoomExclusiveCount.text.toString() == "") 0
+                    else edAddFranchiseRoomExclusiveCount.text.toString().toInt()
+                val exclusivePrice =
+                    if (edAddFranchiseRoomExclusivePrice.text.toString() == "") 0
+                    else edAddFranchiseRoomExclusivePrice.text.toString().toInt()
+                val bedPrice =
+                    if (edAddFranchiseRoomBedPrice.text.toString() == "") 0
+                    else edAddFranchiseRoomBedPrice.text.toString().toInt()
+
+                if (getFileExclusive1 != null || getFileRegular1 != null) {
+                    if (getFileExclusive1 != null && getFileRegular1 != null) {
+                        Timber.tag("TEST").e("KEDUA IMAGE DIUBAH")
+
+                        val fileExclusive1 = reduceFileImage(getFileExclusive1 as File)
+                        val requestImageFileExclusive1 =
+                            fileExclusive1.asRequestBody("image/jpeg".toMediaType())
+                        val imageMultipartExclusive1: MultipartBody.Part =
+                            MultipartBody.Part.createFormData(
+                                EXCLUSIVE_PHOTO,
+                                "Exclusive_Room_Photo",
+                                requestImageFileExclusive1
+                            )
+
+                        val fileRegular1 = reduceFileImage(getFileRegular1 as File)
+                        val requestImageFileRegular1 =
+                            fileRegular1.asRequestBody("image/jpeg".toMediaType())
+                        val imageMultipartRegular1: MultipartBody.Part =
+                            MultipartBody.Part.createFormData(
+                                REGULAR_PHOTO,
+                                "Regular_Room_Photo",
+                                requestImageFileRegular1
+                            )
+
+                        val listOfRoomImage =
+                            listOf(
+                                imageMultipartRegular1,
+                                imageMultipartExclusive1
+                            )
+                        addFranchiseViewModel.executeUpdateHotel(
+                            listOfRoomImage,
+                            hotelId,
+                            hotelName,
+                            hotelAddress,
+                            hotelContact,
+                            regularCount,
+                            null,
+                            exclusiveCount,
+                            null,
+                            regularPrice,
+                            exclusivePrice,
+                            bedPrice,
+                            isRegularImageChanged = true,
+                            isExclusiveImageChanged = true
+                        ).observe(this@AddFranchiseActivity) { hotel ->
+                            when (hotel) {
+                                is Resource.Error -> {
+                                    showLoading(false)
+
+                                    if (!isInternetAvailable(this@AddFranchiseActivity)) {
+                                        showToast(getString(R.string.check_internet))
+                                    } else {
+                                        showToast(hotel.message.toString())
+                                    }
+
+                                    isButtonEnabled(true)
+                                }
+                                is Resource.Loading -> {
+                                    showLoading(true)
+                                    isButtonEnabled(false)
+                                }
+                                is Resource.Message -> {
+                                    showLoading(false)
+                                    isButtonEnabled(true)
+                                }
+                                is Resource.Success -> {
+                                    showLoading(false)
+                                    isButtonEnabled(true)
+
+                                    showToast("Data hotel berhasil diperbaharui")
+                                    val intentToManageFranchise = Intent(
+                                        this@AddFranchiseActivity,
+                                        ManageFranchiseActivity::class.java
+                                    )
+                                    startActivity(intentToManageFranchise)
+                                    finish()
+                                }
+                            }
+                        }
+                    } else if (getFileRegular1 != null) {
+                        Timber.tag("TEST").e("IMAGE REGULAR DIUBAH")
+
+                        val fileRegular1 = reduceFileImage(getFileRegular1 as File)
+                        val requestImageFileRegular1 =
+                            fileRegular1.asRequestBody("image/jpeg".toMediaType())
+                        val imageMultipartRegular1: MultipartBody.Part =
+                            MultipartBody.Part.createFormData(
+                                REGULAR_PHOTO,
+                                "Regular_Room_Photo",
+                                requestImageFileRegular1
+                            )
+
+                        val listOfRoomImage =
+                            listOf(
+                                imageMultipartRegular1,
+                            )
+
+                        addFranchiseViewModel.executeUpdateHotel(
+                            listOfRoomImage,
+                            hotelId,
+                            hotelName,
+                            hotelAddress,
+                            hotelContact,
+                            regularCount,
+                            null,
+                            exclusiveCount,
+                            savedExclusiveRoomImage,
+                            regularPrice,
+                            exclusivePrice,
+                            bedPrice,
+                            isRegularImageChanged = true,
+                            isExclusiveImageChanged = false
+                        ).observe(this@AddFranchiseActivity) { hotel ->
+                            when (hotel) {
+                                is Resource.Error -> {
+                                    showLoading(false)
+
+                                    if (!isInternetAvailable(this@AddFranchiseActivity)) {
+                                        showToast(getString(R.string.check_internet))
+                                    } else {
+                                        showToast(hotel.message.toString())
+                                    }
+
+                                    isButtonEnabled(true)
+                                }
+                                is Resource.Loading -> {
+                                    showLoading(true)
+                                    isButtonEnabled(false)
+                                }
+                                is Resource.Message -> {
+                                    showLoading(false)
+                                    isButtonEnabled(true)
+                                }
+                                is Resource.Success -> {
+                                    showLoading(false)
+                                    isButtonEnabled(true)
+
+                                    showToast("Data hotel berhasil diperbaharui")
+                                    val intentToManageFranchise = Intent(
+                                        this@AddFranchiseActivity,
+                                        ManageFranchiseActivity::class.java
+                                    )
+                                    startActivity(intentToManageFranchise)
+                                    finish()
+                                }
+                            }
+                        }
+                    } else {
+                        Timber.tag("TEST").e("IMAGE EXCLUSIVE DIUBAH")
+
+                        val fileExclusive1 = reduceFileImage(getFileExclusive1 as File)
+                        val requestImageFileExclusive1 =
+                            fileExclusive1.asRequestBody("image/jpeg".toMediaType())
+                        val imageMultipartExclusive1: MultipartBody.Part =
+                            MultipartBody.Part.createFormData(
+                                EXCLUSIVE_PHOTO,
+                                "Exclusive_Room_Photo",
+                                requestImageFileExclusive1
+                            )
+
+                        val listOfRoomImage =
+                            listOf(
+                                imageMultipartExclusive1
+                            )
+
+                        addFranchiseViewModel.executeUpdateHotel(
+                            listOfRoomImage,
+                            hotelId,
+                            hotelName,
+                            hotelAddress,
+                            hotelContact,
+                            regularCount,
+                            savedRegularRoomImage,
+                            exclusiveCount,
+                            null,
+                            regularPrice,
+                            exclusivePrice,
+                            bedPrice,
+                            isRegularImageChanged = false,
+                            isExclusiveImageChanged = true
+                        ).observe(this@AddFranchiseActivity) { hotel ->
+                            when (hotel) {
+                                is Resource.Error -> {
+                                    showLoading(false)
+
+                                    if (!isInternetAvailable(this@AddFranchiseActivity)) {
+                                        showToast(getString(R.string.check_internet))
+                                    } else {
+                                        showToast(hotel.message.toString())
+                                    }
+
+                                    isButtonEnabled(true)
+                                }
+                                is Resource.Loading -> {
+                                    showLoading(true)
+                                    isButtonEnabled(false)
+                                }
+                                is Resource.Message -> {
+                                    showLoading(false)
+                                    isButtonEnabled(true)
+                                }
+                                is Resource.Success -> {
+                                    showLoading(false)
+                                    isButtonEnabled(true)
+
+                                    showToast("Data hotel berhasil diperbaharui")
+                                    val intentToManageFranchise = Intent(
+                                        this@AddFranchiseActivity,
+                                        ManageFranchiseActivity::class.java
+                                    )
+                                    startActivity(intentToManageFranchise)
+                                    finish()
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    addFranchiseViewModel.updateHotel(
+                        hotelId, hotelName,
+                        hotelAddress,
+                        hotelContact,
+                        regularCount,
+                        savedExclusiveRoomImage,
+                        exclusiveCount,
+                        savedExclusiveRoomImage,
+                        regularPrice,
+                        exclusivePrice,
+                        bedPrice,
+                    ).observe(this@AddFranchiseActivity) { hotel ->
+                        when (hotel) {
+                            is Resource.Error -> {
+                                showLoading(false)
+
+                                if (!isInternetAvailable(this@AddFranchiseActivity)) {
+                                    showToast(getString(R.string.check_internet))
+                                } else {
+                                    showToast(hotel.message.toString())
+                                }
+
+                                isButtonEnabled(true)
+                            }
+                            is Resource.Loading -> {
+                                showLoading(true)
+                                isButtonEnabled(false)
+                            }
+                            is Resource.Message -> {
+                                showLoading(false)
+                                isButtonEnabled(true)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+                                isButtonEnabled(true)
+
+                                showToast("Data hotel berhasil diperbaharui")
+                                val intentToManageFranchise = Intent(
+                                    this@AddFranchiseActivity,
+                                    ManageFranchiseActivity::class.java
+                                )
+                                startActivity(intentToManageFranchise)
+                                finish()
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -297,14 +604,17 @@ class AddFranchiseActivity : AppCompatActivity() {
                             edAddFranchiseOwnerName.setText(owner.username)
                             edAddFranchiseOwnerEmail.setText(owner.email)
 
-                            edAddFranchiseReceptionistName.setText(owner.username)
-                            edAddFranchiseReceptionistEmail.setText(owner.email)
+                            edAddFranchiseReceptionistName.setText(receptionist.username)
+                            edAddFranchiseReceptionistEmail.setText(receptionist.email)
 
-                            edAddFranchiseInventoryName.setText(owner.username)
-                            edAddFranchiseInventoryEmail.setText(owner.email)
+                            edAddFranchiseInventoryName.setText(inventoryStaff.username)
+                            edAddFranchiseInventoryEmail.setText(inventoryStaff.email)
 
-                            edAddFranchiseCleaningName.setText(owner.username)
-                            edAddFranchiseCleaningEmail.setText(owner.email)
+                            edAddFranchiseCleaningName.setText(cleaningStaff.username)
+                            edAddFranchiseCleaningEmail.setText(cleaningStaff.email)
+
+                            savedRegularRoomImage = regularRoomImage
+                            savedExclusiveRoomImage = exclusiveRoomImage
                         }
                     }
                 }
@@ -812,7 +1122,7 @@ class AddFranchiseActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleSaveButton() {
+    private fun handleAddHotelSaveButton() {
         binding.apply {
             btnSave.setOnClickListener {
                 isButtonEnabled(false)
@@ -880,8 +1190,9 @@ class AddFranchiseActivity : AppCompatActivity() {
                         imageMultipartExclusive1
                     )
 
-                addFranchiseViewModel.addHotel(
-                    listOfRoomImage, hotelName,
+                addFranchiseViewModel.executeAddHotel(
+                    listOfRoomImage,
+                    hotelName,
                     hotelAddress,
                     hotelContact,
                     regularCount,

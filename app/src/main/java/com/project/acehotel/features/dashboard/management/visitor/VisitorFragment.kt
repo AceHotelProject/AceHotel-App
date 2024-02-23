@@ -100,6 +100,7 @@ class VisitorFragment : Fragment(), IManagementSearch {
             override fun onItemClicked(id: String) {
                 val intentToVisitorDetail =
                     Intent(requireContext(), VisitorDetailActivity::class.java)
+                intentToVisitorDetail.putExtra(VISITOR_ID, id)
                 startActivity(intentToVisitorDetail)
             }
         })
@@ -121,5 +122,9 @@ class VisitorFragment : Fragment(), IManagementSearch {
         storedQuery = query
 
         fetchVisitorList(storedQuery)
+    }
+
+    companion object {
+        private const val VISITOR_ID = "visitor_id"
     }
 }

@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
+import com.project.acehotel.core.domain.hotel.model.Hotel
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.MultipartBody
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +24,7 @@ class AddFranchiseViewModel @Inject constructor(
     private fun uploadImage(image: List<MultipartBody.Part>) =
         authUseCase.uploadImage(image).asLiveData()
 
-    private fun executeAddHotel(
+    private fun addHotel(
         name: String,
         address: String,
         contact: String,
@@ -75,7 +77,7 @@ class AddFranchiseViewModel @Inject constructor(
         inventoryPassword
     ).asLiveData()
 
-    fun addHotel(
+    fun executeAddHotel(
         image: List<MultipartBody.Part>,
         name: String,
         address: String,
@@ -116,7 +118,7 @@ class AddFranchiseViewModel @Inject constructor(
                 }
                 is Resource.Success -> {
                     addSource(
-                        executeAddHotel(
+                        addHotel(
                             name,
                             address,
                             contact,
@@ -144,6 +146,132 @@ class AddFranchiseViewModel @Inject constructor(
                         )
                     ) { hotel ->
                         value = hotel
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateHotel(
+        id: String,
+
+        name: String,
+        address: String,
+        contact: String,
+
+        regularRoomCount: Int,
+        regularRoomImage: String,
+        exclusiveRoomCount: Int,
+        exclusiveRoomImage: String,
+        regularRoomPrice: Int,
+        exclusiveRoomPrice: Int,
+        extraBedPrice: Int,
+    ) = hotelUseCase.updateHotel(
+        id,
+        name,
+        address,
+        contact,
+        regularRoomCount,
+        regularRoomImage,
+        exclusiveRoomCount,
+        exclusiveRoomImage,
+        regularRoomPrice,
+        exclusiveRoomPrice,
+        extraBedPrice
+    ).asLiveData()
+
+    fun executeUpdateHotel(
+        image: List<MultipartBody.Part>,
+
+        id: String,
+
+        name: String,
+        address: String,
+        contact: String,
+
+        regularRoomCount: Int,
+        regularRoomImage: String?,
+        exclusiveRoomCount: Int,
+        exclusiveRoomImage: String?,
+        regularRoomPrice: Int,
+        exclusiveRoomPrice: Int,
+        extraBedPrice: Int,
+
+        isRegularImageChanged: Boolean,
+        isExclusiveImageChanged: Boolean,
+    ): MediatorLiveData<Resource<Hotel>> = MediatorLiveData<Resource<Hotel>>().apply {
+        addSource(uploadImage(image)) { result ->
+            when (result) {
+                is Resource.Error -> {
+
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Message -> {
+
+                }
+                is Resource.Success -> {
+                    Timber.tag("TEST").e(result.data.toString())
+
+                    if (isRegularImageChanged && isExclusiveImageChanged) {
+                        addSource(
+                            updateHotel(
+                                id,
+                                name,
+                                address,
+                                contact,
+                                regularRoomCount, result.data?.get(0)
+                                    ?: "https://storage.googleapis.com/ace-hotel/placeholder_image.png",
+                                exclusiveRoomCount,
+                                result.data?.get(1)
+                                    ?: "https://storage.googleapis.com/ace-hotel/placeholder_image.png",
+                                regularRoomPrice,
+                                exclusiveRoomPrice,
+                                extraBedPrice
+                            )
+                        ) { hotel ->
+                            value = hotel
+                        }
+                    } else if (isRegularImageChanged) {
+                        addSource(
+                            updateHotel(
+                                id,
+                                name,
+                                address,
+                                contact,
+                                regularRoomCount, result.data?.get(0)
+                                    ?: "https://storage.googleapis.com/ace-hotel/placeholder_image.png",
+                                exclusiveRoomCount,
+                                exclusiveRoomImage
+                                    ?: "https://storage.googleapis.com/ace-hotel/placeholder_image.png",
+                                regularRoomPrice,
+                                exclusiveRoomPrice,
+                                extraBedPrice
+                            )
+                        ) { hotel ->
+                            value = hotel
+                        }
+                    } else {
+                        addSource(
+                            updateHotel(
+                                id,
+                                name,
+                                address,
+                                contact,
+                                regularRoomCount,
+                                regularRoomImage
+                                    ?: "https://storage.googleapis.com/ace-hotel/placeholder_image.png",
+                                exclusiveRoomCount,
+                                result.data?.get(1)
+                                    ?: "https://storage.googleapis.com/ace-hotel/placeholder_image.png",
+                                regularRoomPrice,
+                                exclusiveRoomPrice,
+                                extraBedPrice
+                            )
+                        ) { hotel ->
+                            value = hotel
+                        }
                     }
                 }
             }

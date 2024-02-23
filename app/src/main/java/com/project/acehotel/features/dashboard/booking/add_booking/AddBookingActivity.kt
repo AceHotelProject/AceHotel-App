@@ -12,6 +12,8 @@ class AddBookingActivity : AppCompatActivity() {
 
         binding = ActivityAddBookingBinding.inflate(layoutInflater)
 
+        setupActionBar()
+
         handleButtonBack()
 
         isButtonEnabled(false)
