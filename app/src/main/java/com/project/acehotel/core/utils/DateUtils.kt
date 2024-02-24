@@ -24,4 +24,10 @@ object DateUtils {
         val dateFormat = SimpleDateFormat("dd MMM yy", Locale.getDefault())
         return dateFormat.format(calendar.time)
     }
+
+    fun getCompleteCurentDateTime(): String {
+        val calendar = Calendar.getInstance()
+        val completeDateFormat = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.getDefault())
+        return completeDateFormat.format(calendar.time)
+    }
 }

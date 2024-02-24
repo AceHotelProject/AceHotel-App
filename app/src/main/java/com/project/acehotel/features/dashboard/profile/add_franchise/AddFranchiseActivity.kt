@@ -18,11 +18,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.utils.*
 import com.project.acehotel.core.utils.constants.DeleteDialogType
-import com.project.acehotel.core.utils.isInternetAvailable
-import com.project.acehotel.core.utils.reduceFileImage
-import com.project.acehotel.core.utils.showToast
-import com.project.acehotel.core.utils.uriToFile
 import com.project.acehotel.databinding.ActivityAddFranchiseBinding
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
@@ -140,7 +137,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         val imageMultipartExclusive1: MultipartBody.Part =
                             MultipartBody.Part.createFormData(
                                 EXCLUSIVE_PHOTO,
-                                "Exclusive_Room_Photo",
+                                "Exclusive_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
                                 requestImageFileExclusive1
                             )
 
@@ -150,7 +147,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         val imageMultipartRegular1: MultipartBody.Part =
                             MultipartBody.Part.createFormData(
                                 REGULAR_PHOTO,
-                                "Regular_Room_Photo",
+                                "Regular_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
                                 requestImageFileRegular1
                             )
 
@@ -218,7 +215,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         val imageMultipartRegular1: MultipartBody.Part =
                             MultipartBody.Part.createFormData(
                                 REGULAR_PHOTO,
-                                "Regular_Room_Photo",
+                                "Regular_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
                                 requestImageFileRegular1
                             )
 
@@ -286,7 +283,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         val imageMultipartExclusive1: MultipartBody.Part =
                             MultipartBody.Part.createFormData(
                                 EXCLUSIVE_PHOTO,
-                                "Exclusive_Room_Photo",
+                                "Exclusive_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
                                 requestImageFileExclusive1
                             )
 
@@ -1170,7 +1167,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                 val imageMultipartExclusive1: MultipartBody.Part =
                     MultipartBody.Part.createFormData(
                         EXCLUSIVE_PHOTO,
-                        "Exclusive_Room_Photo",
+                        "Exclusive_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
                         requestImageFileExclusive1
                     )
 
@@ -1180,7 +1177,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                 val imageMultipartRegular1: MultipartBody.Part =
                     MultipartBody.Part.createFormData(
                         REGULAR_PHOTO,
-                        "Regular_Room_Photo",
+                        "Regular_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
                         requestImageFileRegular1
                     )
 

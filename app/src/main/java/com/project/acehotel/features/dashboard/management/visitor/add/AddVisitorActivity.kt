@@ -11,10 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.utils.isInternetAvailable
-import com.project.acehotel.core.utils.reduceFileImage
-import com.project.acehotel.core.utils.showToast
-import com.project.acehotel.core.utils.uriToFile
+import com.project.acehotel.core.utils.*
 import com.project.acehotel.databinding.ActivityAddVisitorBinding
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
@@ -219,7 +216,7 @@ class AddVisitorActivity : AppCompatActivity() {
                 val imageMultipartRegular1: MultipartBody.Part =
                     MultipartBody.Part.createFormData(
                         VISITOR_PHOTO,
-                        "Regular_Room_Photo",
+                        "Visitor_Photo_${DateUtils.getCompleteCurentDateTime()}",
                         requestImageFile
                     )
 
