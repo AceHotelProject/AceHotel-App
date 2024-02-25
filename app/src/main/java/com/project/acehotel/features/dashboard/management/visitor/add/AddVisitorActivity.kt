@@ -216,7 +216,7 @@ class AddVisitorActivity : AppCompatActivity() {
                 val imageMultipartRegular1: MultipartBody.Part =
                     MultipartBody.Part.createFormData(
                         VISITOR_PHOTO,
-                        "Visitor_Photo_${DateUtils.getCompleteCurentDateTime()}",
+                        "Visitor_Photo_${DateUtils.getCompleteCurrentDateTime()}",
                         requestImageFile
                     )
 

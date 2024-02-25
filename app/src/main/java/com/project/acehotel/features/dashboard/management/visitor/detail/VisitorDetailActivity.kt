@@ -20,6 +20,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class VisitorDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVisitorDetailBinding
+
     private val visitorViewModel: VisitorDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

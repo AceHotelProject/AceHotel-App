@@ -5,3 +5,5 @@ enum class RoomType(val type: String, val display: String) {
     EXCLUSIVE("exclusive", "Exclusive"),
     UNDEFINED("type", "Type")
 }
+
+val roomTypeList = listOf(RoomType.REGULAR.display, RoomType.EXCLUSIVE.display)

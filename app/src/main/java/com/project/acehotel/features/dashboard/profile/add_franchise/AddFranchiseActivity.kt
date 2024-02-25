@@ -137,7 +137,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         val imageMultipartExclusive1: MultipartBody.Part =
                             MultipartBody.Part.createFormData(
                                 EXCLUSIVE_PHOTO,
-                                "Exclusive_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
+                                "Exclusive_Room_Photo_${DateUtils.getCompleteCurrentDateTime()}",
                                 requestImageFileExclusive1
                             )
 
@@ -147,7 +147,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         val imageMultipartRegular1: MultipartBody.Part =
                             MultipartBody.Part.createFormData(
                                 REGULAR_PHOTO,
-                                "Regular_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
+                                "Regular_Room_Photo_${DateUtils.getCompleteCurrentDateTime()}",
                                 requestImageFileRegular1
                             )
 
@@ -215,7 +215,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         val imageMultipartRegular1: MultipartBody.Part =
                             MultipartBody.Part.createFormData(
                                 REGULAR_PHOTO,
-                                "Regular_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
+                                "Regular_Room_Photo_${DateUtils.getCompleteCurrentDateTime()}",
                                 requestImageFileRegular1
                             )
 
@@ -283,7 +283,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         val imageMultipartExclusive1: MultipartBody.Part =
                             MultipartBody.Part.createFormData(
                                 EXCLUSIVE_PHOTO,
-                                "Exclusive_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
+                                "Exclusive_Room_Photo_${DateUtils.getCompleteCurrentDateTime()}",
                                 requestImageFileExclusive1
                             )
 
@@ -654,7 +654,7 @@ class AddFranchiseActivity : AppCompatActivity() {
             addFranchisePhotoRegular1.setOnClickListener {
                 flagImgReg = 1
                 flagImgExc = 0
-                
+
                 startGallery()
             }
 
@@ -1171,7 +1171,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                 val imageMultipartExclusive1: MultipartBody.Part =
                     MultipartBody.Part.createFormData(
                         EXCLUSIVE_PHOTO,
-                        "Exclusive_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
+                        "Exclusive_Room_Photo_${DateUtils.getCompleteCurrentDateTime()}",
                         requestImageFileExclusive1
                     )
 
@@ -1181,7 +1181,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                 val imageMultipartRegular1: MultipartBody.Part =
                     MultipartBody.Part.createFormData(
                         REGULAR_PHOTO,
-                        "Regular_Room_Photo_${DateUtils.getCompleteCurentDateTime()}",
+                        "Regular_Room_Photo_${DateUtils.getCompleteCurrentDateTime()}",
                         requestImageFileRegular1
                     )
 

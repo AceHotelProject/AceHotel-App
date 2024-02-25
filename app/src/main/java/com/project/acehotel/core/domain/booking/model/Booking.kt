@@ -7,7 +7,10 @@ import kotlinx.parcelize.Parcelize
 data class Booking(
     val roomId: List<String>,
     val addOn: List<String>,
+    val noteId: List<String>,
     val isProofUploaded: Boolean,
+    val transactionProof: String,
+    val hasProblem: Boolean,
     val hotelId: String,
     val visitorId: String,
     val checkinDate: String,

@@ -2,6 +2,9 @@ package com.project.acehotel.core.data.source.remote.network
 
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
+import com.project.acehotel.core.data.source.remote.response.booking.AddBookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
@@ -176,7 +179,7 @@ interface ApiService {
     @FormUrlEncoded
     suspend fun addVisitor(
         @Field("hotel_id") hotelId: String,
-        
+
         @Field("name") name: String,
         @Field("address") address: String,
         @Field("phone") phone: String,
@@ -206,6 +209,61 @@ interface ApiService {
     ): Response<VisitorResponse>
 
     // VISITOR
+
+
+    // BOOKING
+    @POST("bookings")
+    @FormUrlEncoded
+    suspend fun addBooking(
+        @Field("hotel_id") hotelId: String,
+        @Field("visitor_id") visitorId: String,
+        @Field("checkin_date") checkinDate: String,
+        @Field("duration") duration: Int,
+        @Field("room_count") roomCount: Int,
+        @Field("extra_bed") extraBed: Int,
+        @Field("type") type: String,
+    ): AddBookingResponse
+
+    @GET("bookings/hotel/{id}")
+    suspend fun getListBookingByHotel(
+        @Path("id") id: String
+    ): ListBookingResponse
+
+    @GET("bookings/room/{id}")
+    suspend fun getListBookingByRoom(
+        @Path("id") id: String
+    ): ListBookingResponse
+
+    @GET("bookings/visitor/{id}")
+    suspend fun getListBookingByVisitor(
+        @Path("id") id: String
+    ): ListBookingResponse
+
+    @GET("bookings/{id}")
+    suspend fun getDetailBooking(
+        @Path("id") id: String
+    ): BookingResponse
+
+    @DELETE("bookings/{id}")
+    suspend fun deleteBooking(
+        @Path("id") id: String
+    ): Response<BookingResponse>
+
+    @POST("bookings/pay/{id}")
+    @FormUrlEncoded
+    suspend fun payBooking(
+        @Path("id") id: String,
+        @Field("path_transaction_proof") pathTransactionProof: String,
+    ): BookingResponse
+
+    @POST("bookings/discount/{id}")
+    @FormUrlEncoded
+    suspend fun addDiscount(
+        @Field("discount_code") discountCode: String,
+    ): BookingResponse
+
+    // BOOKING
+
 
     // IMAGES
 

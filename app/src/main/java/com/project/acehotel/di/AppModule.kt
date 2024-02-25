@@ -2,6 +2,8 @@ package com.project.acehotel.di
 
 import com.project.acehotel.core.domain.auth.interactor.AuthInteractor
 import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
+import com.project.acehotel.core.domain.booking.interactor.BookingInteractor
+import com.project.acehotel.core.domain.booking.usecase.BookingUseCase
 import com.project.acehotel.core.domain.hotel.interactor.HotelInteractor
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import com.project.acehotel.core.domain.inventory.interactor.InventoryInteractor
@@ -33,4 +35,8 @@ abstract class AppModule {
     @Binds
     @ViewModelScoped
     abstract fun provideVisitorUseCase(visitorInteractor: VisitorInteractor): VisitorUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideBookingUseCase(bookingInteractor: BookingInteractor): BookingUseCase
 }

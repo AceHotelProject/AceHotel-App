@@ -4,6 +4,8 @@ import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
+import com.project.acehotel.core.data.source.remote.response.booking.AddBookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
@@ -516,24 +518,62 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-//    suspend fun deleteHotel(id: String): Flow<ApiResponse<Response<ManageHotelResultItem>>> {
-//        return flow<ApiResponse<Response<ManageHotelResultItem>>> {
-//            try {
-//                val response = apiService.deleteHotel(id)
-//
-//                if (response.isSuccessful) {
-//                    emit(ApiResponse.Success(response))
-//                } else {
-//                    emit(ApiResponse.Empty)
-//                }
-//            } catch (e: Exception) {
-//                emit(ApiResponse.Error(e.toString()))
-//                Timber.tag("RemoteDataSource").e(e.toString())
-//            }
-//        }.flowOn(Dispatchers.IO)
-//    }
-
     // VISITOR
+
+
+    // BOOKING
+
+    suspend fun addBooking(
+        hotelId: String,
+        visitorId: String,
+        checkinDate: String,
+        duration: Int,
+        roomCount: Int,
+        extraBed: Int,
+        type: String,
+    ): Flow<ApiResponse<AddBookingResponse>> {
+        return flow<ApiResponse<AddBookingResponse>> {
+            try {
+                val response = apiService.addBooking(
+                    hotelId,
+                    visitorId,
+                    checkinDate,
+                    duration,
+                    roomCount,
+                    extraBed,
+                    type
+                )
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun deleteBooking(id: String): Flow<ApiResponse<Response<BookingResponse>>> {
+        return flow<ApiResponse<Response<BookingResponse>>> {
+            try {
+                val response = apiService.deleteBooking(id)
+
+                if (response.isSuccessful) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+    // BOOKING
+
 
     //IMAGES
 
