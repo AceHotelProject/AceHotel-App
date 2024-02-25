@@ -653,11 +653,15 @@ class AddFranchiseActivity : AppCompatActivity() {
         binding.apply {
             addFranchisePhotoRegular1.setOnClickListener {
                 flagImgReg = 1
+                flagImgExc = 0
+                
                 startGallery()
             }
 
             addFranchisePhotoExclusive1.setOnClickListener {
                 flagImgExc = 1
+                flagImgReg = 0
+
                 startGallery()
             }
         }

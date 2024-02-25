@@ -23,9 +23,6 @@ class AuthAuthenticator @Inject constructor(
             userManager.getRefreshToken().first().toString()
         }
 
-        Timber.tag("TOKEN").d("Ini refresh token %s", refreshToken)
-        Timber.tag("TOKEN").d("Ini code %s", response.code)
-
         return if (response.code == 401 && refreshToken.isNotEmpty()) {
             runBlocking {
                 when (val newRefreshToken = getNewRefreshToken(refreshToken)) {
@@ -44,9 +41,6 @@ class AuthAuthenticator @Inject constructor(
                     is ApiResponse.Success -> {
                         userManager.saveAccessToken(newRefreshToken.data.access?.token.toString())
                         userManager.saveRefreshToken(newRefreshToken.data.refresh?.token.toString())
-
-                        Timber.tag("TOKEN")
-                            .d("Ini token baru %s", newRefreshToken.data.refresh?.token.toString())
 
                         response.request.newBuilder().header(
                             "Authorization",

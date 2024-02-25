@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.DateUtils
@@ -32,8 +33,6 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
         binding = ActivityChangeStockItemInventoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        checkIsUpdate()
-
         setupActionBar()
 
         initInventoryType()
@@ -50,16 +49,31 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
 
         checkForms()
 
+        checkIsUpdate()
+
         handleButtonSave()
     }
 
     private fun checkIsUpdate() {
         if (intent.getBooleanExtra(FLAG_UPDATE, false)) {
             binding.apply {
-                edChangeStockItemName.isEnabled = true
+                tvTitle.text = "Perubahan Data"
+
+                isEditTextEditable(edChangeStockItemName, true)
                 layoutChangeStockItemType.isClickable = true
+
+                initInventoryType()
             }
         }
+
+
+    }
+
+    private fun isEditTextEditable(editText: TextInputEditText, isEditable: Boolean) {
+        editText.isFocusable = isEditable
+        editText.isClickable = isEditable
+        editText.isFocusableInTouchMode = isEditable
+        editText.isCursorVisible = isEditable
     }
 
     private fun initInventoryType() {
@@ -67,6 +81,7 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
 
         binding.edChangeStockItemType.apply {
             setAdapter(adapter)
+
             addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 

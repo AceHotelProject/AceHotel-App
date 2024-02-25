@@ -28,6 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_title"
             style="@style/textStyleSemIBold_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -254,7 +255,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="32dp"
                     android:text="Judul Perubahan"
                     app:layout_constraintStart_toStartOf="@+id/layout_change_stock_item_title"
                     app:layout_constraintTop_toBottomOf="@+id/btn_increase_stock" />
