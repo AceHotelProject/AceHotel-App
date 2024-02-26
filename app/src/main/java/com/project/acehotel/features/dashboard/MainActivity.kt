@@ -17,6 +17,7 @@ import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseVisitorActivity
+import com.project.acehotel.features.popup.choose_hotel.ChooseHotelDialog
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -49,6 +50,12 @@ class MainActivity : AppCompatActivity() {
                 TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
             }
         }
+
+        mainViewModel.getSelectedHotelData().observe(this) { hotel ->
+            if (hotel.id.isEmpty()) {
+                ChooseHotelDialog().show(supportFragmentManager, "Select Hotel Dialog")
+            }
+        }
     }
 
     private fun handleFab() {
@@ -63,16 +70,19 @@ class MainActivity : AppCompatActivity() {
 
         binding.fabAddBooking.setOnClickListener {
             val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
+            intentToChooseVisitor.putExtra(FLAG_VISITOR, "booking")
             startActivity(intentToChooseVisitor)
         }
 
         binding.fabCheckin.setOnClickListener {
             val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
+            intentToChooseVisitor.putExtra(FLAG_VISITOR, "checkin")
             startActivity(intentToChooseVisitor)
         }
 
         binding.fabCheckout.setOnClickListener {
             val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
+            intentToChooseVisitor.putExtra(FLAG_VISITOR, "checkout")
             startActivity(intentToChooseVisitor)
         }
     }
@@ -197,5 +207,11 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navViewController)
     }
 
+    companion object {
+        private const val FLAG_VISITOR = "flag_visitor"
 
+        private const val MENU_BOOKING = "booking"
+        private const val MENU_CHECKIN = "checkin"
+        private const val MENU_CHECKOUT = "checkout"
+    }
 }

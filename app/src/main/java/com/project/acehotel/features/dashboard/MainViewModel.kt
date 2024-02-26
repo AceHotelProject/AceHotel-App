@@ -15,5 +15,5 @@ class MainViewModel @Inject constructor(
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 }
