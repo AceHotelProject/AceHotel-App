@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,9 +20,9 @@ class ChooseHotelViewModel @Inject constructor(
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
-    fun saveSelectedHotel(id: String) = viewModelScope.launch {
-        hotelUseCase.saveSelectedHotel(id)
+    fun saveSelectedHotelData(data: ManageHotel) = viewModelScope.launch {
+        hotelUseCase.saveSelectedHotelData(data)
     }
 }

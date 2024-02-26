@@ -58,11 +58,11 @@ interface IHotelRepository {
 
         ): Flow<Resource<Hotel>>
 
-    fun getSelectedHotel(): Flow<String>
-
-    suspend fun saveSelectedHotel(id: String)
-
     fun deleteHotel(
         id: String
     ): Flow<Resource<Int>>
+
+    fun getSelectedHotelData(): Flow<ManageHotel>
+
+    suspend fun saveSelectedHotelData(data: ManageHotel)
 }

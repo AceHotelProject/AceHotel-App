@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
 import com.project.acehotel.core.domain.visitor.usecase.VisitorUseCase
@@ -20,15 +21,19 @@ class DeleteItemViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
+
+    fun saveSelectedHotelData(data: ManageHotel) = viewModelScope.launch {
+        hotelUseCase.saveSelectedHotelData(data)
+    }
 
     private fun deleteInventory(id: String, hotelId: String) =
         inventoryUseCase.deleteInventory(id, hotelId).asLiveData()
 
     fun executeDeleteInventory(id: String): MediatorLiveData<Resource<Int>> =
         MediatorLiveData<Resource<Int>>().apply {
-            addSource(getSelectedHotel()) { hotel ->
-                addSource(deleteInventory(id, hotel)) { hotel ->
+            addSource(getSelectedHotelData()) { hotel ->
+                addSource(deleteInventory(id, hotel.id)) { hotel ->
                     value = hotel
                 }
             }
@@ -36,17 +41,13 @@ class DeleteItemViewModel @Inject constructor(
 
     fun executeDeleteHotel(id: String) = hotelUseCase.deleteHotel(id).asLiveData()
 
-    fun saveSelectedHotel(id: String) = viewModelScope.launch {
-        hotelUseCase.saveSelectedHotel(id)
-    }
-
     private fun deleteVisitor(id: String, hotelId: String) =
         visitorUseCase.deleteVisitor(id, hotelId).asLiveData()
 
     fun executeDeleteVisitor(id: String): MediatorLiveData<Resource<Int>> =
         MediatorLiveData<Resource<Int>>().apply {
-            addSource(getSelectedHotel()) { hotelId ->
-                addSource(deleteVisitor(id, hotelId)) { visitor ->
+            addSource(getSelectedHotelData()) { hotel ->
+                addSource(deleteVisitor(id, hotel.id)) { visitor ->
                     value = visitor
                 }
             }

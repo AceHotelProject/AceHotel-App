@@ -24,7 +24,7 @@ class ChooseVisitorViewModel @Inject constructor(
         identityNum: String
     ) = visitorUseCase.getVisitorList(hotelId, name, email, identityNum).asLiveData()
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
     fun executeGetVisitorList(
         name: String,
@@ -32,8 +32,8 @@ class ChooseVisitorViewModel @Inject constructor(
         identityNum: String
     ): MediatorLiveData<Resource<List<Visitor>>> =
         MediatorLiveData<Resource<List<Visitor>>>().apply {
-            addSource(getSelectedHotel()) { hotelId ->
-                addSource(getVisitorList(hotelId, name, email, identityNum)) { visitor ->
+            addSource(getSelectedHotelData()) { hotel ->
+                addSource(getVisitorList(hotel.id, name, email, identityNum)) { visitor ->
                     value = visitor
                 }
             }

@@ -69,9 +69,6 @@ class InventoryDetailActivity : AppCompatActivity() {
                 if (p0.isNullOrEmpty()) {
                     initInventoryHistoryRecyclerView(savedHistoryData)
                 } else {
-                    Timber.tag("TEST").e("Ini query" + p0.toString())
-                    Timber.tag("TEST").e("Ini isi" + savedHistoryData.toString())
-
                     initInventoryHistoryRecyclerView(savedHistoryData)
                 }
             }
@@ -80,9 +77,6 @@ class InventoryDetailActivity : AppCompatActivity() {
                 if (!p0.isNullOrEmpty()) {
                     fetchInventoryHistoryList(p0.toString())
                 } else {
-                    Timber.tag("TEST").e("Ini query" + p0.toString())
-                    Timber.tag("TEST").e("Ini isi" + savedHistoryData.toString())
-
                     initInventoryHistoryRecyclerView(savedHistoryData)
                 }
             }
@@ -91,9 +85,6 @@ class InventoryDetailActivity : AppCompatActivity() {
                 if (!p0.isNullOrEmpty()) {
                     fetchInventoryHistoryList(p0.toString())
                 } else {
-                    Timber.tag("TEST").e("Ini query" + p0.toString())
-                    Timber.tag("TEST").e("Ini isi" + savedHistoryData.toString())
-
                     initInventoryHistoryRecyclerView(savedHistoryData)
                 }
             }
@@ -110,8 +101,8 @@ class InventoryDetailActivity : AppCompatActivity() {
     }
 
     private fun getHotelId() {
-        inventoryDetailViewModel.getSelectedHotel().observe(this) { hotel ->
-            hotelId = hotel
+        inventoryDetailViewModel.getSelectedHotelData().observe(this) { hotel ->
+            hotelId = hotel.id
         }
     }
 

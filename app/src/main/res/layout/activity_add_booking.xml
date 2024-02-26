@@ -44,8 +44,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.0">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -116,8 +118,12 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:focusable="false"
+                    android:inputType="text"
+                    android:maxLines="1"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
+                    app:endIconTint="@color/dark_grey"
                     app:errorEnabled="true"
                     app:errorIconDrawable="@null"
                     app:errorIconTint="@color/red"
@@ -132,9 +138,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/custom_edit_text"
+                        android:clickable="true"
                         android:drawableEnd="@drawable/icons_calendar"
                         android:ems="10"
-                        android:enabled="false"
                         android:focusable="false"
                         android:hint="Tanggal penambahan barang"
                         android:paddingHorizontal="12dp"

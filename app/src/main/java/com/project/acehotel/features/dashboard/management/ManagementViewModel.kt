@@ -14,5 +14,5 @@ class ManagementViewModel @Inject constructor(
 ) : ViewModel() {
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 }

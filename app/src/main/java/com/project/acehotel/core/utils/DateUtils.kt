@@ -1,6 +1,10 @@
 package com.project.acehotel.core.utils
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 object DateUtils {
@@ -25,9 +29,19 @@ object DateUtils {
         return dateFormat.format(calendar.time)
     }
 
-    fun getCompleteCurentDateTime(): String {
+    fun getCompleteCurrentDateTime(): String {
         val calendar = Calendar.getInstance()
         val completeDateFormat = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.getDefault())
         return completeDateFormat.format(calendar.time)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun calculateCheckoutDate(date: String, duration: Long): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy/M/dd")
+
+        val checkinDate = LocalDate.parse(date, formatter)
+        val checkoutDate = checkinDate.plusDays(duration)
+
+        return checkoutDate.format(formatter)
     }
 }

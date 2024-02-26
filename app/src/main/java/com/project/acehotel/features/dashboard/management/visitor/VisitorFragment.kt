@@ -97,7 +97,7 @@ class VisitorFragment : Fragment(), IManagementSearch {
         binding.rvListVisitor.layoutManager = layoutManager
 
         adapter.setOnItemClickCallback(object : VisitorListAdapter.OnItemClickCallback {
-            override fun onItemClicked(id: String) {
+            override fun onItemClicked(id: String, name: String) {
                 val intentToVisitorDetail =
                     Intent(requireContext(), VisitorDetailActivity::class.java)
                 intentToVisitorDetail.putExtra(VISITOR_ID, id)

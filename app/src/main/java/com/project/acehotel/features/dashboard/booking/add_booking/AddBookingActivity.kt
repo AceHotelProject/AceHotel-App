@@ -57,8 +57,8 @@ class AddBookingActivity : AppCompatActivity() {
         binding.apply {
             btnSave.setOnClickListener {
                 var hotelId = ""
-                addBookingViewModel.getSelectedHotel().observe(this@AddBookingActivity) {
-                    hotelId = it
+                addBookingViewModel.getSelectedHotelData().observe(this@AddBookingActivity) {
+                    hotelId = it.id
                 }
 
                 val visitorId = intent.getStringExtra(VISITOR_ID) ?: "Empty"

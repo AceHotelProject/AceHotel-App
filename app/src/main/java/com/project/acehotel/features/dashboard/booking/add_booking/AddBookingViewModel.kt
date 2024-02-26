@@ -13,7 +13,7 @@ class AddBookingViewModel @Inject constructor(
     private val bookingUseCase: BookingUseCase
 ) : ViewModel() {
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
 //    fun addBooking(
 //        hotelId: String,

@@ -1,5 +1,6 @@
 package com.project.acehotel.features.dashboard.management.visitor.choose
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +15,11 @@ import com.project.acehotel.core.ui.adapter.visitor.VisitorListAdapter
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChooseVisitorBinding
+import com.project.acehotel.features.dashboard.booking.add_booking.AddBookingActivity
 import com.project.acehotel.features.dashboard.management.IManagementSearch
+import com.project.acehotel.features.dashboard.management.visitor.add.AddVisitorActivity
+import com.project.acehotel.features.dashboard.room.checkin.CheckinActivity
+import com.project.acehotel.features.dashboard.room.checkout.CheckoutActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -40,6 +45,15 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
         setupSearch()
 
         handleOnRefresh()
+
+        handleButtonAdd()
+    }
+
+    private fun handleButtonAdd() {
+        binding.btnAddVisitor.setOnClickListener {
+            val intentToAddVisitor = Intent(this, AddVisitorActivity::class.java)
+            startActivity(intentToAddVisitor)
+        }
     }
 
     private fun handleOnRefresh() {
@@ -127,6 +141,31 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvChooseVisitor.layoutManager = layoutManager
+
+        adapter.setOnItemClickCallback(object : VisitorListAdapter.OnItemClickCallback {
+            override fun onItemClicked(id: String, name: String) {
+                when (intent.getStringExtra(FLAG_VISITOR)) {
+                    MENU_BOOKING -> {
+                        val intentToAddBooking =
+                            Intent(this@ChooseVisitorActivity, AddBookingActivity::class.java)
+                        intentToAddBooking.putExtra(VISITOR_NAME, name)
+                        intentToAddBooking.putExtra(VISITOR_ID, id)
+
+                        startActivity(intentToAddBooking)
+                    }
+                    MENU_CHECKIN -> {
+                        val intentToCheckin =
+                            Intent(this@ChooseVisitorActivity, CheckinActivity::class.java)
+                        startActivity(intentToCheckin)
+                    }
+                    MENU_CHECKOUT -> {
+                        val intentToCheckout =
+                            Intent(this@ChooseVisitorActivity, CheckoutActivity::class.java)
+                        startActivity(intentToCheckout)
+                    }
+                }
+            }
+        })
     }
 
     private fun handleButtonBack() {
@@ -147,5 +186,17 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
         storedQuery = query
 
         fetchVisitorList(query)
+    }
+
+    companion object {
+        private const val FLAG_VISITOR = "flag_visitor"
+        private const val VISITOR_NAME = "name_visitor"
+        private const val VISITOR_ID = "name_id"
+
+        private const val MENU_BOOKING = "booking"
+        private const val MENU_CHECKIN = "checkin"
+        private const val MENU_CHECKOUT = "checkout"
+
+
     }
 }

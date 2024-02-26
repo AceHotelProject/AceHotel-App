@@ -40,7 +40,7 @@
                 android:id="@+id/tv_choose_hotel_address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:includeFontPadding="false"
                 android:text="@string/hotel_address"
                 android:textColor="@color/dark_grey"

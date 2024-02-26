@@ -10,13 +10,13 @@ import com.project.acehotel.databinding.ItemListChooseHotelBinding
 
 class HotelListAdapter(
     private val manageHotel: List<ManageHotel>?,
-    private val selectedHotel: String
+    private val selectedHotel: ManageHotel
 ) :
     RecyclerView.Adapter<HotelListAdapter.ViewHolder>() {
 
     private lateinit var onItemCallback: OnItemClickCallback
     private var chooseHotelData = manageHotel?.map { hotel ->
-        ChooseHotel(hotel, selectedHotel == hotel.id)
+        ChooseHotel(hotel, selectedHotel.id == hotel.id)
     } ?: emptyList()
 
     inner class ViewHolder(val binding: ItemListChooseHotelBinding) :
@@ -41,7 +41,7 @@ class HotelListAdapter(
         }
 
         holder.itemView.setOnClickListener {
-            onItemCallback.onItemClicked(holder.itemView.context, data.hotel.id)
+            onItemCallback.onItemClicked(holder.itemView.context, data.hotel)
 
             updateCheckedPosition(position)
 
@@ -60,6 +60,6 @@ class HotelListAdapter(
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(context: Context, id: String)
+        fun onItemClicked(context: Context, data: ManageHotel)
     }
 }

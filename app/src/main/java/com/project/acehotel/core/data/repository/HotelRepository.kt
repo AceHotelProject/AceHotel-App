@@ -148,14 +148,6 @@ class HotelRepository @Inject constructor(
         }.asFlow()
     }
 
-    override fun getSelectedHotel(): Flow<String> {
-        return userManager.getCurrentHotelId()
-    }
-
-    override suspend fun saveSelectedHotel(id: String) {
-        return userManager.saveCurrentHotelId(id)
-    }
-
     override fun deleteHotel(id: String): Flow<Resource<Int>> {
         return object : NetworkBoundResource<Int, Response<ManageHotelResultItem>>() {
             override suspend fun fetchFromApi(response: Response<ManageHotelResultItem>): Int {
@@ -166,6 +158,14 @@ class HotelRepository @Inject constructor(
                 return remoteDataSource.deleteHotel(id)
             }
         }.asFlow()
+    }
+
+    override fun getSelectedHotelData(): Flow<ManageHotel> {
+        return userManager.getCurrentHotelData()
+    }
+
+    override suspend fun saveSelectedHotelData(data: ManageHotel) {
+        return userManager.saveCurrentHotelData(data)
     }
 
 

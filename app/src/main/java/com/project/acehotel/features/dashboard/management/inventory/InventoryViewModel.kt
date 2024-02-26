@@ -21,7 +21,7 @@ class InventoryViewModel @Inject constructor(
     private fun getListInventory(hotelId: String, name: String, type: String) =
         inventoryUseCase.getListInventory(hotelId, name, type).asLiveData()
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 
@@ -30,8 +30,8 @@ class InventoryViewModel @Inject constructor(
         type: String
     ): MediatorLiveData<Resource<List<Inventory>>> =
         MediatorLiveData<Resource<List<Inventory>>>().apply {
-            addSource(getSelectedHotel()) { hotel ->
-                addSource(getListInventory(hotel, name, type)) { inventory ->
+            addSource(getSelectedHotelData()) { hotel ->
+                addSource(getListInventory(hotel.id, name, type)) { inventory ->
                     value = inventory
                 }
             }

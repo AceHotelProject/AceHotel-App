@@ -40,7 +40,7 @@ class AddVisitorViewModel @Inject constructor(
     private fun uploadImage(image: List<MultipartBody.Part>) =
         authUseCase.uploadImage(image).asLiveData()
 
-    private fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
     fun executeAddVisitor(
         image: List<MultipartBody.Part>,
@@ -51,7 +51,7 @@ class AddVisitorViewModel @Inject constructor(
         email: String,
         identityNum: String,
     ): MediatorLiveData<Resource<Visitor>> = MediatorLiveData<Resource<Visitor>>().apply {
-        addSource(getSelectedHotel()) { hotel ->
+        addSource(getSelectedHotelData()) { hotel ->
             addSource(uploadImage(image)) { image ->
                 when (image) {
                     is Resource.Error -> {
@@ -66,7 +66,7 @@ class AddVisitorViewModel @Inject constructor(
                     is Resource.Success -> {
                         addSource(
                             addVisitor(
-                                hotel,
+                                hotel.id,
                                 name,
                                 address,
                                 phone,

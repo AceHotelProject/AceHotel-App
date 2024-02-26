@@ -21,7 +21,7 @@ class ChooseHotelActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChooseHotelBinding
     private val chooseHotelViewModel: ChooseHotelViewModel by viewModels()
 
-    private var selectedHotel: String = ""
+    private var selectedHotel: ManageHotel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class ChooseHotelActivity : AppCompatActivity() {
     }
 
     private fun checkSelectedHotel() {
-        chooseHotelViewModel.getSelectedHotel().observe(this) { hotel ->
+        chooseHotelViewModel.getSelectedHotelData().observe(this) { hotel ->
 
             selectedHotel = hotel
         }
@@ -81,12 +81,12 @@ class ChooseHotelActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         binding.rvListChooseHotel.layoutManager = layoutManager
 
-        val adapter = HotelListAdapter(data, selectedHotel)
+        val adapter = HotelListAdapter(data, selectedHotel!!)
         binding.rvListChooseHotel.adapter = adapter
 
         adapter.setOnItemClickCallback(object : HotelListAdapter.OnItemClickCallback {
-            override fun onItemClicked(context: Context, id: String) {
-                chooseHotelViewModel.saveSelectedHotel(id)
+            override fun onItemClicked(context: Context, data: ManageHotel) {
+                chooseHotelViewModel.saveSelectedHotelData(data)
             }
         })
     }

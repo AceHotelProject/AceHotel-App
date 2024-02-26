@@ -31,7 +31,7 @@ class VisitorListAdapter(private val listVisitor: List<Visitor>?) :
 
         holder.itemView.setOnClickListener {
             if (data != null) {
-                onItemCallback.onItemClicked(data.id)
+                onItemCallback.onItemClicked(data.id, data.name)
             }
         }
     }
@@ -41,6 +41,6 @@ class VisitorListAdapter(private val listVisitor: List<Visitor>?) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(id: String)
+        fun onItemClicked(id: String, name: String)
     }
 }

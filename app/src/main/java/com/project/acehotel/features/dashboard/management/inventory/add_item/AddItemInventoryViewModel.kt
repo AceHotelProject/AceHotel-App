@@ -23,7 +23,8 @@ class AddItemInventoryViewModel @Inject constructor(
         stock: Int
     ) = inventoryUseCase.addInventory(hotelId, name, type, stock).asLiveData()
 
-    private fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
+
 
     fun executeAddInventory(
         name: String,
@@ -31,8 +32,8 @@ class AddItemInventoryViewModel @Inject constructor(
         stock: Int
     ): MediatorLiveData<Resource<Inventory>> =
         MediatorLiveData<Resource<Inventory>>().apply {
-            addSource(getSelectedHotel()) { hotel ->
-                addSource(addInventory(hotel, name, type, stock)) { inventory ->
+            addSource(getSelectedHotelData()) { hotel ->
+                addSource(addInventory(hotel.id, name, type, stock)) { inventory ->
                     value = inventory
                 }
             }

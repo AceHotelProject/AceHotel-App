@@ -19,7 +19,7 @@ class InventoryDetailViewModel @Inject constructor(
     fun getDetailInventory(id: String, hotelId: String) =
         inventoryUseCase.getDetailInventory(id, hotelId).asLiveData()
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 

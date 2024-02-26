@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -100,9 +101,9 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                 DeleteDialogType.MANAGE_HOTEL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus cabang hotel ini?"
                     btnYes.setOnClickListener {
-                        deleteItemViewModel.getSelectedHotel().observe(this) { saveId ->
-                            if (id == saveId) {
-                                deleteItemViewModel.saveSelectedHotel("")
+                        deleteItemViewModel.getSelectedHotelData().observe(this) { hotel ->
+                            if (id == hotel.id) {
+                                deleteItemViewModel.saveSelectedHotelData(ManageHotel())
                             }
                         }
 

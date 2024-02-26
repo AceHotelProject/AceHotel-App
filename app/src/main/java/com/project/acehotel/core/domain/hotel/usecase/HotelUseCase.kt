@@ -61,7 +61,7 @@ interface HotelUseCase {
         id: String
     ): Flow<Resource<Int>>
 
-    fun getSelectedHotel(): Flow<String>
+    fun getSelectedHotelData(): Flow<ManageHotel>
 
-    suspend fun saveSelectedHotel(id: String)
+    suspend fun saveSelectedHotelData(data: ManageHotel)
 }

@@ -16,9 +16,9 @@ class ChangeStockItemInventoryViewModel @Inject constructor(
     private val hotelUseCase: HotelUseCase,
 ) : ViewModel() {
 
-    fun getSelectedHotel() = hotelUseCase.getSelectedHotel().asLiveData()
+    fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
-    fun updateInventory(
+    private fun updateInventory(
         id: String,
         hotelId: String,
         name: String,
@@ -37,11 +37,11 @@ class ChangeStockItemInventoryViewModel @Inject constructor(
         title: String,
         description: String
     ): MediatorLiveData<Resource<Inventory>> = MediatorLiveData<Resource<Inventory>>().apply {
-        addSource(getSelectedHotel()) { hotel ->
+        addSource(getSelectedHotelData()) { hotel ->
             addSource(
                 updateInventory(
                     id,
-                    hotel,
+                    hotel.id,
                     name,
                     type,
                     stock,
