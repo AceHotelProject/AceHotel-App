@@ -58,6 +58,16 @@ interface IHotelRepository {
 
         ): Flow<Resource<Hotel>>
 
+    fun updateHotelPrice(
+        id: String,
+        discountCode: String,
+        discountAmount: Int,
+
+        regularRoomPrice: Int,
+        exclusiveRoomPrice: Int,
+        extraBedPrice: Int,
+    ): Flow<Resource<Hotel>>
+
     fun deleteHotel(
         id: String
     ): Flow<Resource<Int>>

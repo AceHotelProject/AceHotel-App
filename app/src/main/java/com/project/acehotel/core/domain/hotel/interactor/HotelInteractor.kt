@@ -97,6 +97,17 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         )
     }
 
+    override fun updateHotelPrice(
+        id: String,
+        discountCode: String,
+        discountAmount: Int,
+        regularRoomPrice: Int,
+        exclusiveRoomPrice: Int,
+        extraBedPrice: Int
+    ): Flow<Resource<Hotel>> {
+        TODO("Not yet implemented")
+    }
+
     override fun deleteHotel(id: String): Flow<Resource<Int>> = hotelRepository.deleteHotel(id)
 
     override fun getSelectedHotelData(): Flow<ManageHotel> = hotelRepository.getSelectedHotelData()

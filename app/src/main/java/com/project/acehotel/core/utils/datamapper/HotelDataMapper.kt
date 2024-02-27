@@ -50,6 +50,9 @@ object HotelDataMapper {
                 inventoryStaffId = listHotel?.inventoryStaffId?.id ?: "Empty",
                 inventoryStaffName = listHotel?.inventoryStaffId?.username ?: "Empty",
                 inventoryStaffEmail = listHotel?.inventoryStaffId?.email ?: "Empty",
+
+                discountAmount = listHotel?.discountAmount ?: 0,
+                discount = listHotel?.discountCode ?: "Empty",
             )
         } ?: listOf()
 
@@ -85,6 +88,9 @@ object HotelDataMapper {
         inventoryStaffId = input.inventoryStaffId?.id ?: "Empty",
         inventoryStaffName = input.inventoryStaffId?.username ?: "Empty",
         inventoryStaffEmail = input.inventoryStaffId?.email ?: "Empty",
+
+        discountAmount = input.discountAmount ?: 0,
+        discount = input.discountCode ?: "Empty",
     )
 
     fun mapCreateHotelResponseToDomain(input: CreateHotelResponse): ManageHotel = ManageHotel(
@@ -119,6 +125,9 @@ object HotelDataMapper {
         inventoryStaffId = input.inventoryStaffId ?: "Empty",
         inventoryStaffName = "Empty",
         inventoryStaffEmail = "Empty",
+
+        discountAmount = 0,
+        discount = "Empty",
     )
 
     fun mapHotelResponseToDomain(input: HotelResponse): Hotel = Hotel(
@@ -137,6 +146,10 @@ object HotelDataMapper {
         regularRoomPrice = input.regularRoomPrice ?: 0,
         exclusiveRoomPrice = input.exclusiveRoomPrice ?: 0,
         extraBedPrice = input.extraBedPrice ?: 0,
+
+        discountAmount = input.extraBedPrice ?: 0,
+        discountCode = input.discountCode ?: "Empty",
+
 
         roomId = input.roomId?.map { room ->
             Room(

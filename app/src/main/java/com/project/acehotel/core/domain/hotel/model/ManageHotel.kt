@@ -21,6 +21,9 @@ data class ManageHotel(
     val exclusiveRoomPrice: Int = 0,
     val extraBedPrice: Int = 0,
 
+    val discount: String = "",
+    val discountAmount: Int = 0,
+
     val roomId: List<String> = listOf(),
     val inventoryId: List<String> = listOf(),
 

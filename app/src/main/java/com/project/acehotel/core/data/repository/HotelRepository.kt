@@ -148,6 +148,33 @@ class HotelRepository @Inject constructor(
         }.asFlow()
     }
 
+    override fun updateHotelPrice(
+        id: String,
+        discountCode: String,
+        discountAmount: Int,
+        regularRoomPrice: Int,
+        exclusiveRoomPrice: Int,
+        extraBedPrice: Int
+    ): Flow<Resource<Hotel>> {
+        return object : NetworkBoundResource<Hotel, HotelResponse>() {
+            override suspend fun fetchFromApi(response: HotelResponse): Hotel {
+                return HotelDataMapper.mapHotelResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<HotelResponse>> {
+                return remoteDataSource.updateHotelPrice(
+                    id,
+                    discountCode,
+                    discountAmount,
+                    regularRoomPrice,
+                    exclusiveRoomPrice,
+                    extraBedPrice
+                )
+            }
+
+        }.asFlow()
+    }
+
     override fun deleteHotel(id: String): Flow<Resource<Int>> {
         return object : NetworkBoundResource<Int, Response<ManageHotelResultItem>>() {
             override suspend fun fetchFromApi(response: Response<ManageHotelResultItem>): Int {

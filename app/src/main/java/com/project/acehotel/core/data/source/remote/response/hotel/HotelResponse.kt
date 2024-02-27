@@ -56,7 +56,13 @@ data class HotelResponse(
     val id: String? = null,
 
     @field:SerializedName("regular_room_count")
-    val regularRoomCount: Int? = null
+    val regularRoomCount: Int? = null,
+
+    @field:SerializedName("discount_code")
+    val discountCode: String? = null,
+
+    @field:SerializedName("discount_amount")
+    val discountAmount: Int? = null
 )
 
 data class RoomIdItem(

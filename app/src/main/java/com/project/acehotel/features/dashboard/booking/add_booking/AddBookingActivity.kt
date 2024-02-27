@@ -110,7 +110,6 @@ class AddBookingActivity : AppCompatActivity() {
                 )
 
             datePicker.show()
-
         }
     }
 

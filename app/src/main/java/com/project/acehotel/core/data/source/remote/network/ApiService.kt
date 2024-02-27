@@ -160,6 +160,17 @@ interface ApiService {
         @Path("id") id: String
     ): Response<ManageHotelResultItem>
 
+    @FormUrlEncoded
+    @PATCH("hotel/{id}")
+    suspend fun updateHotelPrice(
+        @Path("id") id: String,
+        @Field("discount_code") discountCode: String,
+        @Field("discount_amount") discountAmount: Int,
+        @Field("regular_room_price") regularRoomPrice: Int,
+        @Field("exclusive_room_price") exclusiveRoomPrice: Int,
+        @Field("extra_bed_price") extraBedPrice: Int,
+    ): HotelResponse
+
     // HOTELS
 
 
@@ -259,6 +270,7 @@ interface ApiService {
     @POST("bookings/discount/{id}")
     @FormUrlEncoded
     suspend fun addDiscount(
+        @Path("id") id: String,
         @Field("discount_code") discountCode: String,
     ): BookingResponse
 
