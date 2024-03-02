@@ -7,6 +7,8 @@ import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.booking.AddBookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.PayBookingResponse
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.booking.repository.IBookingRepository
 import com.project.acehotel.core.utils.AppExecutors
@@ -32,7 +34,7 @@ class BookingRepository @Inject constructor(
     ): Flow<Resource<Booking>> {
         return object : NetworkBoundResource<Booking, AddBookingResponse>() {
             override suspend fun fetchFromApi(response: AddBookingResponse): Booking {
-                return BookingDataMapper.mapBookingResponseToDomain(response)
+                return BookingDataMapper.mapAddBookingResponseToDomain(response)
             }
 
             override suspend fun createCall(): Flow<ApiResponse<AddBookingResponse>> {
@@ -50,6 +52,58 @@ class BookingRepository @Inject constructor(
         }.asFlow()
     }
 
+    override fun getListBookingByHotel(
+        hotelId: String,
+        filterDate: String
+    ): Flow<Resource<List<Booking>>> {
+        return object : NetworkBoundResource<List<Booking>, ListBookingResponse>() {
+            override suspend fun fetchFromApi(response: ListBookingResponse): List<Booking> {
+                return BookingDataMapper.mapListBookingToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ListBookingResponse>> {
+                return remoteDataSource.getListBookingByHotel(hotelId, filterDate)
+            }
+        }.asFlow()
+    }
+
+    override fun getListBookingByRoom(roomId: String): Flow<Resource<List<Booking>>> {
+        return object : NetworkBoundResource<List<Booking>, ListBookingResponse>() {
+            override suspend fun fetchFromApi(response: ListBookingResponse): List<Booking> {
+                return BookingDataMapper.mapListBookingToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ListBookingResponse>> {
+                return remoteDataSource.getListBookingByRoom(roomId)
+            }
+        }.asFlow()
+    }
+
+    override fun getListBookingByVisitor(visitorId: String): Flow<Resource<List<Booking>>> {
+        return object : NetworkBoundResource<List<Booking>, ListBookingResponse>() {
+            override suspend fun fetchFromApi(response: ListBookingResponse): List<Booking> {
+                return BookingDataMapper.mapListBookingToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ListBookingResponse>> {
+                return remoteDataSource.getListBookingByVisitor(visitorId)
+            }
+        }.asFlow()
+    }
+
+    override fun getDetailBooking(id: String): Flow<Resource<Booking>> {
+        return object : NetworkBoundResource<Booking, BookingResponse>() {
+            override suspend fun fetchFromApi(response: BookingResponse): Booking {
+                return BookingDataMapper.mapBookingResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<BookingResponse>> {
+                return remoteDataSource.getDetailBooking(id)
+            }
+
+        }.asFlow()
+    }
+
     override fun deleteBooking(id: String): Flow<Resource<Int>> {
         return object : NetworkBoundResource<Int, Response<BookingResponse>>() {
             override suspend fun fetchFromApi(response: Response<BookingResponse>): Int {
@@ -58,6 +112,32 @@ class BookingRepository @Inject constructor(
 
             override suspend fun createCall(): Flow<ApiResponse<Response<BookingResponse>>> {
                 return remoteDataSource.deleteBooking(id)
+            }
+
+        }.asFlow()
+    }
+
+    override fun payBooking(id: String, transactionProof: String): Flow<Resource<Booking>> {
+        return object : NetworkBoundResource<Booking, PayBookingResponse>() {
+            override suspend fun fetchFromApi(response: PayBookingResponse): Booking {
+                return BookingDataMapper.mapPayBookingResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<PayBookingResponse>> {
+                return remoteDataSource.payBooking(id, transactionProof)
+            }
+
+        }.asFlow()
+    }
+
+    override fun applyDiscount(id: String, discountCode: String): Flow<Resource<Booking>> {
+        return object : NetworkBoundResource<Booking, PayBookingResponse>() {
+            override suspend fun fetchFromApi(response: PayBookingResponse): Booking {
+                return BookingDataMapper.mapPayBookingResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<PayBookingResponse>> {
+                return remoteDataSource.applyDiscount(id, discountCode)
             }
 
         }.asFlow()

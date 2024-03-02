@@ -62,5 +62,7 @@
     <string name="delete_data">Hapus Data</string>
     <string name="off">OFF</string>
     <string name="on">ON</string>
-
+    <string name="tab_booking_today">Hari Ini</string>
+    <string name="tab_booking_next">Akan Datang</string>
+    <string name="tab_booking_done">Selesai</string>
 </resources>

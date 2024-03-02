@@ -13,4 +13,16 @@ class CheckinActivity : AppCompatActivity() {
         binding = ActivityCheckinBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.refCheckin.isRefreshing = isLoading
+    }
+
+    private fun disableRefresh() {
+        binding.refCheckin.isEnabled = false
+    }
+
+    private fun setupActionBar() {
+        supportActionBar?.hide()
+    }
 }

@@ -13,6 +13,7 @@ data class Booking(
     val hasProblem: Boolean,
     val hotelId: String,
     val visitorId: String,
+    val visitorName: String,
     val checkinDate: String,
     val checkoutDate: String,
     val duration: Int,

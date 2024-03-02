@@ -197,5 +197,4 @@
         app:srcCompat="@drawable/icons_add"
         app:tint="@color/white" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

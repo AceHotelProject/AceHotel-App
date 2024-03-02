@@ -53,7 +53,7 @@
         android:id="@+id/ref_confirm"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/constraintLayout5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
@@ -494,51 +494,16 @@
                         app:layout_constraintTop_toTopOf="@+id/tv_confirm_disc_desc" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_confirm_discount"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
-                    app:errorEnabled="true"
-                    app:errorIconDrawable="@null"
-                    app:errorIconTint="@color/red"
-                    app:errorTextColor="@color/red"
-                    app:hintEnabled="false"
-
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_confirm_discount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/custom_edit_text"
-                        android:ems="10"
-                        android:hint="Gunakan kode diskon"
-                        android:inputType="number"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="16dp"
-                        android:textColorHint="@color/dark_grey"
-                        android:textSize="14sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/custom_button_secondary"
                     android:padding="16dp"
-                    app:layout_constraintEnd_toEndOf="@+id/layout_confirm_discount"
-                    app:layout_constraintStart_toStartOf="@+id/layout_confirm_discount"
-                    app:layout_constraintTop_toBottomOf="@+id/layout_confirm_discount">
+                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+                    app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
                     <TextView
                         style="@style/textStyleSemIBold_16"
@@ -588,32 +553,121 @@
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout5"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_visitor_checkout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_fab"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:elevation="0dp"
+        app:fabCustomSize="60dp"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toTopOf="@+id/fab_visitor_checkin"
+        app:layout_constraintEnd_toEndOf="@+id/fab_visitor_checkin"
+        app:layout_constraintStart_toStartOf="@+id/fab_visitor_checkin"
+        app:maxImageSize="32dp"
+        app:srcCompat="@drawable/icons_arrow_left"
+        app:tint="@color/blue" />
+
+    <TextView
+        android:id="@+id/tv_visitor_checkout"
+        style="@style/textStyleMedium_custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_fab_desc"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:text="Checkout Pengunjung"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_visitor_checkout"
+        app:layout_constraintEnd_toStartOf="@+id/fab_visitor_checkout"
+        app:layout_constraintTop_toTopOf="@+id/fab_visitor_checkout" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_visitor_checkin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_fab"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:elevation="0dp"
+        app:fabCustomSize="60dp"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toTopOf="@+id/fab_menu"
+        app:layout_constraintEnd_toEndOf="@+id/fab_menu"
+        app:layout_constraintStart_toStartOf="@+id/fab_menu"
+        app:maxImageSize="32dp"
+        app:srcCompat="@drawable/icons_arrow_right"
+        app:tint="@color/blue" />
+
+
+    <TextView
+        android:id="@+id/tv_visitor_checkin"
+        style="@style/textStyleMedium_custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_fab_desc"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:text="Checkin Pengunjung"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_visitor_checkin"
+        app:layout_constraintEnd_toStartOf="@+id/fab_visitor_checkin"
+        app:layout_constraintTop_toTopOf="@+id/fab_visitor_checkin" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/blue"
+        android:clickable="true"
+        android:focusable="true"
+        app:elevation="0dp"
+        app:fabCustomSize="60dp"
+        app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:maxImageSize="32dp"
+        app:srcCompat="@drawable/icons_add"
+        app:tint="@color/white" />
 
-        <Button
-            android:id="@+id/btn_save"
-            style="@style/textStyleButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/custom_button"
-            android:elevation="0dp"
-            android:padding="10dp"
-            android:text="@string/save"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/constraintLayout5"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent">-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--        <Button-->
+    <!--            android:id="@+id/btn_save"-->
+    <!--            style="@style/textStyleButton"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="16dp"-->
+    <!--            android:layout_marginTop="12dp"-->
+    <!--            android:layout_marginEnd="16dp"-->
+    <!--            android:layout_marginBottom="24dp"-->
+    <!--            android:background="@drawable/custom_button"-->
+    <!--            android:elevation="0dp"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:text="@string/save"-->
+    <!--            android:textAllCaps="false"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

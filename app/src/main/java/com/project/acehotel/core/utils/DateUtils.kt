@@ -23,6 +23,18 @@ object DateUtils {
         }
     }
 
+    fun convertToDisplayDateFormat2(dateStr: String): String {
+        // Define the input and output date formats
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val desiredFormat = SimpleDateFormat("d/M/yyyy", Locale.getDefault())
+
+        // Parse the input date string into a Date object
+        val date = sourceFormat.parse(dateStr)
+
+        // Format the Date object into the desired format and return it
+        return desiredFormat.format(date)
+    }
+
     fun getCurrentDateTime(): String {
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("dd MMM yy", Locale.getDefault())
@@ -37,11 +49,44 @@ object DateUtils {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun calculateCheckoutDate(date: String, duration: Long): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy/M/dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy/M/d")
 
         val checkinDate = LocalDate.parse(date, formatter)
         val checkoutDate = checkinDate.plusDays(duration)
 
         return checkoutDate.format(formatter)
+    }
+
+    fun convertToDisplayDateFormat(dateStr: String): String {
+        // Define the input and output date formats
+        val sourceFormat = SimpleDateFormat("yyyy/M/d", Locale.getDefault())
+        val desiredFormat = SimpleDateFormat("d/M/yyyy", Locale.getDefault())
+
+        // Parse the input date string into a Date object
+        val date = sourceFormat.parse(dateStr)
+
+        // Format the Date object into the desired format and return it
+        return desiredFormat.format(date)
+    }
+
+    fun getDateThisDay(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-M-d", Locale.getDefault())
+
+        return dateFormat.format(calendar.time)
+    }
+
+    fun getDateThisMonth(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-M", Locale.getDefault())
+
+        return dateFormat.format(calendar.time)
+    }
+
+    fun getDateThisYear(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+
+        return dateFormat.format(calendar.time)
     }
 }

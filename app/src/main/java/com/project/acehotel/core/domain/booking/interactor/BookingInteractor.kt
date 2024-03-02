@@ -29,7 +29,35 @@ class BookingInteractor @Inject constructor(private val bookingRepository: Booki
         )
     }
 
+    override fun getListBookingByHotel(
+        hotelId: String,
+        filterDate: String
+    ): Flow<Resource<List<Booking>>> {
+        return bookingRepository.getListBookingByHotel(hotelId, filterDate)
+    }
+
+    override fun getListBookingByRoom(roomId: String): Flow<Resource<List<Booking>>> {
+        return bookingRepository.getListBookingByRoom(roomId)
+    }
+
+    override fun getListBookingByVisitor(visitorId: String): Flow<Resource<List<Booking>>> {
+        return bookingRepository.getListBookingByVisitor(visitorId)
+    }
+
+    override fun getDetailBooking(id: String): Flow<Resource<Booking>> {
+        return bookingRepository.getDetailBooking(id)
+    }
+
+
     override fun deleteBooking(id: String): Flow<Resource<Int>> {
         return bookingRepository.deleteBooking(id)
+    }
+
+    override fun payBooking(id: String, transactionProof: String): Flow<Resource<Booking>> {
+        return bookingRepository.payBooking(id, transactionProof)
+    }
+
+    override fun applyDiscount(id: String, discountCode: String): Flow<Resource<Booking>> {
+        return bookingRepository.applyDiscount(id, discountCode)
     }
 }

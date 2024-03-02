@@ -189,8 +189,10 @@ object HotelDataMapper {
                         totalPrice = 0,
                         type = "Empty",
                         id = "Empty",
+                        visitorName = "Empty"
                     )
                 } ?: listOf(),
+
                 id = room?.id ?: "Empty",
             )
         } ?: listOf(),

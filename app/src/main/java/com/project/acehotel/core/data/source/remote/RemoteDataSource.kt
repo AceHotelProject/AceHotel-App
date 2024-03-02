@@ -6,6 +6,8 @@ import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
 import com.project.acehotel.core.data.source.remote.response.booking.AddBookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.PayBookingResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
@@ -356,6 +358,37 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun updateHotelPrice(
+        id: String,
+        discountCode: String,
+        discountAmount: Int,
+        regularRoomPrice: Int,
+        exclusiveRoomPrice: Int,
+        extraBedPrice: Int
+    ): Flow<ApiResponse<HotelResponse>> {
+        return flow<ApiResponse<HotelResponse>> {
+            try {
+                val response = apiService.updateHotelPrice(
+                    id,
+                    discountCode,
+                    discountAmount,
+                    regularRoomPrice,
+                    exclusiveRoomPrice,
+                    extraBedPrice
+                )
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
     suspend fun deleteHotel(id: String): Flow<ApiResponse<Response<ManageHotelResultItem>>> {
         return flow<ApiResponse<Response<ManageHotelResultItem>>> {
             try {
@@ -556,6 +589,77 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun getListBookingByHotel(
+        id: String,
+        filterDate: String
+    ): Flow<ApiResponse<ListBookingResponse>> {
+        return flow {
+            try {
+                val response = apiService.getListBookingByHotel(id, filterDate)
+
+                if (response.results != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getListBookingByRoom(id: String): Flow<ApiResponse<ListBookingResponse>> {
+        return flow {
+            try {
+                val response = apiService.getListBookingByRoom(id)
+
+                if (response.results != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getListBookingByVisitor(id: String): Flow<ApiResponse<ListBookingResponse>> {
+        return flow<ApiResponse<ListBookingResponse>> {
+            try {
+                val response = apiService.getListBookingByVisitor(id)
+
+                if (response.results != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getDetailBooking(id: String): Flow<ApiResponse<BookingResponse>> {
+        return flow<ApiResponse<BookingResponse>> {
+            try {
+                val response = apiService.getDetailBooking(id)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
     suspend fun deleteBooking(id: String): Flow<ApiResponse<Response<BookingResponse>>> {
         return flow<ApiResponse<Response<BookingResponse>>> {
             try {
@@ -572,6 +676,48 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
             }
         }.flowOn(Dispatchers.IO)
     }
+
+    suspend fun payBooking(
+        id: String,
+        transactionProof: String
+    ): Flow<ApiResponse<PayBookingResponse>> {
+        return flow<ApiResponse<PayBookingResponse>> {
+            try {
+                val response = apiService.payBooking(id, transactionProof)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun applyDiscount(
+        id: String,
+        discountCode: String
+    ): Flow<ApiResponse<PayBookingResponse>> {
+        return flow<ApiResponse<PayBookingResponse>> {
+            try {
+                val response = apiService.addDiscount(id, discountCode)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+
     // BOOKING
 
 

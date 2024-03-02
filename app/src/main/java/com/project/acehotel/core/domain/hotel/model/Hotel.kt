@@ -31,4 +31,8 @@ data class Hotel(
     val receptionist: User,
     val inventoryStaff: User,
     val cleaningStaff: User,
-) : Parcelable
+
+    val discountAmount: Int,
+    val discountCode: String,
+
+    ) : Parcelable

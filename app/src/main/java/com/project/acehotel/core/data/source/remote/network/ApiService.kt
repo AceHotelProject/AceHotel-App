@@ -5,6 +5,7 @@ import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenRe
 import com.project.acehotel.core.data.source.remote.response.booking.AddBookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.PayBookingResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
 import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
@@ -237,7 +238,8 @@ interface ApiService {
 
     @GET("bookings/hotel/{id}")
     suspend fun getListBookingByHotel(
-        @Path("id") id: String
+        @Path("id") id: String,
+        @Query("checkin_date") filterDate: String,
     ): ListBookingResponse
 
     @GET("bookings/room/{id}")
@@ -265,16 +267,22 @@ interface ApiService {
     suspend fun payBooking(
         @Path("id") id: String,
         @Field("path_transaction_proof") pathTransactionProof: String,
-    ): BookingResponse
+    ): PayBookingResponse
 
     @POST("bookings/discount/{id}")
     @FormUrlEncoded
     suspend fun addDiscount(
         @Path("id") id: String,
         @Field("discount_code") discountCode: String,
-    ): BookingResponse
+    ): PayBookingResponse
 
     // BOOKING
+
+
+    // ROOM
+
+
+    // ROOM
 
 
     // IMAGES

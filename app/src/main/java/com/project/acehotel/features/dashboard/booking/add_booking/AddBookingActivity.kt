@@ -267,7 +267,7 @@ class AddBookingActivity : AppCompatActivity() {
                         checkinDate.isNotEmpty() &&
                         duration != 0 &&
                         roomCount != 0 &&
-                        extraBed != 0 &&
+                        extraBed >= 0 &&
                         type.isNotEmpty()
             )
         }
@@ -283,12 +283,14 @@ class AddBookingActivity : AppCompatActivity() {
         binding.btnSave.isEnabled = isEnabled
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.refAddBooking.isRefreshing = isLoading
-    }
-
     private fun disableRefresh() {
         binding.refAddBooking.isEnabled = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        checkForms()
     }
 
     private fun setupActionBar() {
