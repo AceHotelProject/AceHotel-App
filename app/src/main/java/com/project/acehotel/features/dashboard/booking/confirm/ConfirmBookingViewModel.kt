@@ -8,6 +8,7 @@ import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.booking.usecase.BookingUseCase
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
+import com.project.acehotel.core.domain.room.usecase.RoomUseCase
 import com.project.acehotel.core.domain.visitor.usecase.VisitorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.MultipartBody
@@ -18,7 +19,8 @@ class ConfirmBookingViewModel @Inject constructor(
     private val hotelUseCase: HotelUseCase,
     private val bookingUseCase: BookingUseCase,
     private val visitorUseCase: VisitorUseCase,
-    private val authUseCase: AuthUseCase
+    private val authUseCase: AuthUseCase,
+    private val roomUseCase: RoomUseCase,
 ) : ViewModel() {
 
     fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
@@ -121,12 +123,12 @@ class ConfirmBookingViewModel @Inject constructor(
 
     fun getVisitorDetail(id: String) = visitorUseCase.getVisitorDetail(id).asLiveData()
 
-    fun payBooking(
+    private fun payBooking(
         id: String,
         transactionProof: String
     ) = bookingUseCase.payBooking(id, transactionProof).asLiveData()
 
-    fun applyDiscount(
+    private fun applyDiscount(
         id: String,
         discountCode: String
     ) = bookingUseCase.applyDiscount(id, discountCode).asLiveData()

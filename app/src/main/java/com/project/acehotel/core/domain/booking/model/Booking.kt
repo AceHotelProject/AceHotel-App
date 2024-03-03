@@ -16,6 +16,8 @@ data class Booking(
     val visitorName: String,
     val checkinDate: String,
     val checkoutDate: String,
+    val actualCheckinDate: String,
+    val actualCheckoutDate: String,
     val duration: Int,
     val roomCount: Int,
     val type: String,

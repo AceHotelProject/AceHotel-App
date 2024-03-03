@@ -12,6 +12,8 @@ class CheckoutActivity : AppCompatActivity() {
 
         binding = ActivityCheckoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupActionBar()
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -20,5 +22,9 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun disableRefresh() {
         binding.refCheckout.isEnabled = false
+    }
+
+    private fun setupActionBar() {
+        supportActionBar?.hide()
     }
 }

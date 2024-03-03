@@ -10,7 +10,7 @@ import java.util.*
 object DateUtils {
     fun convertDate(inputDateString: String): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMM yy", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("d MMM yy", Locale.getDefault())
 
         inputFormat.timeZone = TimeZone.getTimeZone("UTC") // Set the UTC time zone for parsing
 

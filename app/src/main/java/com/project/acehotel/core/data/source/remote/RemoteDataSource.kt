@@ -16,6 +16,9 @@ import com.project.acehotel.core.data.source.remote.response.images.UploadImages
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
+import com.project.acehotel.core.data.source.remote.response.room.CheckoutBody
+import com.project.acehotel.core.data.source.remote.response.room.ListRoomResponse
+import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import kotlinx.coroutines.Dispatchers
@@ -717,8 +720,88 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-
     // BOOKING
+
+
+    // ROOM
+
+    suspend fun getListRoomByHotel(id: String): Flow<ApiResponse<ListRoomResponse>> {
+        return flow<ApiResponse<ListRoomResponse>> {
+            try {
+                val response = apiService.getListRoomByHotel(id)
+
+                if (response.results != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getRoomDetail(id: String): Flow<ApiResponse<RoomResponse>> {
+        return flow<ApiResponse<RoomResponse>> {
+            val response = apiService.getRoomDetail(id)
+
+            try {
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun roomCheckin(
+        id: String,
+        checkinDate: String,
+        bookingId: String,
+        visitorId: String
+    ): Flow<ApiResponse<RoomResponse>> {
+        return flow<ApiResponse<RoomResponse>> {
+            try {
+                val response = apiService.roomCheckin(id, checkinDate, bookingId, visitorId)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun roomCheckout(
+        id: String,
+        checkoutBody: CheckoutBody
+    ): Flow<ApiResponse<RoomResponse>> {
+        return flow<ApiResponse<RoomResponse>> {
+            try {
+                val response = apiService.roomCheckout(id, checkoutBody)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    // ROOM
 
 
     //IMAGES

@@ -20,7 +20,7 @@ data class RoomResponse(
     val type: String? = null,
 
     @field:SerializedName("bookings")
-    val bookings: List<Any?>? = null,
+    val bookings: List<BookingsItem?>? = null,
 
     @field:SerializedName("facility")
     val facility: Facility? = null,
@@ -30,4 +30,61 @@ data class RoomResponse(
 
     @field:SerializedName("is_clean")
     val isClean: Boolean? = null
+)
+
+data class Facility(
+
+    @field:SerializedName("karpet")
+    val karpet: Boolean? = null,
+
+    @field:SerializedName("shower")
+    val shower: Boolean? = null,
+
+    @field:SerializedName("tv")
+    val tv: Boolean? = null,
+
+    @field:SerializedName("bantal_hitam")
+    val bantalHitam: Boolean? = null,
+
+    @field:SerializedName("kursi")
+    val kursi: Boolean? = null,
+
+    @field:SerializedName("bantal_putih")
+    val bantalPutih: Boolean? = null,
+
+    @field:SerializedName("selendang")
+    val selendang: Boolean? = null,
+
+    @field:SerializedName("remote_tv")
+    val remoteTv: Boolean? = null,
+
+    @field:SerializedName("remote_ac")
+    val remoteAc: Boolean? = null,
+
+    @field:SerializedName("cermin_wastafel")
+    val cerminWastafel: Boolean? = null,
+
+    @field:SerializedName("kerangjang_sampah")
+    val kerangjangSampah: Boolean? = null,
+
+    @field:SerializedName("gantungan_baju")
+    val gantunganBaju: Boolean? = null
+)
+
+data class BookingsItem(
+
+    @field:SerializedName("booking_id")
+    val bookingId: String? = null,
+
+    @field:SerializedName("checkin_date")
+    val checkinDate: String? = null,
+
+    @field:SerializedName("visitor_id")
+    val visitorId: String? = null,
+
+    @field:SerializedName("_id")
+    val id: String? = null,
+
+    @field:SerializedName("checkout_date")
+    val checkoutDate: String? = null
 )

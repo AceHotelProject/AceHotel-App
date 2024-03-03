@@ -95,7 +95,28 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                 DeleteDialogType.BOOKING_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus booking ini?"
                     btnYes.setOnClickListener {
+                        deleteItemViewModel.executeDeleteBooking(id).observe(this) { booking ->
+                            when (booking) {
+                                is Resource.Error -> {
+                                    if (!isInternetAvailable(requireContext())) {
+                                        activity?.showToast(getString(R.string.check_internet))
+                                    } else {
+                                        activity?.showToast(booking.message.toString())
+                                    }
+                                }
+                                is Resource.Loading -> {
 
+                                }
+                                is Resource.Message -> {
+
+                                }
+                                is Resource.Success -> {
+                                    activity?.showToast("Data booking telah berhasi dihapus")
+                                    activity?.finish()
+                                    dismiss()
+                                }
+                            }
+                        }
                     }
                 }
                 DeleteDialogType.MANAGE_HOTEL -> {

@@ -11,6 +11,7 @@ data class Room(
     val isBooked: Boolean,
     val isClean: Boolean,
     val hotelId: String,
+    val name: String,
     val price: Int,
     val bookings: List<Booking>,
     val id: String

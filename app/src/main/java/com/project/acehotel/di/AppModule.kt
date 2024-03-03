@@ -8,6 +8,8 @@ import com.project.acehotel.core.domain.hotel.interactor.HotelInteractor
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import com.project.acehotel.core.domain.inventory.interactor.InventoryInteractor
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
+import com.project.acehotel.core.domain.room.interactor.RoomInteractor
+import com.project.acehotel.core.domain.room.usecase.RoomUseCase
 import com.project.acehotel.core.domain.visitor.interactor.VisitorInteractor
 import com.project.acehotel.core.domain.visitor.usecase.VisitorUseCase
 import dagger.Binds
@@ -39,4 +41,8 @@ abstract class AppModule {
     @Binds
     @ViewModelScoped
     abstract fun provideBookingUseCase(bookingInteractor: BookingInteractor): BookingUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideRoomUseCase(roomInteractor: RoomInteractor): RoomUseCase
 }

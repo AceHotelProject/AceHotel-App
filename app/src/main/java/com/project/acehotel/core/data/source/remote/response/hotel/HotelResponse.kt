@@ -79,6 +79,9 @@ data class RoomIdItem(
     @field:SerializedName("type")
     val type: String? = null,
 
+    @field:SerializedName("name")
+    val name: String? = null,
+
     @field:SerializedName("bookings")
     val bookings: List<Any?>? = null,
 

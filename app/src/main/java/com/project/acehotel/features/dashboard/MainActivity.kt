@@ -15,11 +15,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.databinding.ActivityMainBinding
+import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseVisitorActivity
 import com.project.acehotel.features.popup.choose_hotel.ChooseHotelDialog
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -46,6 +48,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun validateToken() {
         mainViewModel.getRefreshToken().observe(this) { token ->
+            Timber.tag("TOKEN").e("Saved token: ${token}")
+
             if (token.isNullOrEmpty()) {
                 TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
             }
@@ -69,20 +73,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fabAddBooking.setOnClickListener {
-            val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
-            intentToChooseVisitor.putExtra(FLAG_VISITOR, "booking")
-            startActivity(intentToChooseVisitor)
+            val intentToChooseBooking = Intent(this, ChooseBookingActivity::class.java)
+            intentToChooseBooking.putExtra(FLAG_VISITOR, MENU_BOOKING)
+            startActivity(intentToChooseBooking)
         }
 
         binding.fabCheckin.setOnClickListener {
-            val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
-            intentToChooseVisitor.putExtra(FLAG_VISITOR, "checkin")
-            startActivity(intentToChooseVisitor)
+            val intentToChooseBooking = Intent(this, ChooseBookingActivity::class.java)
+            intentToChooseBooking.putExtra(FLAG_VISITOR, MENU_CHECKIN)
+            startActivity(intentToChooseBooking)
         }
 
         binding.fabCheckout.setOnClickListener {
             val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
-            intentToChooseVisitor.putExtra(FLAG_VISITOR, "checkout")
+            intentToChooseVisitor.putExtra(FLAG_VISITOR, MENU_CHECKOUT)
             startActivity(intentToChooseVisitor)
         }
     }

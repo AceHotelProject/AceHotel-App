@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.booking.usecase.BookingUseCase
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
@@ -18,6 +19,7 @@ class DeleteItemViewModel @Inject constructor(
     private val inventoryUseCase: InventoryUseCase,
     private val hotelUseCase: HotelUseCase,
     private val visitorUseCase: VisitorUseCase,
+    private val bookingUseCase: BookingUseCase,
 ) :
     ViewModel() {
 
@@ -52,4 +54,6 @@ class DeleteItemViewModel @Inject constructor(
                 }
             }
         }
+
+    fun executeDeleteBooking(id: String) = bookingUseCase.deleteBooking(id).asLiveData()
 }

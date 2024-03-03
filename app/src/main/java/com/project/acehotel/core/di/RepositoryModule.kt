@@ -5,6 +5,7 @@ import com.project.acehotel.core.domain.auth.repository.IAuthRepository
 import com.project.acehotel.core.domain.booking.repository.IBookingRepository
 import com.project.acehotel.core.domain.hotel.repository.IHotelRepository
 import com.project.acehotel.core.domain.inventory.repository.IInventoryIRepository
+import com.project.acehotel.core.domain.room.repository.IRoomRepository
 import com.project.acehotel.core.domain.visitor.repository.IVisitorRepository
 import dagger.Binds
 import dagger.Module
@@ -29,4 +30,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun provideBookingRepository(bookingRepository: BookingRepository): IBookingRepository
+
+    @Binds
+    abstract fun provideRoomRepository(roomRepository: RoomRepository): IRoomRepository
 }

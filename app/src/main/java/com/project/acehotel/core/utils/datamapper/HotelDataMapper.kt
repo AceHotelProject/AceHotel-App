@@ -172,6 +172,8 @@ object HotelDataMapper {
                 price = room?.price ?: 0,
                 isBooked = room?.isBooked ?: false,
                 isClean = room?.isClean ?: false,
+                name = room?.name ?: "Empty",
+
                 bookings = room?.bookings?.map { booking ->
                     Booking(
                         roomId = listOf(),
@@ -189,7 +191,9 @@ object HotelDataMapper {
                         totalPrice = 0,
                         type = "Empty",
                         id = "Empty",
-                        visitorName = "Empty"
+                        visitorName = "Empty",
+                        actualCheckinDate = "Empty",
+                        actualCheckoutDate = "Empty",
                     )
                 } ?: listOf(),
 

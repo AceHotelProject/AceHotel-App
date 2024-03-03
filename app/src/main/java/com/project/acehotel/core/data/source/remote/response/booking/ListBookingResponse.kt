@@ -70,6 +70,12 @@ data class ListBookingResultsItem(
     @field:SerializedName("checkin_date")
     val checkinDate: String? = null,
 
+    @field:SerializedName("actual_checkin")
+    val actualCheckin: String? = null,
+
+    @field:SerializedName("actual_checkout")
+    val actualCheckout: String? = null,
+
     @field:SerializedName("id")
     val id: String? = null,
 

@@ -14,6 +14,9 @@ import com.project.acehotel.core.data.source.remote.response.images.UploadImages
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
+import com.project.acehotel.core.data.source.remote.response.room.CheckoutBody
+import com.project.acehotel.core.data.source.remote.response.room.ListRoomResponse
+import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import okhttp3.MultipartBody
@@ -281,6 +284,30 @@ interface ApiService {
 
     // ROOM
 
+    @GET("rooms/hotel/{id}")
+    suspend fun getListRoomByHotel(
+        @Path("id") id: String,
+    ): ListRoomResponse
+
+    @GET("rooms/{id}")
+    suspend fun getRoomDetail(
+        @Path("id") id: String,
+    ): RoomResponse
+
+    @POST("rooms/checkin/{id}")
+    @FormUrlEncoded
+    suspend fun roomCheckin(
+        @Path("id") id: String,
+        @Field("checkin_date") checkinDate: String,
+        @Field("booking_id") bookingId: String,
+        @Field("visitor_id") visitorId: String,
+    ): RoomResponse
+
+    @POST("rooms/checkout/{id}")
+    suspend fun roomCheckout(
+        @Path("id") id: String,
+        @Body checkoutBody: CheckoutBody
+    ): RoomResponse
 
     // ROOM
 

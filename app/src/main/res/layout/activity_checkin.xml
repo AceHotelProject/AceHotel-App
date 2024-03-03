@@ -54,7 +54,7 @@
 
             <TextView
                 android:id="@+id/textView1"
-                style="@style/textStyleMedium_16"
+                style="@style/textStyleMedium_14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -76,7 +76,7 @@
 
             <TextView
                 android:id="@+id/textView2"
-                style="@style/textStyleMedium_16"
+                style="@style/textStyleMedium_14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -87,7 +87,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_checkin_time"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/CustomTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -121,7 +121,7 @@
 
             <TextView
                 android:id="@+id/textView3"
-                style="@style/textStyleMedium_16"
+                style="@style/textStyleMedium_14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -153,15 +153,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ed_checkin_room"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_drop_down_background"
+                    android:background="@drawable/custom_edit_text"
+                    android:ems="10"
                     android:hint="Pilih kamar"
-                    android:inputType="none"
-                    android:lines="1"
-                    android:maxLines="1"
+                    android:inputType="text"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="16dp"
                     android:textColorHint="@color/dark_grey"

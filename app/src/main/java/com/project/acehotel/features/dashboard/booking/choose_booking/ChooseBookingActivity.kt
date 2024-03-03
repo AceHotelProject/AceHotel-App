@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
@@ -17,6 +18,7 @@ import com.project.acehotel.features.dashboard.MainActivity
 import com.project.acehotel.features.dashboard.room.checkin.CheckinActivity
 import com.project.acehotel.features.dashboard.room.checkout.CheckoutActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ChooseBookingActivity : AppCompatActivity() {
@@ -37,6 +39,8 @@ class ChooseBookingActivity : AppCompatActivity() {
         fetchListBooking()
 
         handleRefresh()
+
+
     }
 
     private fun handleRefresh() {
@@ -63,6 +67,7 @@ class ChooseBookingActivity : AppCompatActivity() {
                 }
                 is Resource.Message -> {
                     showLoading(false)
+                    Timber.tag("ChooseBookingActivity").d(booking.message)
                 }
                 is Resource.Success -> {
                     showLoading(false)
@@ -96,7 +101,8 @@ class ChooseBookingActivity : AppCompatActivity() {
                     }
                 }
 
-                intent.putExtra(BOOKING_DATA, booking)
+                val dataJson = Gson().toJson(booking)
+                intent.putExtra(BOOKING_DATA, dataJson)
                 startActivity(intent)
             }
         })
@@ -122,7 +128,5 @@ class ChooseBookingActivity : AppCompatActivity() {
 
         private const val MENU_CHECKIN = "checkin"
         private const val MENU_CHECKOUT = "checkout"
-
-
     }
 }

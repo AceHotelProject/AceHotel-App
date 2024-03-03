@@ -24,7 +24,9 @@ object BookingDataMapper {
         type = input.type ?: "Empty",
         id = input.id ?: "Empty",
         transactionProof = "Empty",
-        visitorName = "Empty"
+        visitorName = "Empty",
+        actualCheckinDate = "Empty",
+        actualCheckoutDate = "Empty",
     )
 
     fun mapBookingResponseToDomain(input: BookingResponse): Booking = Booking(
@@ -45,6 +47,8 @@ object BookingDataMapper {
         id = input.id ?: "Empty",
         transactionProof = input.pathTransactionProof
             ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
+        actualCheckinDate = input.actualCheckin ?: "Empty",
+        actualCheckoutDate = input.actualCheckout ?: "Empty",
     )
 
     fun mapPayBookingResponseToDomain(input: PayBookingResponse): Booking = Booking(
@@ -65,6 +69,8 @@ object BookingDataMapper {
         id = input.id ?: "Empty",
         transactionProof = input.pathTransactionProof
             ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
+        actualCheckinDate = "Empty",
+        actualCheckoutDate = "Empty",
     )
 
     fun mapListBookingToDomain(input: ListBookingResponse): List<Booking> =
@@ -87,6 +93,8 @@ object BookingDataMapper {
                 visitorName = booking?.visitorId?.name ?: "Empty",
                 transactionProof = booking?.pathTransactionProof
                     ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
+                actualCheckinDate = booking?.actualCheckin ?: "Empty",
+                actualCheckoutDate = booking?.actualCheckout ?: "Empty",
             )
         } ?: listOf()
 }

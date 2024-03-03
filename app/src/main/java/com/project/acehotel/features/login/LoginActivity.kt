@@ -136,6 +136,8 @@ class LoginActivity : AppCompatActivity() {
 
                             loginViewModel.saveAccessToken(result.data.tokens.accessToken.token.toString())
 
+                            Timber.tag("TOKEN")
+                                .e("Saved token: ${result.data.tokens.refreshToken.token.toString()}")
                             loginViewModel.saveRefreshToken(result.data.tokens.refreshToken.token.toString())
 
                             val intentToMain = Intent(this, MainActivity::class.java)
