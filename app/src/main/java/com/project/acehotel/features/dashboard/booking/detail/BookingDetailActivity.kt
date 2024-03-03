@@ -22,8 +22,7 @@ import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityBookingDetailBinding
 import com.project.acehotel.features.dashboard.booking.add_booking.AddBookingActivity
-import com.project.acehotel.features.dashboard.room.checkin.CheckinActivity
-import com.project.acehotel.features.dashboard.room.checkout.CheckoutActivity
+import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -199,13 +198,15 @@ class BookingDetailActivity : AppCompatActivity() {
         }
 
         binding.fabVisitorCheckin.setOnClickListener {
-            val intentToChooseItem = Intent(this, CheckinActivity::class.java)
-            startActivity(intentToChooseItem)
+            val intentToChooseBooking = Intent(this, ChooseBookingActivity::class.java)
+            intentToChooseBooking.putExtra(FLAG_VISITOR, MENU_CHECKIN)
+            startActivity(intentToChooseBooking)
         }
 
         binding.fabVisitorCheckout.setOnClickListener {
-            val intentToChooseVisitor = Intent(this, CheckoutActivity::class.java)
-            startActivity(intentToChooseVisitor)
+            val intentToChooseBooking = Intent(this, ChooseBookingActivity::class.java)
+            intentToChooseBooking.putExtra(FLAG_VISITOR, MENU_CHECKOUT)
+            startActivity(intentToChooseBooking)
         }
     }
 
@@ -295,5 +296,10 @@ class BookingDetailActivity : AppCompatActivity() {
         private const val BOOKING_DATA = "booking_data"
         private const val PLACEHOLDER_IMAGE =
             "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg"
+
+        private const val FLAG_VISITOR = "flag_visitor"
+
+        private const val MENU_CHECKIN = "checkin"
+        private const val MENU_CHECKOUT = "checkout"
     }
 }

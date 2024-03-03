@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".features.dashboard.booking.choose_booking.ChooseBookingActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.dashboard.management.inventory.edit_reader.EditReaderActivity"
             android:exported="false" />
 
