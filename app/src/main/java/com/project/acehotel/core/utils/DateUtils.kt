@@ -89,4 +89,19 @@ object DateUtils {
 
         return dateFormat.format(calendar.time)
     }
+
+    fun isTodayDate(checkinDateStr: String): Boolean {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val checkinDate: Date = dateFormat.parse(checkinDateStr) ?: return false
+
+        val checkinCalendar = Calendar.getInstance()
+        checkinCalendar.time = checkinDate
+
+        val todayCalendar = Calendar.getInstance()
+
+        return (checkinCalendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR) &&
+                checkinCalendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH) &&
+                checkinCalendar.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH))
+    }
 }

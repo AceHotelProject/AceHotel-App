@@ -8,6 +8,7 @@
     tools:context=".features.dashboard.room.RoomFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/ref_room"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -556,6 +557,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="@color/grey_bg"
                     app:layout_constraintEnd_toEndOf="@+id/linearLayout5"
                     app:layout_constraintStart_toStartOf="@+id/textView13"
                     app:layout_constraintTop_toBottomOf="@+id/textView13" />

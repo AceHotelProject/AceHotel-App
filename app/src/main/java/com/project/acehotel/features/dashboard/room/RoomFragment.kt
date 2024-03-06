@@ -7,10 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import com.project.acehotel.R
+import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.room.model.Room
+import com.project.acehotel.core.ui.adapter.room.RoomListAdapter
 import com.project.acehotel.core.utils.formatNumber
+import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentRoomBinding
 import com.project.acehotel.features.dashboard.room.change_price.ChangePriceActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class RoomFragment : Fragment() {
@@ -25,6 +33,44 @@ class RoomFragment : Fragment() {
         handleButtonChangePrice()
 
         fetchHotelInfo()
+
+        fetchListRoom()
+    }
+
+    private fun fetchListRoom() {
+        roomViewModel.executeGetListRoomByHotel().observe(this) { room ->
+            when (room) {
+                is Resource.Error -> {
+                    showLoading(false)
+
+                    if (!isInternetAvailable(requireContext())) {
+                        activity?.showToast(getString(R.string.check_internet))
+                    } else {
+                        activity?.showToast(room.message.toString())
+                    }
+                }
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+                is Resource.Message -> {
+                    showLoading(false)
+                    Timber.tag("InventoryDetailActivity").d(room.message)
+                }
+                is Resource.Success -> {
+                    showLoading(false)
+
+                    initRoomRecyclerView(room.data)
+                }
+            }
+        }
+    }
+
+    private fun initRoomRecyclerView(data: List<Room>?) {
+        val adapter = RoomListAdapter(data)
+        binding.rvListRoom.adapter = adapter
+
+        val layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvListRoom.layoutManager = layoutManager
     }
 
     private fun fetchHotelInfo() {
@@ -46,6 +92,10 @@ class RoomFragment : Fragment() {
             val intentToChangePrice = Intent(requireContext(), ChangePriceActivity::class.java)
             startActivity(intentToChangePrice)
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.refRoom.isRefreshing = isLoading
     }
 
     override fun onCreateView(
