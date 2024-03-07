@@ -100,9 +100,9 @@ class AddBookingActivity : AppCompatActivity() {
             val datePicker =
                 DatePickerDialog(
                     this@AddBookingActivity, { view, year, monthOfYear, dayOfMonth ->
-                        savedDate = "$year/${monthOfYear + 1}/$dayOfMonth"
+                        savedDate = "$year-${monthOfYear + 1}-$dayOfMonth"
 
-                        binding.edAddBookingCheckin.setText("$dayOfMonth/${monthOfYear + 1}/$year")
+                        binding.edAddBookingCheckin.setText("$dayOfMonth-${monthOfYear + 1}-$year")
                     },
                     year,
                     month,

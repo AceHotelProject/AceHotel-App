@@ -72,6 +72,9 @@ class ConfirmBookingActivity : AppCompatActivity() {
 
     private fun handleButtonSave() {
         binding.btnSave.setOnClickListener {
+            isButtonEnabled(false)
+            showLoading(true)
+
             val visitorId = bookingData?.visitorId
             val checkinDate = bookingData?.checkinDate
             val duration = bookingData?.duration

@@ -26,7 +26,7 @@ object DateUtils {
     fun convertToDisplayDateFormat2(dateStr: String): String {
         // Define the input and output date formats
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        val desiredFormat = SimpleDateFormat("d/M/yyyy", Locale.getDefault())
+        val desiredFormat = SimpleDateFormat("d-M-yyyy", Locale.getDefault())
 
         // Parse the input date string into a Date object
         val date = sourceFormat.parse(dateStr)
@@ -49,7 +49,7 @@ object DateUtils {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun calculateCheckoutDate(date: String, duration: Long): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy/M/d")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
 
         val checkinDate = LocalDate.parse(date, formatter)
         val checkoutDate = checkinDate.plusDays(duration)
@@ -59,8 +59,8 @@ object DateUtils {
 
     fun convertToDisplayDateFormat(dateStr: String): String {
         // Define the input and output date formats
-        val sourceFormat = SimpleDateFormat("yyyy/M/d", Locale.getDefault())
-        val desiredFormat = SimpleDateFormat("d/M/yyyy", Locale.getDefault())
+        val sourceFormat = SimpleDateFormat("yyyy-M-d", Locale.getDefault())
+        val desiredFormat = SimpleDateFormat("d-M-yyyy", Locale.getDefault())
 
         // Parse the input date string into a Date object
         val date = sourceFormat.parse(dateStr)

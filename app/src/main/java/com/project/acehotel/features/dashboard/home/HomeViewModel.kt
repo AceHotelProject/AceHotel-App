@@ -1,4 +1,4 @@
-package com.project.acehotel.features.dashboard.booking.next
+package com.project.acehotel.features.dashboard.home
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -11,10 +11,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class BookingNextViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val bookingUseCase: BookingUseCase,
-    private val hotelUseCase: HotelUseCase
+    private val hotelUseCase: HotelUseCase,
 ) : ViewModel() {
+
     fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
     private fun getListBookingByHotel(hotelId: String, filterDate: String) =

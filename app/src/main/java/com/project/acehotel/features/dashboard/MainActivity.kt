@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fabAddBooking.setOnClickListener {
-            val intentToChooseBooking = Intent(this, ChooseBookingActivity::class.java)
+            val intentToChooseBooking = Intent(this, ChooseVisitorActivity::class.java)
             intentToChooseBooking.putExtra(FLAG_VISITOR, MENU_BOOKING)
             startActivity(intentToChooseBooking)
         }

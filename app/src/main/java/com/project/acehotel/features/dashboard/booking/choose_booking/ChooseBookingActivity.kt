@@ -15,6 +15,7 @@ import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChooseBookingBinding
 import com.project.acehotel.features.dashboard.MainActivity
+import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseVisitorActivity
 import com.project.acehotel.features.dashboard.room.checkin.CheckinActivity
 import com.project.acehotel.features.dashboard.room.checkout.CheckoutActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +41,14 @@ class ChooseBookingActivity : AppCompatActivity() {
 
         handleRefresh()
 
+        handleAddButton()
+    }
 
+    private fun handleAddButton() {
+        binding.btnAddBooking.setOnClickListener {
+            val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
+            startActivity(intentToChooseVisitor)
+        }
     }
 
     private fun handleRefresh() {
@@ -58,9 +66,12 @@ class ChooseBookingActivity : AppCompatActivity() {
                     if (!isInternetAvailable(this@ChooseBookingActivity)) {
                         showToast(getString(R.string.check_internet))
                     } else {
-                        showToast(booking.message.toString())
+                        if (booking.message?.contains("404", false) == true) {
+                            initListBookingRecyclerView(listOf())
+                        } else {
+                            showToast(booking.message.toString())
+                        }
                     }
-
                 }
                 is Resource.Loading -> {
                     showLoading(true)
