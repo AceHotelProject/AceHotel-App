@@ -31,12 +31,9 @@ object RoomDataMapper {
 
         bookings = input.bookings?.map { booking ->
             Booking(
-                roomId = listOf(),
                 addOn = listOf(),
                 isProofUploaded = false,
-                hasProblem = false,
                 transactionProof = "",
-                noteId = listOf(),
                 hotelId = "Empty",
                 visitorId = booking?.visitorId ?: "Empty",
                 checkinDate = booking?.checkinDate ?: "Empty",
@@ -47,8 +44,7 @@ object RoomDataMapper {
                 type = "Empty",
                 id = booking?.bookingId ?: "Empty",
                 visitorName = "Empty",
-                actualCheckinDate = "Empty",
-                actualCheckoutDate = "Empty",
+                room = listOf()
             )
         } ?: listOf(),
 
@@ -81,24 +77,20 @@ object RoomDataMapper {
 
                 bookings = room?.bookings?.map { booking ->
                     Booking(
-                        roomId = listOf(),
                         addOn = listOf(),
                         isProofUploaded = false,
-                        hasProblem = false,
                         transactionProof = "",
-                        noteId = listOf(),
                         hotelId = "Empty",
                         visitorId = booking?.visitorId ?: "Empty",
                         checkinDate = booking?.checkinDate ?: "Empty",
                         checkoutDate = booking?.checkoutDate ?: "Empty",
-                        actualCheckinDate = "Empty",
-                        actualCheckoutDate = "Empty",
                         duration = 0,
                         roomCount = 0,
                         totalPrice = 0,
                         type = "Empty",
                         id = booking?.bookingId ?: "Empty",
-                        visitorName = "Empty"
+                        visitorName = "Empty",
+                        room = listOf()
                     )
                 } ?: listOf(),
 

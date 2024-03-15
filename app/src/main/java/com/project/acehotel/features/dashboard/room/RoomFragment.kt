@@ -1,5 +1,6 @@
 package com.project.acehotel.features.dashboard.room
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.room.model.Room
@@ -17,6 +19,7 @@ import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentRoomBinding
 import com.project.acehotel.features.dashboard.room.change_price.ChangePriceActivity
+import com.project.acehotel.features.dashboard.room.detail.RoomDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -71,6 +74,16 @@ class RoomFragment : Fragment() {
 
         val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvListRoom.layoutManager = layoutManager
+
+        adapter.setOnItemClickCallback(object : RoomListAdapter.OnItemClickCallback {
+            override fun onItemClicked(context: Context, room: Room) {
+                val intentToRoomDetail = Intent(requireContext(), RoomDetailActivity::class.java)
+
+                val dataJson = Gson().toJson(room, Room::class.java)
+                intentToRoomDetail.putExtra(ROOM_DATA, dataJson)
+                activity?.startActivity(intentToRoomDetail)
+            }
+        })
     }
 
     private fun fetchHotelInfo() {
@@ -110,5 +123,9 @@ class RoomFragment : Fragment() {
         super.onDestroyView()
 
         _binding = null
+    }
+
+    companion object {
+        private const val ROOM_DATA = "room_data"
     }
 }

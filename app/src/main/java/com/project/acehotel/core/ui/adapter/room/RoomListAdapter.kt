@@ -1,5 +1,6 @@
 package com.project.acehotel.core.ui.adapter.room
 
+import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.booking.model.Booking
@@ -10,6 +11,8 @@ import com.project.acehotel.core.utils.constants.RoomStatus
 
 class RoomListAdapter(private val listRoom: List<Room>?) :
     RecyclerView.Adapter<RoomListAdapter.ViewHolder>() {
+
+    private lateinit var onItemCallback: OnItemClickCallback
 
     inner class ViewHolder(val binding: CustomCardRoom) : RecyclerView.ViewHolder(binding)
 
@@ -42,6 +45,20 @@ class RoomListAdapter(private val listRoom: List<Room>?) :
                 setCardMargin(position)
             }
         }
+
+        holder.itemView.setOnClickListener {
+            if (data != null) {
+                onItemCallback.onItemClicked(holder.itemView.context, data)
+            }
+        }
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemCallback = onItemClickCallback
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(context: Context, room: Room)
     }
 }
 

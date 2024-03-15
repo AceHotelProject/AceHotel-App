@@ -106,7 +106,7 @@ class BookingDetailActivity : AppCompatActivity() {
 
         binding.apply {
             if (bookingData != null) {
-                bookingDetailViewModel.getRoomDetail(bookingData!!.roomId.first())
+                bookingDetailViewModel.getRoomDetail(bookingData!!.room.first().id)
                     .observe(this@BookingDetailActivity) { room ->
                         when (room) {
                             is Resource.Error -> {

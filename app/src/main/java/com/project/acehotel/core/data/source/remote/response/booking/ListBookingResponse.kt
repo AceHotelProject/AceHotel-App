@@ -17,7 +17,31 @@ data class ListBookingResponse(
     val page: Int? = null,
 
     @field:SerializedName("results")
-    val results: List<ListBookingResultsItem?>? = null
+    val results: List<ResultsItem?>? = null
+)
+
+data class RoomItem(
+
+    @field:SerializedName("_id")
+    val noteId: String? = null,
+
+    @field:SerializedName("id")
+    val roomId: String? = null,
+
+    @field:SerializedName("has_problem")
+    val hasProblem: Boolean? = null,
+
+    @field:SerializedName("checkout_staff_id")
+    val checkoutStaffId: String? = null,
+
+    @field:SerializedName("actual_checkin")
+    val actualCheckin: String? = null,
+
+    @field:SerializedName("checkin_staff_id")
+    val checkinStaffId: String? = null,
+
+    @field:SerializedName("actual_checkout")
+    val actualCheckout: String? = null
 )
 
 data class VisitorId(
@@ -29,19 +53,13 @@ data class VisitorId(
     val id: String? = null
 )
 
-data class ListBookingResultsItem(
-
-    @field:SerializedName("room_id")
-    val roomId: List<String?>? = null,
-
-    @field:SerializedName("note_id")
-    val noteId: List<Any?>? = null,
+data class ResultsItem(
 
     @field:SerializedName("is_proof_uploaded")
     val isProofUploaded: Boolean? = null,
 
     @field:SerializedName("add_on_id")
-    val addOnId: List<String?>? = null,
+    val addOnId: List<Any?>? = null,
 
     @field:SerializedName("total_price")
     val totalPrice: Int? = null,
@@ -55,14 +73,17 @@ data class ListBookingResultsItem(
     @field:SerializedName("visitor_id")
     val visitorId: VisitorId? = null,
 
-    @field:SerializedName("has_problem")
-    val hasProblem: Boolean? = null,
-
     @field:SerializedName("type")
     val type: String? = null,
 
+    @field:SerializedName("path_transaction_proof")
+    val pathTransactionProof: String? = null,
+
     @field:SerializedName("checkout_date")
     val checkoutDate: String? = null,
+
+    @field:SerializedName("room")
+    val room: List<RoomItem?>? = null,
 
     @field:SerializedName("duration")
     val duration: Int? = null,
@@ -70,15 +91,6 @@ data class ListBookingResultsItem(
     @field:SerializedName("checkin_date")
     val checkinDate: String? = null,
 
-    @field:SerializedName("actual_checkin")
-    val actualCheckin: String? = null,
-
-    @field:SerializedName("actual_checkout")
-    val actualCheckout: String? = null,
-
     @field:SerializedName("id")
-    val id: String? = null,
-
-    @field:SerializedName("path_transaction_proof")
-    val pathTransactionProof: String? = null
+    val id: String? = null
 )

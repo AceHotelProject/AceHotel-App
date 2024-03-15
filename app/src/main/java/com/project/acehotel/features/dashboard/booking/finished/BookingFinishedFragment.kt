@@ -63,7 +63,18 @@ class BookingFinishedFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     showLoading(false)
-                    initBookingRecyclerView(booking.data)
+
+                    val filteredData = booking.data?.filter { bookingData ->
+                        if (bookingData.room.isNotEmpty()) {
+                            (bookingData.room.first().actualCheckout != "Empty" && bookingData.room.first().actualCheckin != "Empty")
+                        } else {
+                            // intentionally make the list empty
+                            bookingData.id == ""
+                        }
+                    }
+                    if (filteredData != null) {
+                        initBookingRecyclerView(filteredData.ifEmpty { listOf() })
+                    }
                 }
             }
         }
