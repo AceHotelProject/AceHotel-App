@@ -45,10 +45,8 @@ class CustomCardRoom(context: Context) : CardView(context) {
         val marginBottomInPx = (16 * density).toInt()
 
         if (position % 2 == 0) {
-//            layoutParams.setMargins(marginInPx, 0, 0, marginBottomInPx)
             layoutParams.setMargins(0, 0, marginInPx, marginBottomInPx)
         } else {
-//            layoutParams.setMargins(0, 0, marginInPx, marginBottomInPx)
             layoutParams.setMargins(marginInPx, 0, 0, marginBottomInPx)
         }
     }
@@ -94,6 +92,4 @@ class CustomCardRoom(context: Context) : CardView(context) {
 
         findViewById<ImageView>(R.id.iv_room_card_status).setImageResource(imageId)
     }
-
-
 }

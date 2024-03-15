@@ -1,7 +1,6 @@
 package com.project.acehotel.core.ui.custom.cards
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,11 +8,12 @@ import androidx.cardview.widget.CardView
 import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.CurrentVisitorStatus
 
-class CustomCardVisitor(context: Context, attributeSet: AttributeSet) :
-    CardView(context, attributeSet) {
+class CustomCardCurrentVisitor(context: Context) :
+    CardView(context) {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.item_list_current_visitor, this, true)
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
     fun setVisitorName(name: String) {
