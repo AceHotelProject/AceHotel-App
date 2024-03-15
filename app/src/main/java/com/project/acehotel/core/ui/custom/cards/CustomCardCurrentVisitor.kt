@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.CurrentVisitorStatus
 
@@ -29,7 +30,9 @@ class CustomCardCurrentVisitor(context: Context) :
             CurrentVisitorStatus.CHECKIN.status -> {
                 if (isDone) {
                     statusDisplay(
-                        time, R.color.green, R.drawable.icons_visitor_card_checkin_true
+                        "Pengunjung checkin pada $time",
+                        R.color.green,
+                        R.drawable.icons_visitor_card_checkin_true
                     )
                 } else {
                     statusDisplay(
@@ -42,7 +45,9 @@ class CustomCardCurrentVisitor(context: Context) :
             CurrentVisitorStatus.CHECKOUT.status -> {
                 if (isDone) {
                     statusDisplay(
-                        time, R.color.red, R.drawable.icons_visitor_card_checkout_true
+                        "Pengunjung checkout pada $time",
+                        R.color.red,
+                        R.drawable.icons_visitor_card_checkout_true
                     )
                 } else {
                     statusDisplay(
@@ -58,7 +63,9 @@ class CustomCardCurrentVisitor(context: Context) :
     private fun statusDisplay(time: String, colorId: Int, imageId: Int) {
         findViewById<TextView>(R.id.tv_current_visitor_desc).apply {
             text = time
-            setTextColor(colorId)
+
+            val color = ContextCompat.getColor(context, colorId)
+            setTextColor(color)
         }
 
         findViewById<ImageView>(R.id.iv_current_visitor_status).setImageResource(imageId)

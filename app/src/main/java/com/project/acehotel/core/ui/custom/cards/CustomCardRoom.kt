@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.project.acehotel.R
 import com.project.acehotel.core.ui.custom.chips.CustomRoomType
 import com.project.acehotel.core.utils.constants.RoomStatus
@@ -87,7 +88,9 @@ class CustomCardRoom(context: Context) : CardView(context) {
     private fun statusDisplay(display: String, colorId: Int, imageId: Int) {
         findViewById<TextView>(R.id.tv_room_card_status).apply {
             text = display
-            setTextColor(colorId)
+
+            val color = ContextCompat.getColor(context, colorId)
+            setTextColor(color)
         }
 
         findViewById<ImageView>(R.id.iv_room_card_status).setImageResource(imageId)
