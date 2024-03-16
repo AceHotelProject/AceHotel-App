@@ -14,6 +14,7 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
+import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -29,11 +30,38 @@ class BookingFinishedFragment : Fragment() {
 
     private val bookingFinishedViewModel: BookingFinishedViewModel by activityViewModels()
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentBookingFinishedBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+//        fetchBookingList()
 
-        fetchBookingList()
+        fetchBookingPagingList()
+    }
+
+    private fun fetchBookingPagingList() {
+        val adapter = BookingPagingListAdapter()
+        binding.rvBookingFinished.adapter = adapter
+        
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.rvBookingFinished.layoutManager = layoutManager
+
+        val dateNow = DateUtils.getDateThisYear()
+        bookingFinishedViewModel.executeGetPagingListBookingByHotel(dateNow)
+            .observe(this) { booking ->
+//                lifecycleScope.launch {
+//                    adapter.submitData(booking)
+//                }
+
+                Timber.tag("TEST").e(booking.toString())
+            }
     }
 
     private fun fetchBookingList() {
@@ -63,6 +91,7 @@ class BookingFinishedFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     showLoading(false)
+                    Timber.tag("TEST").e(booking.data.toString())
 
                     val filteredData = booking.data?.filter { bookingData ->
                         if (bookingData.room.isNotEmpty()) {
@@ -101,14 +130,6 @@ class BookingFinishedFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.refBookingFinished.isRefreshing = isLoading
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentBookingFinishedBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     companion object {

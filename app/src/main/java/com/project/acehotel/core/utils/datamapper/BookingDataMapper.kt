@@ -1,21 +1,16 @@
 package com.project.acehotel.core.utils.datamapper
 
-import com.project.acehotel.core.data.source.remote.response.booking.AddBookingResponse
-import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
-import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
-import com.project.acehotel.core.data.source.remote.response.booking.PayBookingResponse
+import com.project.acehotel.core.data.source.remote.response.booking.*
 import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.domain.booking.model.RoomBooking
 
 object BookingDataMapper {
 
     fun mapAddBookingResponseToDomain(input: AddBookingResponse): Booking = Booking(
-        roomId = (input.roomId ?: listOf()) as List<String>,
         addOn = (input.addOnId ?: listOf()) as List<String>,
-        noteId = (input.noteId ?: listOf()) as List<String>,
         totalPrice = input.totalPrice ?: 0,
         duration = input.duration ?: 0,
         roomCount = input.roomCount ?: 0,
-        hasProblem = input.hasProblem ?: false,
         isProofUploaded = input.isProofUploaded ?: false,
         hotelId = input.hotelId ?: "Empty",
         visitorId = input.visitorId ?: "Empty",
@@ -25,21 +20,38 @@ object BookingDataMapper {
         id = input.id ?: "Empty",
         transactionProof = "Empty",
         visitorName = "Empty",
-        actualCheckinDate = "Empty",
-        actualCheckoutDate = "Empty",
+        room = input.room?.map {
+            RoomBooking(
+                id = it?.roomId ?: "Empty",
+                actualCheckin = "Empty",
+                actualCheckout = "Empty",
+                checkoutStaffId = "Empty",
+                checkinStaffId = "Empty",
+                hasProblem = false,
+                note = "Empty",
+            )
+        } ?: listOf()
     )
 
     fun mapBookingResponseToDomain(input: BookingResponse): Booking = Booking(
-        roomId = (input.roomId ?: listOf()) as List<String>,
         addOn = (input.addOnId ?: listOf()) as List<String>,
-        noteId = (input.noteId ?: listOf()) as List<String>,
+        room = input.room?.map {
+            RoomBooking(
+                id = it?.roomId ?: "Empty",
+                actualCheckin = it?.actualCheckin ?: "Empty",
+                actualCheckout = it?.actualCheckout ?: "Empty",
+                checkoutStaffId = it?.checkoutStaffId ?: "Empty",
+                checkinStaffId = it?.checkinStaffId ?: "Empty",
+                hasProblem = false,
+                note = "Empty",
+            )
+        } ?: listOf(),
         totalPrice = input.totalPrice ?: 0,
         duration = input.duration ?: 0,
         roomCount = input.roomCount ?: 0,
-        hasProblem = input.hasProblem ?: false,
         isProofUploaded = input.isProofUploaded ?: false,
         hotelId = input.hotelId ?: "Empty",
-        visitorId = input.visitorId ?: "Empty",
+        visitorId = input.visitorId?.id ?: "Empty",
         visitorName = "Empty",
         checkinDate = input.checkinDate ?: "Empty",
         checkoutDate = input.checkoutDate ?: "Empty",
@@ -47,18 +59,13 @@ object BookingDataMapper {
         id = input.id ?: "Empty",
         transactionProof = input.pathTransactionProof
             ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
-        actualCheckinDate = input.actualCheckin ?: "Empty",
-        actualCheckoutDate = input.actualCheckout ?: "Empty",
     )
 
     fun mapPayBookingResponseToDomain(input: PayBookingResponse): Booking = Booking(
-        roomId = (input.roomId ?: listOf()) as List<String>,
         addOn = (input.addOnId ?: listOf()) as List<String>,
-        noteId = (input.noteId ?: listOf()) as List<String>,
         totalPrice = input.totalPrice ?: 0,
         duration = input.duration ?: 0,
         roomCount = input.roomCount ?: 0,
-        hasProblem = input.hasProblem ?: false,
         isProofUploaded = input.isProofUploaded ?: false,
         hotelId = input.hotelId ?: "Empty",
         visitorName = "Empty",
@@ -69,32 +76,76 @@ object BookingDataMapper {
         id = input.id ?: "Empty",
         transactionProof = input.pathTransactionProof
             ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
-        actualCheckinDate = "Empty",
-        actualCheckoutDate = "Empty",
+        room = listOf(
+            RoomBooking(
+                id = input.roomId?.firstOrNull() ?: "Empty",
+                actualCheckin = "Empty",
+                actualCheckout = "Empty",
+                checkoutStaffId = "Empty",
+                checkinStaffId = "Empty",
+                hasProblem = false,
+                note = "Empty",
+            )
+        )
+
     )
 
     fun mapListBookingToDomain(input: ListBookingResponse): List<Booking> =
         input.results?.map { booking ->
             Booking(
-                roomId = (booking?.roomId ?: listOf()) as List<String>,
                 addOn = (booking?.addOnId ?: listOf()) as List<String>,
-                noteId = (booking?.noteId ?: listOf()) as List<String>,
+                room = booking?.room?.map {
+                    RoomBooking(
+                        id = it?.roomId ?: "Empty",
+                        actualCheckin = it?.actualCheckin ?: "Empty",
+                        actualCheckout = it?.actualCheckout ?: "Empty",
+                        checkoutStaffId = it?.checkoutStaffId ?: "Empty",
+                        checkinStaffId = it?.checkinStaffId ?: "Empty",
+                        hasProblem = false,
+                        note = "Empty",
+                    )
+                } ?: listOf(),
                 totalPrice = booking?.totalPrice ?: 0,
                 duration = booking?.duration ?: 0,
                 roomCount = booking?.roomCount ?: 0,
-                hasProblem = booking?.hasProblem ?: false,
                 isProofUploaded = booking?.isProofUploaded ?: false,
                 hotelId = booking?.hotelId ?: "Empty",
                 visitorId = booking?.visitorId?.id ?: "Empty",
+                visitorName = booking?.visitorId?.name ?: "Empty",
                 checkinDate = booking?.checkinDate ?: "Empty",
                 checkoutDate = booking?.checkoutDate ?: "Empty",
                 type = booking?.type ?: "Empty",
                 id = booking?.id ?: "Empty",
-                visitorName = booking?.visitorId?.name ?: "Empty",
                 transactionProof = booking?.pathTransactionProof
                     ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
-                actualCheckinDate = booking?.actualCheckin ?: "Empty",
-                actualCheckoutDate = booking?.actualCheckout ?: "Empty",
             )
         } ?: listOf()
+
+    fun mapListBookingResultItemToDomain(input: ListBookingResultsItem): Booking = Booking(
+        addOn = (input.addOnId ?: listOf()) as List<String>,
+        room = input.room?.map {
+            RoomBooking(
+                id = it?.roomId ?: "Empty",
+                actualCheckin = it?.actualCheckin ?: "Empty",
+                actualCheckout = it?.actualCheckout ?: "Empty",
+                checkoutStaffId = it?.checkoutStaffId ?: "Empty",
+                checkinStaffId = it?.checkinStaffId ?: "Empty",
+                hasProblem = false,
+                note = "Empty",
+            )
+        } ?: listOf(),
+        totalPrice = input.totalPrice ?: 0,
+        duration = input.duration ?: 0,
+        roomCount = input.roomCount ?: 0,
+        isProofUploaded = input.isProofUploaded ?: false,
+        hotelId = input.hotelId ?: "Empty",
+        visitorId = input.visitorId?.id ?: "Empty",
+        visitorName = input.visitorId?.name ?: "Empty",
+        checkinDate = input.checkinDate ?: "Empty",
+        checkoutDate = input.checkoutDate ?: "Empty",
+        type = input.type ?: "Empty",
+        id = input.id ?: "Empty",
+        transactionProof = input.pathTransactionProof
+            ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
+    )
 }

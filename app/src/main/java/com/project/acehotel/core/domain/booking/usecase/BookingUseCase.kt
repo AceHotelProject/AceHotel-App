@@ -1,5 +1,6 @@
 package com.project.acehotel.core.domain.booking.usecase
 
+import androidx.paging.PagingData
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import kotlinx.coroutines.flow.Flow
@@ -35,4 +36,13 @@ interface BookingUseCase {
         id: String,
         discountCode: String
     ): Flow<Resource<Booking>>
+
+    // TEST PAGING
+
+    fun getPagingListBookingByHotel(
+        hotelId: String,
+        filterDate: String
+    ): Flow<PagingData<Booking>>
+
+    // TEST PAGING
 }

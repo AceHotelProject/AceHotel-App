@@ -6,10 +6,7 @@ import com.project.acehotel.core.data.source.remote.response.booking.AddBookingR
 import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.PayBookingResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
+import com.project.acehotel.core.data.source.remote.response.hotel.*
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
@@ -175,6 +172,9 @@ interface ApiService {
         @Field("extra_bed_price") extraBedPrice: Int,
     ): HotelResponse
 
+    @GET("recap")
+    suspend fun getHotelRecap(): HotelRecapResponse
+
     // HOTELS
 
 
@@ -243,6 +243,14 @@ interface ApiService {
     suspend fun getListBookingByHotel(
         @Path("id") id: String,
         @Query("checkin_date") filterDate: String,
+    ): ListBookingResponse
+
+    @GET("bookings/hotel/{id}")
+    suspend fun getPagingListBookingByHotel(
+        @Path("id") id: String,
+        @Query("checkin_date") filterDate: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
     ): ListBookingResponse
 
     @GET("bookings/room/{id}")

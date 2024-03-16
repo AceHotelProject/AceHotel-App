@@ -1,10 +1,15 @@
 package com.project.acehotel.core.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.project.acehotel.core.data.source.NetworkBoundResource
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.data.source.local.LocalDataSource
+import com.project.acehotel.core.data.source.paging.ListBookingPagingSource
 import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
+import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.data.source.remote.response.booking.AddBookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
@@ -20,7 +25,8 @@ import javax.inject.Inject
 class BookingRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors
+    private val appExecutors: AppExecutors,
+    private val apiService: ApiService,
 ) : IBookingRepository {
 
     override fun addBooking(
@@ -142,4 +148,22 @@ class BookingRepository @Inject constructor(
 
         }.asFlow()
     }
+
+    // EXPERIMENT PAGING
+
+    override fun getPagingListBookingByHotel(
+        hotelId: String,
+        filterDate: String
+    ): Flow<PagingData<Booking>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                ListBookingPagingSource(apiService, hotelId, filterDate)
+            }
+        ).flow
+    }
+
+    // EXPERIMENT PAGING
 }

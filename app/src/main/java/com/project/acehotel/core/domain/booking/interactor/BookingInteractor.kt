@@ -1,5 +1,6 @@
 package com.project.acehotel.core.domain.booking.interactor
 
+import androidx.paging.PagingData
 import com.project.acehotel.core.data.repository.BookingRepository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
@@ -59,5 +60,12 @@ class BookingInteractor @Inject constructor(private val bookingRepository: Booki
 
     override fun applyDiscount(id: String, discountCode: String): Flow<Resource<Booking>> {
         return bookingRepository.applyDiscount(id, discountCode)
+    }
+
+    override fun getPagingListBookingByHotel(
+        hotelId: String,
+        filterDate: String
+    ): Flow<PagingData<Booking>> {
+        return bookingRepository.getPagingListBookingByHotel(hotelId, filterDate)
     }
 }
