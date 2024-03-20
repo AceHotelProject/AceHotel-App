@@ -2,6 +2,7 @@ package com.project.acehotel.core.domain.hotel.usecase
 
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.HotelRecap
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import kotlinx.coroutines.flow.Flow
 
@@ -75,4 +76,6 @@ interface HotelUseCase {
     fun getSelectedHotelData(): Flow<ManageHotel>
 
     suspend fun saveSelectedHotelData(data: ManageHotel)
+
+    fun getHotelRecap(filterDate: String): Flow<Resource<HotelRecap>>
 }

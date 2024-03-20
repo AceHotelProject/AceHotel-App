@@ -2,6 +2,7 @@ package com.project.acehotel.core.domain.hotel.repository
 
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.HotelRecap
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import kotlinx.coroutines.flow.Flow
 
@@ -75,4 +76,9 @@ interface IHotelRepository {
     fun getSelectedHotelData(): Flow<ManageHotel>
 
     suspend fun saveSelectedHotelData(data: ManageHotel)
+
+    fun getHotelRecap(
+        filterDate: String,
+    ): Flow<Resource<HotelRecap>>
+
 }

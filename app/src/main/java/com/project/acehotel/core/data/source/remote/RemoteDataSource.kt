@@ -8,10 +8,7 @@ import com.project.acehotel.core.data.source.remote.response.booking.AddBookingR
 import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.PayBookingResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
+import com.project.acehotel.core.data.source.remote.response.hotel.*
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
@@ -398,6 +395,25 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 val response = apiService.deleteHotel(id)
 
                 if (response.isSuccessful) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getHotelRecap(
+        filterDate: String,
+    ): Flow<ApiResponse<HotelRecapResponse>> {
+        return flow<ApiResponse<HotelRecapResponse>> {
+            try {
+                val response = apiService.getHotelRecap(filterDate)
+
+                if (response.revenue != null) {
                     emit(ApiResponse.Success(response))
                 } else {
                     emit(ApiResponse.Empty)

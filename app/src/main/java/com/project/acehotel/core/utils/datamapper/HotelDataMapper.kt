@@ -1,12 +1,10 @@
 package com.project.acehotel.core.utils.datamapper
 
-import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
+import com.project.acehotel.core.data.source.remote.response.hotel.*
 import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.HotelRecap
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.room.model.Facility
 import com.project.acehotel.core.domain.room.model.Room
@@ -176,12 +174,9 @@ object HotelDataMapper {
 
                 bookings = room?.bookings?.map { booking ->
                     Booking(
-                        roomId = listOf(),
                         addOn = listOf(),
                         isProofUploaded = false,
-                        hasProblem = false,
                         transactionProof = "",
-                        noteId = listOf(),
                         hotelId = "Empty",
                         visitorId = "Empty",
                         checkinDate = "Empty",
@@ -192,8 +187,7 @@ object HotelDataMapper {
                         type = "Empty",
                         id = "Empty",
                         visitorName = "Empty",
-                        actualCheckinDate = "Empty",
-                        actualCheckoutDate = "Empty",
+                        room = listOf()
                     )
                 } ?: listOf(),
 
@@ -229,6 +223,13 @@ object HotelDataMapper {
             hotelId = (input.ownerId?.hotelId ?: listOf()) as List<String>
         ),
         inventoryId = (input.inventoryId ?: listOf()) as List<String>
+    )
+
+    fun mapHotelRecapResponseToDomain(input: HotelRecapResponse): HotelRecap = HotelRecap(
+        revenue = input.revenue ?: 0,
+        branchCount = input.branchCount ?: 0,
+        checkinCount = input.checkinCount ?: 0,
+        totalBooking = input.totalBooking ?: 0,
     )
 
     private const val PLACEHOLDER_IMAGE =

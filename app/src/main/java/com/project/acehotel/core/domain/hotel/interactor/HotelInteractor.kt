@@ -3,6 +3,7 @@ package com.project.acehotel.core.domain.hotel.interactor
 import com.project.acehotel.core.data.repository.HotelRepository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.HotelRecap
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import kotlinx.coroutines.flow.Flow
@@ -105,7 +106,14 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         exclusiveRoomPrice: Int,
         extraBedPrice: Int
     ): Flow<Resource<Hotel>> {
-        TODO("Not yet implemented")
+        return hotelRepository.updateHotelPrice(
+            id,
+            discountCode,
+            discountAmount,
+            regularRoomPrice,
+            exclusiveRoomPrice,
+            extraBedPrice
+        )
     }
 
     override fun deleteHotel(id: String): Flow<Resource<Int>> = hotelRepository.deleteHotel(id)
@@ -114,4 +122,7 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
 
     override suspend fun saveSelectedHotelData(data: ManageHotel) =
         hotelRepository.saveSelectedHotelData(data)
+
+    override fun getHotelRecap(filterDate: String): Flow<Resource<HotelRecap>> =
+        hotelRepository.getHotelRecap(filterDate)
 }

@@ -6,11 +6,9 @@ import com.project.acehotel.core.data.source.local.LocalDataSource
 import com.project.acehotel.core.data.source.local.datastore.UserManager
 import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
+import com.project.acehotel.core.data.source.remote.response.hotel.*
 import com.project.acehotel.core.domain.hotel.model.Hotel
+import com.project.acehotel.core.domain.hotel.model.HotelRecap
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.repository.IHotelRepository
 import com.project.acehotel.core.utils.AppExecutors
@@ -193,6 +191,18 @@ class HotelRepository @Inject constructor(
 
     override suspend fun saveSelectedHotelData(data: ManageHotel) {
         return userManager.saveCurrentHotelData(data)
+    }
+
+    override fun getHotelRecap(filterDate: String): Flow<Resource<HotelRecap>> {
+        return object : NetworkBoundResource<HotelRecap, HotelRecapResponse>() {
+            override suspend fun fetchFromApi(response: HotelRecapResponse): HotelRecap {
+                return HotelDataMapper.mapHotelRecapResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<HotelRecapResponse>> {
+                return remoteDataSource.getHotelRecap(filterDate)
+            }
+        }.asFlow()
     }
 
 
