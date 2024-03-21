@@ -12,19 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.project.acehotel.R
-import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
-import com.project.acehotel.core.utils.isInternetAvailable
-import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentBookingFinishedBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class BookingFinishedFragment : Fragment() {
@@ -63,63 +58,10 @@ class BookingFinishedFragment : Fragment() {
         val dateNow = DateUtils.getDateThisYear()
         bookingFinishedViewModel.executeGetPagingListBookingByHotel(dateNow)
             .observe(this) { booking ->
-//                val filterFinish = booking.filter {
-//                    if (it.room.isNotEmpty()) {
-//                        it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"
-//                    } else {
-//                        it.id == ""
-//                    }
-//                }
-
                 lifecycleScope.launch {
                     adapter.submitData(booking)
                 }
             }
-    }
-
-    private fun fetchBookingList() {
-        val dateNow = DateUtils.getDateThisYear()
-
-        bookingFinishedViewModel.executeGetListBookingByHotel(dateNow).observe(this) { booking ->
-            when (booking) {
-                is Resource.Error -> {
-                    showLoading(false)
-
-                    if (!isInternetAvailable(requireContext())) {
-                        activity?.showToast(getString(R.string.check_internet))
-                    } else {
-                        if (booking.message?.contains("404", false) == true) {
-                            initBookingRecyclerView(listOf())
-                        } else {
-                            activity?.showToast(booking.message.toString())
-                        }
-                    }
-                }
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
-                is Resource.Message -> {
-                    showLoading(false)
-                    Timber.tag("BookingNowFragment").d(booking.message)
-                }
-                is Resource.Success -> {
-                    showLoading(false)
-                    Timber.tag("TEST").e(booking.data.toString())
-
-                    val filteredData = booking.data?.filter { bookingData ->
-                        if (bookingData.room.isNotEmpty()) {
-                            (bookingData.room.first().actualCheckout != "Empty" && bookingData.room.first().actualCheckin != "Empty")
-                        } else {
-                            // intentionally make the list empty
-                            bookingData.id == ""
-                        }
-                    }
-                    if (filteredData != null) {
-                        initBookingRecyclerView(filteredData.ifEmpty { listOf() })
-                    }
-                }
-            }
-        }
     }
 
     private fun initBookingRecyclerView(booking: List<Booking>?) {
