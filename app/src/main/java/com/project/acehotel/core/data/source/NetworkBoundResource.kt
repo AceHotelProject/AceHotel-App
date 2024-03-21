@@ -1,7 +1,9 @@
 package com.project.acehotel.core.data.source
 
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 
 abstract class NetworkBoundResource<ResultType, RequestType> {
     private var result: Flow<Resource<ResultType>> = flow {
@@ -28,7 +30,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
 
     fun asFlow(): Flow<Resource<ResultType>> = result
 
-    // FOR OFFLINE FIRST APP
+// FOR OFFLINE FIRST APP
 //
 //    private var result: Flow<Resource<ResultType>> = flow {
 //        emit(Resource.Loading())

@@ -173,7 +173,9 @@ interface ApiService {
     ): HotelResponse
 
     @GET("recap")
-    suspend fun getHotelRecap(): HotelRecapResponse
+    suspend fun getHotelRecap(
+        @Query("checkin_date") checkinDate: String
+    ): HotelRecapResponse
 
     // HOTELS
 

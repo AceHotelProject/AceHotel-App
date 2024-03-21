@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.project.acehotel.R
@@ -21,6 +23,7 @@ import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentBookingFinishedBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -38,10 +41,8 @@ class BookingFinishedFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-//        fetchBookingList()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         fetchBookingPagingList()
     }
@@ -49,18 +50,30 @@ class BookingFinishedFragment : Fragment() {
     private fun fetchBookingPagingList() {
         val adapter = BookingPagingListAdapter()
         binding.rvBookingFinished.adapter = adapter
-        
+
+        adapter.addLoadStateListener { loadStates ->
+            val isRefreshing =
+                loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
+            binding.refBookingFinished.isRefreshing = isRefreshing
+        }
+
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvBookingFinished.layoutManager = layoutManager
 
         val dateNow = DateUtils.getDateThisYear()
         bookingFinishedViewModel.executeGetPagingListBookingByHotel(dateNow)
             .observe(this) { booking ->
-//                lifecycleScope.launch {
-//                    adapter.submitData(booking)
+//                val filterFinish = booking.filter {
+//                    if (it.room.isNotEmpty()) {
+//                        it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"
+//                    } else {
+//                        it.id == ""
+//                    }
 //                }
 
-                Timber.tag("TEST").e(booking.toString())
+                lifecycleScope.launch {
+                    adapter.submitData(booking)
+                }
             }
     }
 
@@ -130,6 +143,12 @@ class BookingFinishedFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.refBookingFinished.isRefreshing = isLoading
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 
     companion object {

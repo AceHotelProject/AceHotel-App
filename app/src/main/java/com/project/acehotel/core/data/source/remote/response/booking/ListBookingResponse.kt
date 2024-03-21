@@ -17,7 +17,7 @@ data class ListBookingResponse(
     val page: Int? = null,
 
     @field:SerializedName("results")
-    val results: List<ResultsItem?>? = null
+    val results: List<ListBookingResultsItem?>? = null
 )
 
 data class RoomItem(
@@ -53,7 +53,7 @@ data class VisitorId(
     val id: String? = null
 )
 
-data class ResultsItem(
+data class ListBookingResultsItem(
 
     @field:SerializedName("is_proof_uploaded")
     val isProofUploaded: Boolean? = null,

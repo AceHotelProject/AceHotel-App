@@ -9,6 +9,7 @@ import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.booking.usecase.BookingUseCase
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +39,10 @@ class BookingFinishedViewModel @Inject constructor(
     fun executeGetPagingListBookingByHotel(filterDate: String): MediatorLiveData<PagingData<Booking>> =
         MediatorLiveData<PagingData<Booking>>().apply {
             addSource(getSelectedHotelData()) { hotel ->
+                Timber.tag("PAGING").e(hotel.toString())
                 addSource(getPagingListBookingByHotel(hotel.id, filterDate)) { booking ->
+                    Timber.tag("PAGING").e(booking.toString())
+
                     value = booking
                 }
             }

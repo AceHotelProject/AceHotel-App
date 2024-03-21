@@ -11,13 +11,18 @@ import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.mapToRoomDisplay
 import com.project.acehotel.databinding.ItemListBookingBinding
 
-class BookingPagingListAdapter : PagingDataAdapter<Booking, BookingPagingListAdapter.ViewHolder>(
-    DIFF_CALLBACK
-) {
+class BookingPagingListAdapter :
+    PagingDataAdapter<Booking, BookingPagingListAdapter.ViewHolder>(DIFF_CALLBACK) {
     private lateinit var onItemCallback: OnItemClickCallback
 
     inner class ViewHolder(val binding: ItemListBookingBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding =
+            ItemListBookingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = getItem(position)
@@ -34,12 +39,6 @@ class BookingPagingListAdapter : PagingDataAdapter<Booking, BookingPagingListAda
         holder.itemView.setOnClickListener {
             onItemCallback.onItemClicked(holder.itemView.context, data!!)
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding =
-            ItemListBookingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
