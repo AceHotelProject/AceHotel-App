@@ -4,15 +4,16 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.domain.booking.model.Booking
-import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.FilterDate
 import com.project.acehotel.core.utils.datamapper.BookingDataMapper
+import timber.log.Timber
 import javax.inject.Inject
 
 class ListBookingPagingSource @Inject constructor(
     private val apiService: ApiService,
     private val id: String,
     private val filterDate: String,
+    private val isFinished: Boolean,
 ) : PagingSource<Int, Booking>() {
     override fun getRefreshKey(state: PagingState<Int, Booking>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -42,22 +43,35 @@ class ListBookingPagingSource @Inject constructor(
                 FilterDate.MONTH.value -> {
                     listBooking.filter {
                         if (it.room.isNotEmpty()) {
-                            !DateUtils.isTodayDate(it.checkinDate)
+                            it.room.first().actualCheckin == "Empty" || it.room.first().actualCheckout != "Empty"
                         } else {
                             it.id == ""
                         }
                     }
                 }
                 FilterDate.YEAR.value -> {
-                    listBooking.filter {
-                        if (it.room.isNotEmpty()) {
-                            it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"
-                        } else {
-                            it.id == ""
+                    if (isFinished) {
+                        listBooking.filter {
+                            if (it.room.isNotEmpty()) {
+                                Timber.tag("TEST").e("Masuk ${it.id}")
+                                it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"
+                            } else {
+                                it.id == ""
+                            }
+                        }
+                    } else {
+                        listBooking.filter {
+                            if (it.room.isNotEmpty()) {
+                                it.room.first().actualCheckin == "Empty" || it.room.first().actualCheckout != "Empty"
+                            } else {
+                                it.id == ""
+                            }
                         }
                     }
                 }
             }
+
+            Timber.tag("PAGING").d("${filterDate} = ${listBooking.size}")
 
             LoadResult.Page(
                 data = listBooking,

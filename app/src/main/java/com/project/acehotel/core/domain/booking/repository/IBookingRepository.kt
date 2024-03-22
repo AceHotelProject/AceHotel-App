@@ -41,7 +41,8 @@ interface IBookingRepository {
 
     fun getPagingListBookingByHotel(
         hotelId: String,
-        filterDate: String
+        filterDate: String,
+        isFinished: Boolean
     ): Flow<PagingData<Booking>>
 
     // TEST PAGING

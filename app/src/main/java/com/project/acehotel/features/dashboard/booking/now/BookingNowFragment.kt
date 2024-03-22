@@ -8,19 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.project.acehotel.R
-import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
-import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
+import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
-import com.project.acehotel.core.utils.isInternetAvailable
-import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentBookingNowBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class BookingNowFragment : Fragment() {
@@ -29,59 +26,38 @@ class BookingNowFragment : Fragment() {
 
     private val bookingNowViewModel: BookingNowViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        fetchBookingList()
+        fetchBookingPagingList()
     }
 
-    private fun fetchBookingList() {
-        val dateNow = DateUtils.getDateThisDay()
-
-        bookingNowViewModel.executeGetListBookingByHotel(dateNow).observe(this) { booking ->
-            when (booking) {
-                is Resource.Error -> {
-                    showLoading(false)
-
-                    if (!isInternetAvailable(requireContext())) {
-                        activity?.showToast(getString(R.string.check_internet))
-                    } else {
-                        if (booking.message?.contains("404", false) == true) {
-                            initBookingRecyclerView(listOf())
-                        } else {
-                            activity?.showToast(booking.message.toString())
-                        }
-                    }
-                }
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
-                is Resource.Message -> {
-                    showLoading(false)
-                    Timber.tag("BookingNowFragment").d(booking.message)
-                }
-                is Resource.Success -> {
-                    showLoading(false)
-                    initBookingRecyclerView(booking.data)
-                }
-            }
-        }
-    }
-
-    private fun initBookingRecyclerView(booking: List<Booking>?) {
-        val adapter = BookingListAdapter(booking)
+    private fun fetchBookingPagingList() {
+        val adapter = BookingPagingListAdapter()
         binding.rvBookingNow.adapter = adapter
+
+        adapter.addLoadStateListener { loadStates ->
+            val isRefreshing =
+                loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
+            binding.refBookingNow.isRefreshing = isRefreshing
+        }
 
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvBookingNow.layoutManager = layoutManager
 
-        adapter.setOnItemClickCallback(object : BookingListAdapter.OnItemClickCallback {
+        val filterDate = DateUtils.getDateThisDay()
+        bookingNowViewModel.executeGetPagingListBookingByHotel(filterDate, true)
+            .observe(this) { booking ->
+                lifecycleScope.launch {
+                    adapter.submitData(booking)
+                }
+            }
+
+        adapter.setOnItemClickCallback(object : BookingPagingListAdapter.OnItemClickCallback {
             override fun onItemClicked(context: Context, booking: Booking) {
                 val intentToBookingDetail =
                     Intent(requireContext(), BookingDetailActivity::class.java)
-                val dataToJson = Gson().toJson(booking)
-
-                intentToBookingDetail.putExtra(BOOKING_DATA, dataToJson)
+                intentToBookingDetail.putExtra(BOOKING_DATA, booking)
                 startActivity(intentToBookingDetail)
             }
         })
@@ -97,6 +73,12 @@ class BookingNowFragment : Fragment() {
     ): View? {
         _binding = FragmentBookingNowBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 
     companion object {

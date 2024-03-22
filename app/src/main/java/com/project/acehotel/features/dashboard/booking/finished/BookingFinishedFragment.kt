@@ -11,9 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
 import com.project.acehotel.core.domain.booking.model.Booking
-import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.databinding.FragmentBookingFinishedBinding
@@ -55,36 +53,22 @@ class BookingFinishedFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvBookingFinished.layoutManager = layoutManager
 
-        val dateNow = DateUtils.getDateThisYear()
-        bookingFinishedViewModel.executeGetPagingListBookingByHotel(dateNow)
+        val filterDate = DateUtils.getDateThisYear()
+        bookingFinishedViewModel.executeGetPagingListBookingByHotel(filterDate, true)
             .observe(this) { booking ->
                 lifecycleScope.launch {
                     adapter.submitData(booking)
                 }
             }
-    }
 
-    private fun initBookingRecyclerView(booking: List<Booking>?) {
-        val adapter = BookingListAdapter(booking)
-        binding.rvBookingFinished.adapter = adapter
-
-        val layoutManager = LinearLayoutManager(requireContext())
-        binding.rvBookingFinished.layoutManager = layoutManager
-
-        adapter.setOnItemClickCallback(object : BookingListAdapter.OnItemClickCallback {
+        adapter.setOnItemClickCallback(object : BookingPagingListAdapter.OnItemClickCallback {
             override fun onItemClicked(context: Context, booking: Booking) {
                 val intentToBookingDetail =
                     Intent(requireContext(), BookingDetailActivity::class.java)
-                val dataToJson = Gson().toJson(booking)
-
-                intentToBookingDetail.putExtra(BOOKING_DATA, dataToJson)
+                intentToBookingDetail.putExtra(BOOKING_DATA, booking)
                 startActivity(intentToBookingDetail)
             }
         })
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.refBookingFinished.isRefreshing = isLoading
     }
 
     override fun onDestroyView() {

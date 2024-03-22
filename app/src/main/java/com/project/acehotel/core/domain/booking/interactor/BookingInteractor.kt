@@ -64,8 +64,9 @@ class BookingInteractor @Inject constructor(private val bookingRepository: Booki
 
     override fun getPagingListBookingByHotel(
         hotelId: String,
-        filterDate: String
+        filterDate: String,
+        isFinished: Boolean
     ): Flow<PagingData<Booking>> {
-        return bookingRepository.getPagingListBookingByHotel(hotelId, filterDate)
+        return bookingRepository.getPagingListBookingByHotel(hotelId, filterDate, isFinished)
     }
 }

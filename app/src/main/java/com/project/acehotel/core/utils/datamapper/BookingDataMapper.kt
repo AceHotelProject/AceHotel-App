@@ -101,10 +101,20 @@ object BookingDataMapper {
                         actualCheckout = it?.actualCheckout ?: "Empty",
                         checkoutStaffId = it?.checkoutStaffId ?: "Empty",
                         checkinStaffId = it?.checkinStaffId ?: "Empty",
+                        hasProblem = false, // This seems to be hardcoded, consider using it?.hasProblem ?: false
+                        note = "Empty",
+                    )
+                } ?: listOf(
+                    RoomBooking(
+                        id = "Empty",
+                        actualCheckin = "Empty",
+                        actualCheckout = "Empty",
+                        checkoutStaffId = "Empty",
+                        checkinStaffId = "Empty",
                         hasProblem = false,
                         note = "Empty",
                     )
-                } ?: listOf(),
+                ),
                 totalPrice = booking?.totalPrice ?: 0,
                 duration = booking?.duration ?: 0,
                 roomCount = booking?.roomCount ?: 0,

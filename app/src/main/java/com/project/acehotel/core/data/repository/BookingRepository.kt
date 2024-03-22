@@ -153,14 +153,15 @@ class BookingRepository @Inject constructor(
 
     override fun getPagingListBookingByHotel(
         hotelId: String,
-        filterDate: String
+        filterDate: String,
+        isFinished: Boolean
     ): Flow<PagingData<Booking>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
             pagingSourceFactory = {
-                ListBookingPagingSource(apiService, hotelId, filterDate)
+                ListBookingPagingSource(apiService, hotelId, filterDate, isFinished)
             }
         ).flow
     }
