@@ -1,20 +1,30 @@
 package com.project.acehotel.features.dashboard.management.visitor.detail
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
+import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityVisitorDetailBinding
+import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import com.project.acehotel.features.dashboard.management.visitor.add.AddVisitorActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -36,6 +46,45 @@ class VisitorDetailActivity : AppCompatActivity() {
         handleButtonBack()
 
         setupButtonMore()
+
+        fetchBookingPagingList()
+    }
+
+    private fun fetchBookingPagingList() {
+        val adapter = BookingPagingListAdapter()
+        binding.rvVisitorHistory.adapter = adapter
+
+        adapter.addLoadStateListener { loadStates ->
+            val isRefreshing =
+                loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
+            binding.refVisitorDetail.isRefreshing = isRefreshing
+        }
+
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvVisitorHistory.layoutManager = layoutManager
+
+        val filterDate = DateUtils.getDateThisYear()
+        visitorViewModel.getPagingListBookingByVisitor(
+            intent.getStringExtra(VISITOR_ID) ?: "",
+            filterDate,
+            true
+        )
+            .observe(this) { booking ->
+                lifecycleScope.launch {
+                    adapter.submitData(booking)
+                }
+            }
+
+        adapter.setOnItemClickCallback(object : BookingPagingListAdapter.OnItemClickCallback {
+            override fun onItemClicked(context: Context, booking: Booking) {
+                val intentToBookingDetail =
+                    Intent(this@VisitorDetailActivity, BookingDetailActivity::class.java)
+                val dataToJson = Gson().toJson(booking)
+
+                intentToBookingDetail.putExtra(BOOKING_DATA, dataToJson)
+                startActivity(intentToBookingDetail)
+            }
+        })
     }
 
     private fun setupButtonMore() {
@@ -133,5 +182,6 @@ class VisitorDetailActivity : AppCompatActivity() {
     companion object {
         private const val VISITOR_ID = "visitor_id"
         private const val VISITOR_UPDATE = "visitor_update"
+        private const val BOOKING_DATA = "booking_data"
     }
 }
