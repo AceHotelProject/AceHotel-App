@@ -13,12 +13,15 @@ import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
+import com.project.acehotel.core.ui.adapter.visitor.CurrentVisitorAdapter
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentHomeBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
+import com.project.acehotel.features.dashboard.management.visitor.detail.VisitorDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -29,10 +32,20 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
+    private var hotelData: ManageHotel? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchListRoom()
+        fetchHotelData()
+
+        fetchListBooking()
+    }
+
+    private fun fetchHotelData() {
+        homeViewModel.getSelectedHotelData().observe(this) {
+            hotelData = it
+        }
     }
 
     override fun onCreateView(
@@ -43,8 +56,8 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun fetchListRoom() {
-        val date = DateUtils.getDateThisMonth()
+    private fun fetchListBooking() {
+        val date = DateUtils.getDateThisDay()
 
         homeViewModel.executeGetListBookingByHotel(date).observe(this) { booking ->
             when (booking) {
@@ -54,7 +67,11 @@ class HomeFragment : Fragment() {
                     if (!isInternetAvailable(requireContext())) {
                         activity?.showToast(getString(R.string.check_internet))
                     } else {
-                        activity?.showToast(booking.message.toString())
+                        if (booking.message?.contains("404", false) == true) {
+                            initBookingRecyclerView(listOf())
+                        } else {
+                            activity?.showToast(booking.message.toString())
+                        }
                     }
                 }
                 is Resource.Loading -> {
@@ -68,36 +85,45 @@ class HomeFragment : Fragment() {
                     showLoading(false)
 
                     initBookingRecyclerView(booking.data)
+
+                    initCurrentVisitorRecyclerView(booking.data)
+
+                    initTodayRecap(booking.data)
                 }
             }
         }
+    }
 
+    private fun initTodayRecap(booking: List<Booking>?) {
+        var todayRevenue = 0
+        var todayVisitorCheckIn = 0
+        var todayRoomUsed = 0
+        var todayRoomAvailable = 0
+        var todayNewBooking = 0
 
-//        homeViewModel.executeGetListRoomByHotel().observe(this) { room ->
-//            when (room) {
-//                is Resource.Error -> {
-//                    showLoading(false)
-//
-//                    if (!isInternetAvailable(requireContext())) {
-//                        activity?.showToast(getString(R.string.check_internet))
-//                    } else {
-//                        activity?.showToast(room.message.toString())
-//                    }
-//                }
-//                is Resource.Loading -> {
-//                    showLoading(true)
-//                }
-//                is Resource.Message -> {
-//                    showLoading(false)
-//                    Timber.tag("InventoryDetailActivity").d(room.message)
-//                }
-//                is Resource.Success -> {
-//                    showLoading(false)
-//
-//                    initRoomRecyclerView(room.data)
-//                }
-//            }
-//        }
+        if (booking != null) {
+            for (data in booking) {
+                todayRevenue += data.totalPrice
+
+                if (data.room.isNotEmpty()) {
+                    ++todayRoomUsed
+                    if (data.room.first().actualCheckin != "Empty") {
+                        ++todayVisitorCheckIn
+                    } else if (data.room.first().actualCheckin == "Empty" && data.room.first().actualCheckout == "Empty") {
+                        ++todayNewBooking
+                    }
+                }
+            }
+
+            todayRoomAvailable = hotelData?.roomId?.size!! - todayRoomUsed
+        }
+
+        binding.apply {
+            tvTotalIncome.text = todayRevenue.toString()
+            tvVisitorCheckin.text = todayVisitorCheckIn.toString()
+            tvRoomAvail.text = todayRoomAvailable.toString()
+            tvTotalNewBook.text = todayNewBooking.toString()
+        }
     }
 
     private fun initBookingRecyclerView(booking: List<Booking>?) {
@@ -119,6 +145,23 @@ class HomeFragment : Fragment() {
         })
     }
 
+    private fun initCurrentVisitorRecyclerView(booking: List<Booking>?) {
+        val adapter = CurrentVisitorAdapter(booking)
+        binding.rvListCurrentVisitor.adapter = adapter
+
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.rvListCurrentVisitor.layoutManager = layoutManager
+
+        adapter.setOnItemClickCallback(object : CurrentVisitorAdapter.OnItemClickCallback {
+            override fun onItemClicked(id: String, name: String) {
+                val intentToVisitorDetail =
+                    Intent(requireContext(), VisitorDetailActivity::class.java)
+                intentToVisitorDetail.putExtra(VISITOR_ID, id)
+                startActivity(intentToVisitorDetail)
+            }
+        })
+    }
+
     private fun showLoading(isLoading: Boolean) {
         binding.refHome.isRefreshing = isLoading
     }
@@ -131,5 +174,6 @@ class HomeFragment : Fragment() {
 
     companion object {
         private const val BOOKING_DATA = "booking_data"
+        private const val VISITOR_ID = "visitor_id"
     }
 }
