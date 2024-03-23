@@ -149,8 +149,6 @@ class BookingRepository @Inject constructor(
         }.asFlow()
     }
 
-    // EXPERIMENT PAGING
-
     override fun getPagingListBookingByHotel(
         hotelId: String,
         filterDate: String,
@@ -161,10 +159,38 @@ class BookingRepository @Inject constructor(
                 pageSize = 5
             ),
             pagingSourceFactory = {
-                ListBookingPagingSource(apiService, hotelId, filterDate, isFinished)
+                ListBookingPagingSource(apiService, hotelId, filterDate, isFinished, "hotel")
             }
         ).flow
     }
 
-    // EXPERIMENT PAGING
+    override fun getPagingListBookingByVisitor(
+        visitorId: String,
+        filterDate: String,
+        isFinished: Boolean
+    ): Flow<PagingData<Booking>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                ListBookingPagingSource(apiService, visitorId, filterDate, false, "visitor")
+            }
+        ).flow
+    }
+
+    override fun getPagingListBookingByRoom(
+        roomId: String,
+        filterDate: String,
+        isFinished: Boolean
+    ): Flow<PagingData<Booking>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                ListBookingPagingSource(apiService, roomId, filterDate, false, "room")
+            }
+        ).flow
+    }
 }

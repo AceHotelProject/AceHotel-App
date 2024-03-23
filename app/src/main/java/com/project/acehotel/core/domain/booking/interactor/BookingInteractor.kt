@@ -69,4 +69,20 @@ class BookingInteractor @Inject constructor(private val bookingRepository: Booki
     ): Flow<PagingData<Booking>> {
         return bookingRepository.getPagingListBookingByHotel(hotelId, filterDate, isFinished)
     }
+
+    override fun getPagingListBookingByVisitor(
+        visitorId: String,
+        filterDate: String,
+        isFinished: Boolean
+    ): Flow<PagingData<Booking>> {
+        return bookingRepository.getPagingListBookingByVisitor(visitorId, filterDate, isFinished)
+    }
+
+    override fun getPagingListBookingByRoom(
+        roomId: String,
+        filterDate: String,
+        isFinished: Boolean
+    ): Flow<PagingData<Booking>> {
+        return bookingRepository.getPagingListBookingByRoom(roomId, filterDate, isFinished)
+    }
 }

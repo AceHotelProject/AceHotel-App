@@ -265,6 +265,22 @@ interface ApiService {
         @Path("id") id: String
     ): ListBookingResponse
 
+    @GET("bookings/visitor/{id}")
+    suspend fun getPagingListBookingByVisitor(
+        @Path("id") id: String,
+        @Query("checkin_date") filterDate: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
+    ): ListBookingResponse
+
+    @GET("bookings/room/{id}")
+    suspend fun getPagingListBookingByRoom(
+        @Path("id") id: String,
+        @Query("checkin_date") filterDate: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
+    ): ListBookingResponse
+
     @GET("bookings/{id}")
     suspend fun getDetailBooking(
         @Path("id") id: String
@@ -297,6 +313,7 @@ interface ApiService {
     @GET("rooms/hotel/{id}")
     suspend fun getListRoomByHotel(
         @Path("id") id: String,
+        @Query("limit") limit: Int = 99
     ): ListRoomResponse
 
     @GET("rooms/{id}")

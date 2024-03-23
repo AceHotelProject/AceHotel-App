@@ -45,5 +45,17 @@ interface IBookingRepository {
         isFinished: Boolean
     ): Flow<PagingData<Booking>>
 
+    fun getPagingListBookingByVisitor(
+        visitorId: String,
+        filterDate: String,
+        isFinished: Boolean
+    ): Flow<PagingData<Booking>>
+
+    fun getPagingListBookingByRoom(
+        roomId: String,
+        filterDate: String,
+        isFinished: Boolean
+    ): Flow<PagingData<Booking>>
+
     // TEST PAGING
 }
