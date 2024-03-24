@@ -1,20 +1,26 @@
 package com.project.acehotel.core.ui.custom.cards
 
 import android.content.Context
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.project.acehotel.R
 import com.project.acehotel.core.utils.constants.CurrentVisitorStatus
 
-class CustomCardCurrentVisitor(context: Context) :
-    CardView(context) {
+class CustomCardCurrentVisitor(context: Context, attrs: AttributeSet? = null) :
+    CardView(context, attrs) {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.item_list_current_visitor, this, true)
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+
+        findViewById<ConstraintLayout>(R.id.constraintLayout).setBackgroundColor(
+            ContextCompat.getColor(context, R.color.transparent)
+        )
     }
 
     fun setVisitorName(name: String) {
