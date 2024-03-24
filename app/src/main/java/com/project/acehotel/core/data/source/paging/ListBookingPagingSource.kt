@@ -65,7 +65,7 @@ class ListBookingPagingSource @Inject constructor(
 
             val listBooking = BookingDataMapper.mapListBookingToDomain(response)
 
-            when (filterDate) {
+            val filteredList = when (filterDate) {
                 FilterDate.NOW.value -> {
                     listBooking.filter {
                         if (it.room.isNotEmpty()) {
@@ -88,7 +88,9 @@ class ListBookingPagingSource @Inject constructor(
                     if (isFinished) {
                         listBooking.filter {
                             if (it.room.isNotEmpty()) {
-                                Timber.tag("TEST").e("Masuk ${it.id}")
+                                Timber.tag("TEST")
+                                    .e("Masuk ${it.id} = ${it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"}")
+                                Timber.tag("TEST").e(listBooking.toString())
                                 it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"
                             } else {
                                 it.id == ""
@@ -97,16 +99,19 @@ class ListBookingPagingSource @Inject constructor(
                     } else {
                         listBooking.filter {
                             if (it.room.isNotEmpty()) {
-                                it.room.first().actualCheckin == "Empty" || it.room.first().actualCheckout != "Empty"
+                                it.room.first().actualCheckin == "Empty" || it.room.first().actualCheckout == "Empty"
                             } else {
                                 it.id == ""
                             }
                         }
                     }
                 }
+                else -> {
+                    listOf<Booking>()
+                }
             }
             LoadResult.Page(
-                data = listBooking,
+                data = filteredList,
                 prevKey = if (position == START_PAGE_INDEX) null else position - 1,
                 nextKey = if (listBooking.isEmpty()) null else position + 1
             )
