@@ -107,35 +107,8 @@ object DateUtils {
 
     fun convertTimeToHourMinute(date: String): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        inputFormat.timeZone =
-            TimeZone.getTimeZone("UTC") // Set the timezone to UTC to parse correctly
         val dateInput = inputFormat.parse(date)
-
         val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        outputFormat.timeZone = TimeZone.getDefault()
-
-        return dateInput.let { outputFormat.format(it) } ?: "Invalid Date"
-    }
-
-    fun isDateToday(dateString: String): Boolean {
-        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        format.timeZone = TimeZone.getTimeZone("UTC")
-
-        val date = format.parse(dateString) ?: return false
-
-        val today = Calendar.getInstance()
-        today.set(Calendar.HOUR_OF_DAY, 0)
-        today.set(Calendar.MINUTE, 0)
-        today.set(Calendar.SECOND, 0)
-        today.set(Calendar.MILLISECOND, 0)
-
-        val inputDate = Calendar.getInstance()
-        inputDate.time = date
-        inputDate.set(Calendar.HOUR_OF_DAY, 0)
-        inputDate.set(Calendar.MINUTE, 0)
-        inputDate.set(Calendar.SECOND, 0)
-        inputDate.set(Calendar.MILLISECOND, 0)
-
-        return today.timeInMillis == inputDate.timeInMillis
+        return outputFormat.format(dateInput)
     }
 }
