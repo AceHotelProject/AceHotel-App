@@ -13,7 +13,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
+import com.project.acehotel.core.data.source.remote.MQTTService
 import com.project.acehotel.core.utils.constants.FabMenuState
+import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
@@ -21,6 +23,7 @@ import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseV
 import com.project.acehotel.features.popup.choose_hotel.ChooseHotelDialog
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
+import org.eclipse.paho.client.mqttv3.*
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val mainViewModel: MainViewModel by viewModels()
+    private lateinit var mqttClient: MQTTService
 
     private var fabMenuState: FabMenuState = FabMenuState.COLLAPSED
 
@@ -44,13 +48,82 @@ class MainActivity : AppCompatActivity() {
         handleFab()
 
         validateToken()
+
+        initMQTT()
+    }
+
+    private fun initMQTT() {
+        mqttClient = MQTTService(applicationContext)
+
+        if (!mqttClient.isConnected()) {
+            mqttClient.connect(
+                object : IMqttActionListener {
+                    override fun onSuccess(asyncActionToken: IMqttToken?) {
+                        Timber.tag("MQTT").d("Success connected to MQTT")
+
+                        mqttClient.subscribe(
+                            MQTT_TOPIC,
+                            1,
+                            object : IMqttActionListener {
+                                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                                    Timber.tag("MQTT").d("Success subscribed to ACE HOTEL Topic")
+                                }
+
+                                override fun onFailure(
+                                    asyncActionToken: IMqttToken?,
+                                    exception: Throwable?
+                                ) {
+                                    Timber.tag("MQTT").e(exception)
+                                }
+                            }
+                        )
+                    }
+
+                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                        Timber.tag("MQTT").e(exception)
+                    }
+                },
+                object : MqttCallback {
+                    override fun connectionLost(cause: Throwable?) {
+                        Timber.tag("MQTT").e("Connection lost")
+                    }
+
+                    override fun messageArrived(topic: String?, message: MqttMessage?) {
+                        val msg = "Receive message: ${message.toString()} from topic: $topic"
+
+                        showToast(msg)
+                    }
+
+                    override fun deliveryComplete(token: IMqttDeliveryToken?) {
+                        Timber.tag("MQTT").d("Delivery complete")
+                    }
+                }
+            )
+        }
+
+//        if (mqttClient.isConnected()) {
+//            showToast("Masuk")
+//
+//            mqttClient.subscribe(
+//                MQTT_TOPIC,
+//                1,
+//                object : IMqttActionListener {
+//                    override fun onSuccess(asyncActionToken: IMqttToken?) {
+//                        Timber.tag("MQTT").d("Success subscribed to ACE HOTEL Topic")
+//                    }
+//
+//                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+//                        Timber.tag("MQTT").e(exception)
+//                    }
+//                }
+//            )
+//        }
     }
 
     private fun validateToken() {
         mainViewModel.getRefreshToken().observe(this) { token ->
-            Timber.tag("TOKEN").e("Saved token: ${token}")
-
-            if (token.isNullOrEmpty()) {
+            if (token.isEmpty()) {
+                Timber.tag("TOKEN").e(token.isNotEmpty().toString())
                 TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
             }
         }
@@ -85,9 +158,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fabCheckout.setOnClickListener {
-            val intentToChooseVisitor = Intent(this, ChooseVisitorActivity::class.java)
-            intentToChooseVisitor.putExtra(FLAG_VISITOR, MENU_CHECKOUT)
-            startActivity(intentToChooseVisitor)
+            val intentToChooseBooking = Intent(this, ChooseBookingActivity::class.java)
+            intentToChooseBooking.putExtra(FLAG_VISITOR, MENU_CHECKOUT)
+            startActivity(intentToChooseBooking)
         }
     }
 
@@ -217,5 +290,7 @@ class MainActivity : AppCompatActivity() {
         private const val MENU_BOOKING = "booking"
         private const val MENU_CHECKIN = "checkin"
         private const val MENU_CHECKOUT = "checkout"
+
+        private const val MQTT_TOPIC = "/mqtt-integration/Reader/ACE-001"
     }
 }
