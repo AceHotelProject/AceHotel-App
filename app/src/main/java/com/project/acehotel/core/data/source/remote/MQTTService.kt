@@ -1,13 +1,11 @@
 package com.project.acehotel.core.data.source.remote
 
-import android.content.Context
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 import timber.log.Timber
+import javax.inject.Inject
 
-class MQTTService(context: Context?) {
-
-    private var mqttClient = MqttAndroidClient(context, server, clientId)
+class MQTTService @Inject constructor(private val mqttClient: MqttAndroidClient) {
 
     fun connect(
         cbConnect: IMqttActionListener,
@@ -73,10 +71,5 @@ class MQTTService(context: Context?) {
 
     fun isConnected(): Boolean {
         return mqttClient.isConnected
-    }
-
-    companion object {
-        private const val server = "tcp://91.108.104.92:1883"
-        private const val clientId = "test-app"
     }
 }

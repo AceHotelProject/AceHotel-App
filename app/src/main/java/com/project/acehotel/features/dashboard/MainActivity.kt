@@ -25,13 +25,16 @@ import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.eclipse.paho.client.mqttv3.*
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val mainViewModel: MainViewModel by viewModels()
-    private lateinit var mqttClient: MQTTService
+
+    @Inject
+    lateinit var mqttService: MQTTService
 
     private var fabMenuState: FabMenuState = FabMenuState.COLLAPSED
 
@@ -53,15 +56,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initMQTT() {
-        mqttClient = MQTTService(applicationContext)
-
-        if (!mqttClient.isConnected()) {
-            mqttClient.connect(
+        if (!mqttService.isConnected()) {
+            mqttService.connect(
                 object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         Timber.tag("MQTT").d("Success connected to MQTT")
 
-                        mqttClient.subscribe(
+                        mqttService.subscribe(
                             MQTT_TOPIC,
                             1,
                             object : IMqttActionListener {
@@ -91,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                     override fun messageArrived(topic: String?, message: MqttMessage?) {
                         val msg = "Receive message: ${message.toString()} from topic: $topic"
 
+                        Timber.tag("RESULT").e(message.toString())
                         showToast(msg)
                     }
 
@@ -100,30 +102,11 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         }
-
-//        if (mqttClient.isConnected()) {
-//            showToast("Masuk")
-//
-//            mqttClient.subscribe(
-//                MQTT_TOPIC,
-//                1,
-//                object : IMqttActionListener {
-//                    override fun onSuccess(asyncActionToken: IMqttToken?) {
-//                        Timber.tag("MQTT").d("Success subscribed to ACE HOTEL Topic")
-//                    }
-//
-//                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-//                        Timber.tag("MQTT").e(exception)
-//                    }
-//                }
-//            )
-//        }
     }
 
     private fun validateToken() {
         mainViewModel.getRefreshToken().observe(this) { token ->
             if (token.isEmpty()) {
-                Timber.tag("TOKEN").e(token.isNotEmpty().toString())
                 TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
             }
         }
