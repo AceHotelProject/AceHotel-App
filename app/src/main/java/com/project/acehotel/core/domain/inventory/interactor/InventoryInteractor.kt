@@ -4,6 +4,7 @@ import com.project.acehotel.core.data.repository.InventoryRepository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
+import com.project.acehotel.core.domain.inventory.model.Tag
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -60,5 +61,17 @@ class InventoryInteractor @Inject constructor(private val inventoryRepository: I
 
     override fun deleteInventory(id: String, hotelId: String): Flow<Resource<Int>> {
         return inventoryRepository.deleteInventory(id, hotelId)
+    }
+
+    override fun getTagById(readerId: String): Flow<Resource<String>> {
+        return inventoryRepository.getTagById(readerId)
+    }
+
+    override fun getTag(): Flow<Resource<List<Tag>>> {
+        return inventoryRepository.getTag()
+    }
+
+    override fun addTag(tid: String, inventoryId: String): Flow<Resource<Tag>> {
+        return inventoryRepository.addTag(tid, inventoryId)
     }
 }

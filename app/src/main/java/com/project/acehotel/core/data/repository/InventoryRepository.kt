@@ -8,8 +8,12 @@ import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
+import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
+import com.project.acehotel.core.domain.inventory.model.Tag
 import com.project.acehotel.core.domain.inventory.repository.IInventoryIRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.InventoryDataMapper
@@ -122,6 +126,42 @@ class InventoryRepository @Inject constructor(
 
             override suspend fun createCall(): Flow<ApiResponse<Response<InventoryDetailResponse>>> {
                 return remoteDataSource.deleteInventory(id, hotelId)
+            }
+        }.asFlow()
+    }
+
+    override fun getTagById(readerId: String): Flow<Resource<String>> {
+        return object : NetworkBoundResource<String, ListTagsByIdResponse>() {
+            override suspend fun fetchFromApi(response: ListTagsByIdResponse): String {
+                return response.tagId?.first() ?: ""
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ListTagsByIdResponse>> {
+                return remoteDataSource.getTagById(readerId)
+            }
+        }.asFlow()
+    }
+
+    override fun getTag(): Flow<Resource<List<Tag>>> {
+        return object : NetworkBoundResource<List<Tag>, ListTagsResponse>() {
+            override suspend fun fetchFromApi(response: ListTagsResponse): List<Tag> {
+                return InventoryDataMapper.mapListTagResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ListTagsResponse>> {
+                return remoteDataSource.getTag()
+            }
+        }.asFlow()
+    }
+
+    override fun addTag(tid: String, inventoryId: String): Flow<Resource<Tag>> {
+        return object : NetworkBoundResource<Tag, AddTagResponse>() {
+            override suspend fun fetchFromApi(response: AddTagResponse): Tag {
+                return InventoryDataMapper.mapAddTagResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<AddTagResponse>> {
+                return remoteDataSource.addTag(tid, inventoryId)
             }
         }.asFlow()
     }

@@ -3,6 +3,7 @@ package com.project.acehotel.core.domain.inventory.repository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
+import com.project.acehotel.core.domain.inventory.model.Tag
 import kotlinx.coroutines.flow.Flow
 
 interface IInventoryIRepository {
@@ -41,4 +42,13 @@ interface IInventoryIRepository {
         id: String,
         hotelId: String,
     ): Flow<Resource<Int>>
+
+    fun getTagById(readerId: String): Flow<Resource<String>>
+
+    fun getTag(): Flow<Resource<List<Tag>>>
+
+    fun addTag(
+        tid: String,
+        inventoryId: String,
+    ): Flow<Resource<Tag>>
 }

@@ -16,6 +16,9 @@ import com.project.acehotel.core.data.source.remote.response.inventory.Inventory
 import com.project.acehotel.core.data.source.remote.response.room.CheckoutBody
 import com.project.acehotel.core.data.source.remote.response.room.ListRoomResponse
 import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
+import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import kotlinx.coroutines.Dispatchers
@@ -196,6 +199,62 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 val response = apiService.deleteInventory(inventoryId, hotelId)
 
                 if (response.isSuccessful) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getTagById(
+        readerId: String
+    ): Flow<ApiResponse<ListTagsByIdResponse>> {
+        return flow<ApiResponse<ListTagsByIdResponse>> {
+            try {
+                val response = apiService.getTagById(readerId)
+
+                if (!response.tagId.isNullOrEmpty()) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getTag(): Flow<ApiResponse<ListTagsResponse>> {
+        return flow<ApiResponse<ListTagsResponse>> {
+            try {
+                val response = apiService.getTag()
+
+                if (!response.results.isNullOrEmpty()) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun addTag(
+        tid: String,
+        inventoryId: String,
+    ): Flow<ApiResponse<AddTagResponse>> {
+        return flow<ApiResponse<AddTagResponse>> {
+            try {
+                val response = apiService.addTag(tid, inventoryId)
+
+                if (response.id != null) {
                     emit(ApiResponse.Success(response))
                 } else {
                     emit(ApiResponse.Empty)
@@ -628,10 +687,13 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getListBookingByRoom(id: String): Flow<ApiResponse<ListBookingResponse>> {
+    suspend fun getListBookingByRoom(
+        id: String,
+        filterDate: String
+    ): Flow<ApiResponse<ListBookingResponse>> {
         return flow {
             try {
-                val response = apiService.getListBookingByRoom(id)
+                val response = apiService.getListBookingByRoom(id, filterDate)
 
                 if (response.results != null) {
                     emit(ApiResponse.Success(response))
@@ -840,4 +902,5 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     }
 
     //IMAGES
+
 }

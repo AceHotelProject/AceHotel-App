@@ -3,8 +3,11 @@ package com.project.acehotel.core.utils.datamapper
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
+import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
+import com.project.acehotel.core.domain.inventory.model.Tag
 
 object InventoryDataMapper {
 
@@ -54,4 +57,20 @@ object InventoryDataMapper {
 
             )
         } ?: listOf()
+
+    fun mapAddTagResponseToDomain(input: AddTagResponse): Tag = Tag(
+        status = input.status ?: "Empty",
+        tid = input.tid ?: "Empty",
+        inventoryId = input.inventoryId ?: "Empty",
+        id = input.id ?: "Empty",
+    )
+
+    fun mapListTagResponseToDomain(input: ListTagsResponse): List<Tag> = input.results?.map { tag ->
+        Tag(
+            status = tag?.status ?: "Empty",
+            tid = tag?.tid ?: "Empty",
+            inventoryId = tag?.inventoryId ?: "Empty",
+            id = tag?.id ?: "Empty",
+        )
+    } ?: listOf()
 }
