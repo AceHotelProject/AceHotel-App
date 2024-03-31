@@ -14,6 +14,9 @@ import com.project.acehotel.core.data.source.remote.response.inventory.Inventory
 import com.project.acehotel.core.data.source.remote.response.room.CheckoutBody
 import com.project.acehotel.core.data.source.remote.response.room.ListRoomResponse
 import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
+import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import okhttp3.MultipartBody
@@ -94,6 +97,20 @@ interface ApiService {
         @Query("hotel_id") hotelId: String,
     ): Response<InventoryDetailResponse>
 
+    @GET("tag/{id}")
+    suspend fun getTagById(
+        @Path("id") readerId: String
+    ): ListTagsByIdResponse
+
+    @GET("tag")
+    suspend fun getTag(): ListTagsResponse
+
+    @POST("tag")
+    suspend fun addTag(
+        @Field("tid") tid: String,
+        @Field("inventory_id") inventoryId: String,
+    ): AddTagResponse
+
     // INVENTORY
 
     // HOTELS
@@ -162,7 +179,7 @@ interface ApiService {
     ): Response<ManageHotelResultItem>
 
     @FormUrlEncoded
-    @PATCH("hotel/{id}")
+    @PATCH("hotels/{id}")
     suspend fun updateHotelPrice(
         @Path("id") id: String,
         @Field("discount_code") discountCode: String,
@@ -229,6 +246,7 @@ interface ApiService {
 
 
     // BOOKING
+
     @POST("bookings")
     @FormUrlEncoded
     suspend fun addBooking(
@@ -257,7 +275,8 @@ interface ApiService {
 
     @GET("bookings/room/{id}")
     suspend fun getListBookingByRoom(
-        @Path("id") id: String
+        @Path("id") id: String,
+        @Query("checkin_date") filterDate: String,
     ): ListBookingResponse
 
     @GET("bookings/visitor/{id}")
