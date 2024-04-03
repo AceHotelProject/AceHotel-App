@@ -30,6 +30,16 @@ class BookingNowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fetchBookingPagingList()
+
+        handleRefresh()
+
+        binding.tvEmptyBookingNow.visibility = View.VISIBLE
+    }
+
+    private fun handleRefresh() {
+        binding.refBookingNow.setOnRefreshListener {
+            fetchBookingPagingList()
+        }
     }
 
     private fun fetchBookingPagingList() {
@@ -40,6 +50,11 @@ class BookingNowFragment : Fragment() {
             val isRefreshing =
                 loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
             binding.refBookingNow.isRefreshing = isRefreshing
+
+            val isInitialLoadFinished = loadStates.refresh is LoadState.NotLoading
+            val isEmpty = adapter.itemCount == 0
+
+            handleEmptyStates(isInitialLoadFinished && isEmpty)
         }
 
         val layoutManager = LinearLayoutManager(requireContext())
@@ -48,6 +63,7 @@ class BookingNowFragment : Fragment() {
         val filterDate = DateUtils.getDateThisDay()
         bookingNowViewModel.executeGetPagingListBookingByHotel(filterDate, true)
             .observe(this) { booking ->
+
                 lifecycleScope.launch {
                     adapter.submitData(booking)
                 }
@@ -61,6 +77,10 @@ class BookingNowFragment : Fragment() {
                 startActivity(intentToBookingDetail)
             }
         })
+    }
+
+    private fun handleEmptyStates(isEmpty: Boolean) {
+        binding.tvEmptyBookingNow.visibility = if (isEmpty) View.VISIBLE else View.INVISIBLE
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -30,6 +30,16 @@ class BookingNextFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fetchBookingPagingList()
+
+        handleRefresh()
+
+        binding.tvEmptyBookingNext.visibility = View.VISIBLE
+    }
+
+    private fun handleRefresh() {
+        binding.refBookingNext.setOnRefreshListener {
+            fetchBookingPagingList()
+        }
     }
 
     private fun fetchBookingPagingList() {
@@ -40,6 +50,11 @@ class BookingNextFragment : Fragment() {
             val isRefreshing =
                 loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
             binding.refBookingNext.isRefreshing = isRefreshing
+
+            val isInitialLoadFinished = loadStates.refresh is LoadState.NotLoading
+            val isEmpty = adapter.itemCount == 0
+
+            handleEmptyStates(isInitialLoadFinished && isEmpty)
         }
 
         val layoutManager = LinearLayoutManager(requireContext())
@@ -63,8 +78,8 @@ class BookingNextFragment : Fragment() {
         })
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.refBookingNext.isRefreshing = isLoading
+    private fun handleEmptyStates(isEmpty: Boolean) {
+        binding.tvEmptyBookingNext.visibility = if (isEmpty) View.VISIBLE else View.INVISIBLE
     }
 
     override fun onCreateView(
