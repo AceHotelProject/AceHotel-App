@@ -7,7 +7,6 @@ import com.project.acehotel.core.data.source.remote.response.booking.ListBooking
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.utils.constants.FilterDate
 import com.project.acehotel.core.utils.datamapper.BookingDataMapper
-import timber.log.Timber
 import javax.inject.Inject
 
 class ListBookingPagingSource @Inject constructor(
@@ -68,10 +67,10 @@ class ListBookingPagingSource @Inject constructor(
             val filteredList = when (filterDate) {
                 FilterDate.NOW.value -> {
                     listBooking.filter {
-                        if (it.room.isNotEmpty()) {
+                        if (it.room.isEmpty()) {
                             it.id == ""
                         } else {
-                            it.id.isNotEmpty()
+                            it.id != ""
                         }
                     }
                 }
@@ -88,9 +87,6 @@ class ListBookingPagingSource @Inject constructor(
                     if (isFinished) {
                         listBooking.filter {
                             if (it.room.isNotEmpty()) {
-                                Timber.tag("TEST")
-                                    .e("Masuk ${it.id} = ${it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"}")
-                                Timber.tag("TEST").e(listBooking.toString())
                                 it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"
                             } else {
                                 it.id == ""
