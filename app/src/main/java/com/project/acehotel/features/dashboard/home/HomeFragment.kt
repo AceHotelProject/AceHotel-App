@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
@@ -37,9 +38,32 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initialRecyclerView()
+
         fetchHotelData()
 
         fetchListBooking()
+
+        handleRefresh()
+    }
+
+    private fun handleRefresh() {
+        binding.apply {
+            svHome.viewTreeObserver.addOnScrollChangedListener {
+                refHome.isEnabled = svHome.scrollY == 0
+            }
+
+            refHome.setOnRefreshListener {
+                fetchHotelData()
+
+                fetchListBooking()
+            }
+        }
+    }
+
+    private fun initialRecyclerView() {
+        initCurrentVisitorRecyclerView(listOf())
+        initBookingRecyclerView(listOf())
     }
 
     private fun fetchHotelData() {
@@ -69,6 +93,8 @@ class HomeFragment : Fragment() {
                     } else {
                         if (booking.message?.contains("404", false) == true) {
                             initBookingRecyclerView(listOf())
+
+                            initCurrentVisitorRecyclerView(listOf())
                         } else {
                             activity?.showToast(booking.message.toString())
                         }
@@ -127,6 +153,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun initBookingRecyclerView(booking: List<Booking>?) {
+        handleEmptyStates(booking, binding.rvListCurrentBook)
+
         val adapter = BookingListAdapter(booking)
         binding.rvListCurrentBook.adapter = adapter
 
@@ -146,6 +174,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun initCurrentVisitorRecyclerView(booking: List<Booking>?) {
+        handleEmptyStates(booking, binding.rvListCurrentVisitor)
+
         val adapter = CurrentVisitorAdapter(booking)
         binding.rvListCurrentVisitor.adapter = adapter
 
@@ -160,6 +190,31 @@ class HomeFragment : Fragment() {
                 startActivity(intentToVisitorDetail)
             }
         })
+    }
+
+    private fun handleEmptyStates(booking: List<Booking>?, recyclerView: RecyclerView) {
+        if (booking != null) {
+
+            recyclerView.layoutParams.height =
+                if (booking.isEmpty()) 400 else ViewGroup.LayoutParams.WRAP_CONTENT
+
+            when (recyclerView) {
+                binding.rvListCurrentVisitor -> {
+                    binding.tvEmptyCurrentVisitor.visibility =
+                        if (booking.isEmpty()) View.VISIBLE else View.INVISIBLE
+                }
+                binding.rvListCurrentBook -> {
+                    binding.tvEmptyCurrentBook.visibility =
+                        if (booking.isEmpty()) View.VISIBLE else View.INVISIBLE
+                }
+                else -> {
+                    binding.tvEmptyCurrentVisitor.visibility =
+                        if (booking.isEmpty()) View.VISIBLE else View.INVISIBLE
+                    binding.tvEmptyCurrentBook.visibility =
+                        if (booking.isEmpty()) View.VISIBLE else View.INVISIBLE
+                }
+            }
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
