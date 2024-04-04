@@ -16,11 +16,12 @@ import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.databinding.FragmentBookingNextBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
+import com.project.acehotel.features.dashboard.management.IManagementSearch
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class BookingNextFragment : Fragment() {
+class BookingNextFragment : Fragment(), IManagementSearch {
     private var _binding: FragmentBookingNextBinding? = null
     private val binding get() = _binding!!
 
@@ -29,7 +30,7 @@ class BookingNextFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchBookingPagingList()
+        fetchBookingPagingList("")
 
         handleRefresh()
 
@@ -38,11 +39,11 @@ class BookingNextFragment : Fragment() {
 
     private fun handleRefresh() {
         binding.refBookingNext.setOnRefreshListener {
-            fetchBookingPagingList()
+            fetchBookingPagingList("")
         }
     }
 
-    private fun fetchBookingPagingList() {
+    private fun fetchBookingPagingList(visitorName: String) {
         val adapter = BookingPagingListAdapter()
         binding.rvBookingNext.adapter = adapter
 
@@ -61,7 +62,7 @@ class BookingNextFragment : Fragment() {
         binding.rvBookingNext.layoutManager = layoutManager
 
         val filterDate = DateUtils.getDateThisYear()
-        bookingNextViewModel.executeGetPagingListBookingByHotel(filterDate, false)
+        bookingNextViewModel.executeGetPagingListBookingByHotel(filterDate, false, visitorName)
             .observe(this) { booking ->
                 lifecycleScope.launch {
                     adapter.submitData(booking)
@@ -98,5 +99,9 @@ class BookingNextFragment : Fragment() {
 
     companion object {
         private const val BOOKING_DATA = "booking_data"
+    }
+
+    override fun onSearchQuery(query: String) {
+        fetchBookingPagingList(query)
     }
 }

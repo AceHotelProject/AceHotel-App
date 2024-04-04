@@ -16,11 +16,12 @@ import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.databinding.FragmentBookingFinishedBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
+import com.project.acehotel.features.dashboard.management.IManagementSearch
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class BookingFinishedFragment : Fragment() {
+class BookingFinishedFragment : Fragment(), IManagementSearch {
     private var _binding: FragmentBookingFinishedBinding? = null
     private val binding get() = _binding!!
 
@@ -37,7 +38,7 @@ class BookingFinishedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchBookingPagingList()
+        fetchBookingPagingList("")
 
         handleRefresh()
 
@@ -46,11 +47,11 @@ class BookingFinishedFragment : Fragment() {
 
     private fun handleRefresh() {
         binding.refBookingFinished.setOnRefreshListener {
-            fetchBookingPagingList()
+            fetchBookingPagingList("")
         }
     }
 
-    private fun fetchBookingPagingList() {
+    private fun fetchBookingPagingList(visitorName: String) {
         val adapter = BookingPagingListAdapter()
         binding.rvBookingFinished.adapter = adapter
 
@@ -69,7 +70,7 @@ class BookingFinishedFragment : Fragment() {
         binding.rvBookingFinished.layoutManager = layoutManager
 
         val filterDate = DateUtils.getDateThisYear()
-        bookingFinishedViewModel.executeGetPagingListBookingByHotel(filterDate, true)
+        bookingFinishedViewModel.executeGetPagingListBookingByHotel(filterDate, true, visitorName)
             .observe(this) { booking ->
                 lifecycleScope.launch {
                     adapter.submitData(booking)
@@ -98,5 +99,9 @@ class BookingFinishedFragment : Fragment() {
 
     companion object {
         private const val BOOKING_DATA = "booking_data"
+    }
+
+    override fun onSearchQuery(query: String) {
+
     }
 }

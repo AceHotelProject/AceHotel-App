@@ -16,11 +16,13 @@ import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.databinding.FragmentBookingNowBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
+import com.project.acehotel.features.dashboard.management.IManagementSearch
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
-class BookingNowFragment : Fragment() {
+class BookingNowFragment : Fragment(), IManagementSearch {
     private var _binding: FragmentBookingNowBinding? = null
     private val binding get() = _binding!!
 
@@ -29,7 +31,7 @@ class BookingNowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchBookingPagingList()
+        fetchBookingPagingList("")
 
         handleRefresh()
 
@@ -38,11 +40,11 @@ class BookingNowFragment : Fragment() {
 
     private fun handleRefresh() {
         binding.refBookingNow.setOnRefreshListener {
-            fetchBookingPagingList()
+            fetchBookingPagingList("")
         }
     }
 
-    private fun fetchBookingPagingList() {
+    private fun fetchBookingPagingList(visitorName: String) {
         val adapter = BookingPagingListAdapter()
         binding.rvBookingNow.adapter = adapter
 
@@ -51,17 +53,20 @@ class BookingNowFragment : Fragment() {
                 loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
             binding.refBookingNow.isRefreshing = isRefreshing
 
-            val isInitialLoadFinished = loadStates.refresh is LoadState.NotLoading
+//            val isInitialLoadFinished = loadStates.refresh is LoadState.NotLoading
             val isEmpty = adapter.itemCount == 0
 
-            handleEmptyStates(isInitialLoadFinished && isEmpty)
+            Timber.tag("BookingNow").e(isEmpty.toString())
+
+
+            handleEmptyStates(isEmpty)
         }
 
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvBookingNow.layoutManager = layoutManager
 
         val filterDate = DateUtils.getDateThisDay()
-        bookingNowViewModel.executeGetPagingListBookingByHotel(filterDate, true)
+        bookingNowViewModel.executeGetPagingListBookingByHotel(filterDate, true, visitorName)
             .observe(this) { booking ->
 
                 lifecycleScope.launch {
@@ -78,6 +83,7 @@ class BookingNowFragment : Fragment() {
             }
         })
     }
+
 
     private fun handleEmptyStates(isEmpty: Boolean) {
         binding.tvEmptyBookingNow.visibility = if (isEmpty) View.VISIBLE else View.INVISIBLE
@@ -103,5 +109,9 @@ class BookingNowFragment : Fragment() {
 
     companion object {
         private const val BOOKING_DATA = "booking_data"
+    }
+
+    override fun onSearchQuery(query: String) {
+        fetchBookingPagingList(query)
     }
 }

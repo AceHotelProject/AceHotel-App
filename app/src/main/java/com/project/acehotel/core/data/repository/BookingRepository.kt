@@ -73,14 +73,17 @@ class BookingRepository @Inject constructor(
         }.asFlow()
     }
 
-    override fun getListBookingByRoom(roomId: String): Flow<Resource<List<Booking>>> {
+    override fun getListBookingByRoom(
+        roomId: String,
+        filterDate: String
+    ): Flow<Resource<List<Booking>>> {
         return object : NetworkBoundResource<List<Booking>, ListBookingResponse>() {
             override suspend fun fetchFromApi(response: ListBookingResponse): List<Booking> {
                 return BookingDataMapper.mapListBookingToDomain(response)
             }
 
             override suspend fun createCall(): Flow<ApiResponse<ListBookingResponse>> {
-                return remoteDataSource.getListBookingByRoom(roomId)
+                return remoteDataSource.getListBookingByRoom(roomId, filterDate)
             }
         }.asFlow()
     }
@@ -152,14 +155,22 @@ class BookingRepository @Inject constructor(
     override fun getPagingListBookingByHotel(
         hotelId: String,
         filterDate: String,
-        isFinished: Boolean
+        isFinished: Boolean,
+        visitorName: String
     ): Flow<PagingData<Booking>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
             pagingSourceFactory = {
-                ListBookingPagingSource(apiService, hotelId, filterDate, isFinished, "hotel")
+                ListBookingPagingSource(
+                    apiService,
+                    hotelId,
+                    filterDate,
+                    isFinished,
+                    "hotel",
+                    visitorName
+                )
             }
         ).flow
     }

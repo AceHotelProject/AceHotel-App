@@ -271,6 +271,7 @@ interface ApiService {
         @Query("checkin_date") filterDate: String,
         @Query("page") page: Int,
         @Query("limit") limit: Int,
+        @Query("visitor_name") visitorName: String
     ): ListBookingResponse
 
     @GET("bookings/room/{id}")

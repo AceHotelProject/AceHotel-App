@@ -3,6 +3,7 @@ package com.project.acehotel.core.utils.datamapper
 import com.project.acehotel.core.data.source.remote.response.booking.*
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.booking.model.RoomBooking
+import timber.log.Timber
 
 object BookingDataMapper {
 
@@ -92,6 +93,8 @@ object BookingDataMapper {
 
     fun mapListBookingToDomain(input: ListBookingResponse): List<Booking> =
         input.results?.map { booking ->
+            Timber.tag("TEST").e(booking?.room?.first()?.actualCheckin ?: "Empty")
+
             Booking(
                 addOn = (booking?.addOnId ?: listOf()) as List<String>,
                 room = booking?.room?.map {
@@ -101,7 +104,7 @@ object BookingDataMapper {
                         actualCheckout = it?.actualCheckout ?: "Empty",
                         checkoutStaffId = it?.checkoutStaffId ?: "Empty",
                         checkinStaffId = it?.checkinStaffId ?: "Empty",
-                        hasProblem = false, // This seems to be hardcoded, consider using it?.hasProblem ?: false
+                        hasProblem = false,
                         note = "Empty",
                     )
                 } ?: listOf(

@@ -37,8 +37,11 @@ class BookingInteractor @Inject constructor(private val bookingRepository: Booki
         return bookingRepository.getListBookingByHotel(hotelId, filterDate)
     }
 
-    override fun getListBookingByRoom(roomId: String): Flow<Resource<List<Booking>>> {
-        return bookingRepository.getListBookingByRoom(roomId)
+    override fun getListBookingByRoom(
+        roomId: String,
+        filterDate: String
+    ): Flow<Resource<List<Booking>>> {
+        return bookingRepository.getListBookingByRoom(roomId, filterDate)
     }
 
     override fun getListBookingByVisitor(visitorId: String): Flow<Resource<List<Booking>>> {
@@ -65,9 +68,15 @@ class BookingInteractor @Inject constructor(private val bookingRepository: Booki
     override fun getPagingListBookingByHotel(
         hotelId: String,
         filterDate: String,
-        isFinished: Boolean
+        isFinished: Boolean,
+        visitorName: String
     ): Flow<PagingData<Booking>> {
-        return bookingRepository.getPagingListBookingByHotel(hotelId, filterDate, isFinished)
+        return bookingRepository.getPagingListBookingByHotel(
+            hotelId,
+            filterDate,
+            isFinished,
+            visitorName
+        )
     }
 
     override fun getPagingListBookingByVisitor(

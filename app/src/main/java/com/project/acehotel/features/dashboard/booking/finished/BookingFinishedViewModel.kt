@@ -20,14 +20,16 @@ class BookingFinishedViewModel @Inject constructor(
     private fun getPagingListBookingByHotel(
         hotelId: String,
         filterDate: String,
-        isFinished: Boolean
+        isFinished: Boolean,
+        visitorName: String,
     ) =
-        bookingUseCase.getPagingListBookingByHotel(hotelId, filterDate, isFinished)
+        bookingUseCase.getPagingListBookingByHotel(hotelId, filterDate, isFinished, visitorName)
             .asLiveData()
 
     fun executeGetPagingListBookingByHotel(
         filterDate: String,
-        isFinished: Boolean
+        isFinished: Boolean,
+        visitorName: String,
     ): MediatorLiveData<PagingData<Booking>> =
         MediatorLiveData<PagingData<Booking>>().apply {
             addSource(getSelectedHotelData()) { hotel ->
@@ -35,7 +37,8 @@ class BookingFinishedViewModel @Inject constructor(
                     getPagingListBookingByHotel(
                         hotel.id,
                         filterDate,
-                        isFinished
+                        isFinished,
+                        visitorName
                     )
                 ) { booking ->
                     value = booking

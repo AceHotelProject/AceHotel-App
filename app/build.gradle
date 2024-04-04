@@ -116,4 +116,8 @@ dependencies {
 
     //paging
     implementation 'androidx.paging:paging-runtime-ktx:3.1.0'
+
+    //mqtt (PaHo)
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.0.2'
 }
