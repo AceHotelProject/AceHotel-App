@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.data.source.remote.MQTTService
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.ui.adapter.inventory.InventoryListAdapter
 import com.project.acehotel.core.utils.constants.InventoryType
@@ -19,10 +20,13 @@ import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentInventoryBinding
 import com.project.acehotel.features.dashboard.management.IManagementSearch
 import com.project.acehotel.features.dashboard.management.inventory.add_item.AddItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.inventory.detail.InventoryDetailActivity
 import com.project.acehotel.features.dashboard.management.inventory.edit_reader.EditReaderActivity
 import dagger.hilt.android.AndroidEntryPoint
+import org.eclipse.paho.client.mqttv3.*
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class InventoryFragment : Fragment(), IManagementSearch {
@@ -31,8 +35,15 @@ class InventoryFragment : Fragment(), IManagementSearch {
 
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
 
+    @Inject
+    lateinit var mqttClient: MQTTService
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initMQTT()
+
+        handleEmptyStates(listOf())
 
         fetchInventoryItems("")
 
@@ -41,6 +52,79 @@ class InventoryFragment : Fragment(), IManagementSearch {
         handleButtonAddInventory()
 
         handleButtonEditReader()
+
+        handleButtonAddTag()
+    }
+
+    private fun handleEmptyStates(inventory: List<Inventory>?) {
+        binding.apply {
+            rvListInventory.layoutParams.width =
+                if (inventory?.isEmpty()!!) 400 else ViewGroup.LayoutParams.MATCH_PARENT
+            rvListInventory.layoutParams.height =
+                if (inventory?.isEmpty()!!) 400 else ViewGroup.LayoutParams.WRAP_CONTENT
+            tvEmptyInventoryNext.visibility =
+                if (inventory?.isEmpty()!!) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun initMQTT() {
+        if (!mqttClient.isConnected()) {
+            mqttClient.connect(
+                object : IMqttActionListener {
+                    override fun onSuccess(asyncActionToken: IMqttToken?) {
+                        Timber.tag("MQTT").d("Success connected to MQTT")
+
+                        mqttClient.subscribe(
+                            MQTT_TOPIC,
+                            1,
+                            object : IMqttActionListener {
+                                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                                    Timber.tag("MQTT").d("Success subscribed to ACE HOTEL Topic")
+                                }
+
+                                override fun onFailure(
+                                    asyncActionToken: IMqttToken?,
+                                    exception: Throwable?
+                                ) {
+                                    Timber.tag("MQTT").e(exception)
+                                }
+                            }
+                        )
+                    }
+
+                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                        Timber.tag("MQTT").e(exception)
+                    }
+                },
+                object : MqttCallback {
+                    override fun connectionLost(cause: Throwable?) {
+                        Timber.tag("MQTT").e("Connection lost")
+                    }
+
+                    override fun messageArrived(topic: String?, message: MqttMessage?) {
+                        val msg = "Receive message: ${message.toString()} from topic: $topic"
+
+                        Timber.tag("RESULT").e(message.toString())
+                        // TODO
+                        // implement in layout
+                        activity?.showToast(msg)
+                    }
+
+                    override fun deliveryComplete(token: IMqttDeliveryToken?) {
+                        Timber.tag("MQTT").d("Delivery complete")
+                    }
+                }
+            )
+        }
+    }
+
+    private fun handleButtonAddTag() {
+        binding.btnAddTag.setOnClickListener {
+            val intentToChooseItemInventory =
+                Intent(requireContext(), ChooseItemInventoryActivity::class.java)
+            intentToChooseItemInventory.putExtra(IS_ADD_TAG, true)
+            startActivity(intentToChooseItemInventory)
+        }
     }
 
     private fun handleButtonEditReader() {
@@ -107,6 +191,8 @@ class InventoryFragment : Fragment(), IManagementSearch {
                 is Resource.Success -> {
                     showLoading(false)
 
+                    handleEmptyStates(item.data)
+
                     initInventoryRecyclerView(item.data)
 
                     initQuickInfo(item.data)
@@ -118,13 +204,24 @@ class InventoryFragment : Fragment(), IManagementSearch {
     private fun initQuickInfo(data: List<Inventory>?) {
         var linenTotal = 0
         var bedTotal = 0
+        var foodTotal = 0
+        var drinkTotal = 0
 
         if (data != null) {
             for (i in data.indices) {
-                if (data[i].type == InventoryType.BED.type) {
-                    bedTotal += 1
-                } else {
-                    linenTotal += 1
+                when (data[i].type) {
+                    InventoryType.BED.type -> {
+                        ++bedTotal
+                    }
+                    InventoryType.LINEN.type -> {
+                        ++linenTotal
+                    }
+                    InventoryType.FOOD.type -> {
+                        ++foodTotal
+                    }
+                    InventoryType.DRINK.type -> {
+                        ++drinkTotal
+                    }
                 }
             }
         }
@@ -132,6 +229,9 @@ class InventoryFragment : Fragment(), IManagementSearch {
         binding.apply {
             tvTotalLinen.text = linenTotal.toString()
             tvTotalBed.text = bedTotal.toString()
+
+            tvTotalFood.text = foodTotal.toString()
+            tvTotalDrink.text = drinkTotal.toString()
         }
     }
 
@@ -178,6 +278,10 @@ class InventoryFragment : Fragment(), IManagementSearch {
         private const val INVENTORY_ITEM_ID = "inventory_item_id"
         private const val INVENTORY_ITEM_NAME = "inventory_item_name"
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
+
+        private const val IS_ADD_TAG = "is_add_tag"
+
+        private const val MQTT_TOPIC = "/mqtt-integration/Reader/ACE-001"
     }
 
     override fun onSearchQuery(query: String) {

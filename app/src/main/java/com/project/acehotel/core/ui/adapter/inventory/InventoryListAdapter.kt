@@ -34,7 +34,7 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
                 chipInventoryCardType.setStatus(data.type)
                 tvInventoryCardName.text = data.name
                 tvInventoryCardDesc.text =
-                    "Perubahan " + DateUtils.convertDate(data.historyList.last().date)
+                    "Perubahan terakhir:  " + DateUtils.convertDate(data.historyList.last().date)
                 tvInventoryCardStock.text = data.stock.toString()
             }
         }

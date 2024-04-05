@@ -3,6 +3,8 @@ package com.project.acehotel.core.utils.constants
 enum class InventoryType(val type: String, val display: String) {
     LINEN("linen", "Linen"),
     BED("kasur", "Kasur"),
+    FOOD("makanan", "Makanan"),
+    DRINK("minuman", "Minuman"),
     UNDEFINED("type", "Type")
 }
 
@@ -12,6 +14,12 @@ fun mapToInventoryDisplay(type: String): String {
             InventoryType.BED.display
         }
         InventoryType.LINEN.type -> {
+            InventoryType.LINEN.display
+        }
+        InventoryType.BED.type -> {
+            InventoryType.LINEN.display
+        }
+        InventoryType.FOOD.type -> {
             InventoryType.LINEN.display
         }
         InventoryType.UNDEFINED.type -> {
@@ -31,6 +39,12 @@ fun mapToInventoryType(display: String): String {
         InventoryType.LINEN.display -> {
             InventoryType.LINEN.type
         }
+        InventoryType.FOOD.display -> {
+            InventoryType.LINEN.type
+        }
+        InventoryType.DRINK.display -> {
+            InventoryType.LINEN.type
+        }
         InventoryType.UNDEFINED.display -> {
             InventoryType.UNDEFINED.type
         }
@@ -40,4 +54,9 @@ fun mapToInventoryType(display: String): String {
     }
 }
 
-val inventoryTypeList = listOf(InventoryType.LINEN.display, InventoryType.BED.display)
+val inventoryTypeList = listOf(
+    InventoryType.LINEN.display,
+    InventoryType.BED.display,
+    InventoryType.FOOD.display,
+    InventoryType.DRINK.display,
+)
