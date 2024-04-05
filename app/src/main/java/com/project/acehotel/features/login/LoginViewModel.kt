@@ -26,4 +26,6 @@ class LoginViewModel @Inject constructor(private val authUseCase: AuthUseCase) :
     fun saveRefreshToken(token: String) = viewModelScope.launch {
         authUseCase.saveRefreshToken(token)
     }
+
+    fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 }

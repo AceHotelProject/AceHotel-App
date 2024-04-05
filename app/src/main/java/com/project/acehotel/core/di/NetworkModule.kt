@@ -59,7 +59,7 @@ class NetworkModule {
     }
 
     companion object {
-        const val BASE_URL = "http://35.209.47.216/v1/"
+        const val BASE_URL = "https://acehotel.my.id/v1/"
         private const val server = "tcp://91.108.104.92:1883"
         private const val clientId = "test-app"
     }

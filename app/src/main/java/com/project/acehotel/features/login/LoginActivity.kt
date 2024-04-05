@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleContactButton() {
         binding.tvContactUs.setOnClickListener {
-            //               wa link provided by: https://create.wa.link/
+            // wa link provided by: https://create.wa.link/
             val intentToOpenBrowser = Intent(
                 Intent.ACTION_VIEW, Uri.parse(
                     CUSTOMER_SERVICE_PHONE
@@ -128,25 +128,32 @@ class LoginActivity : AppCompatActivity() {
                         Timber.tag("LoginActivity").d(result.message)
                     }
                     is Resource.Success -> {
-                        showLoading(false)
-                        isButtonEnabled(true)
-
                         if (result.data?.tokens != null) {
-                            loginViewModel.insertCacheUser(result.data)
+                            try {
+                                loginViewModel.saveAccessToken(result.data.tokens.accessToken.token.toString())
+                                loginViewModel.saveRefreshToken(result.data.tokens.refreshToken.token.toString())
 
-                            loginViewModel.saveAccessToken(result.data.tokens.accessToken.token.toString())
-
-                            Timber.tag("TOKEN")
-                                .e("Saved token: ${result.data.tokens.refreshToken.token.toString()}")
-                            loginViewModel.saveRefreshToken(result.data.tokens.refreshToken.token.toString())
-
-                            val intentToMain = Intent(this, MainActivity::class.java)
-                            startActivity(intentToMain)
-                            finish()
+                                loginViewModel.insertCacheUser(result.data)
+                            } finally {
+                                validateToken()
+                            }
                         }
                     }
                     else -> {}
                 }
+            }
+        }
+    }
+
+    private fun validateToken() {
+        loginViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isNotEmpty() || token != "") {
+                showLoading(false)
+                isButtonEnabled(true)
+
+                val intentToMainActivity = Intent(this, MainActivity::class.java)
+                startActivity(intentToMainActivity)
+                finish()
             }
         }
     }
