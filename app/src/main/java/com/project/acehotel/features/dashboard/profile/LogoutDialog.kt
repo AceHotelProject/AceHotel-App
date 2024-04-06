@@ -32,15 +32,32 @@ class LogoutDialog : DialogFragment() {
             }
 
             btnLogoutYes?.setOnClickListener {
-                profileViewModel.deleteToken()
+                btnLogoutNo?.isEnabled = false
+                btnLogoutYes.isEnabled = false
 
-                val intentToSplash = Intent(requireContext(), SplashActivity::class.java)
-                startActivity(intentToSplash)
-//                logoutUser()
+                logoutUser()
             }
 
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun logoutUser() {
+        profileViewModel.getUser().observe(this) { user ->
+            if (user != null) {
+                profileViewModel.deleteUser(user)
+                profileViewModel.deleteToken()
+
+                val btnLogoutNo = view?.findViewById<Button>(R.id.btn_logout_no)
+                val btnLogoutYes = view?.findViewById<Button>(R.id.btn_logout_yes)
+
+                btnLogoutNo?.isEnabled = false
+                btnLogoutYes?.isEnabled = false
+
+                val intentToSplash = Intent(requireContext(), SplashActivity::class.java)
+                startActivity(intentToSplash)
+            }
+        }
     }
 
 //    private fun logoutUser() {
