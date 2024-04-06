@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.project.acehotel.core.utils.IUserLayout
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.databinding.FragmentProfileBinding
 import com.project.acehotel.features.dashboard.profile.choose_hotel.ChooseHotelActivity
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
@@ -15,7 +17,7 @@ import com.project.acehotel.features.dashboard.profile.stats.OverallStatsActivit
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), IUserLayout {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
@@ -35,6 +37,10 @@ class ProfileFragment : Fragment() {
         handleMenu()
 
         initUserInfo()
+
+        profileViewModel.getUser().observe(requireActivity()) { user ->
+            user.user?.role?.let { changeLayoutByUser(it) }
+        }
     }
 
     private fun initUserInfo() {
@@ -85,5 +91,40 @@ class ProfileFragment : Fragment() {
 
     companion object {
         private const val CUSTOMER_SERVICE_PHONE = "https://wa.link/anszxf"
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+
+            }
+            UserRole.FRANCHISE -> {
+                binding.apply {
+                    btnProfileChooseHotel.visibility = View.GONE
+                    btnProfileManageHotel.visibility = View.GONE
+                }
+            }
+            UserRole.INVENTORY_STAFF -> {
+                binding.apply {
+                    btnProfileChooseHotel.visibility = View.GONE
+                    btnProfileManageHotel.visibility = View.GONE
+                }
+            }
+            UserRole.RECEPTIONIST -> {
+                binding.apply {
+                    btnProfileChooseHotel.visibility = View.GONE
+                    btnProfileManageHotel.visibility = View.GONE
+                }
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                binding.apply {
+                    btnProfileChooseHotel.visibility = View.GONE
+                    btnProfileManageHotel.visibility = View.GONE
+                }
+            }
+        }
     }
 }
