@@ -15,6 +15,7 @@ class ListBookingPagingSource @Inject constructor(
     private val filterDate: String,
     private var isFinished: Boolean = false,
     private val endPoint: String,
+    private val visitorName: String = ""
 ) : PagingSource<Int, Booking>() {
     override fun getRefreshKey(state: PagingState<Int, Booking>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -49,7 +50,8 @@ class ListBookingPagingSource @Inject constructor(
                         id,
                         filterDate,
                         position,
-                        params.loadSize
+                        params.loadSize,
+                        visitorName
                     )
                 }
                 else -> {
@@ -57,7 +59,8 @@ class ListBookingPagingSource @Inject constructor(
                         id,
                         filterDate,
                         position,
-                        params.loadSize
+                        params.loadSize,
+                        visitorName
                     )
                 }
             }
@@ -66,20 +69,40 @@ class ListBookingPagingSource @Inject constructor(
 
             val filteredList = when (filterDate) {
                 FilterDate.NOW.value -> {
-                    listBooking.filter {
-                        if (it.room.isEmpty()) {
-                            it.id == ""
-                        } else {
-                            it.id != ""
+                    if (isFinished) {
+                        listBooking.filter {
+                            if (it.room.isNotEmpty()) {
+                                it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"
+                            } else {
+                                it.id == ""
+                            }
+                        }
+                    } else {
+                        listBooking.filter {
+                            if (it.room.isEmpty()) {
+                                it.id == ""
+                            } else {
+                                it.id != ""
+                            }
                         }
                     }
                 }
                 FilterDate.MONTH.value -> {
-                    listBooking.filter {
-                        if (it.room.isNotEmpty()) {
-                            it.room.first().actualCheckin == "Empty" || it.room.first().actualCheckout != "Empty"
-                        } else {
-                            it.id == ""
+                    if (isFinished) {
+                        listBooking.filter {
+                            if (it.room.isNotEmpty()) {
+                                it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout != "Empty"
+                            } else {
+                                it.id == ""
+                            }
+                        }
+                    } else {
+                        listBooking.filter {
+                            if (it.room.isNotEmpty()) {
+                                it.room.first().actualCheckin == "Empty" || it.room.first().actualCheckout != "Empty"
+                            } else {
+                                it.id == ""
+                            }
                         }
                     }
                 }

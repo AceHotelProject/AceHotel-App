@@ -4,6 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.paging.PagingData
+import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.booking.usecase.BookingUseCase
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
@@ -48,4 +49,22 @@ class FinanceViewModel @Inject constructor(
         }
 
     fun getHotelRecap(filterDate: String) = hotelUseCase.getHotelRecap(filterDate).asLiveData()
+
+    fun getListBookingByHotel(
+        hotelId: String,
+        filterDate: String,
+        visitorName: String = "",
+    ) = bookingUseCase.getListBookingByHotel(hotelId, filterDate, visitorName).asLiveData()
+
+    fun executeGetListBookingByHotel(
+        filterDate: String,
+
+        ): MediatorLiveData<Resource<List<Booking>>> =
+        MediatorLiveData<Resource<List<Booking>>>().apply {
+            addSource(getSelectedHotelData()) { hotel ->
+                addSource(getListBookingByHotel(hotel.id, filterDate)) { booking ->
+                    value = booking
+                }
+            }
+        }
 }

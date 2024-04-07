@@ -18,6 +18,8 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
+import com.project.acehotel.core.utils.constants.RoomType
+import com.project.acehotel.core.utils.constants.convertToRoomType
 import com.project.acehotel.core.utils.constants.filterDateList
 import com.project.acehotel.core.utils.constants.mapToFilterDateValue
 import com.project.acehotel.databinding.FragmentFinanceBinding
@@ -34,10 +36,26 @@ class FinanceFragment : Fragment(), IManagementSearch {
 
     private val financeViewModel: FinanceViewModel by activityViewModels()
 
+    private var selectedDate = mapToFilterDateValue(filterDateList.first())
+    private var exclusiveRoomPrice: Int = 0
+    private var regularRoomPrice: Int = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fetchBookingHistory(selectedDate)
+
         setupFilter()
+
+        handleRefresh()
+
+        binding.tvEmptyBooking.visibility = View.VISIBLE
+    }
+
+    private fun handleRefresh() {
+        binding.refFinance.setOnRefreshListener {
+            fetchBookingHistory(selectedDate)
+        }
     }
 
     override fun onCreateView(
@@ -66,17 +84,27 @@ class FinanceFragment : Fragment(), IManagementSearch {
                 override fun afterTextChanged(p0: Editable?) {
                     binding.layoutAddItemType.isHintEnabled = p0.isNullOrEmpty()
 
-                    fetchBookingHistory(mapToFilterDateValue(p0.toString()))
+                    selectedDate = mapToFilterDateValue(p0.toString())
 
-                    fetchFinanceStat(mapToFilterDateValue(p0.toString()))
+                    fetchBookingHistory(selectedDate)
+
+                    fetchFinanceStat(selectedDate)
                 }
             })
         }
     }
 
     private fun fetchFinanceStat(filterDate: String) {
-        financeViewModel.getHotelRecap(filterDate).observe(this) { recap ->
-            when (recap) {
+        var totalRevenue = 0
+        var totalBooking = 0
+
+        financeViewModel.getSelectedHotelData().observe(this) { hotel ->
+            exclusiveRoomPrice = hotel.exclusiveRoomPrice
+            regularRoomPrice = hotel.regularRoomPrice
+        }
+
+        financeViewModel.executeGetListBookingByHotel(filterDate).observe(this) { booking ->
+            when (booking) {
                 is Resource.Error -> {
                     showLoading(false)
                 }
@@ -85,13 +113,33 @@ class FinanceFragment : Fragment(), IManagementSearch {
                 }
                 is Resource.Message -> {
                     showLoading(false)
-                    Timber.tag("FinanceFragment").d(recap.message)
+                    Timber.tag("FinanceFragment").d(booking.message)
                 }
                 is Resource.Success -> {
                     showLoading(false)
-                    binding.apply {
-                        tvFinanceTotalProfit.text = recap.data?.revenue.toString()
-                        tvFinanceTotalBooking.text = recap.data?.totalBooking.toString()
+
+                    if (booking.data != null) {
+                        for (item in booking.data) {
+                            if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout != "Empty") {
+                                when (convertToRoomType(item.type)) {
+                                    RoomType.REGULAR -> {
+                                        totalRevenue += item.roomCount * regularRoomPrice
+                                    }
+                                    RoomType.EXCLUSIVE -> {
+                                        totalRevenue += item.roomCount * exclusiveRoomPrice
+                                    }
+                                    RoomType.UNDEFINED -> {
+
+                                    }
+                                }
+                                totalBooking += item.roomCount
+                            }
+                        }
+
+                        binding.apply {
+                            tvFinanceTotalProfit.text = totalRevenue.toString()
+                            tvFinanceTotalBooking.text = totalBooking.toString()
+                        }
                     }
                 }
             }
@@ -107,6 +155,9 @@ class FinanceFragment : Fragment(), IManagementSearch {
             val isRefreshing =
                 loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
             binding.refFinance.isRefreshing = isRefreshing
+
+            val isEmpty = adapter.itemCount == 0
+            handleEmptyState(isEmpty)
         }
 
         val layoutManager = LinearLayoutManager(requireContext())
@@ -127,6 +178,12 @@ class FinanceFragment : Fragment(), IManagementSearch {
                 startActivity(intentToBookingDetail)
             }
         })
+    }
+
+    private fun handleEmptyState(isEmpty: Boolean) {
+        binding.rvFinanceHistory.layoutParams.height =
+            if (isEmpty) 400 else ViewGroup.LayoutParams.WRAP_CONTENT
+        binding.tvEmptyBooking.visibility = if (isEmpty) View.VISIBLE else View.INVISIBLE
     }
 
     private fun showLoading(isLoading: Boolean) {
