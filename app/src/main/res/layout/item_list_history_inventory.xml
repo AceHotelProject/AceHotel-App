@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text="1 Jan 23"
                 android:textColor="@color/blue"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,16 +47,26 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_inventory_history_card_date" />
 
             <TextView
+                android:id="@+id/tv_inventory_history_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="oleh Penanggungjawab"
+                android:textColor="@color/dark_grey"
+                app:layout_constraintStart_toStartOf="@+id/tv_inventory_history_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_inventory_history_name" />
+
+            <TextView
                 android:id="@+id/tv_inventory_history_desc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="2dp"
                 android:text="@string/item_desc"
                 android:textColor="@color/dark_grey"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_inventory_history_name"
                 app:layout_constraintStart_toStartOf="@+id/tv_inventory_history_name"
-                app:layout_constraintTop_toBottomOf="@+id/tv_inventory_history_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_inventory_history_pic" />
 
 
             <ImageView

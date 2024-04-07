@@ -34,6 +34,7 @@ class InventoryHistoryAdapter(private val listInventoryHistory: List<InventoryHi
             tvInventoryHistoryName.text = data.title
             tvInventoryHistoryDesc.text = data.desc
             tvInventoryHistoryStock.text = data.stockChange.toString()
+            tvInventoryHistoryPic.text = "oleh ${data.personInCharge}"
 
             if (data.stockChange < 0) {
                 ivInventoryHistoryStockStatus.setImageResource(R.drawable.icons_inventory_history_decreased)

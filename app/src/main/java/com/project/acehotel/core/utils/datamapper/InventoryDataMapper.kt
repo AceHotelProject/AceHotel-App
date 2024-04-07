@@ -24,7 +24,8 @@ object InventoryDataMapper {
                         title = inventoryHistory?.title ?: "Empty",
                         desc = inventoryHistory?.description ?: "Empty",
                         stockChange = inventoryHistory?.stockChange ?: -99,
-                        date = inventoryHistory?.date ?: "Empty"
+                        date = inventoryHistory?.date ?: "Empty",
+                        personInCharge = inventoryHistory?.personInCharge ?: "Empty",
                     )
                 } ?: listOf()
             )
@@ -41,7 +42,8 @@ object InventoryDataMapper {
                 title = inventoryHistory?.title ?: "Empty",
                 desc = inventoryHistory?.description ?: "Empty",
                 stockChange = inventoryHistory?.stockChange ?: -99,
-                date = inventoryHistory?.date ?: "Empty"
+                date = inventoryHistory?.date ?: "Empty",
+                personInCharge = inventoryHistory?.personInCharge ?: "Empty",
             )
         } ?: listOf()
     )
@@ -53,8 +55,8 @@ object InventoryDataMapper {
                 title = inventoryHistory?.title ?: "Empty",
                 desc = inventoryHistory?.description ?: "Empty",
                 stockChange = inventoryHistory?.stockChange ?: 0,
-                date = inventoryHistory?.date ?: "Empty"
-
+                date = inventoryHistory?.date ?: "Empty",
+                personInCharge = inventoryHistory?.personInCharge ?: "Empty",
             )
         } ?: listOf()
 

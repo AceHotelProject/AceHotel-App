@@ -9,5 +9,6 @@ data class InventoryHistory(
     val title: String,
     val desc: String,
     val stockChange: Int,
+    val personInCharge: String,
     val date: String
 ) : Parcelable
