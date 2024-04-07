@@ -20,6 +20,7 @@ interface BookingUseCase {
     fun getListBookingByHotel(
         hotelId: String,
         filterDate: String,
+        visitorName: String,
     ): Flow<Resource<List<Booking>>>
 
     fun getListBookingByRoom(roomId: String, filterDate: String): Flow<Resource<List<Booking>>>

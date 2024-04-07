@@ -60,7 +60,8 @@ class BookingRepository @Inject constructor(
 
     override fun getListBookingByHotel(
         hotelId: String,
-        filterDate: String
+        filterDate: String,
+        visitorName: String
     ): Flow<Resource<List<Booking>>> {
         return object : NetworkBoundResource<List<Booking>, ListBookingResponse>() {
             override suspend fun fetchFromApi(response: ListBookingResponse): List<Booking> {
@@ -68,7 +69,7 @@ class BookingRepository @Inject constructor(
             }
 
             override suspend fun createCall(): Flow<ApiResponse<ListBookingResponse>> {
-                return remoteDataSource.getListBookingByHotel(hotelId, filterDate)
+                return remoteDataSource.getListBookingByHotel(hotelId, filterDate, visitorName)
             }
         }.asFlow()
     }

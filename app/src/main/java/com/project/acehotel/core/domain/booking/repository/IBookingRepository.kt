@@ -17,9 +17,13 @@ interface IBookingRepository {
         type: String,
     ): Flow<Resource<Booking>>
 
-    fun getListBookingByHotel(hotelId: String, filterDate: String): Flow<Resource<List<Booking>>>
+    fun getListBookingByHotel(
+        hotelId: String,
+        filterDate: String,
+        visitorName: String,
+        ): Flow<Resource<List<Booking>>>
 
-    fun getListBookingByRoom(roomId: String): Flow<Resource<List<Booking>>>
+    fun getListBookingByRoom(roomId: String, filterDate: String): Flow<Resource<List<Booking>>>
 
     fun getListBookingByVisitor(visitorId: String): Flow<Resource<List<Booking>>>
 
@@ -42,7 +46,8 @@ interface IBookingRepository {
     fun getPagingListBookingByHotel(
         hotelId: String,
         filterDate: String,
-        isFinished: Boolean
+        isFinished: Boolean,
+        visitorName: String
     ): Flow<PagingData<Booking>>
 
     fun getPagingListBookingByVisitor(

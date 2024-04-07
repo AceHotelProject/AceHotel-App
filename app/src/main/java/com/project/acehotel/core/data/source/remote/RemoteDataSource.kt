@@ -669,11 +669,12 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     suspend fun getListBookingByHotel(
         id: String,
-        filterDate: String
+        filterDate: String,
+        visitorName: String
     ): Flow<ApiResponse<ListBookingResponse>> {
         return flow {
             try {
-                val response = apiService.getListBookingByHotel(id, filterDate)
+                val response = apiService.getListBookingByHotel(id, filterDate, visitorName)
 
                 if (response.results != null) {
                     emit(ApiResponse.Success(response))

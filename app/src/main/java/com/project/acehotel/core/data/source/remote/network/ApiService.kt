@@ -263,6 +263,7 @@ interface ApiService {
     suspend fun getListBookingByHotel(
         @Path("id") id: String,
         @Query("checkin_date") filterDate: String,
+        @Query("visitor_name") visitorName: String,
     ): ListBookingResponse
 
     @GET("bookings/hotel/{id}")

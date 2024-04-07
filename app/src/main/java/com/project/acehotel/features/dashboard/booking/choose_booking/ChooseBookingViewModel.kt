@@ -18,17 +18,19 @@ class ChooseBookingViewModel @Inject constructor(
     private val hotelUseCase: HotelUseCase,
 ) : ViewModel() {
 
-    fun getListBookingByHotel(hotelId: String, filterDate: String) =
-        bookingUseCase.getListBookingByHotel(hotelId, filterDate).asLiveData()
+    fun getListBookingByHotel(
+        hotelId: String, filterDate: String, visitorName: String = ""
+    ) =
+        bookingUseCase.getListBookingByHotel(hotelId, filterDate, visitorName).asLiveData()
 
     fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
-    fun executeGetListBookingToday(): MediatorLiveData<Resource<List<Booking>>> =
+    fun executeGetListBookingToday(visitorName: String): MediatorLiveData<Resource<List<Booking>>> =
         MediatorLiveData<Resource<List<Booking>>>().apply {
             addSource(getSelectedHotelData()) { hotel ->
                 val date = DateUtils.getDateThisDay()
 
-                addSource(getListBookingByHotel(hotel.id, date)) { booking ->
+                addSource(getListBookingByHotel(hotel.id, date, visitorName)) { booking ->
                     value = booking
                 }
             }

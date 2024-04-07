@@ -3,6 +3,10 @@ package com.project.acehotel.features.dashboard.booking.choose_booking
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +39,8 @@ class ChooseBookingActivity : AppCompatActivity() {
 
         setupActionBar()
 
+        binding.tvEmptyBooking.visibility = View.VISIBLE
+
         handleButtonBack()
 
         fetchListBooking()
@@ -42,6 +48,33 @@ class ChooseBookingActivity : AppCompatActivity() {
         handleRefresh()
 
         handleAddButton()
+
+        handleSearch()
+    }
+
+    private fun handleSearch() {
+        binding.edBookingSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                fetchListBooking(p0.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                fetchListBooking(p0.toString())
+            }
+        })
+
+        binding.edBookingSearch.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                fetchListBooking(binding.edBookingSearch.text.toString())
+                true // consume the action
+            } else {
+                false // pass on to other listeners.
+            }
+        }
     }
 
     private fun handleAddButton() {
@@ -57,8 +90,8 @@ class ChooseBookingActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchListBooking() {
-        chooseBookingViewModel.executeGetListBookingToday().observe(this) { booking ->
+    private fun fetchListBooking(visitorName: String = "") {
+        chooseBookingViewModel.executeGetListBookingToday(visitorName).observe(this) { booking ->
             when (booking) {
                 is Resource.Error -> {
                     showLoading(false)
@@ -83,10 +116,34 @@ class ChooseBookingActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     showLoading(false)
 
-                    initListBookingRecyclerView(booking.data)
+
+
+                    when (intent.getStringExtra(FLAG_VISITOR)) {
+                        MENU_CHECKIN -> {
+                            val filterCheckinData = booking.data?.filter {
+                                it.room.first().actualCheckin == "Empty"
+                            }
+                            initListBookingRecyclerView(filterCheckinData)
+
+                            handleEmptyData(filterCheckinData)
+                        }
+                        MENU_CHECKOUT -> {
+                            val filterCheckoutData = booking.data?.filter {
+                                it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout == "Empty"
+                            }
+                            initListBookingRecyclerView(filterCheckoutData)
+
+                            handleEmptyData(filterCheckoutData)
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private fun handleEmptyData(filterCheckinData: List<Booking>?) {
+        binding.tvEmptyBooking.visibility =
+            if (filterCheckinData?.isEmpty()!!) View.VISIBLE else View.GONE
     }
 
     private fun initListBookingRecyclerView(data: List<Booking>?) {
@@ -98,9 +155,8 @@ class ChooseBookingActivity : AppCompatActivity() {
 
         adapter.setOnItemClickCallback(object : BookingListAdapter.OnItemClickCallback {
             override fun onItemClicked(context: Context, booking: Booking) {
-                val status = intent.getStringExtra(FLAG_VISITOR)
 
-                val intent: Intent = when (status) {
+                val intent: Intent = when (intent.getStringExtra(FLAG_VISITOR)) {
                     MENU_CHECKIN -> {
                         Intent(this@ChooseBookingActivity, CheckinActivity::class.java)
                     }
