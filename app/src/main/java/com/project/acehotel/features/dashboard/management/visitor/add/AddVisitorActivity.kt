@@ -46,6 +46,8 @@ class AddVisitorActivity : AppCompatActivity() {
         handlePickImages()
 
         setupUI()
+
+        enableRefresh(false)
     }
 
     private fun setupUI() {
@@ -203,6 +205,8 @@ class AddVisitorActivity : AppCompatActivity() {
         binding.apply {
             btnSave.setOnClickListener {
                 isButtonEnabled(false)
+                enableRefresh(true)
+                showLoading(true)
 
                 val name = edAddVisitorName.text.toString()
                 val nik = edAddVisitorNik.text.toString()
@@ -306,6 +310,10 @@ class AddVisitorActivity : AppCompatActivity() {
 
     private fun isButtonEnabled(isEnabled: Boolean) {
         binding.btnSave.isEnabled = isEnabled
+    }
+
+    private fun enableRefresh(isDisable: Boolean) {
+        binding.refAddVisitor.isEnabled = isDisable
     }
 
     private fun setupActionBar() {

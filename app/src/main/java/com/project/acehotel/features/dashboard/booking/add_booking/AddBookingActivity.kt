@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.domain.booking.model.AddBooking
@@ -40,7 +41,9 @@ class AddBookingActivity : AppCompatActivity() {
 
         isButtonEnabled(false)
 
-        disableRefresh()
+        initFormData()
+
+        enableRefresh(false)
 
         handleEditText()
 
@@ -51,6 +54,23 @@ class AddBookingActivity : AppCompatActivity() {
         handlePickDate()
 
         handleSaveButton()
+    }
+
+    private fun initFormData() {
+        binding.apply {
+            //for now we lock to only 1 room
+            //to add more room just create another booking
+            edAddBookingBedCount.setText("0")
+            edAddBookingRoomCount.setText("1")
+            isEditTextEditable(edAddBookingRoomCount, false)
+        }
+    }
+
+    private fun isEditTextEditable(editText: TextInputEditText, isEditable: Boolean) {
+        editText.isFocusable = isEditable
+        editText.isClickable = isEditable
+        editText.isFocusableInTouchMode = isEditable
+        editText.isCursorVisible = isEditable
     }
 
     private fun handleSaveButton() {
@@ -244,9 +264,6 @@ class AddBookingActivity : AppCompatActivity() {
         }
     }
 
-//     if (edAddFranchiseRoomRegularCount.text.toString() == "") 0
-//                    else edAddFranchiseRoomRegularCount.text.toString().toInt()
-
     private fun checkForms() {
         binding.apply {
             val id = intent.getStringExtra(VISITOR_ID)
@@ -283,8 +300,8 @@ class AddBookingActivity : AppCompatActivity() {
         binding.btnSave.isEnabled = isEnabled
     }
 
-    private fun disableRefresh() {
-        binding.refAddBooking.isEnabled = false
+    private fun enableRefresh(isDisable: Boolean) {
+        binding.refAddBooking.isEnabled = isDisable
     }
 
     override fun onResume() {

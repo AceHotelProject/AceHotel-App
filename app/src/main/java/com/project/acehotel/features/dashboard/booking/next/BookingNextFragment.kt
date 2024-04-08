@@ -30,11 +30,11 @@ class BookingNextFragment : Fragment(), IManagementSearch {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvEmptyBookingNext.visibility = View.VISIBLE
+
         fetchBookingPagingList("")
 
         handleRefresh()
-
-        binding.tvEmptyBookingNext.visibility = View.VISIBLE
     }
 
     private fun handleRefresh() {
@@ -51,11 +51,9 @@ class BookingNextFragment : Fragment(), IManagementSearch {
             val isRefreshing =
                 loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
             binding.refBookingNext.isRefreshing = isRefreshing
-
-            val isInitialLoadFinished = loadStates.refresh is LoadState.NotLoading
             val isEmpty = adapter.itemCount == 0
 
-            handleEmptyStates(isInitialLoadFinished && isEmpty)
+            handleEmptyStates(isEmpty)
         }
 
         val layoutManager = LinearLayoutManager(requireContext())

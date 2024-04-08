@@ -19,7 +19,6 @@ import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActiv
 import com.project.acehotel.features.dashboard.management.IManagementSearch
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class BookingNowFragment : Fragment(), IManagementSearch {
@@ -53,11 +52,7 @@ class BookingNowFragment : Fragment(), IManagementSearch {
                 loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
             binding.refBookingNow.isRefreshing = isRefreshing
 
-//            val isInitialLoadFinished = loadStates.refresh is LoadState.NotLoading
             val isEmpty = adapter.itemCount == 0
-
-            Timber.tag("BookingNow").e(isEmpty.toString())
-
 
             handleEmptyStates(isEmpty)
         }

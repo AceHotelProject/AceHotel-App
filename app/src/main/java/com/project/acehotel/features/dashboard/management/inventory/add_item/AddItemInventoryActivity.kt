@@ -44,6 +44,8 @@ class AddItemInventoryActivity : AppCompatActivity() {
         handleStockButton()
 
         handleSaveButton()
+
+        enableRefresh(false)
     }
 
     private fun initInventoryType() {
@@ -73,6 +75,9 @@ class AddItemInventoryActivity : AppCompatActivity() {
 
         binding.apply {
             btnSave.setOnClickListener {
+                showLoading(true)
+                enableRefresh(false)
+
                 val name = edAddItemName.text.toString()
                 val type = mapToInventoryType(edAddItemType.text.toString())
 
@@ -203,6 +208,10 @@ class AddItemInventoryActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.refAddInventory.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun enableRefresh(isDisable: Boolean) {
+        binding.refAddInventory.isEnabled = isDisable
     }
 
     companion object {

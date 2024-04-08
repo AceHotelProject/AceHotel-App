@@ -55,6 +55,8 @@ class AddFranchiseActivity : AppCompatActivity() {
 
         isButtonEnabled(false)
 
+        isButtonEnabled(false)
+
         setupActionBar()
 
         handleButtonBack()
@@ -106,6 +108,7 @@ class AddFranchiseActivity : AppCompatActivity() {
             btnSave.setOnClickListener {
                 isButtonEnabled(false)
                 showLoading(true)
+                enableRefresh(true)
 
                 val hotelName = edAddFranchiseName.text.toString()
                 val hotelAddress = edAddFranchiseAddress.text.toString()
@@ -129,7 +132,6 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                 if (getFileExclusive1 != null || getFileRegular1 != null) {
                     if (getFileExclusive1 != null && getFileRegular1 != null) {
-                        Timber.tag("TEST").e("KEDUA IMAGE DIUBAH")
 
                         val fileExclusive1 = reduceFileImage(getFileExclusive1 as File)
                         val requestImageFileExclusive1 =
@@ -275,8 +277,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                             }
                         }
                     } else {
-                        Timber.tag("TEST").e("IMAGE EXCLUSIVE DIUBAH")
-
                         val fileExclusive1 = reduceFileImage(getFileExclusive1 as File)
                         val requestImageFileExclusive1 =
                             fileExclusive1.asRequestBody("image/jpeg".toMediaType())
@@ -1469,6 +1469,10 @@ class AddFranchiseActivity : AppCompatActivity() {
 
     private fun setupActionBar() {
         supportActionBar?.hide()
+    }
+
+    private fun enableRefresh(isDisable: Boolean) {
+        binding.refAddFranchise.isEnabled = isDisable
     }
 
     companion object {
