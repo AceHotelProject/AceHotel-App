@@ -81,7 +81,8 @@ class RoomRepository @Inject constructor(
         facilityShower: Boolean,
         facilitySelendang: Boolean,
         facilityKerangjangSampah: Boolean,
-        facilityKursi: Boolean
+        facilityKursi: Boolean,
+        note: String,
     ): Flow<Resource<Room>> {
         return object : NetworkBoundResource<Room, RoomResponse>() {
             override suspend fun fetchFromApi(response: RoomResponse): Room {
@@ -105,7 +106,7 @@ class RoomRepository @Inject constructor(
                 )
 
                 val checkoutBody = CheckoutBody(
-                    checkoutDate, bookingId, visitorId, checkoutFacility
+                    checkoutDate, bookingId, visitorId, checkoutFacility, note
                 )
 
                 return remoteDataSource.roomCheckout(

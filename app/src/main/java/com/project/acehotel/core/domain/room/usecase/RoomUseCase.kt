@@ -34,6 +34,8 @@ interface RoomUseCase {
         facilityShower: Boolean,
         facilitySelendang: Boolean,
         facilityKerangjangSampah: Boolean,
-        facilityKursi: Boolean
+        facilityKursi: Boolean,
+
+        note: String,
     ): Flow<Resource<Room>>
 }

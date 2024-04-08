@@ -42,7 +42,8 @@ class RoomInteractor @Inject constructor(private val roomRepository: IRoomReposi
         facilityShower: Boolean,
         facilitySelendang: Boolean,
         facilityKerangjangSampah: Boolean,
-        facilityKursi: Boolean
+        facilityKursi: Boolean,
+        note: String
     ): Flow<Resource<Room>> {
         return roomRepository.roomCheckout(
             roomId,
@@ -60,7 +61,8 @@ class RoomInteractor @Inject constructor(private val roomRepository: IRoomReposi
             facilityShower,
             facilitySelendang,
             facilityKerangjangSampah,
-            facilityKursi
+            facilityKursi,
+            note
         )
     }
 }
