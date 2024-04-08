@@ -59,7 +59,7 @@ object BookingDataMapper {
         type = input.type ?: "Empty",
         id = input.id ?: "Empty",
         transactionProof = input.pathTransactionProof
-            ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
+            ?: IMAGE_PLACEHOLDER,
     )
 
     fun mapPayBookingResponseToDomain(input: PayBookingResponse): Booking = Booking(
@@ -76,7 +76,7 @@ object BookingDataMapper {
         type = input.type ?: "Empty",
         id = input.id ?: "Empty",
         transactionProof = input.pathTransactionProof
-            ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
+            ?: IMAGE_PLACEHOLDER,
         room = listOf(
             RoomBooking(
                 id = input.roomId?.firstOrNull() ?: "Empty",
@@ -130,7 +130,7 @@ object BookingDataMapper {
                 type = booking?.type ?: "Empty",
                 id = booking?.id ?: "Empty",
                 transactionProof = booking?.pathTransactionProof
-                    ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
+                    ?: IMAGE_PLACEHOLDER,
             )
         } ?: listOf()
 
@@ -159,6 +159,9 @@ object BookingDataMapper {
         type = input.type ?: "Empty",
         id = input.id ?: "Empty",
         transactionProof = input.pathTransactionProof
-            ?: "https://storage.googleapis.com/ace-hotel/codioful-formerly-gradienta-G084bO4wGDA-unsplash.jpg",
+            ?: IMAGE_PLACEHOLDER,
     )
+
+    const val IMAGE_PLACEHOLDER =
+        "https://storage.googleapis.com/ace-hotel/placeholder_image.png"
 }

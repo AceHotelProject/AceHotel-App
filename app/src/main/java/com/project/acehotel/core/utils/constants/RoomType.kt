@@ -35,3 +35,17 @@ fun mapToRoomDisplay(type: String): String {
         }
     }
 }
+
+fun convertToRoomType(type: String): RoomType {
+    return when (type) {
+        RoomType.REGULAR.type -> {
+            RoomType.REGULAR
+        }
+        RoomType.EXCLUSIVE.type -> {
+            RoomType.EXCLUSIVE
+        }
+        else -> {
+            RoomType.UNDEFINED
+        }
+    }
+}

@@ -14,6 +14,7 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.room.model.Room
 import com.project.acehotel.core.ui.adapter.room.RoomListAdapter
+import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -30,6 +31,11 @@ class RoomFragment : Fragment() {
 
     private val roomViewModel: RoomViewModel by activityViewModels()
 
+    private var visitorCheckIn = 0
+    private var visitorCheckOut = 0
+    private var roomBooked = 0
+    private var roomAvail = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -38,6 +44,74 @@ class RoomFragment : Fragment() {
         fetchHotelInfo()
 
         fetchListRoom()
+
+        handleRefresh()
+
+        fetchRoomStats()
+    }
+
+    private fun fetchRoomStats() {
+        val filterDate = DateUtils.getDateThisDay()
+
+        roomViewModel.executeGetListBookingByHotel(filterDate).observe(this) { booking ->
+            when (booking) {
+                is Resource.Error -> {
+                    showLoading(false)
+                    if (!isInternetAvailable(requireContext())) {
+                        activity?.showToast(getString(R.string.check_internet))
+                    } else {
+                        Timber.tag("RoomFragment").e(booking.message)
+                    }
+                }
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+                is Resource.Message -> {
+                    showLoading(false)
+                    Timber.tag("RoomFragment").d(booking.message)
+                }
+                is Resource.Success -> {
+                    showLoading(false)
+
+                    val result = booking.data
+                    if (result != null) {
+                        for (item in result) {
+                            if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout != "Empty") {
+                                ++visitorCheckOut
+                            } else if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout == "Empty") {
+                                ++visitorCheckIn
+                                ++roomBooked
+                            } else {
+                                continue
+                            }
+                        }
+                    }
+
+                    binding.apply {
+                        roomAvail -= roomBooked
+
+                        tvRoomTotalCheckin.text = visitorCheckIn.toString()
+                        tvRoomTotalCheckout.text = visitorCheckOut.toString()
+                        tvRoomTotalRoomAvail.text = roomAvail.toString()
+                        tvRoomTotalRoomFull.text = roomBooked.toString()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun handleRefresh() {
+        binding.apply {
+            svRoom.viewTreeObserver.addOnScrollChangedListener {
+                refRoom.isEnabled = svRoom.scrollY == 0
+            }
+
+            refRoom.setOnRefreshListener {
+                fetchHotelInfo()
+
+                fetchListRoom()
+            }
+        }
     }
 
     private fun fetchListRoom() {
@@ -57,7 +131,7 @@ class RoomFragment : Fragment() {
                 }
                 is Resource.Message -> {
                     showLoading(false)
-                    Timber.tag("InventoryDetailActivity").d(room.message)
+                    Timber.tag("RoomFragment").d(room.message)
                 }
                 is Resource.Success -> {
                     showLoading(false)
@@ -89,10 +163,12 @@ class RoomFragment : Fragment() {
     private fun fetchHotelInfo() {
         roomViewModel.getSelectedHotelData().observe(this) { hotel ->
             binding.apply {
+                roomAvail = hotel.regularRoomCount + hotel.exclusiveRoomCount
+
                 tvRoomPriceExclusive.text = "Rp ${formatNumber(hotel.exclusiveRoomPrice)}"
                 tvRoomPriceRegular.text = "Rp ${formatNumber(hotel.regularRoomPrice)}"
 
-                tvRoomDiscount.text = hotel.discount
+                tvRoomDiscount.text = if (hotel.discount == "Empty") "-" else hotel.discount
                 tvRoomDiscountPrice.text = "Rp ${formatNumber(hotel.discountAmount)}"
 
                 tvRoomBedPrice.text = "Rp ${formatNumber(hotel.extraBedPrice)}"

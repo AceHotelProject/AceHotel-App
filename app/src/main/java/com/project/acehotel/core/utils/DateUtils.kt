@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -24,14 +25,11 @@ object DateUtils {
     }
 
     fun convertToDisplayDateFormat2(dateStr: String): String {
-        // Define the input and output date formats
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         val desiredFormat = SimpleDateFormat("d-M-yyyy", Locale.getDefault())
 
-        // Parse the input date string into a Date object
         val date = sourceFormat.parse(dateStr)
 
-        // Format the Date object into the desired format and return it
         return desiredFormat.format(date)
     }
 
@@ -58,14 +56,10 @@ object DateUtils {
     }
 
     fun convertToDisplayDateFormat(dateStr: String): String {
-        // Define the input and output date formats
         val sourceFormat = SimpleDateFormat("yyyy-M-d", Locale.getDefault())
         val desiredFormat = SimpleDateFormat("d-M-yyyy", Locale.getDefault())
-
-        // Parse the input date string into a Date object
         val date = sourceFormat.parse(dateStr)
 
-        // Format the Date object into the desired format and return it
         return desiredFormat.format(date)
     }
 
@@ -103,6 +97,14 @@ object DateUtils {
         return (checkinCalendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR) &&
                 checkinCalendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH) &&
                 checkinCalendar.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH))
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun isDateAfterToday(date: String): Boolean {
+        val inputDateTime = ZonedDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME)
+        val currentDateTime = ZonedDateTime.now(inputDateTime.zone)
+
+        return inputDateTime.isAfter(currentDateTime)
     }
 
     fun convertTimeToHourMinute(date: String): String {
