@@ -14,7 +14,7 @@ class BookingDetailViewModel @Inject constructor(
     private val bookingUseCase: BookingUseCase,
     private val hotelUseCase: HotelUseCase,
     private val visitorUseCase: VisitorUseCase,
-    private val roomUseCase: RoomUseCase
+    private val roomUseCase: RoomUseCase,
 ) : ViewModel() {
 
     fun getDetailBooking(id: String) = bookingUseCase.getDetailBooking(id).asLiveData()

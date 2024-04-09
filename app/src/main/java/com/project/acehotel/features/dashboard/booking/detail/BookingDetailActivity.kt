@@ -8,16 +8,16 @@ import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.domain.visitor.model.Visitor
 import com.project.acehotel.core.utils.DateUtils
-import com.project.acehotel.core.utils.constants.DeleteDialogType
-import com.project.acehotel.core.utils.constants.FabMenuState
-import com.project.acehotel.core.utils.constants.RoomType
-import com.project.acehotel.core.utils.constants.mapToRoomDisplay
+import com.project.acehotel.core.utils.DateUtils.convertToDisplayDateFormat2
+import com.project.acehotel.core.utils.constants.*
 import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -46,8 +46,6 @@ class BookingDetailActivity : AppCompatActivity() {
 
         setupActionBar()
 
-        disableRefresh()
-
         initBookingData()
 
         handleButtonMore()
@@ -55,8 +53,6 @@ class BookingDetailActivity : AppCompatActivity() {
         handleBackButton()
 
         handleFab()
-
-        disableRefresh()
     }
 
     private fun handleButtonMore() {
@@ -128,7 +124,6 @@ class BookingDetailActivity : AppCompatActivity() {
                             is Resource.Success -> {
                                 chipRoomCardType.setStatus(room.data?.type ?: "type")
                                 tvRoomCardName.text = room.data?.name
-
                             }
                         }
                     }
@@ -155,78 +150,236 @@ class BookingDetailActivity : AppCompatActivity() {
                             is Resource.Success -> {
                                 showLoading(false)
 
-                                tvVisitorDetailName.text = visitor.data?.name
-                                tvVisitorDetailNik.text = visitor.data?.identity_num
-                                tvVisitorDetailPhone.text = visitor.data?.phone
-                                tvVisitorDetailEmail.text = visitor.data?.email
-
-                                if (visitor.data?.identityImage != PLACEHOLDER_IMAGE) {
-                                    Glide.with(this@BookingDetailActivity)
-                                        .load(visitor.data?.identityImage).to(ivConfirmVisitor)
-                                }
+                                setVisitorDetailData(visitor.data)
                             }
                         }
                     }
 
-                tvConfirmCheckinDate.text =
-                    DateUtils.convertToDisplayDateFormat2(bookingData!!.checkinDate)
-                tvConfirmCheckoutDate.text =
-                    DateUtils.convertToDisplayDateFormat2(bookingData!!.checkoutDate)
+                setBookingData(bookingData!!)
 
-                tvConfirmNightCount.text = "${bookingData!!.duration} malam"
-                tvConfirmRoomBook.text =
-                    "${mapToRoomDisplay(bookingData!!.type)} (${bookingData!!.roomCount} kamar)"
+                setPriceData(bookingData!!)
 
-                tvConfirmTotalPrice.text = "Rp ${formatNumber(bookingData!!.totalPrice)}"
-
-                bookingDetailViewModel.getSelectedHotelData()
-                    .observe(this@BookingDetailActivity) { hotel ->
-                        if (bookingData!!.type == RoomType.REGULAR.type) {
-                            tvConfirmRoom.text = mapToRoomDisplay(bookingData!!.type)
-                            tvConfirmRoomDesc.text =
-                                "${bookingData!!.duration} malam x ${bookingData!!.roomCount} kamar"
-                            tvConfirmRoomPrice.text =
-                                "Rp ${formatNumber(bookingData!!.duration * bookingData!!.roomCount * hotel.regularRoomPrice)}"
-
-                            tvConfirmBedDesc.text = "${bookingData!!.addOn.size} unit"
-                            tvConfirmBedPrice.text =
-                                "Rp ${formatNumber(hotel.extraBedPrice * bookingData!!.addOn.size)}"
-
-                            if ((bookingData!!.totalPrice - (bookingData!!.duration * bookingData!!.roomCount * hotel.regularRoomPrice)) == hotel.discountAmount) {
-                                tvConfirmDiscDesc.text = "${hotel.discount}"
-                                tvConfirmDiscPrice.text = "Rp ${hotel.discount}"
-                            } else {
-                                tvConfirmDiscDesc.text = "Tidak Menggunakan Diskon"
-                                tvConfirmDiscPrice.text = "Rp 0"
-                            }
-                        } else if (bookingData!!.type == RoomType.EXCLUSIVE.type) {
-                            tvConfirmRoom.text = mapToRoomDisplay(bookingData!!.type)
-                            tvConfirmRoomDesc.text =
-                                "${bookingData!!.duration} malam x ${bookingData!!.roomCount} kamar"
-                            tvConfirmRoomPrice.text =
-                                "Rp ${formatNumber(bookingData!!.duration * bookingData!!.roomCount * hotel.exclusiveRoomPrice)}"
-
-                            tvConfirmBedDesc.text = "${bookingData!!.addOn.size} unit"
-                            tvConfirmBedPrice.text =
-                                "Rp ${formatNumber(hotel.extraBedPrice * bookingData!!.addOn.size)}"
-
-                            if ((bookingData!!.totalPrice - (bookingData!!.duration * bookingData!!.roomCount * hotel.regularRoomPrice)) == hotel.discountAmount) {
-                                tvConfirmDiscDesc.text = "${hotel.discount}"
-                                tvConfirmDiscPrice.text = "Rp ${hotel.discount}"
-                            } else {
-                                tvConfirmDiscDesc.text = "Tidak Menggunakan Diskon"
-                                tvConfirmDiscPrice.text = "Rp 0"
-                            }
-                        }
-
-                        if (bookingData!!.transactionProof != PLACEHOLDER_IMAGE) {
-                            Glide.with(this@BookingDetailActivity)
-                                .load(bookingData!!.transactionProof).to(ivConfirmVisitor)
-                        }
-                    }
+                setActualData(bookingData!!)
             }
         }
     }
+
+    private fun setActualData(data: Booking) {
+        binding.apply {
+            if (data.room.first().actualCheckin != "Empty" && data.room.first().actualCheckout != "Empty") {
+                setVisitorStatus(CurrentVisitorStatus.CHECKOUT.status, true)
+
+                tvConfirmRoomActualCheckin.text =
+                    "${convertToDisplayDateFormat2(data.room.first().actualCheckin)}"
+                bookingDetailViewModel.getVisitorDetail(data.room.first().checkoutStaffId)
+                    .observe(this@BookingDetailActivity) { visitor ->
+                        when (visitor) {
+                            is Resource.Error -> {
+                                showLoading(false)
+
+                                if (!isInternetAvailable(this@BookingDetailActivity)) {
+                                    showToast(getString(R.string.check_internet))
+                                } else {
+                                    showToast(visitor.message.toString())
+                                }
+                            }
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Message -> {
+                                showLoading(false)
+                                Timber.tag("BookingDetailActivity").d(visitor.message)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+
+                                tvConfirmRoomActualCheckinPic.text = visitor.data?.name
+                            }
+                        }
+
+                    }
+
+                tvConfirmRoomActualCheckout.text =
+                    "${convertToDisplayDateFormat2(data.room.first().actualCheckout)}"
+                bookingDetailViewModel.getVisitorDetail(data.room.first().checkoutStaffId)
+                    .observe(this@BookingDetailActivity) { visitor ->
+                        when (visitor) {
+                            is Resource.Error -> {
+                                showLoading(false)
+
+                                if (!isInternetAvailable(this@BookingDetailActivity)) {
+                                    showToast(getString(R.string.check_internet))
+                                } else {
+                                    showToast(visitor.message.toString())
+                                }
+                            }
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Message -> {
+                                showLoading(false)
+                                Timber.tag("BookingDetailActivity").d(visitor.message)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+
+                                tvConfirmRoomActualCheckoutPic.text = visitor.data?.name
+                            }
+                        }
+
+                    }
+            } else if (data.room.first().actualCheckin != "Empty" && DateUtils.isTodayDate(data.checkoutDate)) {
+                setVisitorStatus(CurrentVisitorStatus.CHECKOUT.status, false)
+
+                tvConfirmRoomActualCheckin.text =
+                    "${convertToDisplayDateFormat2(data.room.first().actualCheckin)}"
+                bookingDetailViewModel.getVisitorDetail(data.room.first().checkoutStaffId)
+                    .observe(this@BookingDetailActivity) { visitor ->
+                        when (visitor) {
+                            is Resource.Error -> {
+                                showLoading(false)
+
+                                if (!isInternetAvailable(this@BookingDetailActivity)) {
+                                    showToast(getString(R.string.check_internet))
+                                } else {
+                                    showToast(visitor.message.toString())
+                                }
+                            }
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Message -> {
+                                showLoading(false)
+                                Timber.tag("BookingDetailActivity").d(visitor.message)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+
+                                tvConfirmRoomActualCheckinPic.text = visitor.data?.name
+                            }
+                        }
+                    }
+
+                tvConfirmRoomActualCheckout.text = "Belum checkout"
+                tvConfirmRoomActualCheckoutPic.text = "Belum checkout"
+            } else if (data.room.first().actualCheckin != "Empty" && !DateUtils.isTodayDate(
+                    data.checkoutDate
+                )
+            ) {
+                setVisitorStatus(CurrentVisitorStatus.CHECKIN.status, true)
+
+                tvConfirmRoomActualCheckin.text =
+                    "${convertToDisplayDateFormat2(data.room.first().actualCheckin)}"
+                bookingDetailViewModel.getVisitorDetail(data.room.first().checkinStaffId)
+                    .observe(this@BookingDetailActivity) { visitor ->
+                        when (visitor) {
+                            is Resource.Error -> {
+                                showLoading(false)
+
+                                if (!isInternetAvailable(this@BookingDetailActivity)) {
+                                    showToast(getString(R.string.check_internet))
+                                } else {
+                                    showToast(visitor.message.toString())
+                                }
+                            }
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Message -> {
+                                showLoading(false)
+                                Timber.tag("BookingDetailActivity").d(visitor.message)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+
+                                tvConfirmRoomActualCheckinPic.text = visitor.data?.name
+                            }
+                        }
+                    }
+
+                tvConfirmRoomActualCheckout.text = "Belum checkout"
+                tvConfirmRoomActualCheckoutPic.text = "Belum checkout"
+            } else {
+                setVisitorStatus(CurrentVisitorStatus.CHECKIN.status, false)
+
+                tvConfirmRoomActualCheckin.text =
+                    "Belum checkin"
+                tvConfirmRoomActualCheckinPic.text = "Belum checkin"
+
+                tvConfirmRoomActualCheckout.text = "Belum checkout"
+                tvConfirmRoomActualCheckoutPic.text = "Belum checkout"
+            }
+        }
+    }
+
+    private fun setPriceData(bookingData: Booking) {
+        bookingDetailViewModel.getSelectedHotelData()
+            .observe(this@BookingDetailActivity) { hotel ->
+                binding.apply {
+                    tvConfirmRoom.text = mapToRoomDisplay(bookingData!!.type)
+                    tvConfirmRoomDesc.text =
+                        "${bookingData!!.duration} malam x ${bookingData!!.roomCount} kamar"
+
+                    tvConfirmBedDesc.text = "${bookingData!!.addOn.size} unit"
+                    tvConfirmBedPrice.text =
+                        "Rp ${formatNumber(hotel.extraBedPrice * bookingData!!.addOn.size)}"
+
+                    tvConfirmTotalPrice.text = "Rp ${formatNumber(bookingData!!.totalPrice)}"
+
+                    if (bookingData!!.type == RoomType.REGULAR.type) {
+                        tvConfirmRoomPrice.text =
+                            "Rp ${formatNumber(bookingData!!.duration * bookingData!!.roomCount * hotel.regularRoomPrice)}"
+
+                        if (bookingData!!.totalPrice < (bookingData!!.duration * bookingData!!.roomCount!! * hotel.regularRoomPrice)) {
+                            tvConfirmDiscDesc.text = "${hotel.discount}"
+                            tvConfirmDiscPrice.text = "Rp ${formatNumber(hotel.discountAmount)}"
+                        } else {
+                            tvConfirmDiscDesc.text = "Tidak Menggunakan Diskon"
+                            tvConfirmDiscPrice.text = "Rp 0"
+                        }
+                    } else if (bookingData!!.type == RoomType.EXCLUSIVE.type) {
+                        tvConfirmRoomPrice.text =
+                            "Rp ${formatNumber(bookingData!!.duration * bookingData!!.roomCount * hotel.exclusiveRoomPrice)}"
+
+                        if (bookingData!!.totalPrice < (bookingData!!.duration * bookingData!!.roomCount!! * hotel.exclusiveRoomPrice)) {
+                            tvConfirmDiscDesc.text = "${hotel.discount}"
+                            tvConfirmDiscPrice.text = "Rp ${formatNumber(hotel.discountAmount)}"
+                        } else {
+                            tvConfirmDiscDesc.text = "Tidak Menggunakan Diskon"
+                            tvConfirmDiscPrice.text = "Rp 0"
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun setBookingData(bookingData: Booking) {
+        binding.apply {
+            tvConfirmCheckinDate.text =
+                DateUtils.convertToDisplayDateFormat2(bookingData!!.checkinDate)
+            tvConfirmCheckoutDate.text =
+                DateUtils.convertToDisplayDateFormat2(bookingData!!.checkoutDate)
+
+            tvConfirmNightCount.text = "${bookingData!!.duration} malam"
+            tvConfirmRoomBook.text =
+                "${mapToRoomDisplay(bookingData!!.type)} (${bookingData!!.roomCount} kamar)"
+
+            Glide.with(this@BookingDetailActivity)
+                .load(bookingData!!.transactionProof) to ivConfirmVisitor
+        }
+    }
+
+    private fun setVisitorDetailData(data: Visitor?) {
+        binding.apply {
+            tvVisitorDetailName.text = data?.name
+            tvVisitorDetailNik.text = data?.identity_num
+            tvVisitorDetailPhone.text = data?.phone
+            tvVisitorDetailEmail.text = data?.email
+            Glide.with(this@BookingDetailActivity)
+                .load(data?.identityImage).to(ivConfirmVisitor)
+        }
+    }
+
 
     private fun handleFab() {
         binding.fabMenu.setOnClickListener {
@@ -316,12 +469,54 @@ class BookingDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.refConfirm.isRefreshing = isLoading
+    private fun setVisitorStatus(status: String, isDone: Boolean) {
+        when (status) {
+            CurrentVisitorStatus.CHECKIN.status -> {
+                if (isDone) {
+                    setVisitorStatusDisplay(
+                        "Checkin",
+                        R.color.green,
+                        R.drawable.icons_visitor_card_checkin_true
+                    )
+                } else {
+                    setVisitorStatusDisplay(
+                        "Checkin",
+                        R.color.dark_grey,
+                        R.drawable.icons_visitor_card_checkin_false
+                    )
+                }
+            }
+            CurrentVisitorStatus.CHECKOUT.status -> {
+                if (isDone) {
+                    setVisitorStatusDisplay(
+                        "Checkout",
+                        R.color.red,
+                        R.drawable.icons_visitor_card_checkout_true
+                    )
+                } else {
+                    setVisitorStatusDisplay(
+                        "Checkout",
+                        R.color.dark_grey,
+                        R.drawable.icons_visitor_card_checkout_false
+                    )
+                }
+            }
+        }
     }
 
-    private fun disableRefresh() {
-        binding.refConfirm.isEnabled = false
+    private fun setVisitorStatusDisplay(desc: String, colorId: Int, imageId: Int) {
+        binding.tvCurrentVisitorStatusDesc.apply {
+            text = desc
+
+            val color = ContextCompat.getColor(context, colorId)
+            setTextColor(color)
+        }
+
+        binding.ivCurrentVisitorStatus.setImageResource(imageId)
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.refConfirm.isRefreshing = isLoading
     }
 
     private fun setupActionBar() {
