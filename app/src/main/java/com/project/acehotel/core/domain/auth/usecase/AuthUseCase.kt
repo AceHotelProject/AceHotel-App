@@ -2,6 +2,7 @@ package com.project.acehotel.core.domain.auth.usecase
 
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.model.Auth
+import com.project.acehotel.core.domain.auth.model.User
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 
@@ -28,4 +29,18 @@ interface AuthUseCase {
     suspend fun deleteToken()
 
     fun uploadImage(image: List<MultipartBody.Part>): Flow<Resource<List<String>>>
+
+    fun getUserById(id: String, hotelId: String): Flow<Resource<User>>
+
+    fun updateUser(
+        id: String,
+        hotelId: String,
+        email: String,
+        username: String,
+        role: String,
+    ): Flow<Resource<User>>
+
+    fun deleteUser(id: String, hotelId: String): Flow<Int>
+
+
 }

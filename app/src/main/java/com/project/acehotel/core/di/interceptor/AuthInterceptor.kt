@@ -16,7 +16,7 @@ class AuthInterceptor @Inject constructor(private val userManager: UserManager) 
             userManager.getAccessToken().first().toString()
         }
 
-        Timber.tag("TOKEN").d("Ini access token %s", token)
+        Timber.tag("TOKEN").d("Access token: %s", token)
 
         val request = chain.request().newBuilder()
         if (token.isNotEmpty()) {

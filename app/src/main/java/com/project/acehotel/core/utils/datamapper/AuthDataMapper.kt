@@ -3,11 +3,13 @@ package com.project.acehotel.core.utils.datamapper
 import com.project.acehotel.core.data.source.local.entity.TokenEntity
 import com.project.acehotel.core.data.source.local.entity.UserEntity
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
+import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.domain.auth.model.Auth
 import com.project.acehotel.core.domain.auth.model.Tokens
 import com.project.acehotel.core.domain.auth.model.TokensFormat
 import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.utils.constants.UserRole
+import com.project.acehotel.core.utils.constants.mapToUserRole
 import org.json.JSONArray
 
 object AuthDataMapper {
@@ -15,23 +17,11 @@ object AuthDataMapper {
     fun mapAuthResponseToDomain(input: AuthResponse): Auth = Auth(
         id = 1,
         user = User(
-            role = when (input.user?.role) {
-                UserRole.MASTER.role -> {
-                    UserRole.MASTER
-                }
-                UserRole.FRANCHISE.role -> {
-                    UserRole.FRANCHISE
-                }
-
-                UserRole.ADMIN.role -> {
-                    UserRole.ADMIN
-                }
-                else -> UserRole.UNDEFINED
-            },
+            role = input.user?.role?.let { mapToUserRole(it) },
             username = input.user?.username ?: "Empty",
             email = input.user?.email ?: "Empty",
             id = input.user?.id ?: "Empty",
-            hotelId = input.user?.hotelId
+            hotelId = input.user?.hotelId ?: listOf()
         ),
         tokens = Tokens(
             accessToken = TokensFormat(
@@ -79,6 +69,15 @@ object AuthDataMapper {
             )
         )
     )
+
+    fun mapUserResponseToDomain(input: UserResponse): User = User(
+        id = input.id ?: "Empty",
+        username = input.username ?: "Empty",
+        email = input.email ?: "Empty",
+        role = mapToUserRole(input.role ?: "role"),
+        hotelId = input.hotelId ?: listOf<String>(),
+
+        )
 
     private fun convertStringToList(input: String): List<String> {
         val jsonArray = JSONArray(input)

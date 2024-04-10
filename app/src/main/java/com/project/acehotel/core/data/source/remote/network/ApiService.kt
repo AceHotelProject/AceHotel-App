@@ -11,12 +11,14 @@ import com.project.acehotel.core.data.source.remote.response.images.UploadImages
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
+import com.project.acehotel.core.data.source.remote.response.note.NoteResponse
 import com.project.acehotel.core.data.source.remote.response.room.CheckoutBody
 import com.project.acehotel.core.data.source.remote.response.room.ListRoomResponse
 import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
 import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
 import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
 import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
+import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import okhttp3.MultipartBody
@@ -49,6 +51,33 @@ interface ApiService {
     ): RefreshTokenResponse
 
     // AUTH
+
+
+    // AUTH
+    @GET("user/{id}")
+    suspend fun getUserById(
+        @Path("id") id: String,
+        @Query("hotel_id") hotelId: String,
+    ): UserResponse
+
+    @PATCH("user/{id}")
+    @FormUrlEncoded
+    suspend fun updateUser(
+        @Path("id") id: String,
+        @Query("hotel_id") hotelId: String,
+        @Field("email") email: String,
+        @Field("username") username: String,
+        @Field("role") role: String,
+    ): UserResponse
+
+    @DELETE("user/{id}")
+    suspend fun deleteUser(
+        @Path("id") id: String,
+        @Query("hotel_id") hotelId: String,
+    ): Response<UserResponse>
+
+    // AUTH
+
 
     // INVENTORY
 
@@ -307,11 +336,6 @@ interface ApiService {
         @Path("id") id: String
     ): BookingResponse
 
-    @DELETE("bookings/{id}")
-    suspend fun deleteBooking(
-        @Path("id") id: String
-    ): Response<BookingResponse>
-
     @POST("bookings/pay/{id}")
     @FormUrlEncoded
     suspend fun payBooking(
@@ -325,6 +349,11 @@ interface ApiService {
         @Path("id") id: String,
         @Field("discount_code") discountCode: String,
     ): PayBookingResponse
+
+    @DELETE("booking/{id}")
+    suspend fun deleteBooking(
+        @Path("id") id: String
+    ): Response<BookingResponse>
 
     // BOOKING
 
@@ -357,6 +386,11 @@ interface ApiService {
         @Body checkoutBody: CheckoutBody
     ): RoomResponse
 
+    @DELETE("room/{id}")
+    suspend fun deleteRoom(
+        @Path("id") id: String
+    ): Response<RoomResponse>
+
     // ROOM
 
 
@@ -371,4 +405,11 @@ interface ApiService {
     // IMAGES
 
 
+    // IMAGES
+    @GET("note/{id}")
+    suspend fun getNoteDetail(
+        @Path("id") id: String
+    ): NoteResponse
+
+    // IMAGES
 }
