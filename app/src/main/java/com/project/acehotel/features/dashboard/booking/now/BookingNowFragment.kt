@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
@@ -61,9 +62,8 @@ class BookingNowFragment : Fragment(), IManagementSearch {
         binding.rvBookingNow.layoutManager = layoutManager
 
         val filterDate = DateUtils.getDateThisDay()
-        bookingNowViewModel.executeGetPagingListBookingByHotel(filterDate, true, visitorName)
+        bookingNowViewModel.executeGetPagingListBookingByHotel(filterDate, false, visitorName)
             .observe(this) { booking ->
-
                 lifecycleScope.launch {
                     adapter.submitData(booking)
                 }
@@ -73,7 +73,8 @@ class BookingNowFragment : Fragment(), IManagementSearch {
             override fun onItemClicked(context: Context, booking: Booking) {
                 val intentToBookingDetail =
                     Intent(requireContext(), BookingDetailActivity::class.java)
-                intentToBookingDetail.putExtra(BOOKING_DATA, booking)
+                val jsonData = Gson().toJson(booking, Booking::class.java)
+                intentToBookingDetail.putExtra(BOOKING_DATA, jsonData)
                 startActivity(intentToBookingDetail)
             }
         })
@@ -82,10 +83,6 @@ class BookingNowFragment : Fragment(), IManagementSearch {
 
     private fun handleEmptyStates(isEmpty: Boolean) {
         binding.tvEmptyBookingNow.visibility = if (isEmpty) View.VISIBLE else View.INVISIBLE
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.refBookingNow.isRefreshing = isLoading
     }
 
     override fun onCreateView(

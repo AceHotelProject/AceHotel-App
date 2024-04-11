@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
@@ -71,7 +72,8 @@ class BookingNextFragment : Fragment(), IManagementSearch {
             override fun onItemClicked(context: Context, booking: Booking) {
                 val intentToBookingDetail =
                     Intent(requireContext(), BookingDetailActivity::class.java)
-                intentToBookingDetail.putExtra(BOOKING_DATA, booking)
+                val jsonData = Gson().toJson(booking, Booking::class.java)
+                intentToBookingDetail.putExtra(BOOKING_DATA, jsonData)
                 startActivity(intentToBookingDetail)
             }
         })
