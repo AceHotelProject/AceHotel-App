@@ -171,16 +171,16 @@ class BookingDetailActivity : AppCompatActivity() {
 
                 tvConfirmRoomActualCheckin.text =
                     "${convertToDisplayDateFormat2(data.room.first().actualCheckin)}"
-                bookingDetailViewModel.getVisitorDetail(data.room.first().checkoutStaffId)
-                    .observe(this@BookingDetailActivity) { visitor ->
-                        when (visitor) {
+                bookingDetailViewModel.executeGetUserById(data.room.first().checkoutStaffId)
+                    .observe(this@BookingDetailActivity) { user ->
+                        when (user) {
                             is Resource.Error -> {
                                 showLoading(false)
 
                                 if (!isInternetAvailable(this@BookingDetailActivity)) {
                                     showToast(getString(R.string.check_internet))
                                 } else {
-                                    showToast(visitor.message.toString())
+                                    showToast(user.message.toString())
                                 }
                             }
                             is Resource.Loading -> {
@@ -188,12 +188,13 @@ class BookingDetailActivity : AppCompatActivity() {
                             }
                             is Resource.Message -> {
                                 showLoading(false)
-                                Timber.tag("BookingDetailActivity").d(visitor.message)
+                                Timber.tag("BookingDetailActivity").d(user.message)
                             }
                             is Resource.Success -> {
                                 showLoading(false)
 
-                                tvConfirmRoomActualCheckinPic.text = visitor.data?.name
+                                tvConfirmRoomActualCheckinPic.text =
+                                    "${user.data?.username}\n(${user.data?.email})"
                             }
                         }
 
@@ -201,16 +202,16 @@ class BookingDetailActivity : AppCompatActivity() {
 
                 tvConfirmRoomActualCheckout.text =
                     "${convertToDisplayDateFormat2(data.room.first().actualCheckout)}"
-                bookingDetailViewModel.getVisitorDetail(data.room.first().checkoutStaffId)
-                    .observe(this@BookingDetailActivity) { visitor ->
-                        when (visitor) {
+                bookingDetailViewModel.executeGetUserById(data.room.first().checkoutStaffId)
+                    .observe(this@BookingDetailActivity) { user ->
+                        when (user) {
                             is Resource.Error -> {
                                 showLoading(false)
 
                                 if (!isInternetAvailable(this@BookingDetailActivity)) {
                                     showToast(getString(R.string.check_internet))
                                 } else {
-                                    showToast(visitor.message.toString())
+                                    showToast(user.message.toString())
                                 }
                             }
                             is Resource.Loading -> {
@@ -218,12 +219,13 @@ class BookingDetailActivity : AppCompatActivity() {
                             }
                             is Resource.Message -> {
                                 showLoading(false)
-                                Timber.tag("BookingDetailActivity").d(visitor.message)
+                                Timber.tag("BookingDetailActivity").d(user.message)
                             }
                             is Resource.Success -> {
                                 showLoading(false)
 
-                                tvConfirmRoomActualCheckoutPic.text = visitor.data?.name
+                                tvConfirmRoomActualCheckoutPic.text =
+                                    "${user.data?.username}\n(${user.data?.email})"
                             }
                         }
 
@@ -233,16 +235,16 @@ class BookingDetailActivity : AppCompatActivity() {
 
                 tvConfirmRoomActualCheckin.text =
                     "${convertToDisplayDateFormat2(data.room.first().actualCheckin)}"
-                bookingDetailViewModel.getVisitorDetail(data.room.first().checkoutStaffId)
-                    .observe(this@BookingDetailActivity) { visitor ->
-                        when (visitor) {
+                bookingDetailViewModel.executeGetUserById(data.room.first().checkoutStaffId)
+                    .observe(this@BookingDetailActivity) { user ->
+                        when (user) {
                             is Resource.Error -> {
                                 showLoading(false)
 
                                 if (!isInternetAvailable(this@BookingDetailActivity)) {
                                     showToast(getString(R.string.check_internet))
                                 } else {
-                                    showToast(visitor.message.toString())
+                                    showToast(user.message.toString())
                                 }
                             }
                             is Resource.Loading -> {
@@ -250,12 +252,13 @@ class BookingDetailActivity : AppCompatActivity() {
                             }
                             is Resource.Message -> {
                                 showLoading(false)
-                                Timber.tag("BookingDetailActivity").d(visitor.message)
+                                Timber.tag("BookingDetailActivity").d(user.message)
                             }
                             is Resource.Success -> {
                                 showLoading(false)
 
-                                tvConfirmRoomActualCheckinPic.text = visitor.data?.name
+                                tvConfirmRoomActualCheckinPic.text =
+                                    "${user.data?.username}\n(${user.data?.email})"
                             }
                         }
                     }
@@ -270,16 +273,16 @@ class BookingDetailActivity : AppCompatActivity() {
 
                 tvConfirmRoomActualCheckin.text =
                     "${convertToDisplayDateFormat2(data.room.first().actualCheckin)}"
-                bookingDetailViewModel.getVisitorDetail(data.room.first().checkinStaffId)
-                    .observe(this@BookingDetailActivity) { visitor ->
-                        when (visitor) {
+                bookingDetailViewModel.executeGetUserById(data.room.first().checkinStaffId)
+                    .observe(this@BookingDetailActivity) { user ->
+                        when (user) {
                             is Resource.Error -> {
                                 showLoading(false)
 
                                 if (!isInternetAvailable(this@BookingDetailActivity)) {
                                     showToast(getString(R.string.check_internet))
                                 } else {
-                                    showToast(visitor.message.toString())
+                                    showToast(user.message.toString())
                                 }
                             }
                             is Resource.Loading -> {
@@ -287,12 +290,13 @@ class BookingDetailActivity : AppCompatActivity() {
                             }
                             is Resource.Message -> {
                                 showLoading(false)
-                                Timber.tag("BookingDetailActivity").d(visitor.message)
+                                Timber.tag("BookingDetailActivity").d(user.message)
                             }
                             is Resource.Success -> {
                                 showLoading(false)
 
-                                tvConfirmRoomActualCheckinPic.text = visitor.data?.name
+                                tvConfirmRoomActualCheckinPic.text =
+                                    "${user.data?.username}\n(${user.data?.email})"
                             }
                         }
                     }

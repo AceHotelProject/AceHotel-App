@@ -3,6 +3,7 @@ package com.project.acehotel.core.domain.booking.repository
 import androidx.paging.PagingData
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.domain.booking.model.Note
 import kotlinx.coroutines.flow.Flow
 
 interface IBookingRepository {
@@ -21,7 +22,7 @@ interface IBookingRepository {
         hotelId: String,
         filterDate: String,
         visitorName: String,
-        ): Flow<Resource<List<Booking>>>
+    ): Flow<Resource<List<Booking>>>
 
     fun getListBookingByRoom(roomId: String, filterDate: String): Flow<Resource<List<Booking>>>
 
@@ -41,6 +42,9 @@ interface IBookingRepository {
         discountCode: String
     ): Flow<Resource<Booking>>
 
+    fun getNoteDetail(
+        id: String
+    ): Flow<Resource<Note>>
     // TEST PAGING
 
     fun getPagingListBookingByHotel(
@@ -61,6 +65,7 @@ interface IBookingRepository {
         filterDate: String,
         isFinished: Boolean
     ): Flow<PagingData<Booking>>
+
 
     // TEST PAGING
 }

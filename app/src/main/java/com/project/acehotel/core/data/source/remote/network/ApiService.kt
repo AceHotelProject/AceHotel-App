@@ -54,7 +54,7 @@ interface ApiService {
 
 
     // AUTH
-    @GET("user/{id}")
+    @GET("users/{id}")
     suspend fun getUserById(
         @Path("id") id: String,
         @Query("hotel_id") hotelId: String,

@@ -14,7 +14,9 @@ import com.project.acehotel.core.data.source.remote.response.booking.AddBookingR
 import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.PayBookingResponse
+import com.project.acehotel.core.data.source.remote.response.note.NoteResponse
 import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.domain.booking.model.Note
 import com.project.acehotel.core.domain.booking.repository.IBookingRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.BookingDataMapper
@@ -150,6 +152,18 @@ class BookingRepository @Inject constructor(
                 return remoteDataSource.applyDiscount(id, discountCode)
             }
 
+        }.asFlow()
+    }
+
+    override fun getNoteDetail(id: String): Flow<Resource<Note>> {
+        return object : NetworkBoundResource<Note, NoteResponse>() {
+            override suspend fun fetchFromApi(response: NoteResponse): Note {
+                return BookingDataMapper.mapNoteResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<NoteResponse>> {
+                return remoteDataSource.getNoteDetail(id)
+            }
         }.asFlow()
     }
 

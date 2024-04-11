@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.mapToRoomDisplay
+import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.databinding.ItemListBookingBinding
 
 class BookingPagingListAdapter :
@@ -34,6 +35,7 @@ class BookingPagingListAdapter :
             tvBookingNightCount.text = "${data?.duration} malam"
             tvBookingDate.text =
                 "${DateUtils.convertDate(data?.checkinDate!!)} - ${DateUtils.convertDate(data.checkoutDate)}"
+            tvBookingPrice.text = "Rp ${formatNumber(data.totalPrice)}"
         }
 
         holder.itemView.setOnClickListener {

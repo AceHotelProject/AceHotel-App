@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.project.acehotel.core.data.repository.BookingRepository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.domain.booking.model.Note
 import com.project.acehotel.core.domain.booking.usecase.BookingUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -64,6 +65,10 @@ class BookingInteractor @Inject constructor(private val bookingRepository: Booki
 
     override fun applyDiscount(id: String, discountCode: String): Flow<Resource<Booking>> {
         return bookingRepository.applyDiscount(id, discountCode)
+    }
+
+    override fun getNoteDetail(id: String): Flow<Resource<Note>> {
+        return bookingRepository.getNoteDetail(id)
     }
 
     override fun getPagingListBookingByHotel(

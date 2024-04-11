@@ -1,7 +1,9 @@
 package com.project.acehotel.core.utils.datamapper
 
 import com.project.acehotel.core.data.source.remote.response.booking.*
+import com.project.acehotel.core.data.source.remote.response.note.NoteResponse
 import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.domain.booking.model.Note
 import com.project.acehotel.core.domain.booking.model.RoomBooking
 import timber.log.Timber
 
@@ -160,6 +162,12 @@ object BookingDataMapper {
         id = input.id ?: "Empty",
         transactionProof = input.pathTransactionProof
             ?: IMAGE_PLACEHOLDER,
+    )
+
+    fun mapNoteResponseToDomain(input: NoteResponse): Note = Note(
+        id = input.id ?: "Empty",
+        bookingId = input.bookingId?.first() ?: "Empty",
+        detail = input.detail ?: "Empty",
     )
 
     const val IMAGE_PLACEHOLDER =
