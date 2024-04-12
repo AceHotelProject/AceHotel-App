@@ -14,6 +14,7 @@ import com.project.acehotel.core.domain.room.repository.IRoomRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.RoomDataMapper
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import javax.inject.Inject
 
 class RoomRepository @Inject constructor(
@@ -114,6 +115,18 @@ class RoomRepository @Inject constructor(
                 )
             }
 
+        }.asFlow()
+    }
+
+    override fun deleteRoom(id: String): Flow<Resource<Int>> {
+        return object : NetworkBoundResource<Int, Response<RoomResponse>>() {
+            override suspend fun fetchFromApi(response: Response<RoomResponse>): Int {
+                return response.code()
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<Response<RoomResponse>>> {
+                return remoteDataSource.deleteRoom(id)
+            }
         }.asFlow()
     }
 }

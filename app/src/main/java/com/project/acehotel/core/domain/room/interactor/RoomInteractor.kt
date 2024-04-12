@@ -65,4 +65,8 @@ class RoomInteractor @Inject constructor(private val roomRepository: IRoomReposi
             note
         )
     }
+
+    override fun deleteRoom(id: String): Flow<Resource<Int>> {
+        return roomRepository.deleteRoom(id)
+    }
 }

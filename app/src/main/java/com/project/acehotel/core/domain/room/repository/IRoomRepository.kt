@@ -39,4 +39,6 @@ interface IRoomRepository {
 
         note: String,
     ): Flow<Resource<Room>>
+
+    fun deleteRoom(id: String): Flow<Resource<Int>>
 }

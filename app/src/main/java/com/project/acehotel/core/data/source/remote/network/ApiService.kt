@@ -288,7 +288,7 @@ interface ApiService {
         @Field("type") type: String,
     ): AddBookingResponse
 
-    @GET("bookings/hotel/{id}")
+    @GET("bookings/hotel/{id}?limit=999")
     suspend fun getListBookingByHotel(
         @Path("id") id: String,
         @Query("checkin_date") filterDate: String,
@@ -386,7 +386,7 @@ interface ApiService {
         @Body checkoutBody: CheckoutBody
     ): RoomResponse
 
-    @DELETE("room/{id}")
+    @DELETE("rooms/{id}")
     suspend fun deleteRoom(
         @Path("id") id: String
     ): Response<RoomResponse>

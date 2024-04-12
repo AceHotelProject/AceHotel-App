@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -23,6 +24,7 @@ import com.project.acehotel.core.domain.room.model.Room
 import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
 import com.project.acehotel.core.ui.adapter.visitor.CurrentVisitorAdapter
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.constants.RoomStatus
 import com.project.acehotel.core.utils.constants.RoomType
 import com.project.acehotel.core.utils.isInternetAvailable
@@ -30,6 +32,7 @@ import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityRoomDetailBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import com.project.acehotel.features.dashboard.management.visitor.detail.VisitorDetailActivity
+import com.project.acehotel.features.popup.delete.DeleteItemDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -57,6 +60,37 @@ class RoomDetailActivity : AppCompatActivity() {
         fetchListBooking()
 
         handleRefresh()
+
+        handleButtonMore()
+
+        handleEmptyStates(listOf(), binding.rvRoomDetailNextBooking)
+        handleEmptyStates(listOf(), binding.rvRoomDetailCurrentVisitor)
+    }
+
+    private fun handleButtonMore() {
+        binding.btnMore.setOnClickListener {
+            val popUpMenu = PopupMenu(this, binding.btnMore)
+            popUpMenu.menuInflater.inflate(R.menu.menu_detail_delete_item, popUpMenu.menu)
+
+            popUpMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menuDelete -> {
+                        if (roomData != null) {
+                            DeleteItemDialog(
+                                DeleteDialogType.ROOM_DETAIL,
+                                roomData!!.id
+                            ).show(supportFragmentManager, "Room Dialog")
+                        }
+
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
+            popUpMenu.show()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

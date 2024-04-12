@@ -80,6 +80,7 @@ class RoomFragment : Fragment() {
                                 ++visitorCheckOut
                             } else if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout == "Empty") {
                                 ++visitorCheckIn
+                            } else if (DateUtils.isTodayDate(item.checkinDate) && item.room.first().actualCheckout == "Empty") {
                                 ++roomBooked
                             } else {
                                 continue
