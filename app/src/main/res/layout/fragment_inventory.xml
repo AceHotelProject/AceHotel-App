@@ -23,7 +23,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dp">
 
                 <TextView
                     android:id="@+id/textView4"
@@ -70,7 +71,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
                             android:includeFontPadding="false"
-                            android:text="@string/linen_total"
+                            android:text="Total Linen"
                             android:textColor="@color/black"
                             android:textSize="13sp"
                             app:layout_constraintBottom_toBottomOf="@+id/imageView10"
@@ -112,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
                             android:includeFontPadding="false"
-                            android:text="@string/total_bed"
+                            android:text="Total Kasur"
                             android:textColor="@color/black"
                             android:textSize="13sp"
                             app:layout_constraintBottom_toBottomOf="@+id/imageView11"
@@ -133,6 +134,103 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/linearLayout4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="fill"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/linearLayout2">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_card"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:id="@+id/imageView20"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons_food"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView28"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:includeFontPadding="false"
+                            android:text="Total Makanan"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView20"
+                            app:layout_constraintStart_toEndOf="@+id/imageView20"
+                            app:layout_constraintTop_toTopOf="@+id/imageView20" />
+
+                        <TextView
+                            android:id="@+id/tv_total_food"
+                            style="@style/textStyleSemIBold_20"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:includeFontPadding="false"
+                            android:text="0"
+                            app:layout_constraintEnd_toEndOf="@+id/textView28"
+                            app:layout_constraintStart_toStartOf="@+id/imageView20"
+                            app:layout_constraintTop_toBottomOf="@+id/textView28" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_card"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:id="@+id/imageView31"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons_drink"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView39"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:includeFontPadding="false"
+                            android:text="Total Minuman"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView31"
+                            app:layout_constraintStart_toEndOf="@+id/imageView31"
+                            app:layout_constraintTop_toTopOf="@+id/imageView31" />
+
+                        <TextView
+                            android:id="@+id/tv_total_drink"
+                            style="@style/textStyleSemIBold_20"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:includeFontPadding="false"
+                            android:text="0"
+                            app:layout_constraintEnd_toEndOf="@+id/textView39"
+                            app:layout_constraintStart_toStartOf="@+id/imageView31"
+                            app:layout_constraintTop_toBottomOf="@+id/textView39" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/textView6"
                     style="@style/textStyleMedium_16"
@@ -142,7 +240,7 @@
                     android:layout_marginTop="32dp"
                     android:text="Pengaturan Reader"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
                 <ImageButton
                     android:id="@+id/btn_edit_reader"
@@ -251,6 +349,24 @@
                         app:layout_constraintTop_toTopOf="@+id/textView27" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <Button
+                    android:id="@+id/btn_add_tag"
+                    style="@style/textStyleButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/custom_button"
+                    android:drawableEnd="@drawable/icons_button_add_small"
+                    android:elevation="0dp"
+                    android:paddingHorizontal="12dp"
+                    android:text="Tambah Tag"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout7"
+                    app:layout_constraintStart_toStartOf="@+id/constraintLayout7"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
+
                 <TextView
                     android:id="@+id/textView5"
                     style="@style/textStyleMedium_16"
@@ -260,7 +376,7 @@
                     android:layout_marginTop="32dp"
                     android:text="@string/inventory_list"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
+                    app:layout_constraintTop_toBottomOf="@+id/btn_add_tag" />
 
                 <ImageButton
                     android:id="@+id/btn_add_inventory"
@@ -284,6 +400,17 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+                <TextView
+                    android:id="@+id/tv_empty_inventory_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tidak ada barang"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_list_inventory"
+                    app:layout_constraintEnd_toEndOf="@+id/rv_list_inventory"
+                    app:layout_constraintStart_toStartOf="@+id/rv_list_inventory"
+                    app:layout_constraintTop_toTopOf="@+id/rv_list_inventory" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

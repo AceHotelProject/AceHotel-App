@@ -152,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Kode Diskon"
+                    android:text="Kode Diskon (6 huruf)"
                     app:layout_constraintStart_toStartOf="@+id/textView1"
                     app:layout_constraintTop_toBottomOf="@+id/layout_change_price_exclusive" />
 

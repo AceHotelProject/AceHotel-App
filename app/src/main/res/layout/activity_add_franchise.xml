@@ -45,9 +45,9 @@
             android:layout_marginEnd="16dp"
             android:src="@drawable/icons_button_more"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/textView100"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView100" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -116,7 +116,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Alamat Hotel"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_address"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_name" />
@@ -159,7 +159,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Nomor Telepon"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_address"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_address" />
@@ -202,7 +202,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Jumlah Kamar Reguler"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_address"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_contact" />
@@ -245,7 +245,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Harga Kamar Reguler"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_address"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_regular_count" />
@@ -290,7 +290,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Foto Kamar Reguler"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_room_regular_count"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_regular_price" />
@@ -405,7 +405,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Harga Kamar Exclusive"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_address"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_exclusive_count" />
@@ -450,7 +450,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Foto Kamar Exclusive"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_room_exclusive_count"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_exclusive_price" />
@@ -567,7 +567,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Nama Owner"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_bed_price" />
@@ -610,7 +610,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Email Owner"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_owner_name" />
@@ -745,7 +745,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Nama Resepsionis"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_owner_pass_confirm" />
@@ -788,7 +788,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Email Resepsionis"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_receptionist_name" />
@@ -923,7 +923,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Nama Pegawai Gudang"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_receptionist_pass_confirm" />
@@ -966,7 +966,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Email Pegawai Gudang"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_inventory_name" />
@@ -1101,7 +1101,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Nama Cleaning Service"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_inventory_pass_confirm" />
@@ -1144,7 +1144,7 @@
                     style="@style/textStyleMedium_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="Email Cleaning Service"
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_owner_name"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_cleaning_name" />

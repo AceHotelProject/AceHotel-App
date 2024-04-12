@@ -37,9 +37,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/btn_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/icons_button_more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/ref_room_detail"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,6 +59,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/sv_room_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -55,57 +67,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <HorizontalScrollView
-                    android:id="@+id/horizontalLayout"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/iv_room_detail"
+                    android:layout_width="0dp"
                     android:layout_height="200dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:scrollbars="none"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/custom_image_placeholder"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder_image"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/iv_room_detail_1"
-                            android:layout_width="300dp"
-                            android:layout_height="200dp"
-                            android:layout_marginStart="16dp"
-                            android:background="@drawable/custom_image_placeholder"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/placeholder_image"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/iv_room_detail_2"
-                            android:layout_width="300dp"
-                            android:layout_height="200dp"
-                            android:layout_marginStart="16dp"
-                            android:background="@drawable/custom_image_placeholder"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/placeholder_image"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/iv_room_detail_1"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/iv_room_detail_3"
-                            android:layout_width="300dp"
-                            android:layout_height="200dp"
-                            android:layout_marginStart="16dp"
-                            android:background="@drawable/custom_image_placeholder"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/placeholder_image"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/iv_room_detail_2"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </HorizontalScrollView>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView"
@@ -116,7 +90,7 @@
                     app:cardCornerRadius="4dp"
                     app:cardElevation="0dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/horizontalLayout">
+                    app:layout_constraintTop_toBottomOf="@+id/iv_room_detail">
 
                     <com.project.acehotel.core.ui.custom.chips.CustomRoomType
                         android:id="@+id/chip_room_type"
@@ -136,7 +110,7 @@
                     android:layout_marginTop="6dp"
                     android:text="Kamar 101"
                     app:layout_constraintStart_toStartOf="@+id/cardView"
-                    
+
                     app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -202,6 +176,17 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView33" />
 
                     <TextView
+                        android:id="@+id/tv_empty_current_visitor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tidak ada pengunjung"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="@+id/rv_room_detail_current_visitor"
+                        app:layout_constraintEnd_toEndOf="@+id/rv_room_detail_current_visitor"
+                        app:layout_constraintStart_toStartOf="@+id/rv_room_detail_current_visitor"
+                        app:layout_constraintTop_toTopOf="@+id/rv_room_detail_current_visitor" />
+
+                    <TextView
                         android:id="@+id/textView34"
                         style="@style/textStyleMedium_16"
                         android:layout_width="wrap_content"
@@ -218,9 +203,21 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:nestedScrollingEnabled="false"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView34" />
+
+                    <TextView
+                        android:id="@+id/tv_empty_current_book"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tidak ada pengunjung"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="@+id/rv_room_detail_next_booking"
+                        app:layout_constraintEnd_toEndOf="@+id/rv_room_detail_next_booking"
+                        app:layout_constraintStart_toStartOf="@+id/rv_room_detail_next_booking"
+                        app:layout_constraintTop_toTopOf="@+id/rv_room_detail_next_booking" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

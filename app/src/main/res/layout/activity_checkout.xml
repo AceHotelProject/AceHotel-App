@@ -66,7 +66,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.project.acehotel.core.ui.custom.cards.CustomCardVisitor
+                <com.project.acehotel.core.ui.custom.cards.CustomCardCurrentVisitor
                     android:id="@+id/customCardVisitor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -284,9 +284,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
-                    android:text="Catatan Kunjungan"
+                    android:text="Catatan Permasalahan"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cb_chair" />
+
+                <CheckBox
+                    android:id="@+id/cb_has_problem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/dark_grey"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:padding="4dp"
+                    android:text="Pengunjung bermasalah"
+                    app:layout_constraintStart_toStartOf="@+id/textView3"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layout_checkout_note"
@@ -296,6 +308,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:visibility="gone"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:errorEnabled="true"
@@ -305,7 +318,7 @@
                     app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5">
+                    app:layout_constraintTop_toBottomOf="@+id/cb_has_problem">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/ed_checkout_note"
@@ -313,12 +326,13 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/custom_edit_text"
                         android:ems="10"
-                        android:hint="Masukkan catatan kunjungan"
+                        android:hint="Masukkan deskripsi masalah"
                         android:inputType="text"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="16dp"
                         android:textColorHint="@color/dark_grey"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:visibility="gone" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

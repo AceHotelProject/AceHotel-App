@@ -90,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="@+id/fab_checkin"
         app:layout_constraintStart_toStartOf="@+id/fab_checkin"
         app:maxImageSize="32dp"
-        app:srcCompat="@drawable/icons_arrow_right"
+        app:srcCompat="@drawable/icons_arrow_left"
         app:tint="@color/blue" />
 
     <TextView

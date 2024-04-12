@@ -145,6 +145,7 @@
 
 
                             <TextView
+                                android:id="@+id/tv_current_visitor_status_desc"
                                 style="@style/textStyleMedium_custom"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -277,6 +278,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView27"
                         app:layout_constraintTop_toTopOf="@+id/textView27" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
@@ -382,6 +384,90 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView95"
                         app:layout_constraintTop_toTopOf="@+id/textView95" />
+
+                    <TextView
+                        android:id="@+id/textView94"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Aktual Checkin : "
+                        android:textColor="@color/dark_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_confirm_room_book" />
+
+                    <TextView
+                        android:id="@+id/tv_confirm_room_actual_checkin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Waktu Checkin Aktual"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView94"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView94"
+                        app:layout_constraintTop_toTopOf="@+id/textView94" />
+
+                    <TextView
+                        android:id="@+id/textView93"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="PIC Checkin : "
+                        android:textColor="@color/dark_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_confirm_room_actual_checkin" />
+
+                    <TextView
+                        android:id="@+id/tv_confirm_room_actual_checkin_pic"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Pegawai Checkin Aktual"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView93"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView93"
+                        app:layout_constraintTop_toTopOf="@+id/textView93" />
+
+                    <TextView
+                        android:id="@+id/textView92"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Checkout Aktual : "
+                        android:textColor="@color/dark_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_confirm_room_actual_checkin_pic" />
+
+                    <TextView
+                        android:id="@+id/tv_confirm_room_actual_checkout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Waktu Checkout Aktual"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView92"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView92"
+                        app:layout_constraintTop_toTopOf="@+id/textView92" />
+
+                    <TextView
+                        android:id="@+id/textView91"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="PIC Checkout : "
+                        android:textColor="@color/dark_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_confirm_room_actual_checkout" />
+
+                    <TextView
+                        android:id="@+id/tv_confirm_room_actual_checkout_pic"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Pegawai Checkout Aktual"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView91"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView91"
+                        app:layout_constraintTop_toTopOf="@+id/textView91" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView

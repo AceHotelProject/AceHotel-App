@@ -65,4 +65,12 @@
             android:textSize="12sp" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/pb_add_tag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

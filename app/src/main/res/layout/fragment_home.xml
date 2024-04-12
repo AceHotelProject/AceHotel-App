@@ -17,12 +17,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/sv_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dp">
 
                 <TextView
                     android:id="@+id/textView11"
@@ -255,6 +257,17 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
                 <TextView
+                    android:id="@+id/tv_empty_current_visitor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tidak ada pengunjung"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_list_current_visitor"
+                    app:layout_constraintEnd_toEndOf="@+id/rv_list_current_visitor"
+                    app:layout_constraintStart_toStartOf="@+id/rv_list_current_visitor"
+                    app:layout_constraintTop_toTopOf="@+id/rv_list_current_visitor" />
+
+                <TextView
                     android:id="@+id/textView14"
                     style="@style/textStyleMedium_16"
                     android:layout_width="wrap_content"
@@ -274,6 +287,17 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+                <TextView
+                    android:id="@+id/tv_empty_current_book"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tidak ada booking"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_list_current_book"
+                    app:layout_constraintEnd_toEndOf="@+id/rv_list_current_book"
+                    app:layout_constraintStart_toStartOf="@+id/rv_list_current_book"
+                    app:layout_constraintTop_toTopOf="@+id/rv_list_current_book" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
