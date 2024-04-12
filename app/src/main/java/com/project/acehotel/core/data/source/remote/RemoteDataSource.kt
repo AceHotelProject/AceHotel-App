@@ -20,6 +20,7 @@ import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
 import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
 import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
 import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
+import com.project.acehotel.core.data.source.remote.response.user.ListUserResponse
 import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
@@ -60,6 +61,23 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 val response = apiService.refreshToken(refreshToken)
 
                 if (!response.access?.token.isNullOrEmpty()) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getUserByHotel(hotelId: String): Flow<ApiResponse<ListUserResponse>> {
+        return flow {
+            try {
+                val response = apiService.getUserByHotel(hotelId)
+
+                if (!response.results.isNullOrEmpty()) {
                     emit(ApiResponse.Success(response))
                 } else {
                     emit(ApiResponse.Empty)

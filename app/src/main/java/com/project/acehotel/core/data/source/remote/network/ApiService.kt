@@ -18,6 +18,7 @@ import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
 import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
 import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
 import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
+import com.project.acehotel.core.data.source.remote.response.user.ListUserResponse
 import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
@@ -53,7 +54,13 @@ interface ApiService {
     // AUTH
 
 
-    // AUTH
+    // USER
+
+    @GET("users")
+    suspend fun getUserByHotel(
+        @Query("hotel_id") hotelId: String,
+    ): ListUserResponse
+
     @GET("users/{id}")
     suspend fun getUserById(
         @Path("id") id: String,
@@ -76,7 +83,7 @@ interface ApiService {
         @Query("hotel_id") hotelId: String,
     ): Response<UserResponse>
 
-    // AUTH
+    // USER
 
 
     // INVENTORY
@@ -350,7 +357,7 @@ interface ApiService {
         @Field("discount_code") discountCode: String,
     ): PayBookingResponse
 
-    @DELETE("booking/{id}")
+    @DELETE("bookings/{id}")
     suspend fun deleteBooking(
         @Path("id") id: String
     ): Response<BookingResponse>

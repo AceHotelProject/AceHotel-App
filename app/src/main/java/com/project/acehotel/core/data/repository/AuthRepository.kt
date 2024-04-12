@@ -8,7 +8,10 @@ import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
+import com.project.acehotel.core.data.source.remote.response.user.ListUserResponse
+import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.domain.auth.model.Auth
+import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.domain.auth.repository.IAuthRepository
 import com.project.acehotel.core.utils.AppExecutors
 import com.project.acehotel.core.utils.datamapper.AuthDataMapper
@@ -18,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -67,6 +71,24 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    override fun updateUser(
+        id: String,
+        hotelId: String,
+        email: String,
+        username: String,
+        role: String
+    ): Flow<Resource<User>> {
+        return object : NetworkBoundResource<User, UserResponse>() {
+            override suspend fun fetchFromApi(response: UserResponse): User {
+                return AuthDataMapper.mapUserResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<UserResponse>> {
+                return remoteDataSource.updateUser(id, hotelId, email, username, role)
+            }
+        }.asFlow()
+    }
+
     override suspend fun deleteUser(user: Auth) {
         val userEntity = AuthDataMapper.mapAuthToEntity(user)
 
@@ -75,6 +97,19 @@ class AuthRepository @Inject constructor(
                 localDataSource.deleteUser(userEntity)
             }
         }
+    }
+
+    override fun deleteUserAccount(id: String, hotelId: String): Flow<Resource<Int>> {
+        return object : NetworkBoundResource<Int, Response<UserResponse>>() {
+            override suspend fun fetchFromApi(response: Response<UserResponse>): Int {
+                return response.code()
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<Response<UserResponse>>> {
+                return remoteDataSource.deleteUser(id, hotelId)
+            }
+
+        }.asFlow()
     }
 
     override suspend fun saveAccessToken(token: String) {
@@ -105,6 +140,31 @@ class AuthRepository @Inject constructor(
 
             override suspend fun createCall(): Flow<ApiResponse<UploadImagesResponse>> {
                 return remoteDataSource.uploadImage(image)
+            }
+        }.asFlow()
+    }
+
+    override fun getUserByHotel(hotelId: String): Flow<Resource<List<User>>> {
+        return object : NetworkBoundResource<List<User>, ListUserResponse>() {
+            override suspend fun fetchFromApi(response: ListUserResponse): List<User> {
+                return AuthDataMapper.mapListUserResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ListUserResponse>> {
+                return remoteDataSource.getUserByHotel(hotelId)
+            }
+
+        }.asFlow()
+    }
+
+    override fun getUserById(id: String, hotelId: String): Flow<Resource<User>> {
+        return object : NetworkBoundResource<User, UserResponse>() {
+            override suspend fun fetchFromApi(response: UserResponse): User {
+                return AuthDataMapper.mapUserResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<UserResponse>> {
+                return remoteDataSource.getUserById(id, hotelId)
             }
         }.asFlow()
     }

@@ -30,6 +30,8 @@ interface AuthUseCase {
 
     fun uploadImage(image: List<MultipartBody.Part>): Flow<Resource<List<String>>>
 
+    fun getUserByHotel(hotelId: String): Flow<Resource<List<User>>>
+
     fun getUserById(id: String, hotelId: String): Flow<Resource<User>>
 
     fun updateUser(
@@ -40,7 +42,5 @@ interface AuthUseCase {
         role: String,
     ): Flow<Resource<User>>
 
-    fun deleteUser(id: String, hotelId: String): Flow<Int>
-
-
+    fun deleteUserAccount(id: String, hotelId: String): Flow<Resource<Int>>
 }

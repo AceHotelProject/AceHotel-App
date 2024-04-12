@@ -25,13 +25,12 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
         username: String,
         role: String
     ): Flow<Resource<User>> {
-        TODO("Not yet implemented")
+        return authRepository.updateUser(id, hotelId, email, username, role)
     }
 
     override suspend fun deleteUser(user: Auth) = authRepository.deleteUser(user)
-    override fun deleteUser(id: String, hotelId: String): Flow<Int> {
-        TODO("Not yet implemented")
-    }
+    override fun deleteUserAccount(id: String, hotelId: String): Flow<Resource<Int>> =
+        authRepository.deleteUserAccount(id, hotelId)
 
     override suspend fun saveAccessToken(token: String) = authRepository.saveAccessToken(token)
 
@@ -45,7 +44,10 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
     override fun uploadImage(image: List<MultipartBody.Part>): Flow<Resource<List<String>>> =
         authRepository.uploadImage(image)
 
-    override fun getUserById(id: String, hotelId: String): Flow<Resource<User>> {
-        TODO("Not yet implemented")
-    }
+    override fun getUserByHotel(hotelId: String): Flow<Resource<List<User>>> =
+        authRepository.getUserByHotel(hotelId)
+
+    override fun getUserById(id: String, hotelId: String): Flow<Resource<User>> =
+        authRepository.getUserById(id, hotelId)
+
 }

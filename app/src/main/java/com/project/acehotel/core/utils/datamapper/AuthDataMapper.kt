@@ -3,6 +3,7 @@ package com.project.acehotel.core.utils.datamapper
 import com.project.acehotel.core.data.source.local.entity.TokenEntity
 import com.project.acehotel.core.data.source.local.entity.UserEntity
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
+import com.project.acehotel.core.data.source.remote.response.user.ListUserResponse
 import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.domain.auth.model.Auth
 import com.project.acehotel.core.domain.auth.model.Tokens
@@ -76,8 +77,18 @@ object AuthDataMapper {
         email = input.email ?: "Empty",
         role = mapToUserRole(input.role ?: "role"),
         hotelId = input.hotelId ?: listOf<String>(),
+    )
 
-        )
+    fun mapListUserResponseToDomain(input: ListUserResponse): List<User> =
+        input.results?.map { user ->
+            User(
+                id = user?.id ?: "Empty",
+                username = user?.username ?: "Empty",
+                email = user?.email ?: "Empty",
+                role = mapToUserRole(user?.role ?: "role"),
+                hotelId = user?.hotelId ?: listOf<String>(),
+            )
+        } ?: listOf()
 
     private fun convertStringToList(input: String): List<String> {
         val jsonArray = JSONArray(input)
