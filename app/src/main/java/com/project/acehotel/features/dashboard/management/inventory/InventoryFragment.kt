@@ -9,12 +9,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.data.source.remote.MQTTService
 import com.project.acehotel.core.domain.inventory.model.Inventory
+import com.project.acehotel.core.domain.inventory.model.Reader
 import com.project.acehotel.core.ui.adapter.inventory.InventoryListAdapter
+import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.InventoryType
+import com.project.acehotel.core.utils.constants.MQTT_TOPIC
+import com.project.acehotel.core.utils.constants.READER_NAME
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentInventoryBinding
@@ -35,13 +40,18 @@ class InventoryFragment : Fragment(), IManagementSearch {
 
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
 
+    private var readerData: Reader? = null
+
     @Inject
     lateinit var mqttClient: MQTTService
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initMQTT()
+        // un-comment this to use MQTT
+        // initMQTT()
+
+        fetchReaderData()
 
         handleEmptyStates(listOf())
 
@@ -54,6 +64,39 @@ class InventoryFragment : Fragment(), IManagementSearch {
         handleButtonEditReader()
 
         handleButtonAddTag()
+    }
+
+    private fun fetchReaderData() {
+        inventoryViewModel.getReader(READER_NAME).observe(requireActivity()) { reader ->
+            when (reader) {
+                is Resource.Error -> {
+                    showLoading(false)
+
+                    if (!isInternetAvailable(requireContext())) {
+                        activity?.showToast(getString(R.string.check_internet))
+                    } else {
+                        activity?.showToast(reader.message.toString())
+                    }
+                }
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+                is Resource.Message -> {
+                    showLoading(false)
+                    Timber.tag("InventoryFragment").d(reader.message)
+                }
+                is Resource.Success -> {
+                    binding.apply {
+                        readerData = reader.data
+
+                        tvInventoryReaderStatus.text = "Aktif"
+                        tvInventoryPowerGain.text = "${reader.data?.powerGain.toString()} dB"
+                        tvInventoryReadInterval.text = "${reader.data?.readInterval.toString()} ms"
+                        tvInventoryDate.text = DateUtils.getDateThisDay2()
+                    }
+                }
+            }
+        }
     }
 
     private fun handleEmptyStates(inventory: List<Inventory>?) {
@@ -128,9 +171,13 @@ class InventoryFragment : Fragment(), IManagementSearch {
     }
 
     private fun handleButtonEditReader() {
-        binding.btnEditReader.setOnClickListener {
-            val intentToEditReader = Intent(requireContext(), EditReaderActivity::class.java)
-            startActivity(intentToEditReader)
+        binding.apply {
+            btnEditReader.setOnClickListener {
+                val intentToEditReader = Intent(requireContext(), EditReaderActivity::class.java)
+                val jsonData = Gson().toJson(readerData, Reader::class.java)
+                intentToEditReader.putExtra(READER_DATA, jsonData)
+                startActivity(intentToEditReader)
+            }
         }
     }
 
@@ -150,6 +197,8 @@ class InventoryFragment : Fragment(), IManagementSearch {
 
             refInventory.setOnRefreshListener {
                 fetchInventoryItems(filter)
+
+                fetchReaderData()
             }
         }
     }
@@ -183,10 +232,6 @@ class InventoryFragment : Fragment(), IManagementSearch {
                 is Resource.Message -> {
                     showLoading(false)
                     Timber.tag("InventoryDetailActivity").d(item.message)
-
-                    initInventoryRecyclerView(item.data)
-
-                    initQuickInfo(item.data)
                 }
                 is Resource.Success -> {
                     showLoading(false)
@@ -279,9 +324,9 @@ class InventoryFragment : Fragment(), IManagementSearch {
         private const val INVENTORY_ITEM_NAME = "inventory_item_name"
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
 
-        private const val IS_ADD_TAG = "is_add_tag"
+        private const val READER_DATA = "reader_data"
 
-        private const val MQTT_TOPIC = "/mqtt-integration/Reader/ACE-001"
+        private const val IS_ADD_TAG = "is_add_tag"
     }
 
     override fun onSearchQuery(query: String) {

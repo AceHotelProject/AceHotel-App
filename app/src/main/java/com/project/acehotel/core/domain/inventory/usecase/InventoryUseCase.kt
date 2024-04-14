@@ -3,6 +3,7 @@ package com.project.acehotel.core.domain.inventory.usecase
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
+import com.project.acehotel.core.domain.inventory.model.Reader
 import com.project.acehotel.core.domain.inventory.model.Tag
 import kotlinx.coroutines.flow.Flow
 
@@ -51,4 +52,19 @@ interface InventoryUseCase {
         tid: String,
         inventoryId: String,
     ): Flow<Resource<Tag>>
+
+    fun updateReader(
+        readerId: String,
+        powerGain: Int,
+        readInterval: Int
+    ): Flow<Resource<Reader>>
+
+    fun getReader(
+        readerId: String,
+    ): Flow<Resource<Reader>>
+
+    fun setQueryTag(
+        readerId: String,
+        state: Boolean,
+    ): Flow<Resource<Boolean>>
 }

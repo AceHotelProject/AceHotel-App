@@ -4,6 +4,7 @@ import com.project.acehotel.core.data.repository.InventoryRepository
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
+import com.project.acehotel.core.domain.inventory.model.Reader
 import com.project.acehotel.core.domain.inventory.model.Tag
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
 import kotlinx.coroutines.flow.Flow
@@ -73,5 +74,21 @@ class InventoryInteractor @Inject constructor(private val inventoryRepository: I
 
     override fun addTag(tid: String, inventoryId: String): Flow<Resource<Tag>> {
         return inventoryRepository.addTag(tid, inventoryId)
+    }
+
+    override fun updateReader(
+        readerId: String,
+        powerGain: Int,
+        readInterval: Int
+    ): Flow<Resource<Reader>> {
+        return inventoryRepository.updateReader(readerId, powerGain, readInterval)
+    }
+
+    override fun getReader(readerId: String): Flow<Resource<Reader>> {
+        return inventoryRepository.getReader(readerId)
+    }
+
+    override fun setQueryTag(readerId: String, state: Boolean): Flow<Resource<Boolean>> {
+        return inventoryRepository.setQueryTag(readerId, state)
     }
 }

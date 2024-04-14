@@ -17,9 +17,7 @@ import com.project.acehotel.core.data.source.remote.response.note.NoteResponse
 import com.project.acehotel.core.data.source.remote.response.room.CheckoutBody
 import com.project.acehotel.core.data.source.remote.response.room.ListRoomResponse
 import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
-import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
-import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
-import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
+import com.project.acehotel.core.data.source.remote.response.tag.*
 import com.project.acehotel.core.data.source.remote.response.user.ListUserResponse
 import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
@@ -144,6 +142,23 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 Timber.tag("RemoteDataSource").e(e.toString())
             }
         }
+    }
+
+    suspend fun forgetPassword(email: String): Flow<ApiResponse<Response<AuthResponse>>> {
+        return flow<ApiResponse<Response<AuthResponse>>> {
+            try {
+                val response = apiService.forgetPassword(email)
+
+                if (response.isSuccessful) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
     }
 
     // AUTH
@@ -330,6 +345,66 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         return flow<ApiResponse<AddTagResponse>> {
             try {
                 val response = apiService.addTag(tid, inventoryId)
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setQueryTag(
+        readerId: String,
+        state: Boolean
+    ): Flow<ApiResponse<ReaderQueryResponse>> {
+        return flow<ApiResponse<ReaderQueryResponse>> {
+            try {
+                val response = apiService.setQueryTag(readerId, state)
+
+                if (response.params != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun updateReader(
+        readerId: String,
+        powerGain: Int,
+        readInterval: Int
+    ): Flow<ApiResponse<ReaderResponse>> {
+        return flow<ApiResponse<ReaderResponse>> {
+            try {
+                val response =
+                    apiService.updateReader(readerId, powerGain.toString(), readInterval.toString())
+
+                if (response.id != null) {
+                    emit(ApiResponse.Success(response))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Timber.tag("RemoteDataSource").e(e.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+
+    suspend fun getReader(readerId: String): Flow<ApiResponse<ReaderResponse>> {
+        return flow<ApiResponse<ReaderResponse>> {
+            try {
+                val response = apiService.getReader(readerId)
 
                 if (response.id != null) {
                     emit(ApiResponse.Success(response))

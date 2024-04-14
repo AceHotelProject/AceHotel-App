@@ -8,11 +8,10 @@ import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
-import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
-import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
-import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
+import com.project.acehotel.core.data.source.remote.response.tag.*
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
+import com.project.acehotel.core.domain.inventory.model.Reader
 import com.project.acehotel.core.domain.inventory.model.Tag
 import com.project.acehotel.core.domain.inventory.repository.IInventoryIRepository
 import com.project.acehotel.core.utils.AppExecutors
@@ -163,6 +162,48 @@ class InventoryRepository @Inject constructor(
             override suspend fun createCall(): Flow<ApiResponse<AddTagResponse>> {
                 return remoteDataSource.addTag(tid, inventoryId)
             }
+        }.asFlow()
+    }
+
+    override fun updateReader(
+        readerId: String,
+        powerGain: Int,
+        readInterval: Int
+    ): Flow<Resource<Reader>> {
+        return object : NetworkBoundResource<Reader, ReaderResponse>() {
+            override suspend fun fetchFromApi(response: ReaderResponse): Reader {
+                return InventoryDataMapper.mapReaderResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ReaderResponse>> {
+                return remoteDataSource.updateReader(readerId, powerGain, readInterval)
+            }
+
+        }.asFlow()
+    }
+
+    override fun getReader(readerId: String): Flow<Resource<Reader>> {
+        return object : NetworkBoundResource<Reader, ReaderResponse>() {
+            override suspend fun fetchFromApi(response: ReaderResponse): Reader {
+                return InventoryDataMapper.mapReaderResponseToDomain(response)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ReaderResponse>> {
+                return remoteDataSource.getReader(readerId)
+            }
+        }.asFlow()
+    }
+
+    override fun setQueryTag(readerId: String, state: Boolean): Flow<Resource<Boolean>> {
+        return object : NetworkBoundResource<Boolean, ReaderQueryResponse>() {
+            override suspend fun fetchFromApi(response: ReaderQueryResponse): Boolean {
+                return response.params.toBoolean()
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ReaderQueryResponse>> {
+                return remoteDataSource.setQueryTag(readerId, state)
+            }
+
         }.asFlow()
     }
 }

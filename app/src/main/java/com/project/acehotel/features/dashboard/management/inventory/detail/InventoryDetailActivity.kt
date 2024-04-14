@@ -10,6 +10,7 @@ import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.inventory.model.Inventory
@@ -48,6 +49,8 @@ class InventoryDetailActivity : AppCompatActivity() {
 
         setupActionBar()
 
+        binding.tvEmptyInventoryHistory.visibility = View.VISIBLE
+
         handleFab()
 
         getHotelId()
@@ -61,6 +64,29 @@ class InventoryDetailActivity : AppCompatActivity() {
         getItemInfo()
 
         setupSearch()
+
+        handleRefresh()
+    }
+
+    private fun handleRefresh() {
+        binding.apply {
+            rvListHistoryInventory.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
+                    val firstVisibleItemPosition =
+                        layoutManager?.findFirstVisibleItemPosition() ?: 0
+
+                    binding.refInventoryDetail.isEnabled = firstVisibleItemPosition == 0
+                }
+            })
+
+            refInventoryDetail.setOnRefreshListener {
+                fetchInventoryDetail()
+            }
+        }
     }
 
     private fun setupSearch() {
@@ -180,6 +206,8 @@ class InventoryDetailActivity : AppCompatActivity() {
 
                                 initInventoryHistoryRecyclerView(inventory.data.historyList)
 
+                                handleEmptyStates(inventory.data.historyList)
+
                                 savedHistoryData = inventory.data.historyList
                             }
                         }
@@ -227,6 +255,11 @@ class InventoryDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleEmptyStates(historyList: List<InventoryHistory>) {
+        binding.tvEmptyInventoryHistory.visibility =
+            if (historyList.isEmpty()) View.VISIBLE else View.GONE
+    }
+
     private fun initInventoryHistoryRecyclerView(historyList: List<InventoryHistory>) {
         val adapter = InventoryHistoryAdapter(historyList)
         binding.rvListHistoryInventory.adapter = adapter
@@ -272,7 +305,7 @@ class InventoryDetailActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.refInventoryDetail.isRefreshing = isLoading
     }
 
     companion object {

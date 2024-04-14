@@ -58,12 +58,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Status Reader"
-                app:layout_constraintBottom_toBottomOf="@+id/toggleButton"
+                app:layout_constraintBottom_toBottomOf="@+id/tb_reader"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/toggleButton" />
+                app:layout_constraintTop_toTopOf="@+id/tb_reader" />
 
             <ToggleButton
-                android:id="@+id/toggleButton"
+                android:id="@+id/tb_reader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -87,7 +87,7 @@
                 android:layout_marginTop="24dp"
                 android:text="Power Gain"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+                app:layout_constraintTop_toBottomOf="@+id/tb_reader" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_edit_reader_power"
@@ -115,7 +115,6 @@
                     android:background="@drawable/custom_edit_text"
                     android:drawableEnd="@drawable/icons_dbi"
                     android:ems="10"
-                    android:enabled="false"
                     android:hint="Masukkan power gain"
                     android:inputType="number"
                     android:paddingHorizontal="12dp"
@@ -161,7 +160,6 @@
                     android:background="@drawable/custom_edit_text"
                     android:drawableEnd="@drawable/icons_ms"
                     android:ems="10"
-                    android:enabled="false"
                     android:hint="Masukkan read interval"
                     android:inputType="number"
                     android:paddingHorizontal="12dp"
@@ -206,7 +204,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text"
                     android:ems="10"
-                    android:enabled="false"
                     android:hint="Tanggal perubahan reader"
                     android:inputType="text"
                     android:paddingHorizontal="12dp"

@@ -5,8 +5,10 @@ import com.project.acehotel.core.data.source.remote.response.inventory.Inventory
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryUpdateHistoryItem
 import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
 import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ReaderResponse
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.domain.inventory.model.InventoryHistory
+import com.project.acehotel.core.domain.inventory.model.Reader
 import com.project.acehotel.core.domain.inventory.model.Tag
 
 object InventoryDataMapper {
@@ -75,4 +77,12 @@ object InventoryDataMapper {
             id = tag?.id ?: "Empty",
         )
     } ?: listOf()
+
+    fun mapReaderResponseToDomain(input: ReaderResponse): Reader = Reader(
+        id = input.id ?: "Empty",
+        powerGain = input.powerGain ?: 0,
+        readInterval = input.readInterval ?: 0,
+        readerName = input.readerName ?: "Empty",
+        isActive = input.id?.isNotEmpty() ?: true
+    )
 }
