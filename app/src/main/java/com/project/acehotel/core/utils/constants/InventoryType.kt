@@ -16,11 +16,11 @@ fun mapToInventoryDisplay(type: String): String {
         InventoryType.LINEN.type -> {
             InventoryType.LINEN.display
         }
-        InventoryType.BED.type -> {
-            InventoryType.LINEN.display
+        InventoryType.DRINK.type -> {
+            InventoryType.DRINK.display
         }
         InventoryType.FOOD.type -> {
-            InventoryType.LINEN.display
+            InventoryType.FOOD.display
         }
         InventoryType.UNDEFINED.type -> {
             InventoryType.UNDEFINED.display
@@ -40,10 +40,10 @@ fun mapToInventoryType(display: String): String {
             InventoryType.LINEN.type
         }
         InventoryType.FOOD.display -> {
-            InventoryType.LINEN.type
+            InventoryType.FOOD.type
         }
         InventoryType.DRINK.display -> {
-            InventoryType.LINEN.type
+            InventoryType.DRINK.type
         }
         InventoryType.UNDEFINED.display -> {
             InventoryType.UNDEFINED.type

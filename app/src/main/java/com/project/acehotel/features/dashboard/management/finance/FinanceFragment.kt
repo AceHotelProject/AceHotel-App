@@ -14,12 +14,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
-import com.project.acehotel.core.utils.constants.RoomType
-import com.project.acehotel.core.utils.constants.convertToRoomType
 import com.project.acehotel.core.utils.constants.filterDateList
 import com.project.acehotel.core.utils.constants.mapToFilterDateValue
 import com.project.acehotel.databinding.FragmentFinanceBinding
@@ -49,12 +48,18 @@ class FinanceFragment : Fragment(), IManagementSearch {
 
         handleRefresh()
 
-        binding.tvEmptyBooking.visibility = View.VISIBLE
+        handleEmptyState(true)
     }
 
     private fun handleRefresh() {
-        binding.refFinance.setOnRefreshListener {
-            fetchBookingHistory(selectedDate)
+        binding.apply {
+            svFinance.viewTreeObserver.addOnScrollChangedListener {
+                refFinance.isEnabled = svFinance.scrollY == 0
+            }
+
+            refFinance.setOnRefreshListener {
+                fetchBookingHistory(selectedDate)
+            }
         }
     }
 
@@ -121,17 +126,7 @@ class FinanceFragment : Fragment(), IManagementSearch {
                     if (booking.data != null) {
                         for (item in booking.data) {
                             if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout != "Empty") {
-                                when (convertToRoomType(item.type)) {
-                                    RoomType.REGULAR -> {
-                                        totalRevenue += item.roomCount * regularRoomPrice
-                                    }
-                                    RoomType.EXCLUSIVE -> {
-                                        totalRevenue += item.roomCount * exclusiveRoomPrice
-                                    }
-                                    RoomType.UNDEFINED -> {
-
-                                    }
-                                }
+                                totalRevenue += item.totalPrice
                                 totalBooking += item.roomCount
                             }
                         }
@@ -174,7 +169,8 @@ class FinanceFragment : Fragment(), IManagementSearch {
             override fun onItemClicked(context: Context, booking: Booking) {
                 val intentToBookingDetail =
                     Intent(requireContext(), BookingDetailActivity::class.java)
-                intentToBookingDetail.putExtra(BOOKING_DATA, booking)
+                val jsonData = Gson().toJson(booking, Booking::class.java)
+                intentToBookingDetail.putExtra(BOOKING_DATA, jsonData)
                 startActivity(intentToBookingDetail)
             }
         })

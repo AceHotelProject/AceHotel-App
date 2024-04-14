@@ -10,9 +10,6 @@ fun mapUserRole(type: String): UserRole {
         UserRole.FRANCHISE.role -> {
             UserRole.FRANCHISE
         }
-        UserRole.CLEANING_STAFF.role -> {
-            UserRole.CLEANING_STAFF
-        }
         UserRole.INVENTORY_STAFF.role -> {
             UserRole.INVENTORY_STAFF
         }

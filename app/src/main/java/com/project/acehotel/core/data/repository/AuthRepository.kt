@@ -45,6 +45,19 @@ class AuthRepository @Inject constructor(
         }.asFlow()
     }
 
+    override fun forgetPassword(email: String): Flow<Resource<Int>> {
+        return object : NetworkBoundResource<Int, Response<AuthResponse>>() {
+            override suspend fun fetchFromApi(response: Response<AuthResponse>): Int {
+                return response.code()
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<Response<AuthResponse>>> {
+                return remoteDataSource.forgetPassword(email)
+            }
+
+        }.asFlow()
+    }
+
     override suspend fun insertCacheUser(user: Auth) {
         val userEntity = AuthDataMapper.mapAuthToEntity(user)
 

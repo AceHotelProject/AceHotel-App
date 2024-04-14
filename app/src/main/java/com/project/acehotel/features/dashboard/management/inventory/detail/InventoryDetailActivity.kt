@@ -24,6 +24,7 @@ import com.project.acehotel.databinding.ActivityInventoryDetailBinding
 import com.project.acehotel.features.dashboard.management.inventory.change_stock.ChangeStockItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -66,6 +67,16 @@ class InventoryDetailActivity : AppCompatActivity() {
         setupSearch()
 
         handleRefresh()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        inventoryDetailViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun handleRefresh() {

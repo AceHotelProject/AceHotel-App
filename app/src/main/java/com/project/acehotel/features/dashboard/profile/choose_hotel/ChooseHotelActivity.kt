@@ -2,6 +2,7 @@ package com.project.acehotel.features.dashboard.profile.choose_hotel
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,6 +41,16 @@ class ChooseHotelActivity : AppCompatActivity() {
         fetchListHotel()
 
         validateToken()
+
+        handleRefresh()
+
+        binding.tvEmptyHotel.visibility = View.VISIBLE
+    }
+
+    private fun handleRefresh() {
+        binding.refChooseHotel.setOnRefreshListener {
+            fetchListHotel()
+        }
     }
 
     private fun checkSelectedHotel() {
@@ -72,9 +83,15 @@ class ChooseHotelActivity : AppCompatActivity() {
                     showLoading(false)
 
                     initInventoryRecyclerView(hotel.data)
+
+                    handleEmptyStates(hotel.data)
                 }
             }
         }
+    }
+
+    private fun handleEmptyStates(data: List<ManageHotel>?) {
+        binding.tvEmptyHotel.visibility = if (data?.isEmpty()!!) View.VISIBLE else View.GONE
     }
 
     private fun initInventoryRecyclerView(data: List<ManageHotel>?) {

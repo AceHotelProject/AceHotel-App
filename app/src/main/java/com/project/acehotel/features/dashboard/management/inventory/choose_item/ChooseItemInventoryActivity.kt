@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,9 @@ import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChooseItemInventoryBinding
 import com.project.acehotel.features.dashboard.management.inventory.add_item.AddItemInventoryActivity
+import com.project.acehotel.features.dashboard.management.inventory.add_tag.AddTagDialog
 import com.project.acehotel.features.dashboard.management.inventory.change_stock.ChangeStockItemInventoryActivity
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -35,6 +38,8 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
 
         setupActionBar()
 
+        binding.tvEmptyInventory.visibility = View.VISIBLE
+
         handleButtonBack()
 
         fetchInventoryItems("")
@@ -46,6 +51,16 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         setupSearch()
 
         showLoading(true)
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        chooseItemViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun setupSearch() {
@@ -142,10 +157,16 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
 
                     if (item.data != null) {
                         initInventoryItemRecyclerView(item.data)
+
+                        handleEmptyStates(item.data)
                     }
                 }
             }
         }
+    }
+
+    private fun handleEmptyStates(data: List<Inventory>) {
+        binding.tvEmptyInventory.visibility = if (data.isEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun initInventoryItemRecyclerView(inventoryItem: List<Inventory>) {
@@ -163,18 +184,25 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
                 type: String,
                 stock: Int
             ) {
-                val intentToChangeStockInventory =
-                    Intent(
-                        this@ChooseItemInventoryActivity,
-                        ChangeStockItemInventoryActivity::class.java
-                    )
+                val isAddTag = intent.getBooleanExtra(IS_ADD_TAG, false)
 
-                intentToChangeStockInventory.putExtra(INVENTORY_ITEM_ID, id)
-                intentToChangeStockInventory.putExtra(INVENTORY_ITEM_NAME, name)
-                intentToChangeStockInventory.putExtra(INVENTORY_ITEM_TYPE, type)
-                intentToChangeStockInventory.putExtra(INVENTORY_ITEM_STOCK, stock)
+                if (isAddTag) {
+                    val addTagDialog = AddTagDialog(id, name)
+                    addTagDialog.show(supportFragmentManager, "Select Add Tag Dialog")
+                } else {
+                    val intentToChangeStockInventory =
+                        Intent(
+                            this@ChooseItemInventoryActivity,
+                            ChangeStockItemInventoryActivity::class.java
+                        )
 
-                startActivity(intentToChangeStockInventory)
+                    intentToChangeStockInventory.putExtra(INVENTORY_ITEM_ID, id)
+                    intentToChangeStockInventory.putExtra(INVENTORY_ITEM_NAME, name)
+                    intentToChangeStockInventory.putExtra(INVENTORY_ITEM_TYPE, type)
+                    intentToChangeStockInventory.putExtra(INVENTORY_ITEM_STOCK, stock)
+
+                    startActivity(intentToChangeStockInventory)
+                }
             }
         })
     }
@@ -192,5 +220,7 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         private const val INVENTORY_ITEM_NAME = "inventory_item_name"
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
         private const val INVENTORY_ITEM_STOCK = "inventory_item_stock"
+
+        private const val IS_ADD_TAG = "is_add_tag"
     }
 }

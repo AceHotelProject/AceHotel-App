@@ -10,6 +10,8 @@ import com.project.acehotel.core.utils.constants.CurrentVisitorStatus
 class CurrentVisitorAdapter(private val listCurrentVisitor: List<Booking>?) :
     RecyclerView.Adapter<CurrentVisitorAdapter.ViewHolder>() {
 
+    private lateinit var onItemCallback: OnItemClickCallback
+
     inner class ViewHolder(val binding: CustomCardCurrentVisitor) :
         RecyclerView.ViewHolder(binding)
 
@@ -61,6 +63,18 @@ class CurrentVisitorAdapter(private val listCurrentVisitor: List<Booking>?) :
                     setVisitorStatus(CurrentVisitorStatus.CHECKIN.status, "", false)
                 }
             }
+
+            holder.itemView.setOnClickListener {
+                onItemCallback.onItemClicked(data.visitorId, data.visitorName)
+            }
         }
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemCallback = onItemClickCallback
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(id: String, name: String)
     }
 }

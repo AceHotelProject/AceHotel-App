@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
@@ -34,8 +35,10 @@ class CheckinActivity : AppCompatActivity() {
         setupActionBar()
 
         isButtonEnabled(false)
+        isEditTextEditable(binding.edCheckinRoom, false)
+        isEditTextEditable(binding.edCheckinTime, false)
 
-        disableRefresh()
+        enableRefresh(false)
 
         fetchBookingInfo()
 
@@ -46,8 +49,11 @@ class CheckinActivity : AppCompatActivity() {
 
     private fun handleButtonSave() {
         binding.btnCheckin.setOnClickListener {
+            isButtonEnabled(false)
+            enableRefresh(true)
+
             checkinViewModel.roomCheckin(
-                bookingData!!.roomId.first(),
+                bookingData!!.room.first().id,
                 DateUtils.getDateThisDay(),
                 bookingData!!.id,
                 bookingData!!.visitorId
@@ -55,6 +61,7 @@ class CheckinActivity : AppCompatActivity() {
                 when (room) {
                     is Resource.Error -> {
                         showLoading(false)
+                        isButtonEnabled(true)
 
                         if (!isInternetAvailable(this@CheckinActivity)) {
                             showToast(getString(R.string.check_internet))
@@ -64,13 +71,18 @@ class CheckinActivity : AppCompatActivity() {
                     }
                     is Resource.Loading -> {
                         showLoading(true)
+                        isButtonEnabled(false)
                     }
                     is Resource.Message -> {
                         showLoading(false)
+                        isButtonEnabled(true)
 
                         Timber.tag("CheckinActivity").d(room.message)
                     }
                     is Resource.Success -> {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
                         showToast("Pengunjung telah berhasil checkin")
 
                         val intentToMain = Intent(this@CheckinActivity, MainActivity::class.java)
@@ -83,7 +95,7 @@ class CheckinActivity : AppCompatActivity() {
     }
 
     private fun fetchRoomInfo() {
-        checkinViewModel.getRoomDetail(bookingData?.roomId!!.first()).observe(this) { room ->
+        checkinViewModel.getRoomDetail(bookingData?.room?.first()?.id!!).observe(this) { room ->
             when (room) {
                 is Resource.Error -> {
                     showLoading(false)
@@ -103,6 +115,8 @@ class CheckinActivity : AppCompatActivity() {
                     Timber.tag("CheckinActivity").d(room.message)
                 }
                 is Resource.Success -> {
+                    showLoading(false)
+
                     binding.apply {
                         edCheckinRoom.setText(room.data?.name)
                         edCheckinTime.setText(DateUtils.getCurrentDateTime())
@@ -133,12 +147,19 @@ class CheckinActivity : AppCompatActivity() {
         }
     }
 
+    private fun isEditTextEditable(editText: TextInputEditText, isEditable: Boolean) {
+        editText.isFocusable = isEditable
+        editText.isClickable = isEditable
+        editText.isFocusableInTouchMode = isEditable
+        editText.isCursorVisible = isEditable
+    }
+
     private fun showLoading(isLoading: Boolean) {
         binding.refCheckin.isRefreshing = isLoading
     }
 
-    private fun disableRefresh() {
-        binding.refCheckin.isEnabled = false
+    private fun enableRefresh(isEnabled: Boolean) {
+        binding.refCheckin.isEnabled = isEnabled
     }
 
     private fun isButtonEnabled(isEnabled: Boolean) {

@@ -14,6 +14,7 @@ import com.project.acehotel.core.utils.constants.mapToFilterDateValue
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityOverallStatsBinding
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -36,6 +37,8 @@ class OverallStatsActivity : AppCompatActivity() {
         setupFilter()
 
         fetchRecap(FilterDate.NOW.value)
+
+        validateToken()
     }
 
     private fun fetchRecap(filterDate: String) {
@@ -103,6 +106,14 @@ class OverallStatsActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.refRecap.isRefreshing = isLoading
+    }
+
+    private fun validateToken() {
+        overallStatsViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun setupActionBar() {

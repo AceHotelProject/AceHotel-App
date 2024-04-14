@@ -59,10 +59,6 @@ class CustomUserRole : AppCompatTextView {
                 text = UserRole.INVENTORY_STAFF.display
                 setBackground(context, R.color.orange)
             }
-            UserRole.CLEANING_STAFF.role -> {
-                text = UserRole.CLEANING_STAFF.display
-                setBackground(context, R.color.green)
-            }
             UserRole.UNDEFINED.role -> {
                 text = UserRole.UNDEFINED.display
                 setBackground(context, R.color.dark_grey)

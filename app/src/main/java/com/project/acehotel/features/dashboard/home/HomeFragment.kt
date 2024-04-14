@@ -18,6 +18,7 @@ import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
 import com.project.acehotel.core.ui.adapter.visitor.CurrentVisitorAdapter
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentHomeBinding
@@ -96,6 +97,7 @@ class HomeFragment : Fragment() {
 
                             initCurrentVisitorRecyclerView(listOf())
                         } else {
+                            Timber.tag("HomeFragment").e(booking.message)
                             activity?.showToast(booking.message.toString())
                         }
                     }
@@ -105,7 +107,7 @@ class HomeFragment : Fragment() {
                 }
                 is Resource.Message -> {
                     showLoading(false)
-                    Timber.tag("InventoryDetailActivity").d(booking.message)
+                    Timber.tag("HomeFragment").d(booking.message)
                 }
                 is Resource.Success -> {
                     showLoading(false)
@@ -145,7 +147,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.apply {
-            tvTotalIncome.text = todayRevenue.toString()
+            tvTotalIncome.text = "Rp ${formatNumber(todayRevenue)}"
             tvVisitorCheckin.text = todayVisitorCheckIn.toString()
             tvRoomAvail.text = todayRoomAvailable.toString()
             tvTotalNewBook.text = todayNewBooking.toString()

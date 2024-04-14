@@ -15,6 +15,7 @@ import com.project.acehotel.core.utils.constants.mapToInventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityAddItemInventoryBinding
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -46,6 +47,16 @@ class AddItemInventoryActivity : AppCompatActivity() {
         handleSaveButton()
 
         enableRefresh(false)
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        addItemInventoryViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun initInventoryType() {

@@ -48,6 +48,14 @@ class CustomInventoryType : AppCompatTextView {
                 text = InventoryType.BED.display
                 setBackground(context, R.color.yellow)
             }
+            InventoryType.FOOD.type -> {
+                text = InventoryType.FOOD.display
+                setBackground(context, R.color.green)
+            }
+            InventoryType.DRINK.type -> {
+                text = InventoryType.DRINK.display
+                setBackground(context, R.color.blue)
+            }
             else -> {
                 text = RoomType.UNDEFINED.display
                 setBackground(context, R.color.dark_grey)

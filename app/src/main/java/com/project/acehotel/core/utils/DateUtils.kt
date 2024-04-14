@@ -70,6 +70,13 @@ object DateUtils {
         return dateFormat.format(calendar.time)
     }
 
+    fun getDateThisDay2(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("d MMM yy", Locale.getDefault())
+
+        return dateFormat.format(calendar.time)
+    }
+
     fun getDateThisMonth(): String {
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("yyyy-MM", Locale.getDefault())

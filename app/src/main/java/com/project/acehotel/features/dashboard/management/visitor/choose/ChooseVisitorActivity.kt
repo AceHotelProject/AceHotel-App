@@ -20,6 +20,7 @@ import com.project.acehotel.features.dashboard.management.IManagementSearch
 import com.project.acehotel.features.dashboard.management.visitor.add.AddVisitorActivity
 import com.project.acehotel.features.dashboard.room.checkin.CheckinActivity
 import com.project.acehotel.features.dashboard.room.checkout.CheckoutActivity
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -47,6 +48,16 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
         handleOnRefresh()
 
         handleButtonAdd()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        chooseVisitorViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun handleButtonAdd() {
@@ -69,7 +80,7 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+                fetchVisitorList(p0.toString())
             }
 
             override fun afterTextChanged(p0: Editable?) {

@@ -19,7 +19,7 @@ class BookingDetailViewModel @Inject constructor(
     private val hotelUseCase: HotelUseCase,
     private val visitorUseCase: VisitorUseCase,
     private val roomUseCase: RoomUseCase,
-    private val authUseCase: AuthUseCase
+    private val authUseCase: AuthUseCase,
 ) : ViewModel() {
     fun getSelectedHotelData() = hotelUseCase.getSelectedHotelData().asLiveData()
 
@@ -38,4 +38,8 @@ class BookingDetailViewModel @Inject constructor(
                 }
             }
         }
+
+    fun getNoteDetail(id: String) = bookingUseCase.getNoteDetail(id).asLiveData()
+
+    fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 }

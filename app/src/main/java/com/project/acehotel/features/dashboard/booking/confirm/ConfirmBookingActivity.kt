@@ -22,6 +22,7 @@ import com.project.acehotel.core.utils.constants.RoomType
 import com.project.acehotel.core.utils.constants.mapToRoomType
 import com.project.acehotel.databinding.ActivityConfirmBookingBinding
 import com.project.acehotel.features.dashboard.MainActivity
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -57,7 +58,7 @@ class ConfirmBookingActivity : AppCompatActivity() {
 
         isButtonEnabled(false)
 
-        disableRefresh()
+        enableRefresh(false)
 
         initBookingInfo()
 
@@ -68,10 +69,22 @@ class ConfirmBookingActivity : AppCompatActivity() {
         handlePickImages()
 
         handleButtonSave()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        confirmBookingViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun handleButtonSave() {
         binding.btnSave.setOnClickListener {
+            enableRefresh(true)
+
             isButtonEnabled(false)
             showLoading(true)
 
@@ -368,8 +381,8 @@ class ConfirmBookingActivity : AppCompatActivity() {
         binding.refConfirm.isRefreshing = isLoading
     }
 
-    private fun disableRefresh() {
-        binding.refConfirm.isEnabled = false
+    private fun enableRefresh(isDisable: Boolean) {
+        binding.refConfirm.isEnabled = isDisable
     }
 
     private fun setupActionBar() {

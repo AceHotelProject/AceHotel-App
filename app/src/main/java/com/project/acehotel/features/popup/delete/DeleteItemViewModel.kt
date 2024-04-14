@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
 import com.project.acehotel.core.domain.booking.usecase.BookingUseCase
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import com.project.acehotel.core.domain.inventory.usecase.InventoryUseCase
+import com.project.acehotel.core.domain.room.usecase.RoomUseCase
 import com.project.acehotel.core.domain.visitor.usecase.VisitorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,6 +22,8 @@ class DeleteItemViewModel @Inject constructor(
     private val hotelUseCase: HotelUseCase,
     private val visitorUseCase: VisitorUseCase,
     private val bookingUseCase: BookingUseCase,
+    private val roomUseCase: RoomUseCase,
+    private val authUseCase: AuthUseCase,
 ) :
     ViewModel() {
 
@@ -56,4 +60,18 @@ class DeleteItemViewModel @Inject constructor(
         }
 
     fun executeDeleteBooking(id: String) = bookingUseCase.deleteBooking(id).asLiveData()
+
+    fun executeDeleteRoom(id: String) = roomUseCase.deleteRoom(id).asLiveData()
+
+    private fun deleteUserAccount(id: String, hotelId: String) =
+        authUseCase.deleteUserAccount(id, hotelId).asLiveData()
+
+    fun executeDeleteUserAccount(id: String): MediatorLiveData<Resource<Int>> =
+        MediatorLiveData<Resource<Int>>().apply {
+            addSource(getSelectedHotelData()) { hotel ->
+                addSource(deleteUserAccount(id, hotel.id)) { user ->
+                    value = user
+                }
+            }
+        }
 }

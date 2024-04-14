@@ -14,6 +14,7 @@ import com.project.acehotel.core.utils.constants.READER_NAME
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityEditReaderBinding
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -40,6 +41,8 @@ class EditReaderActivity : AppCompatActivity() {
         handleEditText()
 
         handleSaveButton()
+
+        validateToken()
     }
 
     private fun initReaderData() {
@@ -50,6 +53,14 @@ class EditReaderActivity : AppCompatActivity() {
             edEditReaderRead.setText(readerData.readInterval.toString())
             tbReader.isChecked = readerData.isActive
             edEditReaderDate.setText(DateUtils.getDateThisDay2())
+        }
+    }
+
+    private fun validateToken() {
+        editReaderViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
         }
     }
 

@@ -17,6 +17,7 @@ class CustomCardRoom(context: Context) : CardView(context) {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.item_list_room, this, true)
+        findViewById<ConstraintLayout>(R.id.constraintLayout_Room).elevation = 0F
 
         setRoomStatus(RoomStatus.UNDEFINED.status)
     }

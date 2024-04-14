@@ -4,6 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
 
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.booking.usecase.BookingUseCase
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class ChooseBookingViewModel @Inject constructor(
     private val bookingUseCase: BookingUseCase,
     private val hotelUseCase: HotelUseCase,
+    private val authUseCase: AuthUseCase,
 ) : ViewModel() {
 
     fun getListBookingByHotel(
@@ -35,4 +37,6 @@ class ChooseBookingViewModel @Inject constructor(
                 }
             }
         }
+
+    fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 }

@@ -48,8 +48,6 @@ class FinanceViewModel @Inject constructor(
             }
         }
 
-    fun getHotelRecap(filterDate: String) = hotelUseCase.getHotelRecap(filterDate).asLiveData()
-
     fun getListBookingByHotel(
         hotelId: String,
         filterDate: String,

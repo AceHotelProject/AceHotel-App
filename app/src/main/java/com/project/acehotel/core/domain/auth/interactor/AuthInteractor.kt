@@ -13,6 +13,9 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
     override fun loginUser(email: String, password: String): Flow<Resource<Auth>> =
         authRepository.loginUser(email, password)
 
+    override fun forgetPassword(email: String): Flow<Resource<Int>> =
+        authRepository.forgetPassword(email)
+
     override suspend fun insertCacheUser(user: Auth) = authRepository.insertCacheUser(user)
 
     override fun getUser(): Flow<Auth> = authRepository.getUser()

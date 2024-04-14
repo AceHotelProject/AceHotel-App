@@ -25,6 +25,7 @@ import com.project.acehotel.databinding.ActivityBookingDetailBinding
 import com.project.acehotel.features.dashboard.booking.add_booking.AddBookingActivity
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -53,6 +54,16 @@ class BookingDetailActivity : AppCompatActivity() {
         handleBackButton()
 
         handleFab()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        bookingDetailViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun handleButtonMore() {
@@ -228,7 +239,49 @@ class BookingDetailActivity : AppCompatActivity() {
                                     "${user.data?.username}\n(${user.data?.email})"
                             }
                         }
+                    }
 
+                bookingDetailViewModel.getNoteDetail(data.room.first().id)
+                    .observe(this@BookingDetailActivity) { note ->
+                        when (note) {
+                            is Resource.Error -> {
+                                showLoading(false)
+
+                                if (!isInternetAvailable(this@BookingDetailActivity)) {
+                                    showToast(getString(R.string.check_internet))
+                                } else {
+                                    showToast(note.message.toString())
+                                }
+                            }
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Message -> {
+                                showLoading(false)
+                                Timber.tag("BookingDetailActivity").d(note.message)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+
+                                tvConfirmRoomNotes.text = note.data?.detail
+
+                                if (data.room.first().hasProblem) {
+                                    tvConfirmRoomHasProblem.text = "Bermasalah"
+                                    val color = ContextCompat.getColor(
+                                        this@BookingDetailActivity,
+                                        R.color.red
+                                    )
+                                    tvConfirmRoomHasProblem.setTextColor(color)
+                                } else {
+                                    tvConfirmRoomHasProblem.text = "Aman"
+                                    val color = ContextCompat.getColor(
+                                        this@BookingDetailActivity,
+                                        R.color.green
+                                    )
+                                    tvConfirmRoomHasProblem.setTextColor(color)
+                                }
+                            }
+                        }
                     }
             } else if (data.room.first().actualCheckin != "Empty" && DateUtils.isTodayDate(data.checkoutDate)) {
                 setVisitorStatus(CurrentVisitorStatus.CHECKOUT.status, false)
@@ -336,7 +389,8 @@ class BookingDetailActivity : AppCompatActivity() {
 
                         if (bookingData!!.totalPrice < (bookingData!!.duration * bookingData!!.roomCount!! * hotel.regularRoomPrice)) {
                             tvConfirmDiscDesc.text = "${hotel.discount}"
-                            tvConfirmDiscPrice.text = "Rp ${formatNumber(hotel.discountAmount)}"
+                            tvConfirmDiscPrice.text =
+                                "Rp ${formatNumber(hotel.discountAmount * bookingData!!.roomCount)}"
                         } else {
                             tvConfirmDiscDesc.text = "Tidak Menggunakan Diskon"
                             tvConfirmDiscPrice.text = "Rp 0"
@@ -347,7 +401,8 @@ class BookingDetailActivity : AppCompatActivity() {
 
                         if (bookingData!!.totalPrice < (bookingData!!.duration * bookingData!!.roomCount!! * hotel.exclusiveRoomPrice)) {
                             tvConfirmDiscDesc.text = "${hotel.discount}"
-                            tvConfirmDiscPrice.text = "Rp ${formatNumber(hotel.discountAmount)}"
+                            tvConfirmDiscPrice.text =
+                                "Rp ${formatNumber(hotel.discountAmount * bookingData!!.roomCount)}"
                         } else {
                             tvConfirmDiscDesc.text = "Tidak Menggunakan Diskon"
                             tvConfirmDiscPrice.text = "Rp 0"

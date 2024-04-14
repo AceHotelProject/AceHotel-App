@@ -13,8 +13,7 @@ class InventoryDetailViewModel @Inject constructor(
     private val inventoryUseCase: InventoryUseCase,
     private val hotelUseCase: HotelUseCase,
     private val authUseCase: AuthUseCase
-) :
-    ViewModel() {
+) : ViewModel() {
 
     fun getDetailInventory(id: String, hotelId: String) =
         inventoryUseCase.getDetailInventory(id, hotelId).asLiveData()

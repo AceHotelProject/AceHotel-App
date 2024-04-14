@@ -23,6 +23,7 @@ import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.databinding.ActivityAddFranchiseBinding
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -66,6 +67,18 @@ class AddFranchiseActivity : AppCompatActivity() {
         handlePickImages()
 
         setupUI()
+
+        enableRefresh(false)
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        addFranchiseViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun setupUI() {
@@ -92,14 +105,67 @@ class AddFranchiseActivity : AppCompatActivity() {
                     isEditable(true)
 
                     handleUpdateHotelSaveButton(hotelId)
+
+                    disableEditAccount()
                 }
             }
             else -> {
                 binding.tvTitle.text = "Tambah Hotel"
 
-
                 handleAddHotelSaveButton()
             }
+        }
+    }
+
+    private fun disableEditAccount() {
+        binding.apply {
+            textView22.visibility = View.GONE
+            layoutAddFranchiseCleaningPassConfirm.visibility = View.GONE
+
+            textView21.visibility = View.GONE
+            layoutAddFranchiseCleaningPass.visibility = View.GONE
+
+            textView20.visibility = View.GONE
+            layoutAddFranchiseCleaningEmail.visibility = View.GONE
+
+            textView19.visibility = View.GONE
+            layoutAddFranchiseCleaningName.visibility = View.GONE
+
+            textView18.visibility = View.GONE
+            layoutAddFranchiseInventoryPassConfirm.visibility = View.GONE
+
+            textView17.visibility = View.GONE
+            layoutAddFranchiseInventoryPass.visibility = View.GONE
+
+            textView16.visibility = View.GONE
+            layoutAddFranchiseInventoryEmail.visibility = View.GONE
+
+            textView15.visibility = View.GONE
+            layoutAddFranchiseInventoryName.visibility = View.GONE
+
+            textView14.visibility = View.GONE
+            layoutAddFranchiseInventoryPassConfirm.visibility = View.GONE
+
+            textView13.visibility = View.GONE
+            layoutAddFranchiseInventoryPass.visibility = View.GONE
+
+            textView12.visibility = View.GONE
+            layoutAddFranchiseReceptionistEmail.visibility = View.GONE
+
+            textView11.visibility = View.GONE
+            layoutAddFranchiseReceptionistName.visibility = View.GONE
+
+            textView10.visibility = View.GONE
+            layoutAddFranchiseOwnerPassConfirm.visibility = View.GONE
+
+            textView9.visibility = View.GONE
+            layoutAddFranchiseOwnerPass.visibility = View.GONE
+
+            textView8.visibility = View.GONE
+            layoutAddFranchiseOwnerEmail.visibility = View.GONE
+
+            textView7.visibility = View.GONE
+            layoutAddFranchiseOwnerName.visibility = View.GONE
         }
     }
 

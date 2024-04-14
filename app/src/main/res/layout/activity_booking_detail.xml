@@ -468,6 +468,48 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView91"
                         app:layout_constraintTop_toTopOf="@+id/textView91" />
+
+                    <TextView
+                        android:id="@+id/textView90"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Catatan Kunjungan : "
+                        android:textColor="@color/dark_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_confirm_room_actual_checkout_pic" />
+
+                    <TextView
+                        android:id="@+id/tv_confirm_room_notes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Tidak Ada"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView90"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView90"
+                        app:layout_constraintTop_toTopOf="@+id/textView90" />
+
+                    <TextView
+                        android:id="@+id/textView89"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Pengunjung Bermasalah : "
+                        android:textColor="@color/dark_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_confirm_room_notes" />
+
+                    <TextView
+                        android:id="@+id/tv_confirm_room_has_problem"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Aman"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView89"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView89"
+                        app:layout_constraintTop_toTopOf="@+id/textView89" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView

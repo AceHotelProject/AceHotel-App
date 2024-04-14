@@ -191,7 +191,7 @@ class ChangePriceActivity : AppCompatActivity() {
                                         contact = price.data.contact,
 
                                         regularRoomCount = price.data.regularRoomCount,
-                                        regularRoomImage = price.data.regularRoomImage,
+                                        regularRoomPrice = price.data.regularRoomPrice,
 
                                         exclusiveRoomCount = price.data.exclusiveRoomCount,
                                         exclusiveRoomPrice = price.data.exclusiveRoomPrice,
@@ -263,13 +263,13 @@ class ChangePriceActivity : AppCompatActivity() {
     private fun fetchPriceInfo() {
         changePriceViewModel.getSelectedHotelData().observe(this) { hotel ->
             binding.apply {
-                edChangePriceBedPrice.setText(hotel.extraBedPrice)
-                edChangePriceExclusive.setText(hotel.exclusiveRoomPrice)
-                edChangePriceRegular.setText(hotel.regularRoomPrice)
+                edChangePriceBedPrice.setText(hotel.extraBedPrice.toString())
+                edChangePriceExclusive.setText(hotel.exclusiveRoomPrice.toString())
+                edChangePriceRegular.setText(hotel.regularRoomPrice.toString())
 
                 if (hotel.discount.isNotEmpty() && hotel.discount != "Empty") {
                     edChangePriceDiscount.setText(hotel.discount)
-                    edChangePriceDiscountPrice.setText(hotel.discountAmount)
+                    edChangePriceDiscountPrice.setText(hotel.discountAmount.toString())
                 }
             }
         }
@@ -286,10 +286,7 @@ class ChangePriceActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.refChangePrice.apply {
-            visibility = if (isLoading) View.VISIBLE else View.GONE
-            isEnabled = false
-        }
+        binding.refChangePrice.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun setupActionBar() {

@@ -17,6 +17,7 @@ import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityManageUserBinding
 import com.project.acehotel.databinding.ItemListUserBinding
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -39,6 +40,8 @@ class ManageUserActivity : AppCompatActivity() {
         fetchListUser()
 
         handleEmptyStates(listOf())
+
+        validateToken()
     }
 
     private fun fetchListUser() {
@@ -52,6 +55,8 @@ class ManageUserActivity : AppCompatActivity() {
                     } else {
                         showToast(user.message.toString())
                     }
+
+
                 }
                 is Resource.Loading -> {
                     showLoading(true)
@@ -112,6 +117,14 @@ class ManageUserActivity : AppCompatActivity() {
     private fun handleButtonBack() {
         binding.btnBack.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun validateToken() {
+        manageUserViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
         }
     }
 

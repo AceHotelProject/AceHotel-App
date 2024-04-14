@@ -34,6 +34,8 @@ class VisitorFragment : Fragment(), IManagementSearch {
         fetchVisitorList("")
 
         handleRefresh()
+
+        binding.tvEmptyBookingNext.visibility = View.VISIBLE
     }
 
     private fun handleRefresh() {
@@ -84,9 +86,16 @@ class VisitorFragment : Fragment(), IManagementSearch {
                         showLoading(false)
 
                         initVisitorRecyclerView(visitor.data)
+
+                        handleEmptyStates(visitor.data)
                     }
                 }
             }
+    }
+
+    private fun handleEmptyStates(data: List<Visitor>?) {
+        binding.tvEmptyBookingNext.visibility =
+            if (data?.isEmpty()!!) View.VISIBLE else View.INVISIBLE
     }
 
     private fun initVisitorRecyclerView(data: List<Visitor>?) {

@@ -22,6 +22,7 @@ import com.project.acehotel.features.dashboard.MainActivity
 import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseVisitorActivity
 import com.project.acehotel.features.dashboard.room.checkin.CheckinActivity
 import com.project.acehotel.features.dashboard.room.checkout.CheckoutActivity
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -50,6 +51,16 @@ class ChooseBookingActivity : AppCompatActivity() {
         handleAddButton()
 
         handleSearch()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        chooseBookingViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun handleSearch() {

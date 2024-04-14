@@ -17,6 +17,7 @@ import com.project.acehotel.core.domain.booking.model.AddBooking
 import com.project.acehotel.core.utils.constants.roomTypeList
 import com.project.acehotel.databinding.ActivityAddBookingBinding
 import com.project.acehotel.features.dashboard.booking.confirm.ConfirmBookingActivity
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -54,6 +55,16 @@ class AddBookingActivity : AppCompatActivity() {
         handlePickDate()
 
         handleSaveButton()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        addBookingViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun initFormData() {

@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddTagViewModel @Inject constructor(
-    private val inventoryUseCase: InventoryUseCase
+    private val inventoryUseCase: InventoryUseCase,
 ) : ViewModel() {
 
     private fun getTagById(readerId: String) = inventoryUseCase.getTagById(readerId).asLiveData()

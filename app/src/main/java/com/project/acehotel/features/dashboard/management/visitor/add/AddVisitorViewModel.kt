@@ -85,4 +85,6 @@ class AddVisitorViewModel @Inject constructor(
     }
 
     fun getVisitorDetail(id: String) = visitorUseCase.getVisitorDetail(id).asLiveData()
+
+    fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 }

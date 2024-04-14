@@ -13,6 +13,7 @@ import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.databinding.FragmentProfileBinding
 import com.project.acehotel.features.dashboard.profile.choose_hotel.ChooseHotelActivity
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
+import com.project.acehotel.features.dashboard.profile.manage_user.ManageUserActivity
 import com.project.acehotel.features.dashboard.profile.stats.OverallStatsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -67,6 +68,11 @@ class ProfileFragment : Fragment(), IUserLayout {
                 val intentToManageFranchise =
                     Intent(requireContext(), ManageFranchiseActivity::class.java)
                 startActivity(intentToManageFranchise)
+            }
+            btnProfileManageUser.setOnClickListener {
+                val intentToManageUser =
+                    Intent(requireContext(), ManageUserActivity::class.java)
+                startActivity(intentToManageUser)
             }
             btnProfileCustomerService.setOnClickListener {
 //               wa link provided by: https://create.wa.link/

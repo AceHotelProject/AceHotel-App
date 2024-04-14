@@ -15,9 +15,7 @@ import com.project.acehotel.core.data.source.remote.response.note.NoteResponse
 import com.project.acehotel.core.data.source.remote.response.room.CheckoutBody
 import com.project.acehotel.core.data.source.remote.response.room.ListRoomResponse
 import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
-import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
-import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
-import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
+import com.project.acehotel.core.data.source.remote.response.tag.*
 import com.project.acehotel.core.data.source.remote.response.user.ListUserResponse
 import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
@@ -50,6 +48,11 @@ interface ApiService {
     suspend fun refreshToken(
         @Field("refreshToken") refreshToken: String
     ): RefreshTokenResponse
+
+    @POST("auth/forgot-password")
+    suspend fun forgetPassword(
+        @Field("email") email: String
+    ): Response<AuthResponse>
 
     // AUTH
 
@@ -141,11 +144,33 @@ interface ApiService {
     @GET("tag")
     suspend fun getTag(): ListTagsResponse
 
+    @FormUrlEncoded
     @POST("tag")
     suspend fun addTag(
         @Field("tid") tid: String,
         @Field("inventory_id") inventoryId: String,
     ): AddTagResponse
+    
+    @POST("tag/{id}/query")
+    suspend fun setQueryTag(
+        @Path("id") readerId: String,
+
+        @Query("state") state: Boolean,
+    ): ReaderQueryResponse
+
+    @FormUrlEncoded
+    @PATCH("Reader/{id}")
+    suspend fun updateReader(
+        @Path("id") readerId: String,
+
+        @Field("power_gain") powerGain: String,
+        @Field("read_interval") readInterval: String
+    ): ReaderResponse
+
+    @GET("Reader/{id}")
+    suspend fun getReader(
+        @Path("id") readerId: String,
+    ): ReaderResponse
 
     // INVENTORY
 

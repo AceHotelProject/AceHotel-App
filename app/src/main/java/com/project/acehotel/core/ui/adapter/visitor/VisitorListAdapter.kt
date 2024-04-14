@@ -27,6 +27,7 @@ class VisitorListAdapter(private val listVisitor: List<Visitor>?) :
 
         holder.binding.apply {
             tvVisitorCardName.text = data?.name
+            tvVisitorCardPhone.text = "Nomor telepon: ${data?.phone}"
         }
 
         holder.itemView.setOnClickListener {

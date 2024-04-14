@@ -13,6 +13,7 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.*
 import com.project.acehotel.databinding.ActivityAddVisitorBinding
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -48,6 +49,16 @@ class AddVisitorActivity : AppCompatActivity() {
         setupUI()
 
         enableRefresh(false)
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        addVisitorViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun setupUI() {

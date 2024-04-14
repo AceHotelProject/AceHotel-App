@@ -4,7 +4,8 @@ data class CheckoutBody(
     val checkout_date: String,
     val booking_id: String,
     val visitor_id: String,
-    val facility: CheckoutFacility
+    val facility: CheckoutFacility,
+    val note: String,
 )
 
 data class CheckoutFacility(

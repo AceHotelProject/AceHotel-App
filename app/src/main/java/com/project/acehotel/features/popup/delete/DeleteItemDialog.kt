@@ -3,6 +3,7 @@ package com.project.acehotel.features.popup.delete
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
@@ -44,6 +45,8 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         deleteItemViewModel.executeDeleteInventory(id).observe(this) { result ->
                             when (result) {
                                 is Resource.Error -> {
+                                    isButtonEnabled(true, view)
+
                                     if (!isInternetAvailable(requireContext())) {
                                         activity?.showToast(getString(R.string.check_internet))
                                     } else {
@@ -51,12 +54,14 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                     }
                                 }
                                 is Resource.Loading -> {
-
+                                    isButtonEnabled(false, view)
                                 }
                                 is Resource.Message -> {
-
+                                    isButtonEnabled(true, view)
                                 }
                                 is Resource.Success -> {
+                                    isButtonEnabled(true, view)
+
                                     activity?.showToast("Barang telah berhasi dihapus")
                                     activity?.finish()
                                     dismiss()
@@ -71,6 +76,8 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         deleteItemViewModel.executeDeleteVisitor(id).observe(this) { result ->
                             when (result) {
                                 is Resource.Error -> {
+                                    isButtonEnabled(true, view)
+
                                     if (!isInternetAvailable(requireContext())) {
                                         activity?.showToast(getString(R.string.check_internet))
                                     } else {
@@ -78,12 +85,14 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                     }
                                 }
                                 is Resource.Loading -> {
-
+                                    isButtonEnabled(false, view)
                                 }
                                 is Resource.Message -> {
-
+                                    isButtonEnabled(true, view)
                                 }
                                 is Resource.Success -> {
+                                    isButtonEnabled(true, view)
+
                                     activity?.showToast("Pengunjung telah berhasi dihapus")
                                     activity?.finish()
                                     dismiss()
@@ -98,6 +107,8 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         deleteItemViewModel.executeDeleteBooking(id).observe(this) { booking ->
                             when (booking) {
                                 is Resource.Error -> {
+                                    isButtonEnabled(true, view)
+
                                     if (!isInternetAvailable(requireContext())) {
                                         activity?.showToast(getString(R.string.check_internet))
                                     } else {
@@ -105,12 +116,14 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                     }
                                 }
                                 is Resource.Loading -> {
-
+                                    isButtonEnabled(false, view)
                                 }
                                 is Resource.Message -> {
-
+                                    isButtonEnabled(true, view)
                                 }
                                 is Resource.Success -> {
+                                    isButtonEnabled(true, view)
+
                                     activity?.showToast("Data booking telah berhasi dihapus")
                                     activity?.finish()
                                     dismiss()
@@ -122,6 +135,8 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                 DeleteDialogType.MANAGE_HOTEL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus cabang hotel ini?"
                     btnYes.setOnClickListener {
+                        isButtonEnabled(false, view)
+
                         deleteItemViewModel.getSelectedHotelData().observe(this) { hotel ->
                             if (id == hotel.id) {
                                 deleteItemViewModel.saveSelectedHotelData(ManageHotel())
@@ -131,6 +146,8 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         deleteItemViewModel.executeDeleteHotel(id).observe(this) { result ->
                             when (result) {
                                 is Resource.Error -> {
+                                    isButtonEnabled(true, view)
+
                                     if (!isInternetAvailable(requireContext())) {
                                         activity?.showToast(getString(R.string.check_internet))
                                     } else {
@@ -138,13 +155,77 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                     }
                                 }
                                 is Resource.Loading -> {
-
+                                    isButtonEnabled(false, view)
                                 }
                                 is Resource.Message -> {
-
+                                    isButtonEnabled(true, view)
                                 }
                                 is Resource.Success -> {
+                                    isButtonEnabled(true, view)
+
                                     activity?.showToast("Cabang hotel telah berhasi dihapus")
+                                    activity?.finish()
+                                    dismiss()
+                                }
+                            }
+                        }
+                    }
+                }
+                DeleteDialogType.ROOM_DETAIL -> {
+                    tvDesc.text = "Apakah Anda yakin ingin menghapus kamar ini?"
+                    btnYes.setOnClickListener {
+                        deleteItemViewModel.executeDeleteRoom(id).observe(this) { result ->
+                            when (result) {
+                                is Resource.Error -> {
+                                    isButtonEnabled(true, view)
+
+                                    if (!isInternetAvailable(requireContext())) {
+                                        activity?.showToast(getString(R.string.check_internet))
+                                    } else {
+                                        activity?.showToast(result.message.toString())
+                                    }
+                                }
+                                is Resource.Loading -> {
+                                    isButtonEnabled(false, view)
+                                }
+                                is Resource.Message -> {
+                                    isButtonEnabled(true, view)
+                                }
+                                is Resource.Success -> {
+                                    isButtonEnabled(true, view)
+
+                                    activity?.showToast("Kamar telah berhasi dihapus")
+                                    activity?.finish()
+                                    dismiss()
+                                }
+                            }
+                        }
+                    }
+                }
+                DeleteDialogType.USER_DETAIL -> {
+                    tvDesc.text = "Apakah Anda yakin ingin menghapus user ini?"
+                    btnYes.setOnClickListener {
+                        deleteItemViewModel.executeDeleteUserAccount(id).observe(this) { result ->
+                            when (result) {
+                                is Resource.Error -> {
+                                    isButtonEnabled(true, view)
+
+                                    if (!isInternetAvailable(requireContext())) {
+                                        activity?.showToast(getString(R.string.check_internet))
+                                    } else {
+                                        activity?.showToast(result.message.toString())
+                                    }
+                                }
+                                is Resource.Loading -> {
+                                    isButtonEnabled(false, view)
+                                }
+                                is Resource.Message -> {
+                                    isButtonEnabled(true, view)
+                                }
+                                is Resource.Success -> {
+                                    isButtonEnabled(true, view)
+
+                                    activity?.showToast("User telah berhasi dihapus")
                                     activity?.finish()
                                     dismiss()
                                 }
@@ -156,5 +237,13 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
 
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun isButtonEnabled(isEnabled: Boolean, view: View) {
+        val btnYes = view.findViewById<Button>(R.id.btn_delete_yes)
+        val btnNo = view.findViewById<Button>(R.id.btn_delete_no)
+
+        btnYes.isEnabled = isEnabled
+        btnNo.isEnabled = isEnabled
     }
 }

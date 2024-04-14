@@ -109,3 +109,7 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
         source, 0, 0, source.width, source.height, matrix, true
     )
 }
+
+fun convertToDp(paddingValue: Int): Int {
+    return (paddingValue * 10 + 0.5f).toInt()
+}

@@ -232,6 +232,6 @@ object HotelDataMapper {
         totalBooking = input.totalBooking ?: 0,
     )
 
-    private const val PLACEHOLDER_IMAGE =
+    const val PLACEHOLDER_IMAGE =
         "https://storage.googleapis.com/ace-hotel/placeholder_image.png"
 }

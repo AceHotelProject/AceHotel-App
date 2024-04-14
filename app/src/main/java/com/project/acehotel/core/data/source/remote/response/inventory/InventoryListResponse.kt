@@ -34,6 +34,9 @@ data class InventoryUpdateHistoryItem(
     @field:SerializedName("description")
     val description: String? = null,
 
+    @field:SerializedName("personInCharge")
+    val personInCharge: String? = null,
+
     @field:SerializedName("_id")
     val id: String? = null,
 

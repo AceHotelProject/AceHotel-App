@@ -10,6 +10,8 @@ interface AuthUseCase {
 
     fun loginUser(email: String, password: String): Flow<Resource<Auth>>
 
+    fun forgetPassword(email: String): Flow<Resource<Int>>
+
     suspend fun insertCacheUser(user: Auth)
 
     fun getUser(): Flow<Auth>

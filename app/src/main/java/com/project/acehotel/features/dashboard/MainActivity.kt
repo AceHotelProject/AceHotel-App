@@ -1,21 +1,27 @@
 package com.project.acehotel.features.dashboard
 
+import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
-import com.project.acehotel.core.data.source.remote.MQTTService
 import com.project.acehotel.core.utils.constants.FabMenuState
+import com.project.acehotel.core.utils.showLongToast
 import com.project.acehotel.core.utils.showToast
+import com.project.acehotel.core.utils.worker.TokenWorker
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
@@ -23,18 +29,13 @@ import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseV
 import com.project.acehotel.features.popup.choose_hotel.ChooseHotelDialog
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
-import org.eclipse.paho.client.mqttv3.*
-import timber.log.Timber
-import javax.inject.Inject
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val mainViewModel: MainViewModel by viewModels()
-
-    @Inject
-    lateinit var mqttService: MQTTService
 
     private var fabMenuState: FabMenuState = FabMenuState.COLLAPSED
 
@@ -44,69 +45,45 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        validateToken()
+
         setupBottomNavbar()
 
         setupActionBar()
 
         handleFab()
 
-        validateToken()
+        checkNotificationPermission()
 
-        initMQTT()
+        startTokenWorker()
     }
 
-    private fun initMQTT() {
-        if (!mqttService.isConnected()) {
-            mqttService.connect(
-                object : IMqttActionListener {
-                    override fun onSuccess(asyncActionToken: IMqttToken?) {
-                        Timber.tag("MQTT").d("Success connected to MQTT")
+    private fun startTokenWorker() {
+        val periodicWorker =
+            PeriodicWorkRequest.Builder(TokenWorker::class.java, 6, TimeUnit.HOURS).build()
+        WorkManager.getInstance(this).enqueue(periodicWorker)
+    }
 
-                        mqttService.subscribe(
-                            MQTT_TOPIC,
-                            1,
-                            object : IMqttActionListener {
-                                override fun onSuccess(asyncActionToken: IMqttToken?) {
-                                    Timber.tag("MQTT").d("Success subscribed to ACE HOTEL Topic")
-                                }
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                showToast("Izin notifikasi diberikan")
+            } else {
+                showLongToast("Izin tidak diberikan, ini akan mempengaruhi jalannya aplikasi")
+            }
+        }
 
-                                override fun onFailure(
-                                    asyncActionToken: IMqttToken?,
-                                    exception: Throwable?
-                                ) {
-                                    Timber.tag("MQTT").e(exception)
-                                }
-                            }
-                        )
-                    }
-
-                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-                        Timber.tag("MQTT").e(exception)
-                    }
-                },
-                object : MqttCallback {
-                    override fun connectionLost(cause: Throwable?) {
-                        Timber.tag("MQTT").e("Connection lost")
-                    }
-
-                    override fun messageArrived(topic: String?, message: MqttMessage?) {
-                        val msg = "Receive message: ${message.toString()} from topic: $topic"
-
-                        Timber.tag("RESULT").e(message.toString())
-                        showToast(msg)
-                    }
-
-                    override fun deliveryComplete(token: IMqttDeliveryToken?) {
-                        Timber.tag("MQTT").d("Delivery complete")
-                    }
-                }
-            )
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 
     private fun validateToken() {
         mainViewModel.getRefreshToken().observe(this) { token ->
-            if (token.isEmpty()) {
+            if (token.isEmpty() || token == "") {
                 TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
             }
         }
@@ -273,7 +250,5 @@ class MainActivity : AppCompatActivity() {
         private const val MENU_BOOKING = "booking"
         private const val MENU_CHECKIN = "checkin"
         private const val MENU_CHECKOUT = "checkout"
-
-        private const val MQTT_TOPIC = "/mqtt-integration/Reader/ACE-001"
     }
 }

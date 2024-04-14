@@ -28,4 +28,6 @@ class ManageUserViewModel @Inject constructor(
                 }
             }
         }
+
+    fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 }

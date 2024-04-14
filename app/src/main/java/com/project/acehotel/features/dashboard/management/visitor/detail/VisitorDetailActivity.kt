@@ -23,6 +23,7 @@ import com.project.acehotel.databinding.ActivityVisitorDetailBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import com.project.acehotel.features.dashboard.management.visitor.add.AddVisitorActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,7 +32,7 @@ import timber.log.Timber
 class VisitorDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVisitorDetailBinding
 
-    private val visitorViewModel: VisitorDetailViewModel by viewModels()
+    private val visitorDetailViewModel: VisitorDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,16 @@ class VisitorDetailActivity : AppCompatActivity() {
         setupButtonMore()
 
         fetchBookingPagingList()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        visitorDetailViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun fetchBookingPagingList() {
@@ -64,7 +75,7 @@ class VisitorDetailActivity : AppCompatActivity() {
         binding.rvVisitorHistory.layoutManager = layoutManager
 
         val filterDate = DateUtils.getDateThisYear()
-        visitorViewModel.getPagingListBookingByVisitor(
+        visitorDetailViewModel.getPagingListBookingByVisitor(
             intent.getStringExtra(VISITOR_ID) ?: "",
             filterDate,
             true
@@ -124,7 +135,7 @@ class VisitorDetailActivity : AppCompatActivity() {
     }
 
     private fun fetchVisitorDetail() {
-        visitorViewModel.getVisitorDetail(intent.getStringExtra(VISITOR_ID) ?: "")
+        visitorDetailViewModel.getVisitorDetail(intent.getStringExtra(VISITOR_ID) ?: "")
             .observe(this) { visitor ->
                 when (visitor) {
                     is Resource.Error -> {

@@ -1,5 +1,6 @@
 package com.project.acehotel.features.dashboard.management.inventory.change_stock
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,6 +17,8 @@ import com.project.acehotel.core.utils.constants.mapToInventoryType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityChangeStockItemInventoryBinding
+import com.project.acehotel.features.dashboard.MainActivity
+import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -52,6 +55,16 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
         checkIsUpdate()
 
         handleButtonSave()
+
+        validateToken()
+    }
+
+    private fun validateToken() {
+        changeStockItemViewModel.getRefreshToken().observe(this) { token ->
+            if (token.isEmpty() || token == "") {
+                TokenExpiredDialog().show(supportFragmentManager, "Token Expired Dialog")
+            }
+        }
     }
 
     private fun checkIsUpdate() {
@@ -134,6 +147,11 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
                                 isButtonEnabled(true)
 
                                 showToast("Barang telah berhasil diperbaharui")
+                                val intentToMain = Intent(
+                                    this@ChangeStockItemInventoryActivity,
+                                    MainActivity::class.java
+                                )
+                                startActivity(intentToMain)
                                 finish()
                             }
                         }
