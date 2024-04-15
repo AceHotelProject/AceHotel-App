@@ -38,6 +38,7 @@ class TokenWorker @AssistedInject constructor(
                     is Resource.Error -> {
                         if (!isInternetAvailable(appContext)) {
                             //no internet
+                            Result.failure()
                         } else {
                             authUseCase.getRefreshToken().collect {
                                 if (it.isEmpty()) {
@@ -52,7 +53,7 @@ class TokenWorker @AssistedInject constructor(
 
                     }
                     is Resource.Message -> {
-
+                        Result.failure()
                     }
                     is Resource.Success -> {
 

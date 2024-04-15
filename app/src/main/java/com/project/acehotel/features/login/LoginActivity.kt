@@ -147,7 +147,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateToken() {
         loginViewModel.getRefreshToken().observe(this) { token ->
-            if (token.isNotEmpty() || token != "") {
+            if (token.isNotEmpty()) {
+                Timber.tag("TOKEN").e(token.toString())
+
                 showLoading(false)
                 isButtonEnabled(true)
 

@@ -9,6 +9,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,17 +19,23 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
+import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.FabMenuState
+import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showLongToast
 import com.project.acehotel.core.utils.showToast
+import com.project.acehotel.core.utils.worker.CheckoutWorker
 import com.project.acehotel.core.utils.worker.TokenWorker
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
 import com.project.acehotel.features.dashboard.management.visitor.choose.ChooseVisitorActivity
+import com.project.acehotel.features.popup.checkout.CheckoutDialog
 import com.project.acehotel.features.popup.choose_hotel.ChooseHotelDialog
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -39,6 +46,9 @@ class MainActivity : AppCompatActivity() {
 
     private var fabMenuState: FabMenuState = FabMenuState.COLLAPSED
 
+    private var countNotCheckout: Int = 0
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,11 +66,63 @@ class MainActivity : AppCompatActivity() {
         checkNotificationPermission()
 
         startTokenWorker()
+
+        startCheckoutWorker()
+
+        checkNotCheckout()
+    }
+
+    private fun checkNotCheckout() {
+        val filterDate = DateUtils.getDateThisMonth()
+
+        mainViewModel.executeGetListBookingByHotel(filterDate).observe(this) { booking ->
+            when (booking) {
+                is Resource.Error -> {
+                    if (!isInternetAvailable(this@MainActivity)) {
+                        showToast(getString(R.string.check_internet))
+                    } else {
+                        showToast(booking.message.toString())
+
+                    }
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Message -> {
+                    Timber.tag("MainActivity").d(booking.message)
+                }
+                is Resource.Success -> {
+                    if (booking.data != null) {
+                        for (item in booking.data) {
+                            if ((DateUtils.isTodayDate(item.checkoutDate) ||
+                                        DateUtils.isDateBeforeToday(item.checkoutDate)) &&
+                                item.room.first().actualCheckout == "Empty"
+                            ) {
+                                ++countNotCheckout
+                            }
+                        }
+
+                        if (countNotCheckout != 0) {
+                            CheckoutDialog(countNotCheckout).show(
+                                supportFragmentManager,
+                                "Reminder Checkout Dialog"
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun startCheckoutWorker() {
+        val periodicWorker =
+            PeriodicWorkRequest.Builder(CheckoutWorker::class.java, 4, TimeUnit.HOURS).build()
+        WorkManager.getInstance(this).enqueue(periodicWorker)
     }
 
     private fun startTokenWorker() {
         val periodicWorker =
-            PeriodicWorkRequest.Builder(TokenWorker::class.java, 6, TimeUnit.HOURS).build()
+            PeriodicWorkRequest.Builder(TokenWorker::class.java, 1, TimeUnit.DAYS).build()
         WorkManager.getInstance(this).enqueue(periodicWorker)
     }
 
@@ -95,6 +157,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleFab() {
         binding.fabMenu.setOnClickListener {
             onFabMenuClick()
@@ -112,9 +175,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fabCheckin.setOnClickListener {
-            val intentToChooseBooking = Intent(this, ChooseBookingActivity::class.java)
-            intentToChooseBooking.putExtra(FLAG_VISITOR, MENU_CHECKIN)
-            startActivity(intentToChooseBooking)
+            if (!DateUtils.isCurrentTimeAfter(13)) {
+                showToast("Checkin hanya bisa dilakukan jam 13.00 waktu setempat")
+            } else {
+                val intentToChooseBooking = Intent(this, ChooseBookingActivity::class.java)
+                intentToChooseBooking.putExtra(FLAG_VISITOR, MENU_CHECKIN)
+                startActivity(intentToChooseBooking)
+            }
         }
 
         binding.fabCheckout.setOnClickListener {
