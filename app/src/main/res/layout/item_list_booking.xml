@@ -24,6 +24,25 @@
             android:background="@drawable/custom_card"
             android:padding="12dp">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_booking_price"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.project.acehotel.core.ui.custom.chips.CustomBookingStatus
+                    android:id="@+id/chip_booking_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
+                    android:textSize="10sp" />
+            </androidx.cardview.widget.CardView>
+
             <TextView
                 android:id="@+id/tv_booking_date"
                 style="@style/textStyleMedium_custom"
@@ -100,11 +119,11 @@
                 style="@style/textStyleMedium_16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Rp 100.000"
                 android:textColor="@color/green"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_booking_date" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

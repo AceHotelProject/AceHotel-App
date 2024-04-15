@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.constants.CurrentVisitorStatus
 import com.project.acehotel.core.utils.constants.mapToRoomDisplay
 import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.databinding.ItemListBookingBinding
@@ -37,6 +38,19 @@ class BookingListAdapter(private val listBooking: List<Booking>?) :
             tvBookingDate.text =
                 "${DateUtils.convertDate(data?.checkinDate!!)} - ${DateUtils.convertDate(data.checkoutDate)}"
             tvBookingPrice.text = "Rp ${formatNumber(data.totalPrice)}"
+
+            if (data?.room?.first()?.actualCheckin != "Empty" && data?.room?.first()?.actualCheckout != "Empty") {
+                chipBookingStatus.setStatus(CurrentVisitorStatus.CHECKOUT, true)
+            } else if (data?.room?.first()?.actualCheckin != "Empty" && DateUtils.isTodayDate(data.checkoutDate)) {
+                chipBookingStatus.setStatus(CurrentVisitorStatus.CHECKOUT, false)
+            } else if (data.room.first().actualCheckin != "Empty" && !DateUtils.isTodayDate(
+                    data.checkoutDate
+                )
+            ) {
+                chipBookingStatus.setStatus(CurrentVisitorStatus.CHECKIN, true)
+            } else {
+                chipBookingStatus.setStatus(CurrentVisitorStatus.CHECKIN, false)
+            }
         }
 
         holder.itemView.setOnClickListener {

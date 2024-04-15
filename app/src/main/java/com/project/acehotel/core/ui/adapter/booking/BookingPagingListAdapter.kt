@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.constants.CurrentVisitorStatus
 import com.project.acehotel.core.utils.constants.mapToRoomDisplay
 import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.databinding.ItemListBookingBinding
@@ -29,6 +30,19 @@ class BookingPagingListAdapter :
         val data = getItem(position)
 
         holder.binding.apply {
+            if (data?.room?.first()?.actualCheckin != "Empty" && data?.room?.first()?.actualCheckout != "Empty") {
+                chipBookingStatus.setStatus(CurrentVisitorStatus.CHECKOUT, true)
+            } else if (data?.room?.first()?.actualCheckin != "Empty" && DateUtils.isTodayDate(data.checkoutDate)) {
+                chipBookingStatus.setStatus(CurrentVisitorStatus.CHECKOUT, false)
+            } else if (data.room.first().actualCheckin != "Empty" && !DateUtils.isTodayDate(
+                    data.checkoutDate
+                )
+            ) {
+                chipBookingStatus.setStatus(CurrentVisitorStatus.CHECKIN, true)
+            } else {
+                chipBookingStatus.setStatus(CurrentVisitorStatus.CHECKIN, false)
+            }
+
             tvBookingName.text = data?.visitorName
             tvBookingRoomCount.text = "${data?.roomCount} kamar"
             tvBookingRoomType.text = mapToRoomDisplay(data?.type ?: "type")
