@@ -17,6 +17,7 @@ import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.DeleteDialogType
+import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityVisitorDetailBinding
@@ -33,6 +34,8 @@ class VisitorDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVisitorDetailBinding
 
     private val visitorDetailViewModel: VisitorDetailViewModel by viewModels()
+
+    private var imageUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,19 @@ class VisitorDetailActivity : AppCompatActivity() {
         fetchBookingPagingList()
 
         validateToken()
+
+        handleViewImage()
+    }
+
+    private fun handleViewImage() {
+        binding.ivVisitorDetail.setOnClickListener {
+            if (imageUrl.isNotEmpty()) {
+                val intentToFullImageView =
+                    Intent(this@VisitorDetailActivity, FullImageViewActivity::class.java)
+                intentToFullImageView.putExtra(IMAGE_SOURCE, imageUrl)
+                startActivity(intentToFullImageView)
+            }
+        }
     }
 
     private fun validateToken() {
@@ -166,8 +182,10 @@ class VisitorDetailActivity : AppCompatActivity() {
                                 tvVisitorDetailNik.text = visitor.data.identity_num
                                 tvVisitorDetailPhone.text = visitor.data.phone
 
+                                imageUrl = visitor.data.identityImage
+
                                 Glide.with(this@VisitorDetailActivity)
-                                    .load(visitor.data.identityImage)
+                                    .load(imageUrl)
                                     .into(ivVisitorDetail)
                             }
                         }
@@ -194,5 +212,7 @@ class VisitorDetailActivity : AppCompatActivity() {
         private const val VISITOR_ID = "visitor_id"
         private const val VISITOR_UPDATE = "visitor_update"
         private const val BOOKING_DATA = "booking_data"
+
+        private const val IMAGE_SOURCE = "image_source"
     }
 }

@@ -40,7 +40,7 @@ object DateUtils {
 
     fun getCompleteCurrentDateTime(): String {
         val calendar = Calendar.getInstance()
-        val completeDateFormat = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.getDefault())
+        val completeDateFormat = SimpleDateFormat("dd_MM_yyyy_HH:mm:ss", Locale.getDefault())
         return completeDateFormat.format(calendar.time)
     }
 

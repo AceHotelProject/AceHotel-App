@@ -19,6 +19,7 @@ import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.DateUtils.convertToDisplayDateFormat2
 import com.project.acehotel.core.utils.constants.*
 import com.project.acehotel.core.utils.formatNumber
+import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityBookingDetailBinding
@@ -36,6 +37,8 @@ class BookingDetailActivity : AppCompatActivity() {
     private val bookingDetailViewModel: BookingDetailViewModel by viewModels()
 
     private var bookingData: Booking? = null
+    private var visitorUrl: String = ""
+    private var paymentUrl: String = ""
 
     private var fabMenuState: FabMenuState = FabMenuState.COLLAPSED
 
@@ -56,6 +59,34 @@ class BookingDetailActivity : AppCompatActivity() {
         handleFab()
 
         validateToken()
+
+        handleViewImage()
+
+        handleRefresh()
+    }
+
+    private fun handleRefresh() {
+        binding.refConfirm.setOnRefreshListener {
+            initBookingData()
+        }
+    }
+
+    private fun handleViewImage() {
+        binding.apply {
+            ivConfirmVisitor.setOnClickListener {
+                val intentToFullImageView =
+                    Intent(this@BookingDetailActivity, FullImageViewActivity::class.java)
+                intentToFullImageView.putExtra(IMAGE_SOURCE, visitorUrl)
+                startActivity(intentToFullImageView)
+            }
+
+            ivConfirmPayment.setOnClickListener {
+                val intentToFullImageView =
+                    Intent(this@BookingDetailActivity, FullImageViewActivity::class.java)
+                intentToFullImageView.putExtra(IMAGE_SOURCE, paymentUrl)
+                startActivity(intentToFullImageView)
+            }
+        }
     }
 
     private fun validateToken() {
@@ -423,8 +454,10 @@ class BookingDetailActivity : AppCompatActivity() {
             tvConfirmRoomBook.text =
                 "${mapToRoomDisplay(bookingData!!.type)} (${bookingData!!.roomCount} kamar)"
 
+            paymentUrl = bookingData!!.transactionProof
+
             Glide.with(this@BookingDetailActivity)
-                .load(bookingData!!.transactionProof) to ivConfirmVisitor
+                .load(paymentUrl).into(ivConfirmPayment)
         }
     }
 
@@ -434,8 +467,11 @@ class BookingDetailActivity : AppCompatActivity() {
             tvVisitorDetailNik.text = data?.identity_num
             tvVisitorDetailPhone.text = data?.phone
             tvVisitorDetailEmail.text = data?.email
+
+            visitorUrl = data?.identityImage.toString()
+
             Glide.with(this@BookingDetailActivity)
-                .load(data?.identityImage).to(ivConfirmVisitor)
+                .load(visitorUrl).into(ivConfirmVisitor)
         }
     }
 
@@ -591,5 +627,7 @@ class BookingDetailActivity : AppCompatActivity() {
 
         private const val MENU_CHECKIN = "checkin"
         private const val MENU_CHECKOUT = "checkout"
+
+        private const val IMAGE_SOURCE = "image_source"
     }
 }

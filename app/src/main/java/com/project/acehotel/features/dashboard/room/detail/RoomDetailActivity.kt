@@ -27,6 +27,7 @@ import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.constants.RoomStatus
 import com.project.acehotel.core.utils.constants.RoomType
+import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityRoomDetailBinding
@@ -43,6 +44,7 @@ class RoomDetailActivity : AppCompatActivity() {
     private val roomDetailViewModel: RoomDetailViewModel by viewModels()
 
     private var roomData: Room? = null
+    private var roomImage: String = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +65,21 @@ class RoomDetailActivity : AppCompatActivity() {
 
         handleButtonMore()
 
+        handleImageView()
+
         handleEmptyStates(listOf(), binding.rvRoomDetailNextBooking)
         handleEmptyStates(listOf(), binding.rvRoomDetailCurrentVisitor)
+    }
+
+    private fun handleImageView() {
+        binding.ivRoomDetail.setOnClickListener {
+            if (roomImage.isNotEmpty()) {
+                val intentToFullImageView =
+                    Intent(this@RoomDetailActivity, FullImageViewActivity::class.java)
+                intentToFullImageView.putExtra(IMAGE_SOURCE, roomImage)
+                startActivity(intentToFullImageView)
+            }
+        }
     }
 
     private fun handleButtonMore() {
@@ -188,15 +203,15 @@ class RoomDetailActivity : AppCompatActivity() {
         }
 
         roomDetailViewModel.getSelectedHotelData().observe(this) { hotel ->
-            val roomImage = when (roomData!!.type) {
+            roomImage = when (roomData!!.type) {
                 RoomType.REGULAR.type -> {
-                    hotel.regularRoomImage.first()
+                    hotel.regularRoomImage
                 }
                 RoomType.EXCLUSIVE.type -> {
-                    hotel.exclusiveRoomImage.first()
+                    hotel.exclusiveRoomImage
                 }
                 else -> {
-                    hotel.regularRoomImage.first()
+                    hotel.regularRoomImage
                 }
             }
 
@@ -324,6 +339,8 @@ class RoomDetailActivity : AppCompatActivity() {
 
         private const val BOOKING_DATA = "booking_data"
         private const val VISITOR_ID = "visitor_id"
+
+        private const val IMAGE_SOURCE = "image_source"
     }
 
 }

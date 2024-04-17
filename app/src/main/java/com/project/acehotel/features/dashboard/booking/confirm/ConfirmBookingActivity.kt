@@ -20,6 +20,7 @@ import com.project.acehotel.core.domain.booking.model.AddBooking
 import com.project.acehotel.core.utils.*
 import com.project.acehotel.core.utils.constants.RoomType
 import com.project.acehotel.core.utils.constants.mapToRoomType
+import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.databinding.ActivityConfirmBookingBinding
 import com.project.acehotel.features.dashboard.MainActivity
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
@@ -42,8 +43,9 @@ class ConfirmBookingActivity : AppCompatActivity() {
     private var getFile: File? = null
 
     private var totalPrice: Int? = null
-
     private var flagUseDisc = false
+    private var visitorUrl: String = ""
+    private var paymentUrl: String = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +73,26 @@ class ConfirmBookingActivity : AppCompatActivity() {
         handleButtonSave()
 
         validateToken()
+
+        handleFullImage()
+    }
+
+    private fun handleFullImage() {
+        binding.apply {
+            ivConfirmPayment.setOnClickListener {
+                val intentToFullImageView =
+                    Intent(this@ConfirmBookingActivity, FullImageViewActivity::class.java)
+                intentToFullImageView.putExtra(IMAGE_SOURCE, paymentUrl)
+                startActivity(intentToFullImageView)
+            }
+
+            ivConfirmVisitor.setOnClickListener {
+                val intentToFullImageView =
+                    Intent(this@ConfirmBookingActivity, FullImageViewActivity::class.java)
+                intentToFullImageView.putExtra(IMAGE_SOURCE, paymentUrl)
+                startActivity(intentToFullImageView)
+            }
+        }
     }
 
     private fun validateToken() {
@@ -300,8 +322,10 @@ class ConfirmBookingActivity : AppCompatActivity() {
                                 tvVisitorDetailPhone.text = visitor.data?.phone
                                 tvVisitorDetailEmail.text = visitor.data?.email
 
+                                visitorUrl = visitor.data?.identityImage.toString()
+
                                 Glide.with(this@ConfirmBookingActivity)
-                                    .load(visitor.data?.identityImage).into(ivConfirmVisitor)
+                                    .load(visitorUrl).into(ivConfirmVisitor)
                             }
                         }
                     }
@@ -393,5 +417,7 @@ class ConfirmBookingActivity : AppCompatActivity() {
     companion object {
         private const val BOOKING_DATA = "booking_data"
         private const val PROOF_TRANSACTION = "image"
+
+        private const val IMAGE_SOURCE = "image_source"
     }
 }
