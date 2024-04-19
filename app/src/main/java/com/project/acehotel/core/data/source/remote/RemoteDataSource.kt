@@ -108,12 +108,10 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         id: String,
         hotelId: String,
         email: String,
-        username: String,
-        role: String,
     ): Flow<ApiResponse<UserResponse>> {
         return flow {
             try {
-                val response = apiService.updateUser(id, hotelId, email, username, role)
+                val response = apiService.updateUser(id, hotelId, email)
 
                 if (!response.id.isNullOrEmpty()) {
                     emit(ApiResponse.Success(response))
@@ -124,7 +122,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 emit(ApiResponse.Error(e.toString()))
                 Timber.tag("RemoteDataSource").e(e.toString())
             }
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     suspend fun deleteUser(id: String, hotelId: String): Flow<ApiResponse<Response<UserResponse>>> {

@@ -5,7 +5,9 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.project.acehotel.core.domain.auth.model.User
+import com.project.acehotel.core.utils.constants.mapToUserDisplay
 import com.project.acehotel.databinding.ItemListUserBinding
 import com.project.acehotel.features.dashboard.profile.update_user.UpdateUserActivity
 
@@ -39,24 +41,20 @@ class ManageUserAdapter(private val listUser: List<User>?, private val context: 
         val data = listUser?.get(position)
 
         holder.binding.apply {
-            tvUserCardRole.text = data?.role?.role
+            tvUserCardRole.text = mapToUserDisplay(data?.role?.role ?: "role")
             tvUserCardName.text = data?.username
             tvUserCardEmail.text = data?.email
         }
 
-        holder.binding.ibDeleteUser.setOnClickListener {
-            if (data != null) {
-                onItemCallback.onItemClicked(
-                    holder.itemView.context,
-                    data.id!!,
-                    holder.binding
-                )
-            }
-        }
-
         holder.binding.ibUpdateUser.setOnClickListener {
             val intentToUpdateUser = Intent(holder.itemView.context, UpdateUserActivity::class.java)
+            val dataToJson = Gson().toJson(data, User::class.java)
+            intentToUpdateUser.putExtra(USER_DATA, dataToJson)
             holder.itemView.context.startActivity(intentToUpdateUser)
         }
+    }
+
+    companion object {
+        private const val USER_DATA = "user_data"
     }
 }

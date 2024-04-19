@@ -15,6 +15,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.Constraints
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -115,14 +117,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCheckoutWorker() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresCharging(true)
+            .build()
         val periodicWorker =
-            PeriodicWorkRequest.Builder(CheckoutWorker::class.java, 4, TimeUnit.HOURS).build()
+            PeriodicWorkRequest.Builder(CheckoutWorker::class.java, 4, TimeUnit.HOURS)
+                .setConstraints(constraints).build()
         WorkManager.getInstance(this).enqueue(periodicWorker)
     }
 
     private fun startTokenWorker() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresCharging(true)
+            .build()
         val periodicWorker =
-            PeriodicWorkRequest.Builder(TokenWorker::class.java, 1, TimeUnit.DAYS).build()
+            PeriodicWorkRequest.Builder(TokenWorker::class.java, 1, TimeUnit.DAYS)
+                .setConstraints(constraints).build()
         WorkManager.getInstance(this).enqueue(periodicWorker)
     }
 

@@ -70,17 +70,15 @@ interface ApiService {
         @Query("hotel_id") hotelId: String,
     ): UserResponse
 
-    @PATCH("user/{id}")
+    @PATCH("users/{id}")
     @FormUrlEncoded
     suspend fun updateUser(
         @Path("id") id: String,
         @Query("hotel_id") hotelId: String,
         @Field("email") email: String,
-        @Field("username") username: String,
-        @Field("role") role: String,
     ): UserResponse
 
-    @DELETE("user/{id}")
+    @DELETE("users/{id}")
     suspend fun deleteUser(
         @Path("id") id: String,
         @Query("hotel_id") hotelId: String,
@@ -150,7 +148,7 @@ interface ApiService {
         @Field("tid") tid: String,
         @Field("inventory_id") inventoryId: String,
     ): AddTagResponse
-    
+
     @POST("tag/{id}/query")
     suspend fun setQueryTag(
         @Path("id") readerId: String,

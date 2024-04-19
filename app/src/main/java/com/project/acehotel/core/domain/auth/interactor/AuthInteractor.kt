@@ -21,15 +21,9 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
     override fun getUser(): Flow<Auth> = authRepository.getUser()
 
     override suspend fun updateUser(user: Auth) = authRepository.updateUser(user)
-    override fun updateUser(
-        id: String,
-        hotelId: String,
-        email: String,
-        username: String,
-        role: String
-    ): Flow<Resource<User>> {
-        return authRepository.updateUser(id, hotelId, email, username, role)
-    }
+    override fun updateUser(id: String, hotelId: String, email: String): Flow<Resource<User>> =
+        authRepository.updateUser(id, hotelId, email)
+
 
     override suspend fun deleteUser(user: Auth) = authRepository.deleteUser(user)
     override fun deleteUserAccount(id: String, hotelId: String): Flow<Resource<Int>> =

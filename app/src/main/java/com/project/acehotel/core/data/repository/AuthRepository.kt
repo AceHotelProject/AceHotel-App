@@ -88,8 +88,6 @@ class AuthRepository @Inject constructor(
         id: String,
         hotelId: String,
         email: String,
-        username: String,
-        role: String
     ): Flow<Resource<User>> {
         return object : NetworkBoundResource<User, UserResponse>() {
             override suspend fun fetchFromApi(response: UserResponse): User {
@@ -97,7 +95,7 @@ class AuthRepository @Inject constructor(
             }
 
             override suspend fun createCall(): Flow<ApiResponse<UserResponse>> {
-                return remoteDataSource.updateUser(id, hotelId, email, username, role)
+                return remoteDataSource.updateUser(id, hotelId, email)
             }
         }.asFlow()
     }

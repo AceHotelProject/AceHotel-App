@@ -3,7 +3,6 @@ package com.project.acehotel.features.dashboard.profile.manage_user
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,12 +10,10 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.ui.adapter.user.ManageUserAdapter
-import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityManageUserBinding
 import com.project.acehotel.databinding.ItemListUserBinding
-import com.project.acehotel.features.popup.delete.DeleteItemDialog
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -42,6 +39,14 @@ class ManageUserActivity : AppCompatActivity() {
         handleEmptyStates(listOf())
 
         validateToken()
+
+        handleRefresh()
+    }
+
+    private fun handleRefresh() {
+        binding.refFranchiseUser.setOnRefreshListener {
+            fetchListUser()
+        }
     }
 
     private fun fetchListUser() {
@@ -85,27 +90,10 @@ class ManageUserActivity : AppCompatActivity() {
 
         adapter.setOnItemClickCallback(object : ManageUserAdapter.OnItemClickCallback {
             override fun onItemClicked(context: Context, id: String, holder: ItemListUserBinding) {
-                holder.ibDeleteUser.setOnClickListener {
-                    val popUpMenu = PopupMenu(context, holder.ibDeleteUser)
-                    popUpMenu.menuInflater.inflate(R.menu.menu_detail_delete_item, popUpMenu.menu)
-
-                    popUpMenu.setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.menuDelete -> {
-                                DeleteItemDialog(
-                                    DeleteDialogType.ROOM_DETAIL,
-                                    id
-                                ).show(supportFragmentManager, "Room Dialog")
-
-                                true
-                            }
-
-                            else -> false
-                        }
-                    }
-
-                    popUpMenu.show()
-                }
+//                holder.ibUpdateUser.setOnClickListener {
+//                    val intentToUpdateUser =
+//
+//                }
             }
         })
     }

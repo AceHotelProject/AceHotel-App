@@ -40,8 +40,6 @@ interface IAuthRepository {
         id: String,
         hotelId: String,
         email: String,
-        username: String,
-        role: String,
     ): Flow<Resource<User>>
 
     fun deleteUserAccount(id: String, hotelId: String): Flow<Resource<Int>>
