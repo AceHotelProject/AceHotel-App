@@ -68,11 +68,18 @@ class BookingPagingListAdapter :
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Booking>() {
             override fun areItemsTheSame(oldItem: Booking, newItem: Booking): Boolean {
-                return oldItem == newItem
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: Booking, newItem: Booking): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.id == newItem.id &&
+                        oldItem.visitorName == newItem.visitorName &&
+                        oldItem.checkinDate == newItem.checkinDate &&
+                        oldItem.checkoutDate == newItem.checkoutDate &&
+                        oldItem.totalPrice == newItem.totalPrice &&
+                        oldItem.roomCount == newItem.roomCount &&
+                        oldItem.duration == newItem.duration &&
+                        oldItem.type == newItem.type
             }
         }
     }

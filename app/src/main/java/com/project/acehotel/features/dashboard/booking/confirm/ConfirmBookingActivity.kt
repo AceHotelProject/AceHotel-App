@@ -45,7 +45,6 @@ class ConfirmBookingActivity : AppCompatActivity() {
     private var totalPrice: Int? = null
     private var flagUseDisc = false
     private var visitorUrl: String = ""
-    private var paymentUrl: String = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,20 +77,11 @@ class ConfirmBookingActivity : AppCompatActivity() {
     }
 
     private fun handleFullImage() {
-        binding.apply {
-            ivConfirmPayment.setOnClickListener {
-                val intentToFullImageView =
-                    Intent(this@ConfirmBookingActivity, FullImageViewActivity::class.java)
-                intentToFullImageView.putExtra(IMAGE_SOURCE, paymentUrl)
-                startActivity(intentToFullImageView)
-            }
-
-            ivConfirmVisitor.setOnClickListener {
-                val intentToFullImageView =
-                    Intent(this@ConfirmBookingActivity, FullImageViewActivity::class.java)
-                intentToFullImageView.putExtra(IMAGE_SOURCE, paymentUrl)
-                startActivity(intentToFullImageView)
-            }
+        binding.ivConfirmVisitor.setOnClickListener {
+            val intentToFullImageView =
+                Intent(this@ConfirmBookingActivity, FullImageViewActivity::class.java)
+            intentToFullImageView.putExtra(IMAGE_SOURCE, visitorUrl)
+            startActivity(intentToFullImageView)
         }
     }
 
@@ -176,11 +166,19 @@ class ConfirmBookingActivity : AppCompatActivity() {
 
     private fun handleUseDiscount(discountCode: String, discountAmount: Int, roomCount: Int) {
         binding.apply {
-            val adapter = ArrayAdapter(
-                this@ConfirmBookingActivity,
-                R.layout.drop_inventory_item,
-                listOf(discountCode, "Tidak Menggunakan Diskon")
-            )
+            val adapter = if (discountCode.isNotEmpty()) {
+                ArrayAdapter(
+                    this@ConfirmBookingActivity,
+                    R.layout.drop_inventory_item,
+                    listOf(discountCode, "Tidak Menggunakan Diskon")
+                )
+            } else {
+                ArrayAdapter(
+                    this@ConfirmBookingActivity,
+                    R.layout.drop_inventory_item,
+                    listOf("Tidak Menggunakan Diskon")
+                )
+            }
 
             binding.edConfirmDiscount.apply {
                 setAdapter(adapter)

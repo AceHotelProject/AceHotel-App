@@ -44,6 +44,8 @@ class FinanceFragment : Fragment(), IManagementSearch {
 
         fetchBookingHistory(selectedDate)
 
+        fetchFinanceStat(selectedDate)
+
         setupFilter()
 
         handleRefresh()
@@ -122,8 +124,10 @@ class FinanceFragment : Fragment(), IManagementSearch {
                 }
                 is Resource.Success -> {
                     showLoading(false)
+                    Timber.tag("FINANCE").e(booking.data.toString())
 
                     if (booking.data != null) {
+
                         for (item in booking.data) {
                             if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout != "Empty") {
                                 totalRevenue += item.totalPrice

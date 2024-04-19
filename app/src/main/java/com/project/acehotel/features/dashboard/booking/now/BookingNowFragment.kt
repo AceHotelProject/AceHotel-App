@@ -65,6 +65,7 @@ class BookingNowFragment : Fragment(), IManagementSearch {
         bookingNowViewModel.executeGetPagingListBookingByHotel(filterDate, false, visitorName)
             .observe(this) { booking ->
                 lifecycleScope.launch {
+
                     adapter.submitData(booking)
                 }
             }

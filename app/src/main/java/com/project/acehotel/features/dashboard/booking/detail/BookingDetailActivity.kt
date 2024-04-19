@@ -23,7 +23,6 @@ import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityBookingDetailBinding
-import com.project.acehotel.features.dashboard.booking.add_booking.AddBookingActivity
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
@@ -100,17 +99,17 @@ class BookingDetailActivity : AppCompatActivity() {
     private fun handleButtonMore() {
         binding.btnMore.setOnClickListener {
             val popUpMenu = PopupMenu(this, binding.btnMore)
-            popUpMenu.menuInflater.inflate(R.menu.menu_detail_item, popUpMenu.menu)
+            popUpMenu.menuInflater.inflate(R.menu.menu_detail_delete_item, popUpMenu.menu)
 
             popUpMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.menuUpdate -> {
-                        val intentToUpdateItem =
-                            Intent(this, AddBookingActivity::class.java)
-
-                        startActivity(intentToUpdateItem)
-                        true
-                    }
+//                    R.id.menuUpdate -> {
+//                        val intentToUpdateItem =
+//                            Intent(this, AddBookingActivity::class.java)
+//
+//                        startActivity(intentToUpdateItem)
+//                        true
+//                    }
                     R.id.menuDelete -> {
                         if (bookingData != null) {
                             DeleteItemDialog(

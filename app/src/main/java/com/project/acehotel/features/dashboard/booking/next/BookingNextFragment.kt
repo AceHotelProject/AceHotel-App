@@ -60,7 +60,7 @@ class BookingNextFragment : Fragment(), IManagementSearch {
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvBookingNext.layoutManager = layoutManager
 
-        val filterDate = DateUtils.getDateThisYear()
+        val filterDate = DateUtils.getDateThisMonth()
         bookingNextViewModel.executeGetPagingListBookingByHotel(filterDate, false, visitorName)
             .observe(this) { booking ->
                 lifecycleScope.launch {

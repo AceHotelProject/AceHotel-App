@@ -99,7 +99,7 @@ class ListBookingPagingSource @Inject constructor(
                     } else {
                         listBooking.filter {
                             if (it.room.isNotEmpty()) {
-                                it.room.first().actualCheckin == "Empty" || it.room.first().actualCheckout != "Empty"
+                                it.room.first().actualCheckout == "Empty"
                             } else {
                                 it.id == ""
                             }
@@ -129,6 +129,7 @@ class ListBookingPagingSource @Inject constructor(
                     listOf<Booking>()
                 }
             }
+
             LoadResult.Page(
                 data = filteredList,
                 prevKey = if (position == START_PAGE_INDEX) null else position - 1,
