@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val authUseCase: AuthUseCase) : ViewModel() {
-
     fun loginUser(email: String, password: String) =
         authUseCase.loginUser(email, password).asLiveData()
 
@@ -19,13 +18,9 @@ class LoginViewModel @Inject constructor(private val authUseCase: AuthUseCase) :
         authUseCase.insertCacheUser(user)
     }
 
-    fun saveAccessToken(token: String) = viewModelScope.launch {
-        authUseCase.saveAccessToken(token)
-    }
+    fun saveAccessToken(token: String) = authUseCase.saveAccessToken(token).asLiveData()
 
-    fun saveRefreshToken(token: String) = viewModelScope.launch {
-        authUseCase.saveRefreshToken(token)
-    }
+    fun saveRefreshToken(token: String) = authUseCase.saveRefreshToken(token).asLiveData()
 
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 }

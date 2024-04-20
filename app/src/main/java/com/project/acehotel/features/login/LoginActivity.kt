@@ -129,14 +129,17 @@ class LoginActivity : AppCompatActivity() {
                     }
                     is Resource.Success -> {
                         if (result.data?.tokens != null) {
-                            try {
-                                loginViewModel.saveAccessToken(result.data.tokens.accessToken.token.toString())
-                                loginViewModel.saveRefreshToken(result.data.tokens.refreshToken.token.toString())
+                            loginViewModel.insertCacheUser(result.data)
 
-                                loginViewModel.insertCacheUser(result.data)
-                            } finally {
-                                validateToken()
-                            }
+                            loginViewModel.saveRefreshToken(result.data.tokens.refreshToken.token.toString())
+                                .observe(this) { refresh ->
+                                    loginViewModel.saveAccessToken(result.data.tokens.accessToken.token.toString())
+                                        .observe(this) { access ->
+                                            if (refresh && access) {
+                                                validateToken()
+                                            }
+                                        }
+                                }
                         }
                     }
                     else -> {}
@@ -147,8 +150,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateToken() {
         loginViewModel.getRefreshToken().observe(this) { token ->
+            Timber.tag("TOKEN").e(token.isNotEmpty().toString())
+
             if (token.isNotEmpty()) {
-                Timber.tag("TOKEN").e(token.toString())
+                Timber.tag("TOKEN 2").e(token.toString())
 
                 showLoading(false)
                 isButtonEnabled(true)

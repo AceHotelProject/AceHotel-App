@@ -29,9 +29,11 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
     override fun deleteUserAccount(id: String, hotelId: String): Flow<Resource<Int>> =
         authRepository.deleteUserAccount(id, hotelId)
 
-    override suspend fun saveAccessToken(token: String) = authRepository.saveAccessToken(token)
+    override fun saveAccessToken(token: String): Flow<Boolean> =
+        authRepository.saveAccessToken(token)
 
-    override suspend fun saveRefreshToken(token: String) = authRepository.saveRefreshToken(token)
+    override fun saveRefreshToken(token: String): Flow<Boolean> =
+        authRepository.saveRefreshToken(token)
 
     override fun getAccessToken(): Flow<String> = authRepository.getAccessToken()
 

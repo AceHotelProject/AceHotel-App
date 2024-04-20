@@ -123,11 +123,11 @@ class AuthRepository @Inject constructor(
         }.asFlow()
     }
 
-    override suspend fun saveAccessToken(token: String) {
+    override fun saveAccessToken(token: String): Flow<Boolean> {
         return userManager.saveAccessToken(token)
     }
 
-    override suspend fun saveRefreshToken(token: String) {
+    override fun saveRefreshToken(token: String): Flow<Boolean> {
         return userManager.saveRefreshToken(token)
     }
 

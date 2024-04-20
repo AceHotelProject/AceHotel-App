@@ -22,7 +22,6 @@ object AuthDataMapper {
             username = input.user?.username ?: "Empty",
             email = input.user?.email ?: "Empty",
             id = input.user?.id ?: "Empty",
-            hotelId = input.user?.hotelId ?: listOf()
         ),
         tokens = Tokens(
             accessToken = TokensFormat(
@@ -41,7 +40,6 @@ object AuthDataMapper {
         role = input.user?.role,
         username = input.user?.username,
         email = input.user?.email,
-        hotelId = input.user?.hotelId.toString(),
         tokenInfo = TokenEntity(
             accessToken = input.tokens?.accessToken?.token,
             accessTokenExpire = input.tokens?.accessToken?.expires,
@@ -57,7 +55,6 @@ object AuthDataMapper {
             username = input?.username ?: "Empty",
             email = input?.email ?: "Empty",
             id = input?.userId ?: "Empty",
-            hotelId = convertStringToList(input?.hotelId.toString())
         ),
         tokens = Tokens(
             accessToken = TokensFormat(
@@ -76,7 +73,6 @@ object AuthDataMapper {
         username = input.username ?: "Empty",
         email = input.email ?: "Empty",
         role = mapToUserRole(input.role ?: "role"),
-        hotelId = input.hotelId ?: listOf<String>(),
     )
 
     fun mapListUserResponseToDomain(input: ListUserResponse): List<User> =
@@ -86,7 +82,6 @@ object AuthDataMapper {
                 username = user?.username ?: "Empty",
                 email = user?.email ?: "Empty",
                 role = mapToUserRole(user?.role ?: "role"),
-                hotelId = user?.hotelId ?: listOf<String>(),
             )
         } ?: listOf()
 

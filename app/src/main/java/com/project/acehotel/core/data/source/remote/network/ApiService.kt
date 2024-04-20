@@ -50,6 +50,7 @@ interface ApiService {
     ): RefreshTokenResponse
 
     @POST("auth/forgot-password")
+    @FormUrlEncoded
     suspend fun forgetPassword(
         @Field("email") email: String
     ): Response<AuthResponse>

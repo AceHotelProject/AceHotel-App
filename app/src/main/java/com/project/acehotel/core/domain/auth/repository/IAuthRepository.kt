@@ -20,9 +20,9 @@ interface IAuthRepository {
 
     suspend fun deleteUser(user: Auth)
 
-    suspend fun saveAccessToken(token: String)
+    fun saveAccessToken(token: String): Flow<Boolean>
 
-    suspend fun saveRefreshToken(token: String)
+    fun saveRefreshToken(token: String): Flow<Boolean>
 
     fun getAccessToken(): Flow<String>
 
