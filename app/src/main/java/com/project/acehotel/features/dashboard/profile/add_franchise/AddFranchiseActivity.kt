@@ -20,6 +20,7 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.*
 import com.project.acehotel.core.utils.constants.DeleteDialogType
+import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.databinding.ActivityAddFranchiseBinding
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
@@ -53,8 +54,6 @@ class AddFranchiseActivity : AppCompatActivity() {
 
         binding = ActivityAddFranchiseBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        isButtonEnabled(false)
 
         isButtonEnabled(false)
 
@@ -94,6 +93,8 @@ class AddFranchiseActivity : AppCompatActivity() {
                     isEditable(false)
 
                     setupButtonMore(hotelId)
+
+                    handleFullImageView()
                 }
             }
             FLAG_HOTEL_UPDATE -> {
@@ -113,6 +114,25 @@ class AddFranchiseActivity : AppCompatActivity() {
                 binding.tvTitle.text = "Tambah Hotel"
 
                 handleAddHotelSaveButton()
+            }
+        }
+    }
+
+    private fun handleFullImageView() {
+        binding.apply {
+            if (savedRegularRoomImage.isNotEmpty()) {
+                addFranchisePhotoRegular1.setOnClickListener {
+                    val intentToFullImageView =
+                        Intent(this@AddFranchiseActivity, FullImageViewActivity::class.java)
+                    intentToFullImageView.putExtra(IMAGE_SOURCE, savedRegularRoomImage)
+                    startActivity(intentToFullImageView)
+                }
+            }
+            if (savedExclusiveRoomImage.isNotEmpty()) {
+                val intentToFullImageView =
+                    Intent(this@AddFranchiseActivity, FullImageViewActivity::class.java)
+                intentToFullImageView.putExtra(IMAGE_SOURCE, savedExclusiveRoomImage)
+                startActivity(intentToFullImageView)
             }
         }
     }
@@ -144,10 +164,10 @@ class AddFranchiseActivity : AppCompatActivity() {
             layoutAddFranchiseInventoryName.visibility = View.GONE
 
             textView14.visibility = View.GONE
-            layoutAddFranchiseInventoryPassConfirm.visibility = View.GONE
+            layoutAddFranchiseReceptionistPassConfirm.visibility = View.GONE
 
             textView13.visibility = View.GONE
-            layoutAddFranchiseInventoryPass.visibility = View.GONE
+            layoutAddFranchiseReceptionistPass.visibility = View.GONE
 
             textView12.visibility = View.GONE
             layoutAddFranchiseReceptionistEmail.visibility = View.GONE
@@ -1343,179 +1363,194 @@ class AddFranchiseActivity : AppCompatActivity() {
                 if (edAddFranchiseRoomBedPrice.text.toString() == "") 0
                 else edAddFranchiseRoomBedPrice.text.toString().toInt()
 
-            val ownerName = edAddFranchiseOwnerName.text.toString()
-            val ownerEmail = edAddFranchiseOwnerEmail.text.toString()
-            val ownerPass = edAddFranchiseOwnerPass.text.toString()
-            val ownerPassConfirm = edAddFranchiseOwnerPassConfirm.text.toString()
+            if (intent.getStringExtra(FLAG_HOTEL_UI) == FLAG_HOTEL_UPDATE) {
+                Timber.tag("UPDATE").e("masuk bro sini")
 
-            val receptionistName = edAddFranchiseReceptionistName.text.toString()
-            val receptionistEmail = edAddFranchiseReceptionistEmail.text.toString()
-            val receptionistPass = edAddFranchiseReceptionistPass.text.toString()
-            val receptionistPassConfirm = edAddFranchiseReceptionistPassConfirm.text.toString()
-
-            val inventoryName = edAddFranchiseInventoryName.text.toString()
-            val inventoryEmail = edAddFranchiseInventoryEmail.text.toString()
-            val inventoryPass = edAddFranchiseInventoryPass.text.toString()
-            val inventoryPassConfirm = edAddFranchiseInventoryPassConfirm.text.toString()
-
-            val cleaningName = edAddFranchiseCleaningName.text.toString()
-            val cleaningEmail = edAddFranchiseCleaningEmail.text.toString()
-            val cleaningPass = edAddFranchiseCleaningPass.text.toString()
-            val cleaningPassConfirm = edAddFranchiseCleaningPassConfirm.text.toString()
-
-
-            // OWNER
-            if (!Patterns.EMAIL_ADDRESS.matcher(ownerEmail).matches() && ownerEmail != "") {
-                layoutAddFranchiseOwnerEmail.error = getString(R.string.wrong_email_format)
+                isButtonEnabled(
+                    hotelName.isNotEmpty() && layoutAddFranchiseName.error == null &&
+                            hotelAddress.isNotEmpty() && layoutAddFranchiseAddress.error == null &&
+                            hotelContact.isNotEmpty() && layoutAddFranchiseContact.error == null &&
+                            regularCount >= MIN_ROOM_COUNT && regularCount <= MAX_ROOM_COUNT &&
+                            regularPrice >= MIN_ROOM_PRICE && regularPrice <= MAX_ROOM_PRICE &&
+                            exclusiveCount > MIN_ROOM_COUNT && exclusiveCount <= MAX_ROOM_COUNT &&
+                            exclusivePrice >= MIN_ROOM_PRICE && exclusivePrice <= MAX_ROOM_PRICE &&
+                            bedPrice >= MIN_BED_PRICE && bedPrice <= MAX_BED_PRICE
+                )
             } else {
-                layoutAddFranchiseOwnerEmail.error = null
-            }
+                val ownerName = edAddFranchiseOwnerName.text.toString()
+                val ownerEmail = edAddFranchiseOwnerEmail.text.toString()
+                val ownerPass = edAddFranchiseOwnerPass.text.toString()
+                val ownerPassConfirm = edAddFranchiseOwnerPassConfirm.text.toString()
 
-            if (ownerPass.length < 8) {
-                layoutAddFranchiseOwnerPass.error =
-                    getString(R.string.wrong_password_format)
-            } else {
-                layoutAddFranchiseOwnerPass.error = null
-            }
+                val receptionistName = edAddFranchiseReceptionistName.text.toString()
+                val receptionistEmail = edAddFranchiseReceptionistEmail.text.toString()
+                val receptionistPass = edAddFranchiseReceptionistPass.text.toString()
+                val receptionistPassConfirm = edAddFranchiseReceptionistPassConfirm.text.toString()
 
-            if (ownerPassConfirm.length < 8) {
-                layoutAddFranchiseOwnerPassConfirm.error =
-                    getString(R.string.wrong_password_format)
-            } else {
-                if (ownerPass != ownerPassConfirm) {
-                    layoutAddFranchiseOwnerPass.error = getString(R.string.diff_password)
-                    layoutAddFranchiseOwnerPassConfirm.error =
-                        getString(R.string.diff_password)
+                val inventoryName = edAddFranchiseInventoryName.text.toString()
+                val inventoryEmail = edAddFranchiseInventoryEmail.text.toString()
+                val inventoryPass = edAddFranchiseInventoryPass.text.toString()
+                val inventoryPassConfirm = edAddFranchiseInventoryPassConfirm.text.toString()
+
+                val cleaningName = edAddFranchiseCleaningName.text.toString()
+                val cleaningEmail = edAddFranchiseCleaningEmail.text.toString()
+                val cleaningPass = edAddFranchiseCleaningPass.text.toString()
+                val cleaningPassConfirm = edAddFranchiseCleaningPassConfirm.text.toString()
+
+
+                // OWNER
+                if (!Patterns.EMAIL_ADDRESS.matcher(ownerEmail).matches() && ownerEmail != "") {
+                    layoutAddFranchiseOwnerEmail.error = getString(R.string.wrong_email_format)
+                } else {
+                    layoutAddFranchiseOwnerEmail.error = null
+                }
+
+                if (ownerPass.length < 8) {
+                    layoutAddFranchiseOwnerPass.error =
+                        getString(R.string.wrong_password_format)
                 } else {
                     layoutAddFranchiseOwnerPass.error = null
-                    layoutAddFranchiseOwnerPassConfirm.error = null
                 }
-            }
-            // OWNER
 
-            // RECEPTIONIST
-            if (!Patterns.EMAIL_ADDRESS.matcher(receptionistEmail)
-                    .matches() && receptionistEmail != ""
-            ) {
-                layoutAddFranchiseReceptionistEmail.error =
-                    getString(R.string.wrong_email_format)
-            } else {
-                layoutAddFranchiseReceptionistEmail.error = null
-            }
+                if (ownerPassConfirm.length < 8) {
+                    layoutAddFranchiseOwnerPassConfirm.error =
+                        getString(R.string.wrong_password_format)
+                } else {
+                    if (ownerPass != ownerPassConfirm) {
+                        layoutAddFranchiseOwnerPass.error = getString(R.string.diff_password)
+                        layoutAddFranchiseOwnerPassConfirm.error =
+                            getString(R.string.diff_password)
+                    } else {
+                        layoutAddFranchiseOwnerPass.error = null
+                        layoutAddFranchiseOwnerPassConfirm.error = null
+                    }
+                }
+                // OWNER
 
-            if (receptionistPass.length < 8) {
-                layoutAddFranchiseReceptionistPass.error =
-                    getString(R.string.wrong_password_format)
-            } else {
-                layoutAddFranchiseReceptionistPass.error = null
-            }
+                // RECEPTIONIST
+                if (!Patterns.EMAIL_ADDRESS.matcher(receptionistEmail)
+                        .matches() && receptionistEmail != ""
+                ) {
+                    layoutAddFranchiseReceptionistEmail.error =
+                        getString(R.string.wrong_email_format)
+                } else {
+                    layoutAddFranchiseReceptionistEmail.error = null
+                }
 
-            if (receptionistPassConfirm.length < 8) {
-                layoutAddFranchiseReceptionistPassConfirm.error =
-                    getString(R.string.wrong_password_format)
-            } else {
-                if (receptionistPass != receptionistPassConfirm) {
+                if (receptionistPass.length < 8) {
                     layoutAddFranchiseReceptionistPass.error =
-                        getString(R.string.diff_password)
-                    layoutAddFranchiseReceptionistPassConfirm.error =
-                        getString(R.string.diff_password)
+                        getString(R.string.wrong_password_format)
                 } else {
                     layoutAddFranchiseReceptionistPass.error = null
-                    layoutAddFranchiseReceptionistPassConfirm.error = null
                 }
-            }
-            // RECEPTIONIST
 
-            // INVENTORY
-            if (!Patterns.EMAIL_ADDRESS.matcher(inventoryEmail)
-                    .matches() && inventoryEmail != ""
-            ) {
-                layoutAddFranchiseInventoryEmail.error =
-                    getString(R.string.wrong_email_format)
-            } else {
-                layoutAddFranchiseInventoryEmail.error = null
-            }
+                if (receptionistPassConfirm.length < 8) {
+                    layoutAddFranchiseReceptionistPassConfirm.error =
+                        getString(R.string.wrong_password_format)
+                } else {
+                    if (receptionistPass != receptionistPassConfirm) {
+                        layoutAddFranchiseReceptionistPass.error =
+                            getString(R.string.diff_password)
+                        layoutAddFranchiseReceptionistPassConfirm.error =
+                            getString(R.string.diff_password)
+                    } else {
+                        layoutAddFranchiseReceptionistPass.error = null
+                        layoutAddFranchiseReceptionistPassConfirm.error = null
+                    }
+                }
+                // RECEPTIONIST
 
-            if (inventoryPass.length < 8) {
-                layoutAddFranchiseInventoryPass.error =
-                    getString(R.string.wrong_password_format)
-            } else {
-                layoutAddFranchiseInventoryPass.error = null
-            }
+                // INVENTORY
+                if (!Patterns.EMAIL_ADDRESS.matcher(inventoryEmail)
+                        .matches() && inventoryEmail != ""
+                ) {
+                    layoutAddFranchiseInventoryEmail.error =
+                        getString(R.string.wrong_email_format)
+                } else {
+                    layoutAddFranchiseInventoryEmail.error = null
+                }
 
-            if (inventoryPassConfirm.length < 8) {
-                layoutAddFranchiseInventoryPassConfirm.error =
-                    getString(R.string.wrong_password_format)
-            } else {
-                if (inventoryPass != inventoryPassConfirm) {
+                if (inventoryPass.length < 8) {
                     layoutAddFranchiseInventoryPass.error =
-                        getString(R.string.diff_password)
-                    layoutAddFranchiseInventoryPassConfirm.error =
-                        getString(R.string.diff_password)
+                        getString(R.string.wrong_password_format)
                 } else {
                     layoutAddFranchiseInventoryPass.error = null
-                    layoutAddFranchiseInventoryPassConfirm.error = null
                 }
-            }
-            // INVENTORY
 
-            // CLEANING
-            if (!Patterns.EMAIL_ADDRESS.matcher(cleaningEmail)
-                    .matches() && cleaningEmail != ""
-            ) {
-                layoutAddFranchiseCleaningEmail.error =
-                    getString(R.string.wrong_email_format)
-            } else {
-                layoutAddFranchiseCleaningEmail.error = null
-            }
+                if (inventoryPassConfirm.length < 8) {
+                    layoutAddFranchiseInventoryPassConfirm.error =
+                        getString(R.string.wrong_password_format)
+                } else {
+                    if (inventoryPass != inventoryPassConfirm) {
+                        layoutAddFranchiseInventoryPass.error =
+                            getString(R.string.diff_password)
+                        layoutAddFranchiseInventoryPassConfirm.error =
+                            getString(R.string.diff_password)
+                    } else {
+                        layoutAddFranchiseInventoryPass.error = null
+                        layoutAddFranchiseInventoryPassConfirm.error = null
+                    }
+                }
+                // INVENTORY
 
-            if (cleaningPass.length < 8) {
-                layoutAddFranchiseCleaningPass.error =
-                    getString(R.string.wrong_password_format)
-            } else {
-                layoutAddFranchiseCleaningPass.error = null
-            }
+                // CLEANING
+                if (!Patterns.EMAIL_ADDRESS.matcher(cleaningEmail)
+                        .matches() && cleaningEmail != ""
+                ) {
+                    layoutAddFranchiseCleaningEmail.error =
+                        getString(R.string.wrong_email_format)
+                } else {
+                    layoutAddFranchiseCleaningEmail.error = null
+                }
 
-            if (cleaningPassConfirm.length < 8) {
-                layoutAddFranchiseCleaningPassConfirm.error =
-                    getString(R.string.wrong_password_format)
-            } else {
-                if (cleaningPass != cleaningPassConfirm) {
+                if (cleaningPass.length < 8) {
                     layoutAddFranchiseCleaningPass.error =
-                        getString(R.string.diff_password)
-                    layoutAddFranchiseCleaningPassConfirm.error =
-                        getString(R.string.diff_password)
+                        getString(R.string.wrong_password_format)
                 } else {
                     layoutAddFranchiseCleaningPass.error = null
-                    layoutAddFranchiseCleaningPassConfirm.error = null
                 }
-            }
-            // CLEANING
 
-            isButtonEnabled(
-                hotelName.isNotEmpty() && layoutAddFranchiseName.error == null &&
-                        hotelAddress.isNotEmpty() && layoutAddFranchiseAddress.error == null &&
-                        hotelContact.isNotEmpty() && layoutAddFranchiseContact.error == null &&
-                        regularCount >= MIN_ROOM_COUNT && regularCount <= MAX_ROOM_COUNT &&
-                        regularPrice >= MIN_ROOM_PRICE && regularPrice <= MAX_ROOM_PRICE &&
-                        exclusiveCount > MIN_ROOM_COUNT && exclusiveCount <= MAX_ROOM_COUNT &&
-                        exclusivePrice >= MIN_ROOM_PRICE && exclusivePrice <= MAX_ROOM_PRICE &&
-                        bedPrice >= MIN_BED_PRICE && bedPrice <= MAX_BED_PRICE &&
-                        ownerName.isNotEmpty() && layoutAddFranchiseOwnerName.error == null &&
-                        ownerEmail.isNotEmpty() && layoutAddFranchiseOwnerEmail.error == null &&
-                        ownerPass.isNotEmpty() && layoutAddFranchiseOwnerPass.error == null &&
-                        receptionistName.isNotEmpty() && layoutAddFranchiseReceptionistName.error == null &&
-                        receptionistEmail.isNotEmpty() && layoutAddFranchiseReceptionistEmail.error == null &&
-                        receptionistPass.isNotEmpty() && layoutAddFranchiseReceptionistPass.error == null &&
-                        inventoryName.isNotEmpty() && layoutAddFranchiseInventoryName.error == null &&
-                        inventoryEmail.isNotEmpty() && layoutAddFranchiseInventoryEmail.error == null &&
-                        inventoryPass.isNotEmpty() && layoutAddFranchiseInventoryPass.error == null &&
-                        cleaningName.isNotEmpty() && layoutAddFranchiseCleaningName.error == null &&
-                        cleaningEmail.isNotEmpty() && layoutAddFranchiseCleaningEmail.error == null &&
-                        cleaningPass.isNotEmpty() && layoutAddFranchiseCleaningPass.error == null &&
-                        getFileRegular1 != null &&
-                        getFileExclusive1 != null
-            )
+                if (cleaningPassConfirm.length < 8) {
+                    layoutAddFranchiseCleaningPassConfirm.error =
+                        getString(R.string.wrong_password_format)
+                } else {
+                    if (cleaningPass != cleaningPassConfirm) {
+                        layoutAddFranchiseCleaningPass.error =
+                            getString(R.string.diff_password)
+                        layoutAddFranchiseCleaningPassConfirm.error =
+                            getString(R.string.diff_password)
+                    } else {
+                        layoutAddFranchiseCleaningPass.error = null
+                        layoutAddFranchiseCleaningPassConfirm.error = null
+                    }
+                }
+                // CLEANING
+
+                isButtonEnabled(
+                    hotelName.isNotEmpty() && layoutAddFranchiseName.error == null &&
+                            hotelAddress.isNotEmpty() && layoutAddFranchiseAddress.error == null &&
+                            hotelContact.isNotEmpty() && layoutAddFranchiseContact.error == null &&
+                            regularCount >= MIN_ROOM_COUNT && regularCount <= MAX_ROOM_COUNT &&
+                            regularPrice >= MIN_ROOM_PRICE && regularPrice <= MAX_ROOM_PRICE &&
+                            exclusiveCount > MIN_ROOM_COUNT && exclusiveCount <= MAX_ROOM_COUNT &&
+                            exclusivePrice >= MIN_ROOM_PRICE && exclusivePrice <= MAX_ROOM_PRICE &&
+                            bedPrice >= MIN_BED_PRICE && bedPrice <= MAX_BED_PRICE &&
+                            ownerName.isNotEmpty() && layoutAddFranchiseOwnerName.error == null &&
+                            ownerEmail.isNotEmpty() && layoutAddFranchiseOwnerEmail.error == null &&
+                            ownerPass.isNotEmpty() && layoutAddFranchiseOwnerPass.error == null &&
+                            receptionistName.isNotEmpty() && layoutAddFranchiseReceptionistName.error == null &&
+                            receptionistEmail.isNotEmpty() && layoutAddFranchiseReceptionistEmail.error == null &&
+                            receptionistPass.isNotEmpty() && layoutAddFranchiseReceptionistPass.error == null &&
+                            inventoryName.isNotEmpty() && layoutAddFranchiseInventoryName.error == null &&
+                            inventoryEmail.isNotEmpty() && layoutAddFranchiseInventoryEmail.error == null &&
+                            inventoryPass.isNotEmpty() && layoutAddFranchiseInventoryPass.error == null &&
+                            cleaningName.isNotEmpty() && layoutAddFranchiseCleaningName.error == null &&
+                            cleaningEmail.isNotEmpty() && layoutAddFranchiseCleaningEmail.error == null &&
+                            cleaningPass.isNotEmpty() && layoutAddFranchiseCleaningPass.error == null &&
+                            getFileRegular1 != null &&
+                            getFileExclusive1 != null
+                )
+            }
         }
     }
 
@@ -1562,5 +1597,9 @@ class AddFranchiseActivity : AppCompatActivity() {
         private const val FLAG_HOTEL_UPDATE = "hotel_update"
 
         private const val HOTEL_ID = "hotel_id"
+
+        private const val IMAGE_SOURCE = "image_source"
+
+        private const val VISITOR_ID = "visitor_id"
     }
 }
