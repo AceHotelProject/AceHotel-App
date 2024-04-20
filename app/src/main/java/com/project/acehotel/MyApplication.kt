@@ -30,7 +30,7 @@ open class MyApplication : Application(), Configuration.Provider {
 
         startTokenWorker()
 
-        startTokenWorker()
+        startCheckoutWorker()
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -42,7 +42,7 @@ open class MyApplication : Application(), Configuration.Provider {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
         val periodicWorker =
-            PeriodicWorkRequest.Builder(CheckoutWorker::class.java, 2, TimeUnit.DAYS)
+            PeriodicWorkRequest.Builder(CheckoutWorker::class.java, 4, TimeUnit.HOURS)
                 .setConstraints(constraints).build()
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "checkoutWorker",
