@@ -15,10 +15,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
@@ -27,8 +23,6 @@ import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showLongToast
 import com.project.acehotel.core.utils.showToast
-import com.project.acehotel.core.utils.worker.CheckoutWorker
-import com.project.acehotel.core.utils.worker.TokenWorker
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
@@ -38,7 +32,6 @@ import com.project.acehotel.features.popup.choose_hotel.ChooseHotelDialog
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -67,10 +60,6 @@ class MainActivity : AppCompatActivity() {
 
         checkNotificationPermission()
 
-        startTokenWorker()
-
-        startCheckoutWorker()
-
         checkNotCheckout()
     }
 
@@ -84,7 +73,6 @@ class MainActivity : AppCompatActivity() {
                         showToast(getString(R.string.check_internet))
                     } else {
                         showToast(booking.message.toString())
-
                     }
                 }
                 is Resource.Loading -> {
@@ -114,28 +102,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun startCheckoutWorker() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresCharging(true)
-            .build()
-        val periodicWorker =
-            PeriodicWorkRequest.Builder(CheckoutWorker::class.java, 4, TimeUnit.HOURS)
-                .setConstraints(constraints).build()
-        WorkManager.getInstance(this).enqueue(periodicWorker)
-    }
-
-    private fun startTokenWorker() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresCharging(true)
-            .build()
-        val periodicWorker =
-            PeriodicWorkRequest.Builder(TokenWorker::class.java, 1, TimeUnit.DAYS)
-                .setConstraints(constraints).build()
-        WorkManager.getInstance(this).enqueue(periodicWorker)
     }
 
     private val requestPermissionLauncher =
