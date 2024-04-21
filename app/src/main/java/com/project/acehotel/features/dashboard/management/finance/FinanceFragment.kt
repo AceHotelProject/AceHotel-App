@@ -19,8 +19,11 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
+import com.project.acehotel.core.utils.IUserLayout
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.core.utils.constants.filterDateList
 import com.project.acehotel.core.utils.constants.mapToFilterDateValue
+import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentFinanceBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import com.project.acehotel.features.dashboard.management.IManagementSearch
@@ -29,7 +32,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class FinanceFragment : Fragment(), IManagementSearch {
+class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
     private var _binding: FragmentFinanceBinding? = null
     private val binding get() = _binding!!
 
@@ -51,6 +54,14 @@ class FinanceFragment : Fragment(), IManagementSearch {
         handleRefresh()
 
         handleEmptyState(true)
+
+        checkUserRole()
+    }
+
+    private fun checkUserRole() {
+        financeViewModel.getUser().observe(requireActivity()) { user ->
+            user.user?.role?.let { changeLayoutByUser(it) }
+        }
     }
 
     private fun handleRefresh() {
@@ -195,6 +206,29 @@ class FinanceFragment : Fragment(), IManagementSearch {
     }
 
     override fun onSearchQuery(query: String) {
+        activity?.showToast("Pencarian booking tidak dapat dilakukan, silahkan lakukan pencarian pada bagian halaman \"Pesan\"")
+    }
 
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+
+            }
+            UserRole.FRANCHISE -> {
+
+            }
+            UserRole.INVENTORY_STAFF -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+            UserRole.RECEPTIONIST -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+        }
     }
 }
