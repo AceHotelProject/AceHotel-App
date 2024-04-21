@@ -15,13 +15,10 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.visitor.model.Visitor
-import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.*
 import com.project.acehotel.core.utils.DateUtils.convertToDisplayDateFormat2
 import com.project.acehotel.core.utils.constants.*
-import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
-import com.project.acehotel.core.utils.isInternetAvailable
-import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityBookingDetailBinding
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
@@ -30,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class BookingDetailActivity : AppCompatActivity() {
+class BookingDetailActivity : AppCompatActivity(), IUserLayout {
     private lateinit var binding: ActivityBookingDetailBinding
 
     private val bookingDetailViewModel: BookingDetailViewModel by viewModels()
@@ -62,6 +59,14 @@ class BookingDetailActivity : AppCompatActivity() {
         handleViewImage()
 
         handleRefresh()
+
+        checkUserRole()
+    }
+
+    private fun checkUserRole() {
+        bookingDetailViewModel.getUser().observe(this) { user ->
+            user.user?.role?.let { changeLayoutByUser(it) }
+        }
     }
 
     private fun handleRefresh() {
@@ -628,5 +633,28 @@ class BookingDetailActivity : AppCompatActivity() {
         private const val MENU_CHECKOUT = "checkout"
 
         private const val IMAGE_SOURCE = "image_source"
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+
+            }
+            UserRole.FRANCHISE -> {
+
+            }
+            UserRole.INVENTORY_STAFF -> {
+                binding.btnMore.visibility = View.GONE
+            }
+            UserRole.RECEPTIONIST -> {
+                binding.btnMore.visibility = View.GONE
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                binding.btnMore.visibility = View.GONE
+            }
+        }
     }
 }

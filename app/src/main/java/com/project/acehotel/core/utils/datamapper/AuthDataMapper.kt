@@ -12,6 +12,7 @@ import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.core.utils.constants.mapToUserRole
 import org.json.JSONArray
+import org.json.JSONException
 
 object AuthDataMapper {
 
@@ -22,6 +23,7 @@ object AuthDataMapper {
             username = input.user?.username ?: "Empty",
             email = input.user?.email ?: "Empty",
             id = input.user?.id ?: "Empty",
+            hotelId = input.user?.hotelId ?: listOf()
         ),
         tokens = Tokens(
             accessToken = TokensFormat(
@@ -55,6 +57,7 @@ object AuthDataMapper {
             username = input?.username ?: "Empty",
             email = input?.email ?: "Empty",
             id = input?.userId ?: "Empty",
+            hotelId = convertStringToList(input?.hotelId.toString())
         ),
         tokens = Tokens(
             accessToken = TokensFormat(
@@ -73,6 +76,7 @@ object AuthDataMapper {
         username = input.username ?: "Empty",
         email = input.email ?: "Empty",
         role = mapToUserRole(input.role ?: "role"),
+        hotelId = input.hotelId ?: listOf()
     )
 
     fun mapListUserResponseToDomain(input: ListUserResponse): List<User> =
@@ -82,17 +86,24 @@ object AuthDataMapper {
                 username = user?.username ?: "Empty",
                 email = user?.email ?: "Empty",
                 role = mapToUserRole(user?.role ?: "role"),
+                hotelId = user?.hotelId ?: listOf()
             )
         } ?: listOf()
 
     private fun convertStringToList(input: String): List<String> {
-        val jsonArray = JSONArray(input)
-
-        val outputList = mutableListOf<String>()
-        for (i in 0 until jsonArray.length()) {
-            outputList.add(jsonArray.getString(i))
+        if (input.isBlank()) {
+            return emptyList()  // Return an empty list if input is blank
         }
-
-        return outputList
+        try {
+            val jsonArray = JSONArray(input)
+            val outputList = mutableListOf<String>()
+            for (i in 0 until jsonArray.length()) {
+                outputList.add(jsonArray.getString(i))
+            }
+            return outputList
+        } catch (e: JSONException) {
+            println("Error parsing JSON: ${e.localizedMessage}")
+            return emptyList()
+        }
     }
 }

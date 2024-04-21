@@ -20,6 +20,7 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.*
 import com.project.acehotel.core.utils.constants.DeleteDialogType
+import com.project.acehotel.core.utils.datamapper.HotelDataMapper
 import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.databinding.ActivityAddFranchiseBinding
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
@@ -70,6 +71,33 @@ class AddFranchiseActivity : AppCompatActivity() {
         enableRefresh(false)
 
         validateToken()
+
+        lockPassword()
+    }
+
+    private fun lockPassword() {
+        binding.apply {
+            isEditTextEditable(edAddFranchiseOwnerPass, false)
+            isEditTextEditable(edAddFranchiseOwnerPassConfirm, false)
+            edAddFranchiseOwnerPass.setText(DEFAULT_INITIAL_PASSWORD)
+            edAddFranchiseOwnerPassConfirm.setText(DEFAULT_INITIAL_PASSWORD)
+
+
+            isEditTextEditable(edAddFranchiseReceptionistPass, false)
+            isEditTextEditable(edAddFranchiseReceptionistPassConfirm, false)
+            edAddFranchiseReceptionistPass.setText(DEFAULT_INITIAL_PASSWORD)
+            edAddFranchiseReceptionistPassConfirm.setText(DEFAULT_INITIAL_PASSWORD)
+
+            isEditTextEditable(edAddFranchiseInventoryPass, false)
+            isEditTextEditable(edAddFranchiseInventoryPassConfirm, false)
+            edAddFranchiseInventoryPass.setText(DEFAULT_INITIAL_PASSWORD)
+            edAddFranchiseInventoryPassConfirm.setText(DEFAULT_INITIAL_PASSWORD)
+
+            isEditTextEditable(edAddFranchiseCleaningPass, false)
+            isEditTextEditable(edAddFranchiseCleaningPassConfirm, false)
+            edAddFranchiseCleaningPass.setText(DEFAULT_INITIAL_PASSWORD)
+            edAddFranchiseCleaningPassConfirm.setText(DEFAULT_INITIAL_PASSWORD)
+        }
     }
 
     private fun validateToken() {
@@ -284,13 +312,23 @@ class AddFranchiseActivity : AppCompatActivity() {
                                     showLoading(false)
                                     isButtonEnabled(true)
 
-                                    showToast("Data hotel berhasil diperbaharui")
-                                    val intentToManageFranchise = Intent(
-                                        this@AddFranchiseActivity,
-                                        ManageFranchiseActivity::class.java
-                                    )
-                                    startActivity(intentToManageFranchise)
-                                    finish()
+                                    if (hotel.data != null) {
+                                        showToast("Data hotel berhasil diperbaharui")
+
+                                        val convertData =
+                                            HotelDataMapper.mapHotelToManageHotel(hotel.data)
+                                        addFranchiseViewModel.saveSelectedHotelData(convertData)
+                                            .observe(this@AddFranchiseActivity) { result ->
+                                                if (result) {
+                                                    val intentToManageFranchise = Intent(
+                                                        this@AddFranchiseActivity,
+                                                        ManageFranchiseActivity::class.java
+                                                    )
+                                                    startActivity(intentToManageFranchise)
+                                                    finish()
+                                                }
+                                            }
+                                    }
                                 }
                             }
                         }
@@ -353,6 +391,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                                     isButtonEnabled(true)
 
                                     showToast("Data hotel berhasil diperbaharui")
+
                                     val intentToManageFranchise = Intent(
                                         this@AddFranchiseActivity,
                                         ManageFranchiseActivity::class.java
@@ -419,6 +458,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                                     isButtonEnabled(true)
 
                                     showToast("Data hotel berhasil diperbaharui")
+
                                     val intentToManageFranchise = Intent(
                                         this@AddFranchiseActivity,
                                         ManageFranchiseActivity::class.java
@@ -467,6 +507,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                                 isButtonEnabled(true)
 
                                 showToast("Data hotel berhasil diperbaharui")
+
                                 val intentToManageFranchise = Intent(
                                     this@AddFranchiseActivity,
                                     ManageFranchiseActivity::class.java
@@ -1600,6 +1641,6 @@ class AddFranchiseActivity : AppCompatActivity() {
 
         private const val IMAGE_SOURCE = "image_source"
 
-        private const val VISITOR_ID = "visitor_id"
+        private const val DEFAULT_INITIAL_PASSWORD = "hotel12345"
     }
 }

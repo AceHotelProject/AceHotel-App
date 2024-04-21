@@ -15,6 +15,7 @@ import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private val id: String) :
@@ -140,6 +141,11 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         deleteItemViewModel.getSelectedHotelData().observe(this) { hotel ->
                             if (id == hotel.id) {
                                 deleteItemViewModel.saveSelectedHotelData(ManageHotel())
+                                    .observe(this@DeleteItemDialog) { hotel ->
+                                        if (hotel) {
+                                            Timber.tag("DELETE").d("Data hotel berhasil direset")
+                                        }
+                                    }
                             }
                         }
 

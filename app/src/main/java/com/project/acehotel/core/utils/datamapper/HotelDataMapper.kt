@@ -199,21 +199,21 @@ object HotelDataMapper {
             username = input.cleaningStaffId?.username ?: "Empty",
             email = input.cleaningStaffId?.email ?: "Empty",
             id = input.cleaningStaffId?.id ?: "Empty",
-            hotelId = (input.cleaningStaffId?.hotelId ?: listOf()) as List<String>
+            hotelId = (input.ownerId?.hotelId ?: listOf()) as List<String>
         ),
         receptionist = User(
             role = mapUserRole(input.receptionistId?.role ?: "role"),
             username = input.receptionistId?.username ?: "Empty",
             email = input.receptionistId?.email ?: "Empty",
             id = input.receptionistId?.id ?: "Empty",
-            hotelId = (input.receptionistId?.hotelId ?: listOf()) as List<String>
+            hotelId = (input.ownerId?.hotelId ?: listOf()) as List<String>
         ),
         inventoryStaff = User(
             role = mapUserRole(input.inventoryStaffId?.role ?: "role"),
             username = input.inventoryStaffId?.username ?: "Empty",
             email = input.inventoryStaffId?.email ?: "Empty",
             id = input.inventoryStaffId?.id ?: "Empty",
-            hotelId = (input.inventoryStaffId?.hotelId ?: listOf()) as List<String>
+            hotelId = (input.ownerId?.hotelId ?: listOf()) as List<String>
         ),
         owner = User(
             role = mapUserRole(input.ownerId?.role ?: "role"),
@@ -232,6 +232,40 @@ object HotelDataMapper {
         totalBooking = input.totalBooking ?: 0,
     )
 
-    const val PLACEHOLDER_IMAGE =
+    fun mapHotelToManageHotel(input: Hotel?): ManageHotel = ManageHotel(
+        id = input?.id ?: "Empty",
+        name = input?.name ?: "Empty",
+        address = input?.address ?: "Empty",
+        contact = input?.contact ?: "Empty",
+
+        regularRoomImage = input?.regularRoomImage ?: "Empty",
+        exclusiveRoomImage = input?.exclusiveRoomImage ?: "Empty",
+        regularRoomCount = input?.regularRoomCount ?: 0,
+        exclusiveRoomCount = input?.exclusiveRoomCount ?: 0,
+        regularRoomPrice = input?.regularRoomPrice ?: 0,
+        exclusiveRoomPrice = input?.exclusiveRoomPrice ?: 0,
+        extraBedPrice = input?.extraBedPrice ?: 0,
+
+        discount = input?.discountCode ?: "Empty",
+        discountAmount = input?.discountAmount ?: 0,
+
+        ownerId = input?.owner?.id ?: "",
+        ownerName = input?.owner?.username ?: "",
+        ownerEmail = input?.owner?.email ?: "",
+
+        receptionistId = input?.receptionist?.id ?: "",
+        receptionistName = input?.receptionist?.username ?: "",
+        receptionistEmail = input?.receptionist?.email ?: "",
+
+        cleaningStaffId = input?.cleaningStaff?.id ?: "",
+        cleaningStaffName = input?.cleaningStaff?.username ?: "",
+        cleaningStaffEmail = input?.cleaningStaff?.email ?: "",
+
+        inventoryStaffId = input?.inventoryStaff?.id ?: "",
+        inventoryStaffName = input?.inventoryStaff?.username ?: "",
+        inventoryStaffEmail = input?.inventoryStaff?.email ?: "",
+    )
+
+    private const val PLACEHOLDER_IMAGE =
         "https://storage.googleapis.com/ace-hotel/placeholder_image.png"
 }

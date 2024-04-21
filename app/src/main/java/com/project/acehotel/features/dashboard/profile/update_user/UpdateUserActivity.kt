@@ -12,6 +12,7 @@ import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.utils.constants.mapToUserDisplay
 import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.showLongToast
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityUpdateUserBinding
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
@@ -46,6 +47,45 @@ class UpdateUserActivity : AppCompatActivity() {
         handleEditText()
 
         handleSaveButton()
+
+        handleButtonChangePass()
+    }
+
+    private fun handleButtonChangePass() {
+        binding.btnChangePassword.setOnClickListener {
+            val email = binding.edUpdateUserEmail.text.toString()
+
+            updateUserViewModel.forgetPassword(email).observe(this) { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        if (!isInternetAvailable(this@UpdateUserActivity)) {
+                            showToast(getString(R.string.check_internet))
+                        } else {
+                            showToast(result.message.toString())
+                        }
+                    }
+                    is Resource.Loading -> {
+                        showLoading(true)
+                        isButtonEnabled(false)
+                    }
+                    is Resource.Message -> {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        Timber.tag("UpdateUserActivity").d(result.message)
+                    }
+                    is Resource.Success -> {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        showLongToast("Kami telah mengirimkan email untuk mengganti password pengguna, silahkan cek email $email")
+                    }
+                }
+            }
+        }
     }
 
     private fun handleEditText() {
@@ -167,6 +207,7 @@ class UpdateUserActivity : AppCompatActivity() {
         }
 
         isEditTextEditable(binding.edUpdateUserRole, false)
+        isEditTextEditable(binding.edUpdateUserName, false)
     }
 
     private fun validateToken() {

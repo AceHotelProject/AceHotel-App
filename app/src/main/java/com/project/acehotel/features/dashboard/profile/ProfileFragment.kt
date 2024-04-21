@@ -39,6 +39,10 @@ class ProfileFragment : Fragment(), IUserLayout {
 
         initUserInfo()
 
+        checkUserRole()
+    }
+
+    private fun checkUserRole() {
         profileViewModel.getUser().observe(requireActivity()) { user ->
             user.user?.role?.let { changeLayoutByUser(it) }
         }
@@ -95,10 +99,6 @@ class ProfileFragment : Fragment(), IUserLayout {
         _binding = null
     }
 
-    companion object {
-        private const val CUSTOMER_SERVICE_PHONE = "https://wa.link/anszxf"
-    }
-
     override fun changeLayoutByUser(userRole: UserRole) {
         when (userRole) {
             UserRole.MASTER -> {
@@ -114,12 +114,14 @@ class ProfileFragment : Fragment(), IUserLayout {
                 binding.apply {
                     btnProfileChooseHotel.visibility = View.GONE
                     btnProfileManageHotel.visibility = View.GONE
+                    btnProfileManageUser.visibility = View.GONE
                 }
             }
             UserRole.RECEPTIONIST -> {
                 binding.apply {
                     btnProfileChooseHotel.visibility = View.GONE
                     btnProfileManageHotel.visibility = View.GONE
+                    btnProfileManageUser.visibility = View.GONE
                 }
             }
             UserRole.ADMIN -> {
@@ -129,8 +131,13 @@ class ProfileFragment : Fragment(), IUserLayout {
                 binding.apply {
                     btnProfileChooseHotel.visibility = View.GONE
                     btnProfileManageHotel.visibility = View.GONE
+                    btnProfileManageUser.visibility = View.GONE
                 }
             }
         }
+    }
+
+    companion object {
+        private const val CUSTOMER_SERVICE_PHONE = "https://wa.link/anszxf"
     }
 }

@@ -3,7 +3,7 @@ package com.project.acehotel.core.data.repository
 import com.project.acehotel.core.data.source.NetworkBoundResource
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.data.source.local.LocalDataSource
-import com.project.acehotel.core.data.source.local.datastore.UserManager
+import com.project.acehotel.core.data.source.local.datastore.DatastoreManager
 import com.project.acehotel.core.data.source.remote.RemoteDataSource
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.response.auth.AuthResponse
@@ -30,7 +30,7 @@ class AuthRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors,
-    private val userManager: UserManager,
+    private val datastoreManager: DatastoreManager,
 ) : IAuthRepository {
 
     override fun loginUser(email: String, password: String): Flow<Resource<Auth>> {
@@ -124,23 +124,23 @@ class AuthRepository @Inject constructor(
     }
 
     override fun saveAccessToken(token: String): Flow<Boolean> {
-        return userManager.saveAccessToken(token)
+        return datastoreManager.saveAccessToken(token)
     }
 
     override fun saveRefreshToken(token: String): Flow<Boolean> {
-        return userManager.saveRefreshToken(token)
+        return datastoreManager.saveRefreshToken(token)
     }
 
     override fun getAccessToken(): Flow<String> {
-        return userManager.getAccessToken()
+        return datastoreManager.getAccessToken()
     }
 
     override fun getRefreshToken(): Flow<String> {
-        return userManager.getRefreshToken()
+        return datastoreManager.getRefreshToken()
     }
 
     override suspend fun deleteToken() {
-        return userManager.deleteToken()
+        return datastoreManager.deleteToken()
     }
 
     override fun uploadImage(image: List<MultipartBody.Part>): Flow<Resource<List<String>>> {

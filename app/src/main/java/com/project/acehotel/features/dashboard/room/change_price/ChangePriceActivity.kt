@@ -222,11 +222,13 @@ class ChangePriceActivity : AppCompatActivity() {
                                         inventoryStaffName = price.data.inventoryStaff.username.toString(),
                                         inventoryStaffEmail = price.data.inventoryStaff.email.toString()
                                     )
-                                )
+                                ).observe(this@ChangePriceActivity) { hotel ->
+                                    if (hotel) {
+                                        showToast("List harga berhasil diperbaharui")
+                                        finish()
+                                    }
+                                }
                             }
-
-                            showToast("List harga berhasil diperbaharui")
-                            finish()
                         }
                     }
                 }

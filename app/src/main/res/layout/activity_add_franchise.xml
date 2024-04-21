@@ -295,19 +295,6 @@
                     app:layout_constraintStart_toStartOf="@+id/layout_add_franchise_room_regular_count"
                     app:layout_constraintTop_toBottomOf="@+id/layout_add_franchise_room_regular_price" />
 
-                <ImageView
-                    android:id="@+id/add_franchise_photo_regular_1"
-                    android:layout_width="0dp"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_image"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
                 <!--                <HorizontalScrollView-->
                 <!--                    android:id="@+id/horizontalLayout"-->
                 <!--                    android:layout_width="match_parent"-->
@@ -356,6 +343,20 @@
                 <!--                            app:layout_constraintTop_toTopOf="parent" />-->
                 <!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
                 <!--                </HorizontalScrollView>-->
+
+                <ImageView
+                    android:id="@+id/add_franchise_photo_regular_1"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
                 <TextView
                     android:id="@+id/textView5"

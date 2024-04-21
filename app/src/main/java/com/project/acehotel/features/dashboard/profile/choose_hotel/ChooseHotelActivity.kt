@@ -104,6 +104,11 @@ class ChooseHotelActivity : AppCompatActivity() {
         adapter.setOnItemClickCallback(object : HotelListAdapter.OnItemClickCallback {
             override fun onItemClicked(context: Context, data: ManageHotel) {
                 chooseHotelViewModel.saveSelectedHotelData(data)
+                    .observe(this@ChooseHotelActivity) { hotel ->
+                        if (hotel) {
+                            Timber.tag("ChooseHotel").d("Data hotel yang diamati diperbaharui")
+                        }
+                    }
             }
         })
     }

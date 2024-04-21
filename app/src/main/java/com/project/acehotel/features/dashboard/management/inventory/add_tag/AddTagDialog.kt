@@ -82,7 +82,6 @@ class AddTagDialog(private val id: String, private val inventorName: String) : D
                     activity?.showLongToast("Tag tidak terdeteksi")
                 }
                 is Resource.Loading -> {
-                    dismiss()
                     activity?.showLongToast("Reader sedang mendeteksi tag")
                 }
                 is Resource.Message -> {

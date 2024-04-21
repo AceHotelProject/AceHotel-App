@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
-import com.project.acehotel.core.data.source.local.datastore.UserManager
+import com.project.acehotel.core.data.source.local.datastore.DatastoreManager
 import com.project.acehotel.core.data.source.local.room.UserDao
 import com.project.acehotel.core.data.source.local.room.UserDatabase
 import dagger.Module
@@ -50,8 +50,8 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideTokenManager(dataStore: DataStore<Preferences>): UserManager =
-        UserManager(dataStore)
+    fun provideTokenManager(dataStore: DataStore<Preferences>): DatastoreManager =
+        DatastoreManager(dataStore)
 
     companion object {
         const val TOKEN_MANAGER = "token_manager"

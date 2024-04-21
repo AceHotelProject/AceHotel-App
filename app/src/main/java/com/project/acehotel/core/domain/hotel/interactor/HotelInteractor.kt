@@ -120,7 +120,7 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
 
     override fun getSelectedHotelData(): Flow<ManageHotel> = hotelRepository.getSelectedHotelData()
 
-    override suspend fun saveSelectedHotelData(data: ManageHotel) =
+    override fun saveSelectedHotelData(data: ManageHotel): Flow<Boolean> =
         hotelRepository.saveSelectedHotelData(data)
 
     override fun getHotelRecap(filterDate: String): Flow<Resource<HotelRecap>> =

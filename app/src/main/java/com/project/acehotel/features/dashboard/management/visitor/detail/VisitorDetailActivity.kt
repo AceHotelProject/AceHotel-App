@@ -3,6 +3,7 @@ package com.project.acehotel.features.dashboard.management.visitor.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +17,9 @@ import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.ui.adapter.booking.BookingPagingListAdapter
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.IUserLayout
 import com.project.acehotel.core.utils.constants.DeleteDialogType
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -30,7 +33,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class VisitorDetailActivity : AppCompatActivity() {
+class VisitorDetailActivity : AppCompatActivity(), IUserLayout {
     private lateinit var binding: ActivityVisitorDetailBinding
 
     private val visitorDetailViewModel: VisitorDetailViewModel by viewModels()
@@ -117,7 +120,7 @@ class VisitorDetailActivity : AppCompatActivity() {
     private fun setupButtonMore() {
         binding.btnVisitorDetailMore.setOnClickListener {
             val popUpMenu = PopupMenu(this, binding.btnVisitorDetailMore)
-            popUpMenu.menuInflater.inflate(R.menu.menu_detail_item, popUpMenu.menu)
+            popUpMenu.menuInflater.inflate(R.menu.menu_detail_delete_item, popUpMenu.menu)
 
             popUpMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
@@ -214,5 +217,28 @@ class VisitorDetailActivity : AppCompatActivity() {
         private const val BOOKING_DATA = "booking_data"
 
         private const val IMAGE_SOURCE = "image_source"
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+
+            }
+            UserRole.FRANCHISE -> {
+
+            }
+            UserRole.INVENTORY_STAFF -> {
+                binding.btnVisitorDetailMore.visibility = View.GONE
+            }
+            UserRole.RECEPTIONIST -> {
+                binding.btnVisitorDetailMore.visibility = View.GONE
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                binding.btnVisitorDetailMore.visibility = View.GONE
+            }
+        }
     }
 }

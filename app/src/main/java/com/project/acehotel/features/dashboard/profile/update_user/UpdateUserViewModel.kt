@@ -38,4 +38,6 @@ class UpdateUserViewModel @Inject constructor(
             }
         }
     }
+
+    fun forgetPassword(email: String) = authUseCase.forgetPassword(email).asLiveData()
 }

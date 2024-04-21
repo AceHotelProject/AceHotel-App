@@ -1,6 +1,6 @@
 package com.project.acehotel.core.di.interceptor
 
-import com.project.acehotel.core.data.source.local.datastore.UserManager
+import com.project.acehotel.core.data.source.local.datastore.DatastoreManager
 import com.project.acehotel.core.data.source.remote.network.ApiResponse
 import com.project.acehotel.core.data.source.remote.network.ApiService
 import com.project.acehotel.core.data.source.remote.response.auth.RefreshTokenResponse
@@ -15,32 +15,32 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class AuthAuthenticator @Inject constructor(
-    private val userManager: UserManager,
+    private val datastoreManager: DatastoreManager,
 ) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         val refreshToken = runBlocking {
-            userManager.getRefreshToken().first().toString()
+            datastoreManager.getRefreshToken().first().toString()
         }
 
         return if (response.code == 401 && refreshToken.isNotEmpty()) {
             runBlocking {
                 when (val newRefreshToken = getNewRefreshToken(refreshToken)) {
                     ApiResponse.Empty -> {
-                        userManager.deleteToken()
+                        datastoreManager.deleteToken()
 
                         Timber.tag("AuthAuthenticator").e("Empty")
                         response.request.newBuilder().build()
                     }
                     is ApiResponse.Error -> {
-                        userManager.deleteToken()
+                        datastoreManager.deleteToken()
 
                         Timber.tag("AuthAuthenticator").e(newRefreshToken.errorMessage)
                         response.request.newBuilder().build()
                     }
                     is ApiResponse.Success -> {
-                        userManager.saveAccessToken(newRefreshToken.data.access?.token.toString())
-                        userManager.saveRefreshToken(newRefreshToken.data.refresh?.token.toString())
+                        datastoreManager.saveAccessToken(newRefreshToken.data.access?.token.toString())
+                        datastoreManager.saveRefreshToken(newRefreshToken.data.refresh?.token.toString())
 
                         response.request.newBuilder().header(
                             "Authorization",

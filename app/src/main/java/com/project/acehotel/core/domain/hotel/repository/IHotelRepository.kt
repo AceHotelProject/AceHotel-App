@@ -75,7 +75,7 @@ interface IHotelRepository {
 
     fun getSelectedHotelData(): Flow<ManageHotel>
 
-    suspend fun saveSelectedHotelData(data: ManageHotel)
+    fun saveSelectedHotelData(data: ManageHotel): Flow<Boolean>
 
     fun getHotelRecap(
         filterDate: String,

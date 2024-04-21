@@ -3,6 +3,7 @@ package com.project.acehotel.features.splash
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.project.acehotel.databinding.ActivitySplashBinding
@@ -28,32 +29,28 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkUserInfo() {
-//        splashViewModel.getUser().observe(this) { result ->
-//            if (!result.tokens?.accessToken?.token.isNullOrEmpty() && result.tokens?.accessToken?.token != "Empty") {
-//                val intentToHome = Intent(this, MainActivity::class.java)
-//                startActivity(intentToHome)
-//                finish()
-//            } else {
-//                val intentToLogin = Intent(this, LoginActivity::class.java)
-//                startActivity(intentToLogin)
-//                finish()
-//            }
-//        }
-
         splashViewModel.getAccessToken().observe(this) { token ->
             if (token != "") {
-                val intentToHome = Intent(this, MainActivity::class.java)
-                startActivity(intentToHome)
-                finish()
+                Handler().postDelayed({
+                    val intentToHome = Intent(this, MainActivity::class.java)
+                    startActivity(intentToHome)
+                    finish()
+                }, DELAY.toLong())
             } else {
-                val intentToLogin = Intent(this, LoginActivity::class.java)
-                startActivity(intentToLogin)
-                finish()
+                Handler().postDelayed({
+                    val intentToLogin = Intent(this, LoginActivity::class.java)
+                    startActivity(intentToLogin)
+                    finish()
+                }, DELAY.toLong())
             }
         }
     }
 
     private fun setupActionBar() {
         supportActionBar?.hide()
+    }
+
+    companion object {
+        private const val DELAY = 3000
     }
 }

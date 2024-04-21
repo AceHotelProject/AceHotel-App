@@ -17,10 +17,9 @@ import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
 import com.project.acehotel.core.ui.adapter.visitor.CurrentVisitorAdapter
-import com.project.acehotel.core.utils.DateUtils
-import com.project.acehotel.core.utils.formatNumber
-import com.project.acehotel.core.utils.isInternetAvailable
-import com.project.acehotel.core.utils.showToast
+import com.project.acehotel.core.utils.*
+import com.project.acehotel.core.utils.constants.UserRole
+import com.project.acehotel.core.utils.constants.UserRole.*
 import com.project.acehotel.databinding.FragmentHomeBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import com.project.acehotel.features.dashboard.management.visitor.detail.VisitorDetailActivity
@@ -28,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), IUserLayout {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -39,6 +38,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkUserRole()
+
         initialRecyclerView()
 
         fetchHotelData()
@@ -46,6 +47,12 @@ class HomeFragment : Fragment() {
         fetchListBooking()
 
         handleRefresh()
+    }
+
+    private fun checkUserRole() {
+        homeViewModel.getUser().observe(requireActivity()) { user ->
+            user.user?.role?.let { changeLayoutByUser(it) }
+        }
     }
 
     private fun handleRefresh() {
@@ -232,5 +239,28 @@ class HomeFragment : Fragment() {
     companion object {
         private const val BOOKING_DATA = "booking_data"
         private const val VISITOR_ID = "visitor_id"
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            MASTER -> {
+
+            }
+            FRANCHISE -> {
+
+            }
+            INVENTORY_STAFF -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+            RECEPTIONIST -> {
+
+            }
+            ADMIN -> {
+
+            }
+            UNDEFINED -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+        }
     }
 }

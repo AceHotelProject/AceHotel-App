@@ -24,9 +24,11 @@ import com.project.acehotel.core.domain.room.model.Room
 import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
 import com.project.acehotel.core.ui.adapter.visitor.CurrentVisitorAdapter
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.IUserLayout
 import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.constants.RoomStatus
 import com.project.acehotel.core.utils.constants.RoomType
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
@@ -38,7 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class RoomDetailActivity : AppCompatActivity() {
+class RoomDetailActivity : AppCompatActivity(), IUserLayout {
     private lateinit var binding: ActivityRoomDetailBinding
 
     private val roomDetailViewModel: RoomDetailViewModel by viewModels()
@@ -67,8 +69,16 @@ class RoomDetailActivity : AppCompatActivity() {
 
         handleImageView()
 
+        checkUserRole()
+
         handleEmptyStates(listOf(), binding.rvRoomDetailNextBooking)
         handleEmptyStates(listOf(), binding.rvRoomDetailCurrentVisitor)
+    }
+
+    private fun checkUserRole() {
+        roomDetailViewModel.getUser().observe(this) { user ->
+            user.user?.role?.let { changeLayoutByUser(it) }
+        }
     }
 
     private fun handleImageView() {
@@ -341,6 +351,29 @@ class RoomDetailActivity : AppCompatActivity() {
         private const val VISITOR_ID = "visitor_id"
 
         private const val IMAGE_SOURCE = "image_source"
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+
+            }
+            UserRole.FRANCHISE -> {
+
+            }
+            UserRole.INVENTORY_STAFF -> {
+                binding.btnMore.visibility = View.GONE
+            }
+            UserRole.RECEPTIONIST -> {
+                binding.btnMore.visibility = View.GONE
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                binding.btnMore.visibility = View.GONE
+            }
+        }
     }
 
 }

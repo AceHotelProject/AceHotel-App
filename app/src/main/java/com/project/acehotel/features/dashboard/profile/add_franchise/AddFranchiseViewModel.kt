@@ -19,6 +19,9 @@ class AddFranchiseViewModel @Inject constructor(
     private val hotelUseCase: HotelUseCase,
 ) : ViewModel() {
 
+    fun saveSelectedHotelData(data: ManageHotel) =
+        hotelUseCase.saveSelectedHotelData(data).asLiveData()
+
     fun getRefreshToken() = authUseCase.getRefreshToken().asLiveData()
 
     fun getHotel(id: String) = hotelUseCase.getHotel(id).asLiveData()
