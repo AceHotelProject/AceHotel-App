@@ -14,10 +14,8 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.room.model.Room
 import com.project.acehotel.core.ui.adapter.room.RoomListAdapter
-import com.project.acehotel.core.utils.DateUtils
-import com.project.acehotel.core.utils.formatNumber
-import com.project.acehotel.core.utils.isInternetAvailable
-import com.project.acehotel.core.utils.showToast
+import com.project.acehotel.core.utils.*
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.databinding.FragmentRoomBinding
 import com.project.acehotel.features.dashboard.room.change_price.ChangePriceActivity
 import com.project.acehotel.features.dashboard.room.detail.RoomDetailActivity
@@ -25,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class RoomFragment : Fragment() {
+class RoomFragment : Fragment(), IUserLayout {
     private var _binding: FragmentRoomBinding? = null
     private val binding get() = _binding!!
 
@@ -204,5 +202,28 @@ class RoomFragment : Fragment() {
 
     companion object {
         private const val ROOM_DATA = "room_data"
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+
+            }
+            UserRole.FRANCHISE -> {
+
+            }
+            UserRole.INVENTORY_STAFF -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+            UserRole.RECEPTIONIST -> {
+                binding.btnEditPrice.visibility = View.GONE
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+        }
     }
 }
