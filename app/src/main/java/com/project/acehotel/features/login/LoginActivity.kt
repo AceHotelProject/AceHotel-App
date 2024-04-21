@@ -14,7 +14,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.utils.IUserLayout
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.showLongToast
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityLoginBinding
 import com.project.acehotel.features.dashboard.MainActivity
@@ -22,9 +25,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), IUserLayout {
     private lateinit var binding: ActivityLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
+
+    private var currentHotelId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,17 +134,18 @@ class LoginActivity : AppCompatActivity() {
                     }
                     is Resource.Success -> {
                         if (result.data?.tokens != null) {
+                            currentHotelId = result.data.user?.hotelId?.first() ?: ""
+
                             loginViewModel.insertCacheUser(result.data)
 
-                            loginViewModel.saveRefreshToken(result.data.tokens.refreshToken.token.toString())
-                                .observe(this) { refresh ->
-                                    loginViewModel.saveAccessToken(result.data.tokens.accessToken.token.toString())
-                                        .observe(this) { access ->
-                                            if (refresh && access) {
-                                                validateToken()
-                                            }
-                                        }
+                            loginViewModel.executeValidateToken(
+                                result.data.tokens.refreshToken.token.toString(),
+                                result.data.tokens.accessToken.token.toString()
+                            ).observe(this) { token ->
+                                if (token.isNotEmpty()) {
+                                    validateUser()
                                 }
+                            }
                         }
                     }
                     else -> {}
@@ -148,20 +154,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateToken() {
-        loginViewModel.getRefreshToken().observe(this) { token ->
-            Timber.tag("TOKEN").e(token.isNotEmpty().toString())
-
-            if (token.isNotEmpty()) {
-                Timber.tag("TOKEN 2").e(token.toString())
-
-                showLoading(false)
-                isButtonEnabled(true)
-
-                val intentToMainActivity = Intent(this, MainActivity::class.java)
-                startActivity(intentToMainActivity)
-                finish()
-            }
+    private fun validateUser() {
+        loginViewModel.getUser().observe(this) { user ->
+            user.user?.role?.let { changeLayoutByUser(it) }
         }
     }
 
@@ -205,5 +200,89 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val CUSTOMER_SERVICE_PHONE = "https://wa.link/anszxf"
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+                showLoading(false)
+                isButtonEnabled(true)
+
+                val intentToMainActivity = Intent(this, MainActivity::class.java)
+                startActivity(intentToMainActivity)
+                finish()
+            }
+            UserRole.FRANCHISE -> {
+                loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
+                    if (it) {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        startActivity(intentToMainActivity)
+                        finish()
+                    } else {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        showLongToast("Terjadi kesalahan, pastikan jaringan internet Anda dan lakukan login ulang")
+                    }
+                }
+            }
+            UserRole.INVENTORY_STAFF -> {
+                loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
+                    if (it) {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        startActivity(intentToMainActivity)
+                        finish()
+                    } else {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        showLongToast("Terjadi kesalahan, pastikan jaringan internet Anda dan lakukan login ulang")
+                    }
+                }
+            }
+            UserRole.RECEPTIONIST -> {
+                loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
+                    if (it) {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        startActivity(intentToMainActivity)
+                        finish()
+                    } else {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        showLongToast("Terjadi kesalahan, pastikan jaringan internet Anda dan lakukan login ulang")
+                    }
+                }
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
+                    if (it) {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        startActivity(intentToMainActivity)
+                        finish()
+                    } else {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        showLongToast("Terjadi kesalahan, pastikan jaringan internet Anda dan lakukan login ulang")
+                    }
+                }
+            }
+        }
     }
 }
