@@ -12,6 +12,8 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.visitor.model.Visitor
 import com.project.acehotel.core.ui.adapter.visitor.VisitorListAdapter
+import com.project.acehotel.core.utils.IUserLayout
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentVisitorBinding
@@ -21,11 +23,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class VisitorFragment : Fragment(), IManagementSearch {
+class VisitorFragment : Fragment(), IManagementSearch, IUserLayout {
     private var _binding: FragmentVisitorBinding? = null
     private val binding get() = _binding!!
 
     private val visitorViewModel: VisitorViewModel by activityViewModels()
+
     private var storedQuery = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -133,7 +136,31 @@ class VisitorFragment : Fragment(), IManagementSearch {
         fetchVisitorList(storedQuery)
     }
 
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+
+            }
+            UserRole.FRANCHISE -> {
+
+            }
+            UserRole.INVENTORY_STAFF -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+            UserRole.RECEPTIONIST -> {
+              
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+        }
+    }
+
     companion object {
         private const val VISITOR_ID = "visitor_id"
     }
+
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.auth.usecase.AuthUseCase
 import com.project.acehotel.core.domain.hotel.usecase.HotelUseCase
 import com.project.acehotel.core.domain.visitor.model.Visitor
 import com.project.acehotel.core.domain.visitor.usecase.VisitorUseCase
@@ -13,7 +14,8 @@ import javax.inject.Inject
 @HiltViewModel
 class VisitorViewModel @Inject constructor(
     private val visitorUseCase: VisitorUseCase,
-    private val hotelUseCase: HotelUseCase
+    private val hotelUseCase: HotelUseCase,
+    private val authUseCase: AuthUseCase,
 ) :
     ViewModel() {
 
