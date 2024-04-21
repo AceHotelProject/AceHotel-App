@@ -1,6 +1,5 @@
 package com.project.acehotel.features.dashboard.profile.manage_user
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -10,10 +9,10 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.ui.adapter.user.ManageUserAdapter
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.core.utils.isInternetAvailable
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityManageUserBinding
-import com.project.acehotel.databinding.ItemListUserBinding
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -23,6 +22,8 @@ class ManageUserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityManageUserBinding
 
     private val manageUserViewModel: ManageUserViewModel by viewModels()
+
+    private var currentUserRole: UserRole? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,16 @@ class ManageUserActivity : AppCompatActivity() {
         validateToken()
 
         handleRefresh()
+
+        checkUserRole()
+    }
+
+    private fun checkUserRole() {
+        manageUserViewModel.getUser().observe(this) { user ->
+            if (user != null) {
+                currentUserRole = user.user?.role
+            }
+        }
     }
 
     private fun handleRefresh() {
@@ -60,8 +71,6 @@ class ManageUserActivity : AppCompatActivity() {
                     } else {
                         showToast(user.message.toString())
                     }
-
-
                 }
                 is Resource.Loading -> {
                     showLoading(true)
@@ -73,7 +82,9 @@ class ManageUserActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     showLoading(false)
 
-                    initUserRecyclerView(user.data)
+                    if (currentUserRole != null) {
+                        initUserRecyclerView(user.data, currentUserRole!!)
+                    }
 
                     handleEmptyStates(user.data)
                 }
@@ -81,21 +92,20 @@ class ManageUserActivity : AppCompatActivity() {
         }
     }
 
-    private fun initUserRecyclerView(data: List<User>?) {
-        val adapter = ManageUserAdapter(data, this)
+    private fun initUserRecyclerView(data: List<User>?, userRole: UserRole) {
+        val filterData = data?.filter { user ->
+            if (userRole == UserRole.FRANCHISE) {
+                user.role != UserRole.MASTER
+            } else {
+                true
+            }
+        }
+
+        val adapter = ManageUserAdapter(filterData, this)
         binding.rvListUser.adapter = adapter
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvListUser.layoutManager = layoutManager
-
-        adapter.setOnItemClickCallback(object : ManageUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(context: Context, id: String, holder: ItemListUserBinding) {
-//                holder.ibUpdateUser.setOnClickListener {
-//                    val intentToUpdateUser =
-//
-//                }
-            }
-        })
     }
 
     private fun handleEmptyStates(data: List<User>?) {
