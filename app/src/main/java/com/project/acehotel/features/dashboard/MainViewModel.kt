@@ -42,4 +42,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+
+    fun getUser() = authUseCase.getUser().asLiveData()
 }

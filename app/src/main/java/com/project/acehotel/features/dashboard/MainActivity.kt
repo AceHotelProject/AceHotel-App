@@ -18,11 +18,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.*
 import com.project.acehotel.core.utils.constants.FabMenuState
-import com.project.acehotel.core.utils.isInternetAvailable
-import com.project.acehotel.core.utils.showLongToast
-import com.project.acehotel.core.utils.showToast
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
@@ -56,11 +54,18 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBar()
 
-        handleFab()
-
         checkNotificationPermission()
 
         checkNotCheckout()
+
+        checkUserRole()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkUserRole() {
+        mainViewModel.getUser().observe(this) { user ->
+            user.user?.role?.let { handleFab(it) }
+        }
     }
 
     private fun checkNotCheckout() {
@@ -136,9 +141,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun handleFab() {
+    private fun handleFab(userRole: UserRole) {
         binding.fabMenu.setOnClickListener {
-            onFabMenuClick()
+            onFabMenuClick(userRole)
         }
 
         binding.fabChangeStock.setOnClickListener {
@@ -169,18 +174,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onFabMenuClick() {
+    private fun onFabMenuClick(userRole: UserRole) {
         fabMenuState = if (fabMenuState == FabMenuState.COLLAPSED) {
             FabMenuState.EXPANDED
         } else {
             FabMenuState.COLLAPSED
         }
-        setVisibility(fabMenuState == FabMenuState.EXPANDED)
-        setAnimation(fabMenuState == FabMenuState.EXPANDED)
-        setClickable(fabMenuState == FabMenuState.EXPANDED)
+
+        setVisibility(fabMenuState == FabMenuState.EXPANDED, userRole)
+        setAnimation(fabMenuState == FabMenuState.EXPANDED, userRole)
+        setClickable(fabMenuState == FabMenuState.EXPANDED, userRole)
     }
 
-    private fun setAnimation(isClicked: Boolean) {
+    private fun setAnimation(isClicked: Boolean, userRole: UserRole) {
         val rotateOpen: Animation by lazy {
             AnimationUtils.loadAnimation(this, R.anim.anim_rotate_open)
         }
@@ -194,76 +200,182 @@ class MainActivity : AppCompatActivity() {
             AnimationUtils.loadAnimation(this, R.anim.anim_to_bottom)
         }
 
-        if (isClicked) {
-            binding.fabMenu.startAnimation(rotateOpen)
+        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE) {
+            if (isClicked) {
+                binding.fabMenu.startAnimation(rotateOpen)
 
-            binding.fabAddBooking.startAnimation(fromBottom)
-            binding.tvAddBooking.startAnimation(fromBottom)
+                binding.fabAddBooking.startAnimation(fromBottom)
+                binding.tvAddBooking.startAnimation(fromBottom)
 
-            binding.fabCheckin.startAnimation(fromBottom)
-            binding.tvCheckin.startAnimation(fromBottom)
+                binding.fabCheckin.startAnimation(fromBottom)
+                binding.tvCheckin.startAnimation(fromBottom)
 
-            binding.fabCheckout.startAnimation(fromBottom)
-            binding.tvCheckout.startAnimation(fromBottom)
+                binding.fabCheckout.startAnimation(fromBottom)
+                binding.tvCheckout.startAnimation(fromBottom)
 
-            binding.fabChangeStock.startAnimation(fromBottom)
-            binding.tvChangeStock.startAnimation(fromBottom)
-        } else {
-            binding.fabMenu.startAnimation(rotateClose)
+                binding.fabChangeStock.startAnimation(fromBottom)
+                binding.tvChangeStock.startAnimation(fromBottom)
+            } else {
+                binding.fabMenu.startAnimation(rotateClose)
 
-            binding.fabAddBooking.startAnimation(toBottom)
-            binding.tvAddBooking.startAnimation(toBottom)
+                binding.fabAddBooking.startAnimation(toBottom)
+                binding.tvAddBooking.startAnimation(toBottom)
 
-            binding.fabCheckin.startAnimation(toBottom)
-            binding.tvCheckin.startAnimation(toBottom)
+                binding.fabCheckin.startAnimation(toBottom)
+                binding.tvCheckin.startAnimation(toBottom)
 
-            binding.fabCheckout.startAnimation(toBottom)
-            binding.tvCheckout.startAnimation(toBottom)
+                binding.fabCheckout.startAnimation(toBottom)
+                binding.tvCheckout.startAnimation(toBottom)
 
-            binding.fabChangeStock.startAnimation(toBottom)
-            binding.tvChangeStock.startAnimation(toBottom)
+                binding.fabChangeStock.startAnimation(toBottom)
+                binding.tvChangeStock.startAnimation(toBottom)
+            }
+        } else if (userRole == UserRole.INVENTORY_STAFF) {
+            if (isClicked) {
+                binding.fabMenu.startAnimation(rotateOpen)
+
+                binding.fabChangeStock.startAnimation(fromBottom)
+                binding.tvChangeStock.startAnimation(fromBottom)
+            } else {
+                binding.fabMenu.startAnimation(rotateClose)
+
+                binding.fabChangeStock.startAnimation(toBottom)
+                binding.tvChangeStock.startAnimation(toBottom)
+            }
+        } else if (userRole == UserRole.RECEPTIONIST) {
+            if (isClicked) {
+                binding.fabMenu.startAnimation(rotateOpen)
+
+                binding.fabAddBooking.startAnimation(fromBottom)
+                binding.tvAddBooking.startAnimation(fromBottom)
+
+                binding.fabCheckin.startAnimation(fromBottom)
+                binding.tvCheckin.startAnimation(fromBottom)
+
+                binding.fabCheckout.startAnimation(fromBottom)
+                binding.tvCheckout.startAnimation(fromBottom)
+            } else {
+                binding.fabMenu.startAnimation(rotateClose)
+
+                binding.fabAddBooking.startAnimation(toBottom)
+                binding.tvAddBooking.startAnimation(toBottom)
+
+                binding.fabCheckin.startAnimation(toBottom)
+                binding.tvCheckin.startAnimation(toBottom)
+
+                binding.fabCheckout.startAnimation(toBottom)
+                binding.tvCheckout.startAnimation(toBottom)
+            }
         }
     }
 
-    private fun setVisibility(isClicked: Boolean) {
-        if (isClicked) {
-            binding.fabAddBooking.visibility = View.VISIBLE
-            binding.tvAddBooking.visibility = View.VISIBLE
+    private fun setVisibility(isClicked: Boolean, userRole: UserRole) {
+        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE) {
+            if (isClicked) {
+                binding.fabAddBooking.visibility = View.VISIBLE
+                binding.tvAddBooking.visibility = View.VISIBLE
 
-            binding.fabCheckin.visibility = View.VISIBLE
-            binding.tvCheckin.visibility = View.VISIBLE
+                binding.fabCheckin.visibility = View.VISIBLE
+                binding.tvCheckin.visibility = View.VISIBLE
 
-            binding.fabCheckout.visibility = View.VISIBLE
-            binding.tvCheckout.visibility = View.VISIBLE
+                binding.fabCheckout.visibility = View.VISIBLE
+                binding.tvCheckout.visibility = View.VISIBLE
 
-            binding.fabChangeStock.visibility = View.VISIBLE
-            binding.tvChangeStock.visibility = View.VISIBLE
-        } else {
-            binding.fabAddBooking.visibility = View.INVISIBLE
-            binding.tvAddBooking.visibility = View.INVISIBLE
+                binding.fabChangeStock.visibility = View.VISIBLE
+                binding.tvChangeStock.visibility = View.VISIBLE
+            } else {
+                binding.fabAddBooking.visibility = View.INVISIBLE
+                binding.tvAddBooking.visibility = View.INVISIBLE
 
-            binding.fabCheckin.visibility = View.INVISIBLE
-            binding.tvCheckin.visibility = View.INVISIBLE
+                binding.fabCheckin.visibility = View.INVISIBLE
+                binding.tvCheckin.visibility = View.INVISIBLE
 
-            binding.fabCheckout.visibility = View.INVISIBLE
-            binding.tvCheckout.visibility = View.INVISIBLE
+                binding.fabCheckout.visibility = View.INVISIBLE
+                binding.tvCheckout.visibility = View.INVISIBLE
 
-            binding.fabChangeStock.visibility = View.INVISIBLE
-            binding.tvChangeStock.visibility = View.INVISIBLE
+                binding.fabChangeStock.visibility = View.INVISIBLE
+                binding.tvChangeStock.visibility = View.INVISIBLE
+            }
+        } else if (userRole == UserRole.INVENTORY_STAFF) {
+            binding.fabAddBooking.visibility = View.GONE
+            binding.tvAddBooking.visibility = View.GONE
+
+            binding.fabCheckin.visibility = View.GONE
+            binding.tvCheckin.visibility = View.GONE
+
+            binding.fabCheckout.visibility = View.GONE
+            binding.tvCheckout.visibility = View.GONE
+
+            if (isClicked) {
+                binding.fabChangeStock.visibility = View.VISIBLE
+                binding.tvChangeStock.visibility = View.VISIBLE
+            } else {
+                binding.fabChangeStock.visibility = View.INVISIBLE
+                binding.tvChangeStock.visibility = View.INVISIBLE
+            }
+        } else if (userRole == UserRole.RECEPTIONIST) {
+            binding.fabChangeStock.visibility = View.GONE
+            binding.tvChangeStock.visibility = View.GONE
+
+            if (isClicked) {
+                binding.fabAddBooking.visibility = View.VISIBLE
+                binding.tvAddBooking.visibility = View.VISIBLE
+
+                binding.fabCheckin.visibility = View.VISIBLE
+                binding.tvCheckin.visibility = View.VISIBLE
+
+                binding.fabCheckout.visibility = View.VISIBLE
+                binding.tvCheckout.visibility = View.VISIBLE
+            } else {
+                binding.fabAddBooking.visibility = View.INVISIBLE
+                binding.tvAddBooking.visibility = View.INVISIBLE
+
+                binding.fabCheckin.visibility = View.INVISIBLE
+                binding.tvCheckin.visibility = View.INVISIBLE
+
+                binding.fabCheckout.visibility = View.INVISIBLE
+                binding.tvCheckout.visibility = View.INVISIBLE
+            }
         }
     }
 
-    private fun setClickable(isClicked: Boolean) {
-        if (isClicked) {
-            binding.fabAddBooking.isClickable = true
-            binding.fabCheckin.isClickable = true
-            binding.fabCheckout.isClickable = true
-            binding.fabChangeStock.isClickable = true
-        } else {
-            binding.fabAddBooking.isClickable = false
-            binding.fabCheckin.isClickable = false
-            binding.fabCheckout.isClickable = false
-            binding.fabChangeStock.isClickable = false
+    private fun setClickable(isClicked: Boolean, userRole: UserRole) {
+        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE) {
+            if (isClicked) {
+                binding.fabAddBooking.isClickable = true
+                binding.fabCheckin.isClickable = true
+                binding.fabCheckout.isClickable = true
+                binding.fabChangeStock.isClickable = true
+            } else {
+                binding.fabAddBooking.isClickable = false
+                binding.fabCheckin.isClickable = false
+                binding.fabCheckout.isClickable = false
+                binding.fabChangeStock.isClickable = false
+            }
+        } else if (userRole == UserRole.INVENTORY_STAFF) {
+            if (isClicked) {
+                binding.fabAddBooking.isClickable = false
+                binding.fabCheckin.isClickable = false
+                binding.fabCheckout.isClickable = false
+
+                binding.fabChangeStock.isClickable = true
+            } else {
+                binding.fabAddBooking.isClickable = false
+                binding.fabCheckin.isClickable = false
+                binding.fabCheckout.isClickable = false
+
+                binding.fabChangeStock.isClickable = false
+            }
+        } else if (userRole == UserRole.RECEPTIONIST) {
+            if (isClicked) {
+                binding.fabAddBooking.isClickable = true
+                binding.fabCheckin.isClickable = true
+                binding.fabCheckout.isClickable = true
+            } else {
+                binding.fabAddBooking.isClickable = false
+                binding.fabCheckin.isClickable = false
+                binding.fabCheckout.isClickable = false
+            }
         }
     }
 
