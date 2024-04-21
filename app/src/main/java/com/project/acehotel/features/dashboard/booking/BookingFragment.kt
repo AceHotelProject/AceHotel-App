@@ -10,17 +10,22 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.acehotel.R
 import com.project.acehotel.core.ui.adapter.tabs.BookingPagerAdapter
+import com.project.acehotel.core.utils.IUserLayout
+import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.databinding.FragmentBookingBinding
 import com.project.acehotel.features.dashboard.management.IManagementSearch
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BookingFragment : Fragment() {
+class BookingFragment : Fragment(), IUserLayout {
     private var _binding: FragmentBookingBinding? = null
     private val binding get() = _binding!!
+
+    private val bookingViewModel: BookingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,6 +33,14 @@ class BookingFragment : Fragment() {
         setupTabs()
 
         setupSearch()
+
+        checkUserRole()
+    }
+
+    private fun checkUserRole() {
+        bookingViewModel.getUser().observe(requireActivity()) { user ->
+            user.user?.role?.let { changeLayoutByUser(it) }
+        }
     }
 
     private fun setupSearch() {
@@ -99,5 +112,28 @@ class BookingFragment : Fragment() {
             R.string.tab_booking_next,
             R.string.tab_booking_done,
         )
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+
+            }
+            UserRole.FRANCHISE -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+            UserRole.INVENTORY_STAFF -> {
+
+            }
+            UserRole.RECEPTIONIST -> {
+
+            }
+            UserRole.ADMIN -> {
+
+            }
+            UserRole.UNDEFINED -> {
+                binding.mainLayout.visibility = View.GONE
+            }
+        }
     }
 }
