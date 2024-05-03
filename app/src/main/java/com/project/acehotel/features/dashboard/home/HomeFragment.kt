@@ -150,7 +150,8 @@ class HomeFragment : Fragment(), IUserLayout {
                 }
             }
 
-            todayRoomAvailable = hotelData?.roomId?.size!! - todayRoomUsed
+            todayRoomAvailable =
+                (hotelData!!.regularRoomCount + hotelData!!.exclusiveRoomCount) - todayRoomUsed
         }
 
         binding.apply {
