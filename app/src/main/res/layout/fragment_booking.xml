@@ -27,6 +27,7 @@
             android:drawableStart="@drawable/icons_search"
             android:drawablePadding="12sp"
             android:ems="10"
+            android:focusableInTouchMode="false"
             android:hint="@string/search"
             android:imeOptions="actionSearch"
             android:inputType="text"

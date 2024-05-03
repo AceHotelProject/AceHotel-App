@@ -765,7 +765,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     ): Flow<ApiResponse<Response<VisitorResponse>>> {
         return flow {
             try {
-                val response = apiService.deleteHotel(id, hotelId)
+                val response = apiService.deleteVisitor(id, hotelId)
 
                 if (response.isSuccessful) {
                     emit(ApiResponse.Success(response))

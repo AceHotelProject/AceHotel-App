@@ -1,10 +1,12 @@
 package com.project.acehotel.features.dashboard.management.visitor.choose
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -92,6 +94,11 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
         binding.edChooseVisitorSearch.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 fetchVisitorList(binding.edChooseVisitorSearch.text.toString())
+
+                binding.edChooseVisitorSearch.clearFocus()
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(window.decorView.windowToken, 0)
+                currentFocus?.clearFocus()
                 true // consume the action
             } else {
                 false // pass on to other listeners.

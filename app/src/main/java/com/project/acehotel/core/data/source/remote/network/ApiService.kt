@@ -296,8 +296,8 @@ interface ApiService {
         @Field("path_identity_image") pathIdentityImage: String,
     ): VisitorResponse
 
-    @DELETE("hotels/{id}")
-    suspend fun deleteHotel(
+    @DELETE("visitors/{id}")
+    suspend fun deleteVisitor(
         @Path("id") id: String,
         @Query("hotel_id") hotelId: String,
     ): Response<VisitorResponse>
