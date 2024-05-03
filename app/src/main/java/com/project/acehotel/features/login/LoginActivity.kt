@@ -205,12 +205,21 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
     override fun changeLayoutByUser(userRole: UserRole) {
         when (userRole) {
             UserRole.MASTER -> {
-                showLoading(false)
-                isButtonEnabled(true)
+                loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
+                    if (it) {
+                        showLoading(false)
+                        isButtonEnabled(true)
 
-                val intentToMainActivity = Intent(this, MainActivity::class.java)
-                startActivity(intentToMainActivity)
-                finish()
+                        val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        startActivity(intentToMainActivity)
+                        finish()
+                    } else {
+                        showLoading(false)
+                        isButtonEnabled(true)
+
+                        showLongToast("Terjadi kesalahan, pastikan jaringan internet Anda dan lakukan login ulang")
+                    }
+                }
             }
             UserRole.FRANCHISE -> {
                 loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
