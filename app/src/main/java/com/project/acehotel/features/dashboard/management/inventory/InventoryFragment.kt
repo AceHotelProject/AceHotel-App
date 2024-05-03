@@ -19,8 +19,8 @@ import com.project.acehotel.core.ui.adapter.inventory.InventoryListAdapter
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.InventoryType
 import com.project.acehotel.core.utils.constants.MQTT_TOPIC
-import com.project.acehotel.core.utils.constants.READER_NAME
 import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.showLongToast
 import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentInventoryBinding
 import com.project.acehotel.features.dashboard.management.IManagementSearch
@@ -163,10 +163,31 @@ class InventoryFragment : Fragment(), IManagementSearch {
 
     private fun handleButtonAddTag() {
         binding.btnAddTag.setOnClickListener {
-            val intentToChooseItemInventory =
-                Intent(requireContext(), ChooseItemInventoryActivity::class.java)
-            intentToChooseItemInventory.putExtra(IS_ADD_TAG, true)
-            startActivity(intentToChooseItemInventory)
+
+            inventoryViewModel.getTagById(READER_NAME).observe(this) { tag ->
+                when (tag) {
+                    is Resource.Error -> {
+                        activity?.showLongToast("Tag tidak terdeteksi")
+                    }
+                    is Resource.Loading -> {
+                        activity?.showLongToast("Reader sedang mendeteksi tag")
+                    }
+                    is Resource.Message -> {
+                        activity?.showLongToast("Tag tidak terdeteksi")
+                    }
+                    is Resource.Success -> {
+                        if (tag.data != null) {
+                            activity?.showLongToast("Tag berhasil terdeteksi")
+
+                            val intentToChooseItemInventory =
+                                Intent(requireContext(), ChooseItemInventoryActivity::class.java)
+                            intentToChooseItemInventory.putExtra(IS_ADD_TAG, true)
+                            intentToChooseItemInventory.putExtra(TAG_DATA, tag.data)
+                            startActivity(intentToChooseItemInventory)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -319,17 +340,20 @@ class InventoryFragment : Fragment(), IManagementSearch {
         binding.refInventory.isRefreshing = isLoading
     }
 
+    override fun onSearchQuery(query: String) {
+        fetchInventoryItems(query)
+    }
+
     companion object {
         private const val INVENTORY_ITEM_ID = "inventory_item_id"
         private const val INVENTORY_ITEM_NAME = "inventory_item_name"
+
         private const val INVENTORY_ITEM_TYPE = "inventory_item_type"
 
         private const val READER_DATA = "reader_data"
-
         private const val IS_ADD_TAG = "is_add_tag"
-    }
+        private const val TAG_DATA = "tag_data"
 
-    override fun onSearchQuery(query: String) {
-        fetchInventoryItems(query)
+        private const val READER_NAME = "ACE-001"
     }
 }

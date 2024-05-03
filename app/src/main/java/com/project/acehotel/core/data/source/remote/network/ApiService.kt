@@ -135,7 +135,7 @@ interface ApiService {
         @Query("hotel_id") hotelId: String,
     ): Response<InventoryDetailResponse>
 
-    @GET("tag/{id}")
+    @GET("tag/id/{readerId}")
     suspend fun getTagById(
         @Path("id") readerId: String
     ): ListTagsByIdResponse

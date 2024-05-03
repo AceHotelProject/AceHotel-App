@@ -38,4 +38,7 @@ class InventoryViewModel @Inject constructor(
         }
 
     fun getReader(readerId: String) = inventoryUseCase.getReader(readerId).asLiveData()
+
+    fun getTagById(readerId: String) = inventoryUseCase.getTagById(readerId).asLiveData()
+
 }

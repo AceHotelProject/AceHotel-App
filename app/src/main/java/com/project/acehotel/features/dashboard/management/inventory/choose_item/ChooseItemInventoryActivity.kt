@@ -126,12 +126,16 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         var type = ""
         var name = ""
 
-        if (filter == "linen" || filter == "Linen") {
-            type = "linen"
-        } else if (filter == "Kasur" || filter == "kasur") {
-            type = "kasur"
-        } else {
-            name = filter
+        when (filter) {
+            "linen", "Linen" -> {
+                type = "linen"
+            }
+            "Kasur", "kasur" -> {
+                type = "kasur"
+            }
+            else -> {
+                name = filter
+            }
         }
 
         chooseItemViewModel.fetchListInventory(name, type).observe(this) { item ->
@@ -185,9 +189,10 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
                 stock: Int
             ) {
                 val isAddTag = intent.getBooleanExtra(IS_ADD_TAG, false)
+                val tagId = intent.getStringExtra(TAG_DATA)
 
-                if (isAddTag) {
-                    val addTagDialog = AddTagDialog(id, name)
+                if (isAddTag && !tagId.isNullOrEmpty()) {
+                    val addTagDialog = AddTagDialog(id, tagId, name)
                     addTagDialog.show(supportFragmentManager, "Select Add Tag Dialog")
                 } else {
                     val intentToChangeStockInventory =
@@ -222,5 +227,7 @@ class ChooseItemInventoryActivity : AppCompatActivity() {
         private const val INVENTORY_ITEM_STOCK = "inventory_item_stock"
 
         private const val IS_ADD_TAG = "is_add_tag"
+
+        private const val TAG_DATA = "tag_data"
     }
 }

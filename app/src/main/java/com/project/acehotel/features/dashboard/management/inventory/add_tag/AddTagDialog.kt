@@ -15,10 +15,16 @@ import com.project.acehotel.features.dashboard.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AddTagDialog(private val id: String, private val inventorName: String) : DialogFragment() {
+class AddTagDialog(
+    private val inventoryId: String,
+    private val tagId: String,
+    private val inventoryName: String
+) :
+    DialogFragment() {
     private val addTagViewModel: AddTagViewModel by activityViewModels()
 
-    private lateinit var tagId: String
+    private var btnLogoutNo: Button? = null
+    private var btnLogoutYes: Button? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity.let {
@@ -29,13 +35,11 @@ class AddTagDialog(private val id: String, private val inventorName: String) : D
             builder.setView(view)
             builder.setCancelable(false)
 
-            val btnLogoutNo = view?.findViewById<Button>(R.id.btn_add_tag_no)
-            val btnLogoutYes = view?.findViewById<Button>(R.id.btn_add_tag_yes)
+            btnLogoutNo = view?.findViewById<Button>(R.id.btn_add_tag_no)
+            btnLogoutYes = view?.findViewById<Button>(R.id.btn_add_tag_yes)
 
             val addTagText = view?.findViewById<TextView>(R.id.tv_add_tag)
-            addTagText?.text = "Apakah anda yakin ingin menyimpan data tag pada $inventorName"
-
-            setupTag()
+            addTagText?.text = "Apakah anda yakin ingin menyimpan data tag pada $inventoryName"
 
             btnLogoutNo?.setOnClickListener {
                 dismiss()
@@ -50,52 +54,38 @@ class AddTagDialog(private val id: String, private val inventorName: String) : D
     }
 
     private fun handleAddTagButton() {
-        addTagViewModel.addTag(tagId, id).observe(this@AddTagDialog) { tag ->
+        addTagViewModel.addTag(tagId, inventoryId).observe(this@AddTagDialog) { tag ->
             when (tag) {
                 is Resource.Error -> {
                     dismiss()
+
+                    isButtoNenabled(false)
                     activity?.showLongToast("Gagal menambahkan tag")
                 }
                 is Resource.Loading -> {
-
+                    isButtoNenabled(false)
                 }
                 is Resource.Message -> {
                     dismiss()
+
+                    isButtoNenabled(false)
                     activity?.showLongToast("Gagal menambahkan tag")
                 }
                 is Resource.Success -> {
+                    isButtoNenabled(true)
 
+                    dismiss()
                     activity?.showLongToast("Berhasil menambahkan tag")
                     val intentToMain = Intent(requireContext(), MainActivity::class.java)
                     activity?.startActivity(intentToMain)
-                    dismiss()
                 }
             }
         }
     }
 
-    private fun setupTag() {
-        addTagViewModel.getTagById(READER_NAME).observe(this@AddTagDialog) { tag ->
-            when (tag) {
-                is Resource.Error -> {
-                    dismiss()
-                    activity?.showLongToast("Tag tidak terdeteksi")
-                }
-                is Resource.Loading -> {
-                    activity?.showLongToast("Reader sedang mendeteksi tag")
-                }
-                is Resource.Message -> {
-                    dismiss()
-                    activity?.showLongToast("Tag tidak terdeteksi")
-                }
-                is Resource.Success -> {
-                    if (tag.data != null) {
-                        activity?.showLongToast("Tag berhasil terdeteksi")
-                        tagId = tag.data
-                    }
-                }
-            }
-        }
+    private fun isButtoNenabled(isEnabled: Boolean) {
+        btnLogoutYes?.isEnabled = isEnabled
+        btnLogoutNo?.isEnabled = isEnabled
     }
 
     companion object {
