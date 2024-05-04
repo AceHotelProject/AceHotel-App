@@ -29,10 +29,6 @@ interface IHotelRepository {
         receptionistEmail: String,
         receptionistPassword: String,
 
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
-
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,

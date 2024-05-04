@@ -48,8 +48,6 @@ class ManageHotelListAdapter(
                 "${data?.receptionistName} - ${data?.receptionistEmail}"
             tvFranchiseHotelInventory.text =
                 "${data?.inventoryStaffName} - ${data?.inventoryStaffEmail}"
-            tvFranchiseHotelCleaning.text =
-                "${data?.cleaningStaffName} - ${data?.cleaningStaffEmail}"
         }
 
         holder.binding.btnFranchiseMore.setOnClickListener {

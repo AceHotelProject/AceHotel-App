@@ -441,10 +441,6 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         receptionistEmail: String,
         receptionistPassword: String,
 
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
-
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
@@ -469,9 +465,6 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                         receptionistName,
                         receptionistEmail,
                         receptionistPassword,
-                        cleaningName,
-                        cleaningEmail,
-                        cleaningPassword,
                         inventoryName,
                         inventoryEmail,
                         inventoryPassword

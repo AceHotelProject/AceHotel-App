@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     if (!isInternetAvailable(this@MainActivity)) {
                         showToast(getString(R.string.check_internet))
                     } else {
-                        showToast(booking.message.toString())
+                        Timber.tag("MainActivity").e(booking.message)
                     }
                 }
                 is Resource.Loading -> {

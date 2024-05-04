@@ -201,10 +201,6 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
         binding.refFinance.isRefreshing = isLoading
     }
 
-    companion object {
-        private const val BOOKING_DATA = "booking_data"
-    }
-
     override fun onSearchQuery(query: String) {
         activity?.showToast("Pencarian booking tidak dapat dilakukan, silahkan lakukan pencarian pada bagian halaman \"Pesan\"")
     }
@@ -230,5 +226,9 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
                 binding.mainLayout.visibility = View.GONE
             }
         }
+    }
+
+    companion object {
+        private const val BOOKING_DATA = "booking_data"
     }
 }

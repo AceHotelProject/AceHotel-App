@@ -198,10 +198,6 @@ interface ApiService {
         @Field("receptionist_email") receptionistEmail: String,
         @Field("receptionist_password") receptionistPassword: String,
 
-        @Field("cleaning_staff_name") cleaningName: String,
-        @Field("cleaning_staff_email") cleaningEmail: String,
-        @Field("cleaning_staff_password") cleaningPassword: String,
-
         @Field("inventory_staff_name") inventoryName: String,
         @Field("inventory_staff_email") inventoryEmail: String,
         @Field("inventory_staff_password") inventoryPassword: String,

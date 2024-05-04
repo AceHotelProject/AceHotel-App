@@ -142,7 +142,7 @@
                         android:drawableEnd="@drawable/icons_calendar"
                         android:ems="10"
                         android:focusable="false"
-                        android:hint="Tanggal penambahan barang"
+                        android:hint="Tanggal penambahan booking"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="16dp"
                         android:textColorHint="@color/dark_grey"

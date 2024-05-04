@@ -28,9 +28,6 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
         receptionistName: String,
         receptionistEmail: String,
         receptionistPassword: String,
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String
@@ -52,9 +49,6 @@ class HotelInteractor @Inject constructor(private val hotelRepository: HotelRepo
             receptionistName,
             receptionistEmail,
             receptionistPassword,
-            cleaningName,
-            cleaningEmail,
-            cleaningPassword,
             inventoryName,
             inventoryEmail,
             inventoryPassword

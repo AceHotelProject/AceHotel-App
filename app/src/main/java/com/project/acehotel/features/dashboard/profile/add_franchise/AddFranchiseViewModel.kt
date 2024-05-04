@@ -50,10 +50,6 @@ class AddFranchiseViewModel @Inject constructor(
         receptionistEmail: String,
         receptionistPassword: String,
 
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
-
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String,
@@ -74,9 +70,6 @@ class AddFranchiseViewModel @Inject constructor(
         receptionistName,
         receptionistEmail,
         receptionistPassword,
-        cleaningName,
-        cleaningEmail,
-        cleaningPassword,
         inventoryName,
         inventoryEmail,
         inventoryPassword
@@ -101,10 +94,6 @@ class AddFranchiseViewModel @Inject constructor(
         receptionistName: String,
         receptionistEmail: String,
         receptionistPassword: String,
-
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
 
         inventoryName: String,
         inventoryEmail: String,
@@ -142,9 +131,6 @@ class AddFranchiseViewModel @Inject constructor(
                             receptionistName,
                             receptionistEmail,
                             receptionistPassword,
-                            cleaningName,
-                            cleaningEmail,
-                            cleaningPassword,
                             inventoryName,
                             inventoryEmail,
                             inventoryPassword

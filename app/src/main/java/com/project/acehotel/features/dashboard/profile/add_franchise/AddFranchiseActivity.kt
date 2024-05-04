@@ -92,11 +92,6 @@ class AddFranchiseActivity : AppCompatActivity() {
             isEditTextEditable(edAddFranchiseInventoryPassConfirm, false)
             edAddFranchiseInventoryPass.setText(DEFAULT_INITIAL_PASSWORD)
             edAddFranchiseInventoryPassConfirm.setText(DEFAULT_INITIAL_PASSWORD)
-
-            isEditTextEditable(edAddFranchiseCleaningPass, false)
-            isEditTextEditable(edAddFranchiseCleaningPassConfirm, false)
-            edAddFranchiseCleaningPass.setText(DEFAULT_INITIAL_PASSWORD)
-            edAddFranchiseCleaningPassConfirm.setText(DEFAULT_INITIAL_PASSWORD)
         }
     }
 
@@ -167,18 +162,6 @@ class AddFranchiseActivity : AppCompatActivity() {
 
     private fun disableEditAccount() {
         binding.apply {
-            textView22.visibility = View.GONE
-            layoutAddFranchiseCleaningPassConfirm.visibility = View.GONE
-
-            textView21.visibility = View.GONE
-            layoutAddFranchiseCleaningPass.visibility = View.GONE
-
-            textView20.visibility = View.GONE
-            layoutAddFranchiseCleaningEmail.visibility = View.GONE
-
-            textView19.visibility = View.GONE
-            layoutAddFranchiseCleaningName.visibility = View.GONE
-
             textView18.visibility = View.GONE
             layoutAddFranchiseInventoryPassConfirm.visibility = View.GONE
 
@@ -568,16 +551,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                 layoutAddFranchiseInventoryPass.visibility = View.VISIBLE
                 layoutAddFranchiseInventoryPassConfirm.visibility = View.VISIBLE
 
-                isEditTextEditable(edAddFranchiseCleaningName, editable)
-                isEditTextEditable(edAddFranchiseCleaningEmail, editable)
-                isEditTextEditable(edAddFranchiseCleaningPass, editable)
-                isEditTextEditable(edAddFranchiseCleaningPassConfirm, editable)
-
-                textView21.visibility = View.VISIBLE
-                textView22.visibility = View.VISIBLE
-                layoutAddFranchiseCleaningPass.visibility = View.VISIBLE
-                layoutAddFranchiseCleaningPassConfirm.visibility = View.VISIBLE
-
                 addFranchisePhotoRegular1.isClickable = editable
                 addFranchisePhotoExclusive1.isClickable = editable
             } else {
@@ -623,16 +596,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                 textView18.visibility = View.GONE
                 layoutAddFranchiseInventoryPass.visibility = View.GONE
                 layoutAddFranchiseInventoryPassConfirm.visibility = View.GONE
-
-                isEditTextEditable(edAddFranchiseCleaningName, editable)
-                isEditTextEditable(edAddFranchiseCleaningEmail, editable)
-                isEditTextEditable(edAddFranchiseCleaningPass, editable)
-                isEditTextEditable(edAddFranchiseCleaningPassConfirm, editable)
-
-                textView21.visibility = View.GONE
-                textView22.visibility = View.GONE
-                layoutAddFranchiseCleaningPass.visibility = View.GONE
-                layoutAddFranchiseCleaningPassConfirm.visibility = View.GONE
 
                 addFranchisePhotoRegular1.isClickable = editable
                 addFranchisePhotoExclusive1.isClickable = editable
@@ -733,9 +696,6 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                             edAddFranchiseInventoryName.setText(inventoryStaff.username)
                             edAddFranchiseInventoryEmail.setText(inventoryStaff.email)
-
-                            edAddFranchiseCleaningName.setText(cleaningStaff.username)
-                            edAddFranchiseCleaningEmail.setText(cleaningStaff.email)
 
                             savedRegularRoomImage = regularRoomImage
                             savedExclusiveRoomImage = exclusiveRoomImage
@@ -1159,94 +1119,6 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                 edAddFranchiseInventoryPassConfirm.setSelection(edAddFranchiseInventoryPassConfirm.text!!.length)
             }
-
-            edAddFranchiseCleaningName.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    checkForms()
-                }
-            })
-
-            edAddFranchiseCleaningEmail.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    checkForms()
-                }
-            })
-
-            edAddFranchiseCleaningPass.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    checkForms()
-                }
-            })
-
-            layoutAddFranchiseCleaningPass.setEndIconOnClickListener {
-                if (edAddFranchiseCleaningPass.transformationMethod == PasswordTransformationMethod.getInstance()) {
-                    edAddFranchiseCleaningPass.transformationMethod =
-                        HideReturnsTransformationMethod.getInstance()
-                    layoutAddFranchiseCleaningPass.endIconDrawable =
-                        getDrawable(R.drawable.icons_no_see_pass)
-                } else {
-                    edAddFranchiseCleaningPass.transformationMethod =
-                        PasswordTransformationMethod.getInstance()
-                    layoutAddFranchiseCleaningPass.endIconDrawable =
-                        getDrawable(R.drawable.icons_see_pass)
-                }
-
-                edAddFranchiseCleaningPass.setSelection(edAddFranchiseCleaningPass.text!!.length)
-            }
-
-            edAddFranchiseCleaningPassConfirm.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    checkForms()
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    checkForms()
-                }
-            })
-
-            layoutAddFranchiseCleaningPassConfirm.setEndIconOnClickListener {
-                if (edAddFranchiseCleaningPassConfirm.transformationMethod == PasswordTransformationMethod.getInstance()) {
-                    edAddFranchiseCleaningPassConfirm.transformationMethod =
-                        HideReturnsTransformationMethod.getInstance()
-                    layoutAddFranchiseCleaningPassConfirm.endIconDrawable =
-                        getDrawable(R.drawable.icons_no_see_pass)
-                } else {
-                    edAddFranchiseCleaningPassConfirm.transformationMethod =
-                        PasswordTransformationMethod.getInstance()
-                    layoutAddFranchiseCleaningPassConfirm.endIconDrawable =
-                        getDrawable(R.drawable.icons_see_pass)
-                }
-
-                edAddFranchiseCleaningPassConfirm.setSelection(edAddFranchiseCleaningPassConfirm.text!!.length)
-            }
         }
     }
 
@@ -1287,10 +1159,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                 val inventoryName = edAddFranchiseInventoryName.text.toString()
                 val inventoryEmail = edAddFranchiseInventoryEmail.text.toString()
                 val inventoryPass = edAddFranchiseInventoryPass.text.toString()
-
-                val cleaningName = edAddFranchiseCleaningName.text.toString()
-                val cleaningEmail = edAddFranchiseCleaningEmail.text.toString()
-                val cleaningPass = edAddFranchiseCleaningPass.text.toString()
 
                 val fileExclusive1 = reduceFileImage(getFileExclusive1 as File)
                 val requestImageFileExclusive1 =
@@ -1334,9 +1202,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                     receptionistName,
                     receptionistEmail,
                     receptionistPass,
-                    cleaningName,
-                    cleaningEmail,
-                    cleaningPass,
                     inventoryName,
                     inventoryEmail,
                     inventoryPass
@@ -1405,8 +1270,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                 else edAddFranchiseRoomBedPrice.text.toString().toInt()
 
             if (intent.getStringExtra(FLAG_HOTEL_UI) == FLAG_HOTEL_UPDATE) {
-                Timber.tag("UPDATE").e("masuk bro sini")
-
                 isButtonEnabled(
                     hotelName.isNotEmpty() && layoutAddFranchiseName.error == null &&
                             hotelAddress.isNotEmpty() && layoutAddFranchiseAddress.error == null &&
@@ -1432,12 +1295,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                 val inventoryEmail = edAddFranchiseInventoryEmail.text.toString()
                 val inventoryPass = edAddFranchiseInventoryPass.text.toString()
                 val inventoryPassConfirm = edAddFranchiseInventoryPassConfirm.text.toString()
-
-                val cleaningName = edAddFranchiseCleaningName.text.toString()
-                val cleaningEmail = edAddFranchiseCleaningEmail.text.toString()
-                val cleaningPass = edAddFranchiseCleaningPass.text.toString()
-                val cleaningPassConfirm = edAddFranchiseCleaningPassConfirm.text.toString()
-
 
                 // OWNER
                 if (!Patterns.EMAIL_ADDRESS.matcher(ownerEmail).matches() && ownerEmail != "") {
@@ -1534,39 +1391,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                 }
                 // INVENTORY
 
-                // CLEANING
-                if (!Patterns.EMAIL_ADDRESS.matcher(cleaningEmail)
-                        .matches() && cleaningEmail != ""
-                ) {
-                    layoutAddFranchiseCleaningEmail.error =
-                        getString(R.string.wrong_email_format)
-                } else {
-                    layoutAddFranchiseCleaningEmail.error = null
-                }
-
-                if (cleaningPass.length < 8) {
-                    layoutAddFranchiseCleaningPass.error =
-                        getString(R.string.wrong_password_format)
-                } else {
-                    layoutAddFranchiseCleaningPass.error = null
-                }
-
-                if (cleaningPassConfirm.length < 8) {
-                    layoutAddFranchiseCleaningPassConfirm.error =
-                        getString(R.string.wrong_password_format)
-                } else {
-                    if (cleaningPass != cleaningPassConfirm) {
-                        layoutAddFranchiseCleaningPass.error =
-                            getString(R.string.diff_password)
-                        layoutAddFranchiseCleaningPassConfirm.error =
-                            getString(R.string.diff_password)
-                    } else {
-                        layoutAddFranchiseCleaningPass.error = null
-                        layoutAddFranchiseCleaningPassConfirm.error = null
-                    }
-                }
-                // CLEANING
-
                 isButtonEnabled(
                     hotelName.isNotEmpty() && layoutAddFranchiseName.error == null &&
                             hotelAddress.isNotEmpty() && layoutAddFranchiseAddress.error == null &&
@@ -1585,9 +1409,6 @@ class AddFranchiseActivity : AppCompatActivity() {
                             inventoryName.isNotEmpty() && layoutAddFranchiseInventoryName.error == null &&
                             inventoryEmail.isNotEmpty() && layoutAddFranchiseInventoryEmail.error == null &&
                             inventoryPass.isNotEmpty() && layoutAddFranchiseInventoryPass.error == null &&
-                            cleaningName.isNotEmpty() && layoutAddFranchiseCleaningName.error == null &&
-                            cleaningEmail.isNotEmpty() && layoutAddFranchiseCleaningEmail.error == null &&
-                            cleaningPass.isNotEmpty() && layoutAddFranchiseCleaningPass.error == null &&
                             getFileRegular1 != null &&
                             getFileExclusive1 != null
                 )

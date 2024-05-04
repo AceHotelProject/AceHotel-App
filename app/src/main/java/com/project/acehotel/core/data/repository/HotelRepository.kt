@@ -42,9 +42,6 @@ class HotelRepository @Inject constructor(
         receptionistName: String,
         receptionistEmail: String,
         receptionistPassword: String,
-        cleaningName: String,
-        cleaningEmail: String,
-        cleaningPassword: String,
         inventoryName: String,
         inventoryEmail: String,
         inventoryPassword: String
@@ -72,9 +69,6 @@ class HotelRepository @Inject constructor(
                     receptionistName,
                     receptionistEmail,
                     receptionistPassword,
-                    cleaningName,
-                    cleaningEmail,
-                    cleaningPassword,
                     inventoryName,
                     inventoryEmail,
                     inventoryPassword
