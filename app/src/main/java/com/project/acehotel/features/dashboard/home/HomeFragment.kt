@@ -103,6 +103,9 @@ class HomeFragment : Fragment(), IUserLayout {
                             initBookingRecyclerView(listOf())
 
                             initCurrentVisitorRecyclerView(listOf())
+
+                            binding.tvRoomAvail.text =
+                                (hotelData!!.regularRoomCount + hotelData!!.exclusiveRoomCount).toString()
                         } else {
                             Timber.tag("HomeFragment").e(booking.message)
                             activity?.showToast(booking.message.toString())

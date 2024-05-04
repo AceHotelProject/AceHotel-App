@@ -12,7 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.acehotel.R
 import com.project.acehotel.core.ui.adapter.tabs.ManagementPagerAdapter
@@ -23,9 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class ManagementFragment : Fragment() {
     private var _binding: FragmentManagementBinding? = null
     private val binding get() = _binding!!
-
-    private val managementViewModel: ManagementViewModel by activityViewModels()
-    private var tabPosition = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,6 +83,13 @@ class ManagementFragment : Fragment() {
                 LayoutInflater.from(requireContext()).inflate(R.layout.tab_title, null) as TextView
             binding.tabLayout.getTabAt(i)?.customView = customTextView
         }
+
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                isEditTextEditable(position != 0) // Assuming you want search disabled only on the first tab
+            }
+        })
     }
 
     override fun onCreateView(
@@ -100,6 +104,15 @@ class ManagementFragment : Fragment() {
         super.onDestroyView()
 
         _binding = null
+    }
+
+    private fun isEditTextEditable(isEditable: Boolean) {
+        binding.edManagementSearch.apply {
+            isFocusable = isEditable
+            isClickable = isEditable
+            isFocusableInTouchMode = isEditable
+            isCursorVisible = isEditable
+        }
     }
 
     companion object {
