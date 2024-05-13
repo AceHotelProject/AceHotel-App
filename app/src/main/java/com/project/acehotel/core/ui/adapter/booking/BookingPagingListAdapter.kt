@@ -4,17 +4,18 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.booking.model.Booking
+import com.project.acehotel.core.ui.adapter.booking.callback.BookingPagingDiffCallback
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.CurrentVisitorStatus
 import com.project.acehotel.core.utils.constants.mapToRoomDisplay
 import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.databinding.ItemListBookingBinding
+import timber.log.Timber
 
 class BookingPagingListAdapter :
-    PagingDataAdapter<Booking, BookingPagingListAdapter.ViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<Booking, BookingPagingListAdapter.ViewHolder>(BookingPagingDiffCallback()) {
     private lateinit var onItemCallback: OnItemClickCallback
 
     inner class ViewHolder(val binding: ItemListBookingBinding) :
@@ -28,6 +29,8 @@ class BookingPagingListAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = getItem(position)
+
+        Timber.tag("DIFF").e(data?.id)
 
         holder.binding.apply {
             if (data?.room?.first()?.actualCheckin != "Empty" && data?.room?.first()?.actualCheckout != "Empty") {
@@ -63,24 +66,5 @@ class BookingPagingListAdapter :
 
     interface OnItemClickCallback {
         fun onItemClicked(context: Context, booking: Booking)
-    }
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Booking>() {
-            override fun areItemsTheSame(oldItem: Booking, newItem: Booking): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Booking, newItem: Booking): Boolean {
-                return oldItem.id == newItem.id &&
-                        oldItem.visitorName == newItem.visitorName &&
-                        oldItem.checkinDate == newItem.checkinDate &&
-                        oldItem.checkoutDate == newItem.checkoutDate &&
-                        oldItem.totalPrice == newItem.totalPrice &&
-                        oldItem.roomCount == newItem.roomCount &&
-                        oldItem.duration == newItem.duration &&
-                        oldItem.type == newItem.type
-            }
-        }
     }
 }

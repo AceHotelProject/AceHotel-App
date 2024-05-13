@@ -212,7 +212,8 @@ class BookingRepository @Inject constructor(
     ): Flow<PagingData<Booking>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 5
+                pageSize = 10,
+                initialLoadSize = 15,
             ),
             pagingSourceFactory = {
                 ListBookingPagingSource(apiService, roomId, filterDate, false, "room")

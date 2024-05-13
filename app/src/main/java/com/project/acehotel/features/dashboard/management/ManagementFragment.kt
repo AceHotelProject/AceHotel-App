@@ -65,7 +65,7 @@ class ManagementFragment : Fragment() {
     private fun handleSearch(query: String) {
         val currentFragment =
             childFragmentManager.findFragmentByTag("f${binding.viewPager.currentItem}")
-        if (currentFragment is IManagementSearch) {
+        if (currentFragment is IManagementSearch && query.isNotEmpty()) {
             currentFragment.onSearchQuery(query)
         }
     }

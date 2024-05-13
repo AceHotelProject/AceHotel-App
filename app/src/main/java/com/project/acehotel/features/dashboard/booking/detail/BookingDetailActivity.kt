@@ -285,7 +285,7 @@ class BookingDetailActivity : AppCompatActivity(), IUserLayout {
                                 if (!isInternetAvailable(this@BookingDetailActivity)) {
                                     showToast(getString(R.string.check_internet))
                                 } else {
-                                    showToast(note.message.toString())
+//                                    showToast(note.message.toString())
                                 }
                             }
                             is Resource.Loading -> {

@@ -50,8 +50,10 @@ class HomeFragment : Fragment(), IUserLayout {
     }
 
     private fun checkUserRole() {
-        homeViewModel.getUser().observe(requireActivity()) { user ->
-            user.user?.role?.let { changeLayoutByUser(it) }
+        homeViewModel.getUser().observe(this) { user ->
+            user.user?.role?.let {
+                changeLayoutByUser(it)
+            }
         }
     }
 

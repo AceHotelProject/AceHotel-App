@@ -123,17 +123,18 @@ class ChooseBookingActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
                     Timber.tag("ChooseBookingActivity").d(booking.message)
                 }
+
                 is Resource.Success -> {
                     showLoading(false)
-
-
 
                     when (intent.getStringExtra(FLAG_VISITOR)) {
                         MENU_CHECKIN -> {
@@ -144,6 +145,7 @@ class ChooseBookingActivity : AppCompatActivity() {
 
                             handleEmptyData(filterCheckinData)
                         }
+
                         MENU_CHECKOUT -> {
                             val filterCheckoutData = booking.data?.filter {
                                 it.room.first().actualCheckin != "Empty" && it.room.first().actualCheckout == "Empty"
@@ -177,9 +179,11 @@ class ChooseBookingActivity : AppCompatActivity() {
                     MENU_CHECKIN -> {
                         Intent(this@ChooseBookingActivity, CheckinActivity::class.java)
                     }
+
                     MENU_CHECKOUT -> {
                         Intent(this@ChooseBookingActivity, CheckoutActivity::class.java)
                     }
+
                     else -> {
                         Intent(this@ChooseBookingActivity, MainActivity::class.java)
                     }

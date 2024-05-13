@@ -18,9 +18,12 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.utils.*
+import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.core.utils.constants.UserRole
+import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.showLongToast
+import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.ActivityMainBinding
 import com.project.acehotel.features.dashboard.booking.choose_booking.ChooseBookingActivity
 import com.project.acehotel.features.dashboard.management.inventory.choose_item.ChooseItemInventoryActivity
@@ -80,12 +83,15 @@ class MainActivity : AppCompatActivity() {
                         Timber.tag("MainActivity").e(booking.message)
                     }
                 }
+
                 is Resource.Loading -> {
 
                 }
+
                 is Resource.Message -> {
                     Timber.tag("MainActivity").d(booking.message)
                 }
+
                 is Resource.Success -> {
                     if (booking.data != null) {
                         for (item in booking.data) {

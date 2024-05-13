@@ -127,10 +127,10 @@ class BookingFragment : Fragment(), IUserLayout {
 
             }
             UserRole.FRANCHISE -> {
-                binding.mainLayout.visibility = View.GONE
+
             }
             UserRole.INVENTORY_STAFF -> {
-
+                binding.mainLayout.visibility = View.GONE
             }
             UserRole.RECEPTIONIST -> {
 

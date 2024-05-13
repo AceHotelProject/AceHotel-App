@@ -30,7 +30,7 @@ class ChooseBookingViewModel @Inject constructor(
     fun executeGetListBookingToday(visitorName: String): MediatorLiveData<Resource<List<Booking>>> =
         MediatorLiveData<Resource<List<Booking>>>().apply {
             addSource(getSelectedHotelData()) { hotel ->
-                val date = DateUtils.getDateThisDay()
+                val date = DateUtils.getDateThisMonth()
 
                 addSource(getListBookingByHotel(hotel.id, date, visitorName)) { booking ->
                     value = booking
