@@ -55,7 +55,7 @@ class RoomFragment : Fragment(), IUserLayout {
     }
 
     private fun checkUserRole() {
-        roomViewModel.getUser().observe(this) { user ->
+        roomViewModel.getUser().observe(requireActivity()) { user ->
             user.user?.role?.let {
                 changeLayoutByUser(it)
             }
@@ -65,55 +65,56 @@ class RoomFragment : Fragment(), IUserLayout {
     private fun fetchRoomStats() {
         val filterDate = DateUtils.getDateThisDay()
 
-        roomViewModel.executeGetListBookingByHotel(filterDate).observe(this) { booking ->
-            when (booking) {
-                is Resource.Error -> {
-                    showLoading(false)
-                    if (!isInternetAvailable(requireContext())) {
-                        activity?.showToast(getString(R.string.check_internet))
-                    } else {
-                        Timber.tag("RoomFragment").e(booking.message)
-                    }
-                }
-
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
-
-                is Resource.Message -> {
-                    showLoading(false)
-                    Timber.tag("RoomFragment").d(booking.message)
-                }
-
-                is Resource.Success -> {
-                    showLoading(false)
-
-                    val result = booking.data
-                    if (result != null) {
-                        for (item in result) {
-                            if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout != "Empty") {
-                                ++visitorCheckOut
-                            } else if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout == "Empty") {
-                                ++visitorCheckIn
-                            } else if (DateUtils.isTodayDate(item.checkinDate) && item.room.first().actualCheckout == "Empty") {
-                                ++roomBooked
-                            } else {
-                                continue
-                            }
+        roomViewModel.executeGetListBookingByHotel(filterDate)
+            .observe(requireActivity()) { booking ->
+                when (booking) {
+                    is Resource.Error -> {
+                        showLoading(false)
+                        if (!isInternetAvailable(requireContext())) {
+                            activity?.showToast(getString(R.string.check_internet))
+                        } else {
+                            Timber.tag("RoomFragment").e(booking.message)
                         }
                     }
 
-                    binding.apply {
-                        roomAvail -= roomBooked
+                    is Resource.Loading -> {
+                        showLoading(true)
+                    }
 
-                        tvRoomTotalCheckin.text = visitorCheckIn.toString()
-                        tvRoomTotalCheckout.text = visitorCheckOut.toString()
-                        tvRoomTotalRoomAvail.text = roomAvail.toString()
-                        tvRoomTotalRoomFull.text = roomBooked.toString()
+                    is Resource.Message -> {
+                        showLoading(false)
+                        Timber.tag("RoomFragment").d(booking.message)
+                    }
+
+                    is Resource.Success -> {
+                        showLoading(false)
+
+                        val result = booking.data
+                        if (result != null) {
+                            for (item in result) {
+                                if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout != "Empty") {
+                                    ++visitorCheckOut
+                                } else if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout == "Empty") {
+                                    ++visitorCheckIn
+                                } else if (DateUtils.isTodayDate(item.checkinDate) && item.room.first().actualCheckout == "Empty") {
+                                    ++roomBooked
+                                } else {
+                                    continue
+                                }
+                            }
+                        }
+
+                        binding.apply {
+                            roomAvail -= roomBooked
+
+                            tvRoomTotalCheckin.text = visitorCheckIn.toString()
+                            tvRoomTotalCheckout.text = visitorCheckOut.toString()
+                            tvRoomTotalRoomAvail.text = roomAvail.toString()
+                            tvRoomTotalRoomFull.text = roomBooked.toString()
+                        }
                     }
                 }
             }
-        }
     }
 
     private fun handleRefresh() {
@@ -131,7 +132,7 @@ class RoomFragment : Fragment(), IUserLayout {
     }
 
     private fun fetchListRoom() {
-        roomViewModel.executeGetListRoomByHotel().observe(this) { room ->
+        roomViewModel.executeGetListRoomByHotel().observe(requireActivity()) { room ->
             when (room) {
                 is Resource.Error -> {
                     showLoading(false)
@@ -180,7 +181,7 @@ class RoomFragment : Fragment(), IUserLayout {
     }
 
     private fun fetchHotelInfo() {
-        roomViewModel.getSelectedHotelData().observe(this) { hotel ->
+        roomViewModel.getSelectedHotelData().observe(requireActivity()) { hotel ->
             binding.apply {
                 roomAvail = hotel.regularRoomCount + hotel.exclusiveRoomCount
 
