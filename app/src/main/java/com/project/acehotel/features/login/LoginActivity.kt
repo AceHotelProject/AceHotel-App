@@ -122,16 +122,19 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                             showToast("Pastikan email dan password telah benar")
                         }
                     }
+
                     is Resource.Loading -> {
                         showLoading(true)
                         isButtonEnabled(false)
                     }
+
                     is Resource.Message -> {
                         showLoading(false)
                         isButtonEnabled(true)
 
                         Timber.tag("LoginActivity").d(result.message)
                     }
+
                     is Resource.Success -> {
                         if (result.data?.tokens != null) {
                             currentHotelId = result.data.user?.hotelId?.first() ?: ""
@@ -148,6 +151,7 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                             }
                         }
                     }
+
                     else -> {}
                 }
             }
@@ -211,8 +215,9 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                         isButtonEnabled(true)
 
                         val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        intentToMainActivity.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intentToMainActivity)
-                        finish()
                     } else {
                         showLoading(false)
                         isButtonEnabled(true)
@@ -221,6 +226,7 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                     }
                 }
             }
+
             UserRole.FRANCHISE -> {
                 loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
                     if (it) {
@@ -228,8 +234,9 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                         isButtonEnabled(true)
 
                         val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        intentToMainActivity.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intentToMainActivity)
-                        finish()
                     } else {
                         showLoading(false)
                         isButtonEnabled(true)
@@ -238,6 +245,7 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                     }
                 }
             }
+
             UserRole.INVENTORY_STAFF -> {
                 loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
                     if (it) {
@@ -245,8 +253,9 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                         isButtonEnabled(true)
 
                         val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        intentToMainActivity.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intentToMainActivity)
-                        finish()
                     } else {
                         showLoading(false)
                         isButtonEnabled(true)
@@ -255,6 +264,7 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                     }
                 }
             }
+
             UserRole.RECEPTIONIST -> {
                 loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
                     if (it) {
@@ -262,8 +272,9 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                         isButtonEnabled(true)
 
                         val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        intentToMainActivity.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intentToMainActivity)
-                        finish()
                     } else {
                         showLoading(false)
                         isButtonEnabled(true)
@@ -272,9 +283,11 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                     }
                 }
             }
+
             UserRole.ADMIN -> {
 
             }
+
             UserRole.UNDEFINED -> {
                 loginViewModel.executeSaveCurrentHotel(currentHotelId).observe(this) {
                     if (it) {
@@ -282,8 +295,9 @@ class LoginActivity : AppCompatActivity(), IUserLayout {
                         isButtonEnabled(true)
 
                         val intentToMainActivity = Intent(this, MainActivity::class.java)
+                        intentToMainActivity.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intentToMainActivity)
-                        finish()
                     } else {
                         showLoading(false)
                         isButtonEnabled(true)

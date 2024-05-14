@@ -14,8 +14,12 @@ import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.room.model.Room
 import com.project.acehotel.core.ui.adapter.room.RoomListAdapter
-import com.project.acehotel.core.utils.*
+import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.IUserLayout
 import com.project.acehotel.core.utils.constants.UserRole
+import com.project.acehotel.core.utils.formatNumber
+import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentRoomBinding
 import com.project.acehotel.features.dashboard.room.change_price.ChangePriceActivity
 import com.project.acehotel.features.dashboard.room.detail.RoomDetailActivity
@@ -46,6 +50,16 @@ class RoomFragment : Fragment(), IUserLayout {
         handleRefresh()
 
         fetchRoomStats()
+
+        checkUserRole()
+    }
+
+    private fun checkUserRole() {
+        roomViewModel.getUser().observe(this) { user ->
+            user.user?.role?.let {
+                changeLayoutByUser(it)
+            }
+        }
     }
 
     private fun fetchRoomStats() {
@@ -61,13 +75,16 @@ class RoomFragment : Fragment(), IUserLayout {
                         Timber.tag("RoomFragment").e(booking.message)
                     }
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
                     Timber.tag("RoomFragment").d(booking.message)
                 }
+
                 is Resource.Success -> {
                     showLoading(false)
 
@@ -125,13 +142,16 @@ class RoomFragment : Fragment(), IUserLayout {
                         activity?.showToast(room.message.toString())
                     }
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
                     Timber.tag("RoomFragment").d(room.message)
                 }
+
                 is Resource.Success -> {
                     showLoading(false)
 
@@ -209,18 +229,23 @@ class RoomFragment : Fragment(), IUserLayout {
             UserRole.MASTER -> {
 
             }
+
             UserRole.FRANCHISE -> {
 
             }
+
             UserRole.INVENTORY_STAFF -> {
                 binding.mainLayout.visibility = View.GONE
             }
+
             UserRole.RECEPTIONIST -> {
                 binding.btnEditPrice.visibility = View.GONE
             }
+
             UserRole.ADMIN -> {
 
             }
+
             UserRole.UNDEFINED -> {
                 binding.mainLayout.visibility = View.GONE
             }

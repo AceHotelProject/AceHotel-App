@@ -97,8 +97,9 @@ class MainActivity : AppCompatActivity() {
                         for (item in booking.data) {
                             if ((DateUtils.isTodayDate(item.checkoutDate) ||
                                         DateUtils.isDateBeforeToday(item.checkoutDate)) &&
-                                item.room.first().actualCheckout == "Empty"
+                                item.room.first().actualCheckout == "Empty" && item.room.first().actualCheckin != "Empty"
                             ) {
+                                Timber.tag("CHECKOUT").e(item.toString())
                                 ++countNotCheckout
                             }
                         }

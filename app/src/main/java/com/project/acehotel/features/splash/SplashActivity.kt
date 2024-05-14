@@ -33,14 +33,16 @@ class SplashActivity : AppCompatActivity() {
             if (token != "") {
                 Handler().postDelayed({
                     val intentToHome = Intent(this, MainActivity::class.java)
+                    intentToHome.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intentToHome)
-                    finish()
                 }, DELAY.toLong())
             } else {
                 Handler().postDelayed({
                     val intentToLogin = Intent(this, LoginActivity::class.java)
+                    intentToLogin.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intentToLogin)
-                    finish()
                 }, DELAY.toLong())
             }
         }

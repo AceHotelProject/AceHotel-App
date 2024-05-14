@@ -164,16 +164,19 @@ class CheckoutActivity : AppCompatActivity() {
                             showToast(room.message.toString())
                         }
                     }
+
                     is Resource.Loading -> {
                         showLoading(true)
                         isButtonEnabled(false)
                     }
+
                     is Resource.Message -> {
                         showLoading(false)
                         isButtonEnabled(true)
 
                         Timber.tag("CheckoutActivity").d(room.message)
                     }
+
                     is Resource.Success -> {
                         showLoading(false)
                         isButtonEnabled(true)
@@ -181,8 +184,9 @@ class CheckoutActivity : AppCompatActivity() {
                         showToast("Pengunjung telah berhasil checkin")
 
                         val intentToMain = Intent(this@CheckoutActivity, MainActivity::class.java)
+                        intentToMain.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intentToMain)
-                        finish()
                     }
                 }
             }

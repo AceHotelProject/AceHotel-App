@@ -69,16 +69,19 @@ class CheckinActivity : AppCompatActivity() {
                             showToast(room.message.toString())
                         }
                     }
+
                     is Resource.Loading -> {
                         showLoading(true)
                         isButtonEnabled(false)
                     }
+
                     is Resource.Message -> {
                         showLoading(false)
                         isButtonEnabled(true)
 
                         Timber.tag("CheckinActivity").d(room.message)
                     }
+
                     is Resource.Success -> {
                         showLoading(false)
                         isButtonEnabled(true)
@@ -86,8 +89,9 @@ class CheckinActivity : AppCompatActivity() {
                         showToast("Pengunjung telah berhasil checkin")
 
                         val intentToMain = Intent(this@CheckinActivity, MainActivity::class.java)
+                        intentToMain.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intentToMain)
-                        finish()
                     }
                 }
             }
@@ -106,14 +110,17 @@ class CheckinActivity : AppCompatActivity() {
                         showToast(room.message.toString())
                     }
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
 
                     Timber.tag("CheckinActivity").d(room.message)
                 }
+
                 is Resource.Success -> {
                     showLoading(false)
 

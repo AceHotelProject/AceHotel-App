@@ -18,10 +18,14 @@ import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
-import com.project.acehotel.core.utils.*
+import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.DeleteDialogType
 import com.project.acehotel.core.utils.datamapper.HotelDataMapper
 import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
+import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.reduceFileImage
+import com.project.acehotel.core.utils.showToast
+import com.project.acehotel.core.utils.uriToFile
 import com.project.acehotel.databinding.ActivityAddFranchiseBinding
 import com.project.acehotel.features.dashboard.profile.manage_franchise.ManageFranchiseActivity
 import com.project.acehotel.features.popup.delete.DeleteItemDialog
@@ -120,6 +124,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                     handleFullImageView()
                 }
             }
+
             FLAG_HOTEL_UPDATE -> {
                 binding.apply {
                     binding.tvTitle.text = "Perbaharui Hotel"
@@ -133,6 +138,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                     disableEditAccount()
                 }
             }
+
             else -> {
                 binding.tvTitle.text = "Tambah Hotel"
 
@@ -283,14 +289,17 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                                     isButtonEnabled(true)
                                 }
+
                                 is Resource.Loading -> {
                                     showLoading(true)
                                     isButtonEnabled(false)
                                 }
+
                                 is Resource.Message -> {
                                     showLoading(false)
                                     isButtonEnabled(true)
                                 }
+
                                 is Resource.Success -> {
                                     showLoading(false)
                                     isButtonEnabled(true)
@@ -307,8 +316,10 @@ class AddFranchiseActivity : AppCompatActivity() {
                                                         this@AddFranchiseActivity,
                                                         ManageFranchiseActivity::class.java
                                                     )
+
+                                                    intentToManageFranchise.flags =
+                                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                                     startActivity(intentToManageFranchise)
-                                                    finish()
                                                 }
                                             }
                                     }
@@ -361,14 +372,17 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                                     isButtonEnabled(true)
                                 }
+
                                 is Resource.Loading -> {
                                     showLoading(true)
                                     isButtonEnabled(false)
                                 }
+
                                 is Resource.Message -> {
                                     showLoading(false)
                                     isButtonEnabled(true)
                                 }
+
                                 is Resource.Success -> {
                                     showLoading(false)
                                     isButtonEnabled(true)
@@ -379,8 +393,9 @@ class AddFranchiseActivity : AppCompatActivity() {
                                         this@AddFranchiseActivity,
                                         ManageFranchiseActivity::class.java
                                     )
+                                    intentToManageFranchise.flags =
+                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     startActivity(intentToManageFranchise)
-                                    finish()
                                 }
                             }
                         }
@@ -428,14 +443,17 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                                     isButtonEnabled(true)
                                 }
+
                                 is Resource.Loading -> {
                                     showLoading(true)
                                     isButtonEnabled(false)
                                 }
+
                                 is Resource.Message -> {
                                     showLoading(false)
                                     isButtonEnabled(true)
                                 }
+
                                 is Resource.Success -> {
                                     showLoading(false)
                                     isButtonEnabled(true)
@@ -446,8 +464,10 @@ class AddFranchiseActivity : AppCompatActivity() {
                                         this@AddFranchiseActivity,
                                         ManageFranchiseActivity::class.java
                                     )
+
+                                    intentToManageFranchise.flags =
+                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     startActivity(intentToManageFranchise)
-                                    finish()
                                 }
                             }
                         }
@@ -477,14 +497,17 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                                 isButtonEnabled(true)
                             }
+
                             is Resource.Loading -> {
                                 showLoading(true)
                                 isButtonEnabled(false)
                             }
+
                             is Resource.Message -> {
                                 showLoading(false)
                                 isButtonEnabled(true)
                             }
+
                             is Resource.Success -> {
                                 showLoading(false)
                                 isButtonEnabled(true)
@@ -495,8 +518,10 @@ class AddFranchiseActivity : AppCompatActivity() {
                                     this@AddFranchiseActivity,
                                     ManageFranchiseActivity::class.java
                                 )
+
+                                intentToManageFranchise.flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(intentToManageFranchise)
-                                finish()
                             }
                         }
                     }
@@ -629,6 +654,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         startActivity(intentToAUpdateHotel)
                         true
                     }
+
                     R.id.menuDelete -> {
                         DeleteItemDialog(DeleteDialogType.MANAGE_HOTEL, hotelId).show(
                             supportFragmentManager,
@@ -636,6 +662,7 @@ class AddFranchiseActivity : AppCompatActivity() {
                         )
                         true
                     }
+
                     else -> false
                 }
             }
@@ -658,16 +685,19 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                     isButtonEnabled(true)
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                     isButtonEnabled(false)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
                     isButtonEnabled(true)
 
                     Timber.tag("AddFranchiseActivity").d(hotel.message)
                 }
+
                 is Resource.Success -> {
                     showLoading(false)
                     isButtonEnabled(true)
@@ -1218,16 +1248,19 @@ class AddFranchiseActivity : AppCompatActivity() {
 
                             isButtonEnabled(true)
                         }
+
                         is Resource.Loading -> {
                             showLoading(true)
                             isButtonEnabled(false)
                         }
+
                         is Resource.Message -> {
                             showLoading(false)
                             isButtonEnabled(true)
 
                             Timber.tag("AddFranchiseActivity").d(hotel.message)
                         }
+
                         is Resource.Success -> {
                             showLoading(false)
                             isButtonEnabled(true)
@@ -1238,8 +1271,9 @@ class AddFranchiseActivity : AppCompatActivity() {
                                 this@AddFranchiseActivity,
                                 ManageFranchiseActivity::class.java
                             )
+                            intentToManageFranchise.flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intentToManageFranchise)
-                            finish()
                         }
                     }
                 }

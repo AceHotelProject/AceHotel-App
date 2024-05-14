@@ -55,6 +55,8 @@ class LogoutDialog : DialogFragment() {
                 btnLogoutYes?.isEnabled = false
 
                 val intentToSplash = Intent(requireContext(), SplashActivity::class.java)
+                intentToSplash.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intentToSplash)
             }
         }
