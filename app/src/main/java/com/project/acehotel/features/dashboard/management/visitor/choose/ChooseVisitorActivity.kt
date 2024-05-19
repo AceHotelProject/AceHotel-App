@@ -137,13 +137,16 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
                             }
                         }
                     }
+
                     is Resource.Loading -> {
                         showLoading(true)
                     }
+
                     is Resource.Message -> {
                         showLoading(false)
                         Timber.tag("VisitorFragment").d(visitor.message)
                     }
+
                     is Resource.Success -> {
                         showLoading(false)
 
@@ -171,11 +174,13 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
 
                         startActivity(intentToAddBooking)
                     }
+
                     MENU_CHECKIN -> {
                         val intentToCheckin =
                             Intent(this@ChooseVisitorActivity, CheckinActivity::class.java)
                         startActivity(intentToCheckin)
                     }
+
                     MENU_CHECKOUT -> {
                         val intentToCheckout =
                             Intent(this@ChooseVisitorActivity, CheckoutActivity::class.java)
@@ -214,7 +219,5 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
         private const val MENU_BOOKING = "booking"
         private const val MENU_CHECKIN = "checkin"
         private const val MENU_CHECKOUT = "checkout"
-
-
     }
 }

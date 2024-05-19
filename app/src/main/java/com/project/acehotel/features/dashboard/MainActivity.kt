@@ -19,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.IUserLayout
 import com.project.acehotel.core.utils.constants.FabMenuState
 import com.project.acehotel.core.utils.constants.UserRole
 import com.project.acehotel.core.utils.isInternetAvailable
@@ -35,7 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IUserLayout {
     private lateinit var binding: ActivityMainBinding
 
     private val mainViewModel: MainViewModel by viewModels()
@@ -58,8 +59,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBar()
 
         checkNotificationPermission()
-
-        checkNotCheckout()
 
         checkUserRole()
     }
@@ -207,7 +206,7 @@ class MainActivity : AppCompatActivity() {
             AnimationUtils.loadAnimation(this, R.anim.anim_to_bottom)
         }
 
-        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE) {
+        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE || userRole == UserRole.RECEPTIONIST) {
             if (isClicked) {
                 binding.fabMenu.startAnimation(rotateOpen)
 
@@ -249,35 +248,11 @@ class MainActivity : AppCompatActivity() {
                 binding.fabChangeStock.startAnimation(toBottom)
                 binding.tvChangeStock.startAnimation(toBottom)
             }
-        } else if (userRole == UserRole.RECEPTIONIST) {
-            if (isClicked) {
-                binding.fabMenu.startAnimation(rotateOpen)
-
-                binding.fabAddBooking.startAnimation(fromBottom)
-                binding.tvAddBooking.startAnimation(fromBottom)
-
-                binding.fabCheckin.startAnimation(fromBottom)
-                binding.tvCheckin.startAnimation(fromBottom)
-
-                binding.fabCheckout.startAnimation(fromBottom)
-                binding.tvCheckout.startAnimation(fromBottom)
-            } else {
-                binding.fabMenu.startAnimation(rotateClose)
-
-                binding.fabAddBooking.startAnimation(toBottom)
-                binding.tvAddBooking.startAnimation(toBottom)
-
-                binding.fabCheckin.startAnimation(toBottom)
-                binding.tvCheckin.startAnimation(toBottom)
-
-                binding.fabCheckout.startAnimation(toBottom)
-                binding.tvCheckout.startAnimation(toBottom)
-            }
         }
     }
 
     private fun setVisibility(isClicked: Boolean, userRole: UserRole) {
-        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE) {
+        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE || userRole == UserRole.RECEPTIONIST) {
             if (isClicked) {
                 binding.fabAddBooking.visibility = View.VISIBLE
                 binding.tvAddBooking.visibility = View.VISIBLE
@@ -320,34 +295,11 @@ class MainActivity : AppCompatActivity() {
                 binding.fabChangeStock.visibility = View.INVISIBLE
                 binding.tvChangeStock.visibility = View.INVISIBLE
             }
-        } else if (userRole == UserRole.RECEPTIONIST) {
-            binding.fabChangeStock.visibility = View.GONE
-            binding.tvChangeStock.visibility = View.GONE
-
-            if (isClicked) {
-                binding.fabAddBooking.visibility = View.VISIBLE
-                binding.tvAddBooking.visibility = View.VISIBLE
-
-                binding.fabCheckin.visibility = View.VISIBLE
-                binding.tvCheckin.visibility = View.VISIBLE
-
-                binding.fabCheckout.visibility = View.VISIBLE
-                binding.tvCheckout.visibility = View.VISIBLE
-            } else {
-                binding.fabAddBooking.visibility = View.INVISIBLE
-                binding.tvAddBooking.visibility = View.INVISIBLE
-
-                binding.fabCheckin.visibility = View.INVISIBLE
-                binding.tvCheckin.visibility = View.INVISIBLE
-
-                binding.fabCheckout.visibility = View.INVISIBLE
-                binding.tvCheckout.visibility = View.INVISIBLE
-            }
         }
     }
 
     private fun setClickable(isClicked: Boolean, userRole: UserRole) {
-        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE) {
+        if (userRole == UserRole.MASTER || userRole == UserRole.FRANCHISE || userRole == UserRole.RECEPTIONIST) {
             if (isClicked) {
                 binding.fabAddBooking.isClickable = true
                 binding.fabCheckin.isClickable = true
@@ -372,16 +324,6 @@ class MainActivity : AppCompatActivity() {
                 binding.fabCheckout.isClickable = false
 
                 binding.fabChangeStock.isClickable = false
-            }
-        } else if (userRole == UserRole.RECEPTIONIST) {
-            if (isClicked) {
-                binding.fabAddBooking.isClickable = true
-                binding.fabCheckin.isClickable = true
-                binding.fabCheckout.isClickable = true
-            } else {
-                binding.fabAddBooking.isClickable = false
-                binding.fabCheckin.isClickable = false
-                binding.fabCheckout.isClickable = false
             }
         }
     }
@@ -414,5 +356,33 @@ class MainActivity : AppCompatActivity() {
         private const val MENU_BOOKING = "booking"
         private const val MENU_CHECKIN = "checkin"
         private const val MENU_CHECKOUT = "checkout"
+    }
+
+    override fun changeLayoutByUser(userRole: UserRole) {
+        when (userRole) {
+            UserRole.MASTER -> {
+                checkNotCheckout()
+            }
+
+            UserRole.FRANCHISE -> {
+                checkNotCheckout()
+            }
+
+            UserRole.INVENTORY_STAFF -> {
+
+            }
+
+            UserRole.RECEPTIONIST -> {
+                checkNotCheckout()
+            }
+
+            UserRole.ADMIN -> {
+
+            }
+
+            UserRole.UNDEFINED -> {
+
+            }
+        }
     }
 }

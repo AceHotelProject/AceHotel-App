@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
+import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.domain.room.model.Room
 import com.project.acehotel.core.ui.adapter.room.RoomListAdapter
 import com.project.acehotel.core.utils.DateUtils
@@ -32,6 +33,8 @@ class RoomFragment : Fragment(), IUserLayout {
     private val binding get() = _binding!!
 
     private val roomViewModel: RoomViewModel by activityViewModels()
+
+    private var hotelData: ManageHotel? = null
 
     private var visitorCheckIn = 0
     private var visitorCheckOut = 0
@@ -105,7 +108,8 @@ class RoomFragment : Fragment(), IUserLayout {
                         }
 
                         binding.apply {
-                            roomAvail -= roomBooked
+                            roomAvail =
+                                hotelData?.regularRoomCount!! + hotelData?.exclusiveRoomCount!! - roomBooked
 
                             tvRoomTotalCheckin.text = visitorCheckIn.toString()
                             tvRoomTotalCheckout.text = visitorCheckOut.toString()
@@ -182,8 +186,10 @@ class RoomFragment : Fragment(), IUserLayout {
 
     private fun fetchHotelInfo() {
         roomViewModel.getSelectedHotelData().observe(requireActivity()) { hotel ->
+            hotelData = hotel
+
             binding.apply {
-                roomAvail = hotel.regularRoomCount + hotel.exclusiveRoomCount
+//                roomAvail = hotel.regularRoomCount + hotel.exclusiveRoomCount
 
                 tvRoomPriceExclusive.text = "Rp ${formatNumber(hotel.exclusiveRoomPrice)}"
                 tvRoomPriceRegular.text = "Rp ${formatNumber(hotel.regularRoomPrice)}"

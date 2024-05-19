@@ -104,34 +104,42 @@ class ProfileFragment : Fragment(), IUserLayout {
             UserRole.MASTER -> {
 
             }
+
             UserRole.FRANCHISE -> {
                 binding.apply {
                     btnProfileChooseHotel.visibility = View.GONE
                     btnProfileManageHotel.visibility = View.GONE
                 }
             }
+
             UserRole.INVENTORY_STAFF -> {
                 binding.apply {
                     btnProfileChooseHotel.visibility = View.GONE
                     btnProfileManageHotel.visibility = View.GONE
                     btnProfileManageUser.visibility = View.GONE
+                    btnProfileStatTotal.visibility = View.GONE
                 }
             }
+
             UserRole.RECEPTIONIST -> {
                 binding.apply {
-                    btnProfileChooseHotel.visibility = View.GONE
+                    btnProfileStatTotal.visibility = View.GONE
                     btnProfileManageHotel.visibility = View.GONE
                     btnProfileManageUser.visibility = View.GONE
+                    btnProfileChooseHotel.visibility = View.GONE
                 }
             }
+
             UserRole.ADMIN -> {
 
             }
+
             UserRole.UNDEFINED -> {
                 binding.apply {
                     btnProfileChooseHotel.visibility = View.GONE
                     btnProfileManageHotel.visibility = View.GONE
                     btnProfileManageUser.visibility = View.GONE
+                    btnProfileStatTotal.visibility = View.GONE
                 }
             }
         }

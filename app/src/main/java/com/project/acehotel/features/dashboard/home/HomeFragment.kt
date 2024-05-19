@@ -17,9 +17,18 @@ import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.hotel.model.ManageHotel
 import com.project.acehotel.core.ui.adapter.booking.BookingListAdapter
 import com.project.acehotel.core.ui.adapter.visitor.CurrentVisitorAdapter
-import com.project.acehotel.core.utils.*
+import com.project.acehotel.core.utils.DateUtils
+import com.project.acehotel.core.utils.IUserLayout
 import com.project.acehotel.core.utils.constants.UserRole
-import com.project.acehotel.core.utils.constants.UserRole.*
+import com.project.acehotel.core.utils.constants.UserRole.ADMIN
+import com.project.acehotel.core.utils.constants.UserRole.FRANCHISE
+import com.project.acehotel.core.utils.constants.UserRole.INVENTORY_STAFF
+import com.project.acehotel.core.utils.constants.UserRole.MASTER
+import com.project.acehotel.core.utils.constants.UserRole.RECEPTIONIST
+import com.project.acehotel.core.utils.constants.UserRole.UNDEFINED
+import com.project.acehotel.core.utils.formatNumber
+import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.showToast
 import com.project.acehotel.databinding.FragmentHomeBinding
 import com.project.acehotel.features.dashboard.booking.detail.BookingDetailActivity
 import com.project.acehotel.features.dashboard.management.visitor.detail.VisitorDetailActivity
@@ -41,10 +50,6 @@ class HomeFragment : Fragment(), IUserLayout {
         checkUserRole()
 
         initialRecyclerView()
-
-        fetchHotelData()
-
-        fetchListBooking()
 
         handleRefresh()
     }
@@ -114,13 +119,16 @@ class HomeFragment : Fragment(), IUserLayout {
                         }
                     }
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
                     Timber.tag("HomeFragment").d(booking.message)
                 }
+
                 is Resource.Success -> {
                     showLoading(false)
 
@@ -218,10 +226,12 @@ class HomeFragment : Fragment(), IUserLayout {
                     binding.tvEmptyCurrentVisitor.visibility =
                         if (booking.isEmpty()) View.VISIBLE else View.INVISIBLE
                 }
+
                 binding.rvListCurrentBook -> {
                     binding.tvEmptyCurrentBook.visibility =
                         if (booking.isEmpty()) View.VISIBLE else View.INVISIBLE
                 }
+
                 else -> {
                     binding.tvEmptyCurrentVisitor.visibility =
                         if (booking.isEmpty()) View.VISIBLE else View.INVISIBLE
@@ -250,20 +260,31 @@ class HomeFragment : Fragment(), IUserLayout {
     override fun changeLayoutByUser(userRole: UserRole) {
         when (userRole) {
             MASTER -> {
+                fetchHotelData()
 
+                fetchListBooking()
             }
+
             FRANCHISE -> {
+                fetchHotelData()
 
+                fetchListBooking()
             }
+
             INVENTORY_STAFF -> {
                 binding.mainLayout.visibility = View.GONE
             }
-            RECEPTIONIST -> {
 
+            RECEPTIONIST -> {
+                fetchHotelData()
+
+                fetchListBooking()
             }
+
             ADMIN -> {
 
             }
+
             UNDEFINED -> {
                 binding.mainLayout.visibility = View.GONE
             }
