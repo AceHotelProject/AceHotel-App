@@ -27,12 +27,12 @@ class VisitorListAdapter(private val listVisitor: List<Visitor>?) :
 
         holder.binding.apply {
             tvVisitorCardName.text = data?.name
-            tvVisitorCardPhone.text = "Nomor telepon: ${data?.phone}"
+            tvVisitorCardPhone.text = "Nomor telepon : ${data?.phone}"
         }
 
         holder.itemView.setOnClickListener {
             if (data != null) {
-                onItemCallback.onItemClicked(data.id, data.name)
+                onItemCallback.onItemClicked(data.id, data.name, data.phone)
             }
         }
     }
@@ -42,6 +42,6 @@ class VisitorListAdapter(private val listVisitor: List<Visitor>?) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(id: String, name: String)
+        fun onItemClicked(id: String, name: String, number: String)
     }
 }

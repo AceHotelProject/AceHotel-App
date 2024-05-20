@@ -63,7 +63,7 @@ class VisitorFragment : Fragment(), IManagementSearch, IUserLayout {
         }
 
         visitorViewModel.executeGetVisitorList(name, email, identityNum)
-            .observe(this) { visitor ->
+            .observe(requireActivity()) { visitor ->
                 when (visitor) {
                     is Resource.Error -> {
                         showLoading(false)
@@ -78,13 +78,16 @@ class VisitorFragment : Fragment(), IManagementSearch, IUserLayout {
                             }
                         }
                     }
+
                     is Resource.Loading -> {
                         showLoading(true)
                     }
+
                     is Resource.Message -> {
                         showLoading(false)
                         Timber.tag("VisitorFragment").d(visitor.message)
                     }
+
                     is Resource.Success -> {
                         showLoading(false)
 
@@ -109,7 +112,7 @@ class VisitorFragment : Fragment(), IManagementSearch, IUserLayout {
         binding.rvListVisitor.layoutManager = layoutManager
 
         adapter.setOnItemClickCallback(object : VisitorListAdapter.OnItemClickCallback {
-            override fun onItemClicked(id: String, name: String) {
+            override fun onItemClicked(id: String, name: String, number: String) {
                 val intentToVisitorDetail =
                     Intent(requireContext(), VisitorDetailActivity::class.java)
                 intentToVisitorDetail.putExtra(VISITOR_ID, id)
@@ -141,18 +144,23 @@ class VisitorFragment : Fragment(), IManagementSearch, IUserLayout {
             UserRole.MASTER -> {
 
             }
+
             UserRole.FRANCHISE -> {
 
             }
+
             UserRole.INVENTORY_STAFF -> {
                 binding.mainLayout.visibility = View.GONE
             }
+
             UserRole.RECEPTIONIST -> {
-              
+
             }
+
             UserRole.ADMIN -> {
 
             }
+
             UserRole.UNDEFINED -> {
                 binding.mainLayout.visibility = View.GONE
             }
