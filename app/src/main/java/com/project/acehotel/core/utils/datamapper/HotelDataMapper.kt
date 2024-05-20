@@ -1,6 +1,10 @@
 package com.project.acehotel.core.utils.datamapper
 
-import com.project.acehotel.core.data.source.remote.response.hotel.*
+import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.HotelRecapResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
 import com.project.acehotel.core.domain.auth.model.User
 import com.project.acehotel.core.domain.booking.model.Booking
 import com.project.acehotel.core.domain.hotel.model.Hotel
@@ -145,7 +149,7 @@ object HotelDataMapper {
         exclusiveRoomPrice = input.exclusiveRoomPrice ?: 0,
         extraBedPrice = input.extraBedPrice ?: 0,
 
-        discountAmount = input.extraBedPrice ?: 0,
+        discountAmount = input.discountAmount ?: 0,
         discountCode = input.discountCode ?: "Empty",
 
 

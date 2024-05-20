@@ -37,6 +37,8 @@ class ChangePriceActivity : AppCompatActivity() {
 
         handleEditText()
 
+        enableRefresh(false)
+
         handleSaveButton()
     }
 
@@ -138,16 +140,23 @@ class ChangePriceActivity : AppCompatActivity() {
                 val bedPrice = if (edChangePriceBedPrice.text.toString()
                         .isNotEmpty()
                 ) edChangePriceBedPrice.text.toString().toInt() else 0
+
                 val regulerPrice = if (edChangePriceRegular.text.toString()
                         .isNotEmpty()
                 ) edChangePriceRegular.text.toString().toInt() else 0
+
                 val exclusivePrice = if (edChangePriceExclusive.text.toString()
                         .isNotEmpty()
                 ) edChangePriceExclusive.text.toString().toInt() else 0
+
                 val discountCode = edChangePriceDiscount.text.toString().ifEmpty { "Empty" }
+
                 val discountPrice = if (edChangePriceDiscountPrice.text.toString()
                         .isNotEmpty()
                 ) edChangePriceDiscountPrice.text.toString().toInt() else 0
+
+                Timber.tag("BED").e(bedPrice.toString())
+                Timber.tag("DISC").e(discountPrice.toString())
 
                 changePriceViewModel.executeUpdateHotelPrice(
                     discountCode,
@@ -167,21 +176,27 @@ class ChangePriceActivity : AppCompatActivity() {
                                 showToast(price.message.toString())
                             }
                         }
+
                         is Resource.Loading -> {
                             showLoading(true)
                             isButtonEnabled(false)
                         }
+
                         is Resource.Message -> {
                             showLoading(false)
                             isButtonEnabled(true)
 
                             Timber.tag("AddItemInventoryActivity").d(price.message)
                         }
+
                         is Resource.Success -> {
                             showLoading(false)
                             isButtonEnabled(true)
 
                             if (price.data?.discountCode?.isNotEmpty()!! && price.data.discountAmount != 0) {
+                                Timber.tag("BED").e("Bos" + price.data.extraBedPrice.toString())
+                                Timber.tag("DISC").e("Bos" + price.data.discountAmount.toString())
+
                                 changePriceViewModel.saveSelectedHotelData(
                                     ManageHotel(
                                         id = price.data.id,
@@ -271,6 +286,7 @@ class ChangePriceActivity : AppCompatActivity() {
 
                 if (hotel.discount.isNotEmpty() && hotel.discount != "Empty") {
                     edChangePriceDiscount.setText(hotel.discount)
+                    Timber.tag("CHANGE").e(hotel.discountAmount.toString())
                     edChangePriceDiscountPrice.setText(hotel.discountAmount.toString())
                 }
             }
@@ -285,6 +301,10 @@ class ChangePriceActivity : AppCompatActivity() {
 
     private fun isButtonEnabled(isEnabled: Boolean) {
         binding.btnSave.isEnabled = isEnabled
+    }
+
+    private fun enableRefresh(isDisable: Boolean) {
+        binding.refChangePrice.isEnabled = isDisable
     }
 
     private fun showLoading(isLoading: Boolean) {

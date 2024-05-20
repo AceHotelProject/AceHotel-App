@@ -17,10 +17,15 @@ import com.google.gson.Gson
 import com.project.acehotel.R
 import com.project.acehotel.core.data.source.Resource
 import com.project.acehotel.core.domain.booking.model.AddBooking
-import com.project.acehotel.core.utils.*
+import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.core.utils.constants.RoomType
 import com.project.acehotel.core.utils.constants.mapToRoomType
+import com.project.acehotel.core.utils.formatNumber
 import com.project.acehotel.core.utils.full_image_view.FullImageViewActivity
+import com.project.acehotel.core.utils.isInternetAvailable
+import com.project.acehotel.core.utils.reduceFileImage
+import com.project.acehotel.core.utils.showToast
+import com.project.acehotel.core.utils.uriToFile
 import com.project.acehotel.databinding.ActivityConfirmBookingBinding
 import com.project.acehotel.features.dashboard.MainActivity
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
@@ -140,16 +145,19 @@ class ConfirmBookingActivity : AppCompatActivity() {
                             showToast(booking.message.toString())
                         }
                     }
+
                     is Resource.Loading -> {
                         showLoading(true)
                         isButtonEnabled(false)
                     }
+
                     is Resource.Message -> {
                         showLoading(false)
                         isButtonEnabled(true)
 
                         Timber.tag("ConfirmBookingActivity").d(booking.message)
                     }
+
                     is Resource.Success -> {
                         showLoading(false)
                         isButtonEnabled(true)
@@ -157,6 +165,8 @@ class ConfirmBookingActivity : AppCompatActivity() {
                         showToast("Booking baru telah berhasil ditambahkan")
 
                         val intentToMain = Intent(this, MainActivity::class.java)
+                        intentToMain.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intentToMain)
                     }
                 }
@@ -303,14 +313,17 @@ class ConfirmBookingActivity : AppCompatActivity() {
                                 showToast(visitor.message.toString())
                             }
                         }
+
                         is Resource.Loading -> {
                             showLoading(true)
                         }
+
                         is Resource.Message -> {
                             showLoading(false)
 
                             Timber.tag("ConfirmBookingActivity").d(visitor.message)
                         }
+
                         is Resource.Success -> {
                             showLoading(false)
 

@@ -18,8 +18,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val authUseCase: AuthUseCase,
     private val hotelUseCase: HotelUseCase,
-
-    ) : ViewModel() {
+) : ViewModel() {
 
     fun getUser() = authUseCase.getUser().asLiveData()
 
@@ -43,6 +42,7 @@ class LoginViewModel @Inject constructor(
         MediatorLiveData<String>().apply {
             addSource(saveRefreshToken(refreshToken)) { refreshToken ->
                 addSource(saveAccessToken(accessToken)) { accessToken ->
+
                     if (refreshToken && accessToken) {
                         addSource(getRefreshToken()) { token ->
                             value = token
@@ -61,12 +61,15 @@ class LoginViewModel @Inject constructor(
                     is Resource.Error -> {
                         value = false
                     }
+
                     is Resource.Loading -> {
 
                     }
+
                     is Resource.Message -> {
                         value = false
                     }
+
                     is Resource.Success -> {
                         val data = HotelDataMapper.mapHotelToManageHotel(hotel.data)
                         addSource(saveSelectedHotelData(data)) {

@@ -54,12 +54,15 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                         activity?.showToast(result.message.toString())
                                     }
                                 }
+
                                 is Resource.Loading -> {
                                     isButtonEnabled(false, view)
                                 }
+
                                 is Resource.Message -> {
                                     isButtonEnabled(true, view)
                                 }
+
                                 is Resource.Success -> {
                                     isButtonEnabled(true, view)
 
@@ -71,6 +74,7 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         }
                     }
                 }
+
                 DeleteDialogType.VISITOR_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus pengunjung ini?"
                     btnYes.setOnClickListener {
@@ -85,12 +89,15 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                         activity?.showToast(result.message.toString())
                                     }
                                 }
+
                                 is Resource.Loading -> {
                                     isButtonEnabled(false, view)
                                 }
+
                                 is Resource.Message -> {
                                     isButtonEnabled(true, view)
                                 }
+
                                 is Resource.Success -> {
                                     isButtonEnabled(true, view)
 
@@ -102,6 +109,7 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         }
                     }
                 }
+
                 DeleteDialogType.BOOKING_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus booking ini?"
                     btnYes.setOnClickListener {
@@ -116,12 +124,15 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                         activity?.showToast(booking.message.toString())
                                     }
                                 }
+
                                 is Resource.Loading -> {
                                     isButtonEnabled(false, view)
                                 }
+
                                 is Resource.Message -> {
                                     isButtonEnabled(true, view)
                                 }
+
                                 is Resource.Success -> {
                                     isButtonEnabled(true, view)
 
@@ -133,6 +144,7 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         }
                     }
                 }
+
                 DeleteDialogType.MANAGE_HOTEL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus cabang hotel ini?"
                     btnYes.setOnClickListener {
@@ -160,12 +172,15 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                         activity?.showToast(result.message.toString())
                                     }
                                 }
+
                                 is Resource.Loading -> {
                                     isButtonEnabled(false, view)
                                 }
+
                                 is Resource.Message -> {
                                     isButtonEnabled(true, view)
                                 }
+
                                 is Resource.Success -> {
                                     isButtonEnabled(true, view)
 
@@ -177,6 +192,7 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         }
                     }
                 }
+
                 DeleteDialogType.ROOM_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus kamar ini?"
                     btnYes.setOnClickListener {
@@ -191,12 +207,15 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                         activity?.showToast(result.message.toString())
                                     }
                                 }
+
                                 is Resource.Loading -> {
                                     isButtonEnabled(false, view)
                                 }
+
                                 is Resource.Message -> {
                                     isButtonEnabled(true, view)
                                 }
+
                                 is Resource.Success -> {
                                     isButtonEnabled(true, view)
 
@@ -208,6 +227,7 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                         }
                     }
                 }
+
                 DeleteDialogType.USER_DETAIL -> {
                     tvDesc.text = "Apakah Anda yakin ingin menghapus user ini?"
                     btnYes.setOnClickListener {
@@ -222,12 +242,15 @@ class DeleteItemDialog(private val deleteDialogType: DeleteDialogType, private v
                                         activity?.showToast(result.message.toString())
                                     }
                                 }
+
                                 is Resource.Loading -> {
                                     isButtonEnabled(false, view)
                                 }
+
                                 is Resource.Message -> {
                                     isButtonEnabled(true, view)
                                 }
+
                                 is Resource.Success -> {
                                     isButtonEnabled(true, view)
 

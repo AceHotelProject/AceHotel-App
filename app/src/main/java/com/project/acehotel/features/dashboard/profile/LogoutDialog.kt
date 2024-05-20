@@ -61,20 +61,4 @@ class LogoutDialog : DialogFragment() {
             }
         }
     }
-
-//    private fun logoutUser() {
-//        profileViewModel.deleteUser()
-//
-//        profileViewModel.getUser().observe(this) { user ->
-//
-//            if (user != null) {
-//                Timber.tag("TEST").e(user.toString())
-//                profileViewModel.deleteUser(user)
-//
-//                val intentToSplash = Intent(requireContext(), SplashActivity::class.java)
-//                startActivity(intentToSplash)
-//
-//            }
-//        }
-//    }
 }

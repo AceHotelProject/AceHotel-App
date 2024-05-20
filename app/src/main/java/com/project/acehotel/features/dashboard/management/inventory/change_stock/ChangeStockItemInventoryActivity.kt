@@ -20,7 +20,6 @@ import com.project.acehotel.databinding.ActivityChangeStockItemInventoryBinding
 import com.project.acehotel.features.dashboard.MainActivity
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ChangeStockItemInventoryActivity : AppCompatActivity() {
@@ -134,14 +133,17 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
                                     showToast(inventory.message.toString())
                                 }
                             }
+
                             is Resource.Loading -> {
                                 showLoading(true)
                                 isButtonEnabled(false)
                             }
+
                             is Resource.Message -> {
                                 showLoading(false)
                                 isButtonEnabled(true)
                             }
+
                             is Resource.Success -> {
                                 showLoading(false)
                                 isButtonEnabled(true)
@@ -213,11 +215,7 @@ class ChangeStockItemInventoryActivity : AppCompatActivity() {
     }
 
     private fun checkForms() {
-        Timber.tag("TEST").e("Stok" + (stockCount != tempStockCount).toString())
-        Timber.tag("TEST").e("Desc" + (!binding.edChangeStockItemDesc.text.isNullOrEmpty()))
-        Timber.tag("TEST").e("Title" + !binding.edChangeStockItemTitle.text.isNullOrEmpty())
-
-        isButtonEnabled(stockCount != tempStockCount && !binding.edChangeStockItemDesc.text.isNullOrEmpty() && !binding.edChangeStockItemTitle.text.isNullOrEmpty())
+        isButtonEnabled(!binding.edChangeStockItemDesc.text.isNullOrEmpty() && !binding.edChangeStockItemTitle.text.isNullOrEmpty())
     }
 
     private fun initItemInfo() {
