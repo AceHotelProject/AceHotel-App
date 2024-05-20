@@ -41,8 +41,19 @@ class RoomFragment : Fragment(), IUserLayout {
     private var roomBooked = 0
     private var roomAvail = 0
 
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentRoomBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        if (_binding == null) return
 
         handleButtonChangePrice()
 
@@ -58,7 +69,7 @@ class RoomFragment : Fragment(), IUserLayout {
     }
 
     private fun checkUserRole() {
-        roomViewModel.getUser().observe(requireActivity()) { user ->
+        roomViewModel.getUser().observe(viewLifecycleOwner) { user ->
             user.user?.role?.let {
                 changeLayoutByUser(it)
             }
@@ -69,7 +80,7 @@ class RoomFragment : Fragment(), IUserLayout {
         val filterDate = DateUtils.getDateThisDay()
 
         roomViewModel.executeGetListBookingByHotel(filterDate)
-            .observe(requireActivity()) { booking ->
+            .observe(viewLifecycleOwner) { booking ->
                 when (booking) {
                     is Resource.Error -> {
                         showLoading(false)
@@ -136,7 +147,7 @@ class RoomFragment : Fragment(), IUserLayout {
     }
 
     private fun fetchListRoom() {
-        roomViewModel.executeGetListRoomByHotel().observe(requireActivity()) { room ->
+        roomViewModel.executeGetListRoomByHotel().observe(viewLifecycleOwner) { room ->
             when (room) {
                 is Resource.Error -> {
                     showLoading(false)
@@ -185,7 +196,7 @@ class RoomFragment : Fragment(), IUserLayout {
     }
 
     private fun fetchHotelInfo() {
-        roomViewModel.getSelectedHotelData().observe(requireActivity()) { hotel ->
+        roomViewModel.getSelectedHotelData().observe(viewLifecycleOwner) { hotel ->
             hotelData = hotel
 
             binding.apply {
@@ -211,14 +222,6 @@ class RoomFragment : Fragment(), IUserLayout {
 
     private fun showLoading(isLoading: Boolean) {
         binding.refRoom.isRefreshing = isLoading
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentRoomBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onDestroyView() {

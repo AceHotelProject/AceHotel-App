@@ -19,7 +19,7 @@ import com.project.acehotel.databinding.ActivityAddBookingBinding
 import com.project.acehotel.features.dashboard.booking.confirm.ConfirmBookingActivity
 import com.project.acehotel.features.popup.token.TokenExpiredDialog
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
+import java.util.Calendar
 
 @AndroidEntryPoint
 class AddBookingActivity : AppCompatActivity() {
@@ -40,11 +40,7 @@ class AddBookingActivity : AppCompatActivity() {
 
         handleButtonBack()
 
-        isButtonEnabled(false)
-
         initFormData()
-
-        enableRefresh(false)
 
         handleEditText()
 
@@ -57,6 +53,10 @@ class AddBookingActivity : AppCompatActivity() {
         handleSaveButton()
 
         validateToken()
+
+        isButtonEnabled(false)
+
+        enableRefresh(false)
     }
 
     private fun validateToken() {
@@ -69,8 +69,8 @@ class AddBookingActivity : AppCompatActivity() {
 
     private fun initFormData() {
         binding.apply {
-            //for now we lock to only 1 room
-            //to add more room just create another booking
+            // for now we lock to only 1 room
+            // to add more room just create another booking
             edAddBookingBedCount.setText("0")
             edAddBookingRoomCount.setText("1")
             isEditTextEditable(edAddBookingRoomCount, false)
@@ -174,9 +174,13 @@ class AddBookingActivity : AppCompatActivity() {
     }
 
     private fun initVisitorInfo() {
-        var name = intent.getStringExtra(VISITOR_NAME)
+        val name = intent.getStringExtra(VISITOR_NAME)
+        val number = intent.getStringExtra(VISITOR_NUMBER)
 
-        binding.tvVisitorCardName.text = name
+        binding.apply {
+            tvVisitorCardName.text = name
+            tvVisitorNumber.text = "Nomor telepon : $number"
+        }
     }
 
     private fun handleEditText() {
@@ -334,6 +338,7 @@ class AddBookingActivity : AppCompatActivity() {
 
     companion object {
         private const val VISITOR_NAME = "name_visitor"
+        private const val VISITOR_NUMBER = "number_visitor"
         private const val VISITOR_ID = "name_id"
 
         private const val BOOKING_DATA = "booking_data"

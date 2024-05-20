@@ -164,12 +164,13 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
         binding.rvChooseVisitor.layoutManager = layoutManager
 
         adapter.setOnItemClickCallback(object : VisitorListAdapter.OnItemClickCallback {
-            override fun onItemClicked(id: String, name: String) {
+            override fun onItemClicked(id: String, name: String, number: String) {
                 when (intent.getStringExtra(FLAG_VISITOR)) {
                     MENU_BOOKING -> {
                         val intentToAddBooking =
                             Intent(this@ChooseVisitorActivity, AddBookingActivity::class.java)
                         intentToAddBooking.putExtra(VISITOR_NAME, name)
+                        intentToAddBooking.putExtra(VISITOR_NUMBER, number)
                         intentToAddBooking.putExtra(VISITOR_ID, id)
 
                         startActivity(intentToAddBooking)
@@ -214,6 +215,7 @@ class ChooseVisitorActivity : AppCompatActivity(), IManagementSearch {
     companion object {
         private const val FLAG_VISITOR = "flag_visitor"
         private const val VISITOR_NAME = "name_visitor"
+        private const val VISITOR_NUMBER = "number_visitor"
         private const val VISITOR_ID = "name_id"
 
         private const val MENU_BOOKING = "booking"

@@ -55,7 +55,7 @@ class HomeFragment : Fragment(), IUserLayout {
     }
 
     private fun checkUserRole() {
-        homeViewModel.getUser().observe(this) { user ->
+        homeViewModel.getUser().observe(requireActivity()) { user ->
             user.user?.role?.let {
                 changeLayoutByUser(it)
             }
@@ -82,7 +82,7 @@ class HomeFragment : Fragment(), IUserLayout {
     }
 
     private fun fetchHotelData() {
-        homeViewModel.getSelectedHotelData().observe(this) {
+        homeViewModel.getSelectedHotelData().observe(requireActivity()) {
             hotelData = it
         }
     }
@@ -98,7 +98,7 @@ class HomeFragment : Fragment(), IUserLayout {
     private fun fetchListBooking() {
         val date = DateUtils.getDateThisDay()
 
-        homeViewModel.executeGetListBookingByHotel(date).observe(this) { booking ->
+        homeViewModel.executeGetListBookingByHotel(date).observe(requireActivity()) { booking ->
             when (booking) {
                 is Resource.Error -> {
                     showLoading(false)

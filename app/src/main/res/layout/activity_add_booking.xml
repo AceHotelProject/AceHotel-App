@@ -91,10 +91,11 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/tv_visitor_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="Kunjungan terakhir : 01 Jan 2023"
+                        android:text="No Telp: 081338665666"
                         android:textColor="@color/dark_grey"
                         app:layout_constraintStart_toStartOf="@+id/tv_visitor_card_name"
                         app:layout_constraintTop_toBottomOf="@+id/tv_visitor_card_name" />
