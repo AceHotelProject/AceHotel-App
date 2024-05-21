@@ -29,7 +29,11 @@ import com.project.acehotel.features.dashboard.management.inventory.choose_item.
 import com.project.acehotel.features.dashboard.management.inventory.detail.InventoryDetailActivity
 import com.project.acehotel.features.dashboard.management.inventory.edit_reader.EditReaderActivity
 import dagger.hilt.android.AndroidEntryPoint
-import org.eclipse.paho.client.mqttv3.*
+import org.eclipse.paho.client.mqttv3.IMqttActionListener
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
+import org.eclipse.paho.client.mqttv3.IMqttToken
+import org.eclipse.paho.client.mqttv3.MqttCallback
+import org.eclipse.paho.client.mqttv3.MqttMessage
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -78,13 +82,16 @@ class InventoryFragment : Fragment(), IManagementSearch {
                         activity?.showToast(reader.message.toString())
                     }
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
                     Timber.tag("InventoryFragment").d(reader.message)
                 }
+
                 is Resource.Success -> {
                     binding.apply {
                         readerData = reader.data
@@ -169,12 +176,15 @@ class InventoryFragment : Fragment(), IManagementSearch {
                     is Resource.Error -> {
                         activity?.showLongToast("Tag tidak terdeteksi")
                     }
+
                     is Resource.Loading -> {
                         activity?.showLongToast("Reader sedang mendeteksi tag")
                     }
+
                     is Resource.Message -> {
                         activity?.showLongToast("Tag tidak terdeteksi")
                     }
+
                     is Resource.Success -> {
                         if (tag.data != null) {
                             activity?.showLongToast("Tag berhasil terdeteksi")
@@ -247,13 +257,16 @@ class InventoryFragment : Fragment(), IManagementSearch {
                         activity?.showToast(item.message.toString())
                     }
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
                     Timber.tag("InventoryDetailActivity").d(item.message)
                 }
+
                 is Resource.Success -> {
                     showLoading(false)
 
@@ -279,12 +292,15 @@ class InventoryFragment : Fragment(), IManagementSearch {
                     InventoryType.BED.type -> {
                         ++bedTotal
                     }
+
                     InventoryType.LINEN.type -> {
                         ++linenTotal
                     }
+
                     InventoryType.FOOD.type -> {
                         ++foodTotal
                     }
+
                     InventoryType.DRINK.type -> {
                         ++drinkTotal
                     }
@@ -342,6 +358,12 @@ class InventoryFragment : Fragment(), IManagementSearch {
 
     override fun onSearchQuery(query: String) {
         fetchInventoryItems(query)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 
     companion object {

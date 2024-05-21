@@ -126,13 +126,16 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
                 is Resource.Error -> {
                     showLoading(false)
                 }
+
                 is Resource.Loading -> {
                     showLoading(true)
                 }
+
                 is Resource.Message -> {
                     showLoading(false)
                     Timber.tag("FinanceFragment").d(booking.message)
                 }
+
                 is Resource.Success -> {
                     showLoading(false)
                     Timber.tag("FINANCE").e(booking.data.toString())
@@ -210,22 +213,33 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
             UserRole.MASTER -> {
 
             }
+
             UserRole.FRANCHISE -> {
 
             }
+
             UserRole.INVENTORY_STAFF -> {
                 binding.mainLayout.visibility = View.GONE
             }
+
             UserRole.RECEPTIONIST -> {
                 binding.mainLayout.visibility = View.GONE
             }
+
             UserRole.ADMIN -> {
 
             }
+
             UserRole.UNDEFINED -> {
                 binding.mainLayout.visibility = View.GONE
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        _binding = null
     }
 
     companion object {

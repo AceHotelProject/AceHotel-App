@@ -67,7 +67,7 @@ class BookingFragment : Fragment(), IUserLayout {
                 binding.edBookingSearch.clearFocus()
                 val manager =
                     activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                manager.hideSoftInputFromWindow(view?.getWindowToken(), 0)
+                manager.hideSoftInputFromWindow(view?.windowToken, 0)
                 true // consume the action
             } else {
                 false // pass on to other listeners.
@@ -101,7 +101,7 @@ class BookingFragment : Fragment(), IUserLayout {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentBookingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -126,18 +126,23 @@ class BookingFragment : Fragment(), IUserLayout {
             UserRole.MASTER -> {
 
             }
+
             UserRole.FRANCHISE -> {
 
             }
+
             UserRole.INVENTORY_STAFF -> {
                 binding.mainLayout.visibility = View.GONE
             }
+
             UserRole.RECEPTIONIST -> {
 
             }
+
             UserRole.ADMIN -> {
 
             }
+
             UserRole.UNDEFINED -> {
                 binding.mainLayout.visibility = View.GONE
             }

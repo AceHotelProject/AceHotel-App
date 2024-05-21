@@ -164,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:includeFontPadding="false"
-                        android:text="Total Booking"
+                        android:text="Total Cabang"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="@+id/imageView2"

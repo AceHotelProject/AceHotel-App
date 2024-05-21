@@ -167,6 +167,12 @@ class VisitorFragment : Fragment(), IManagementSearch, IUserLayout {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
+    }
+
     companion object {
         private const val VISITOR_ID = "visitor_id"
     }
