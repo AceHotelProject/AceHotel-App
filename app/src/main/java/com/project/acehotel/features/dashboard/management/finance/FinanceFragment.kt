@@ -116,47 +116,48 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
         var totalRevenue = 0
         var totalBooking = 0
 
-        financeViewModel.getSelectedHotelData().observe(this) { hotel ->
+        financeViewModel.getSelectedHotelData().observe(requireActivity()) { hotel ->
             exclusiveRoomPrice = hotel.exclusiveRoomPrice
             regularRoomPrice = hotel.regularRoomPrice
         }
 
-        financeViewModel.executeGetListBookingByHotel(filterDate).observe(this) { booking ->
-            when (booking) {
-                is Resource.Error -> {
-                    showLoading(false)
-                }
+        financeViewModel.executeGetListBookingByHotel(filterDate)
+            .observe(requireActivity()) { booking ->
+                when (booking) {
+                    is Resource.Error -> {
+                        showLoading(false)
+                    }
 
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
+                    is Resource.Loading -> {
+                        showLoading(true)
+                    }
 
-                is Resource.Message -> {
-                    showLoading(false)
-                    Timber.tag("FinanceFragment").d(booking.message)
-                }
+                    is Resource.Message -> {
+                        showLoading(false)
+                        Timber.tag("FinanceFragment").d(booking.message)
+                    }
 
-                is Resource.Success -> {
-                    showLoading(false)
-                    Timber.tag("FINANCE").e(booking.data.toString())
+                    is Resource.Success -> {
+                        showLoading(false)
+                        Timber.tag("FINANCE").e(booking.data.toString())
 
-                    if (booking.data != null) {
+                        if (booking.data != null) {
 
-                        for (item in booking.data) {
-                            if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout != "Empty") {
-                                totalRevenue += item.totalPrice
-                                totalBooking += item.roomCount
+                            for (item in booking.data) {
+                                if (item.room.first().actualCheckin != "Empty" && item.room.first().actualCheckout != "Empty") {
+                                    totalRevenue += item.totalPrice
+                                    totalBooking += item.roomCount
+                                }
                             }
-                        }
 
-                        binding.apply {
-                            tvFinanceTotalProfit.text = totalRevenue.toString()
-                            tvFinanceTotalBooking.text = totalBooking.toString()
+                            binding.apply {
+                                tvFinanceTotalProfit.text = totalRevenue.toString()
+                                tvFinanceTotalBooking.text = totalBooking.toString()
+                            }
                         }
                     }
                 }
             }
-        }
     }
 
 
@@ -177,7 +178,7 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
         binding.rvFinanceHistory.layoutManager = layoutManager
 
         financeViewModel.executeGetPagingListBookingByHotel(filterDate, true, "")
-            .observe(this) { booking ->
+            .observe(requireActivity()) { booking ->
                 lifecycleScope.launch {
                     adapter.submitData(booking)
                 }

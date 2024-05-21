@@ -171,7 +171,7 @@ class InventoryFragment : Fragment(), IManagementSearch {
     private fun handleButtonAddTag() {
         binding.btnAddTag.setOnClickListener {
 
-            inventoryViewModel.getTagById(READER_NAME).observe(this) { tag ->
+            inventoryViewModel.getTagById(READER_NAME).observe(requireActivity()) { tag ->
                 when (tag) {
                     is Resource.Error -> {
                         activity?.showLongToast("Tag tidak terdeteksi")
@@ -246,7 +246,7 @@ class InventoryFragment : Fragment(), IManagementSearch {
             name = query
         }
 
-        inventoryViewModel.fetchListInventory(name, type).observe(this) { item ->
+        inventoryViewModel.fetchListInventory(name, type).observe(requireActivity()) { item ->
             when (item) {
                 is Resource.Error -> {
                     showLoading(false)
