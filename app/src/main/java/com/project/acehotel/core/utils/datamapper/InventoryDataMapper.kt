@@ -80,9 +80,9 @@ object InventoryDataMapper {
 
     fun mapReaderResponseToDomain(input: ReaderResponse): Reader = Reader(
         id = input.id ?: "Empty",
-        powerGain = input.powerGain ?: 0,
+        tagExpired = input.tagExpired ?: 0,
         readInterval = input.readInterval ?: 0,
         readerName = input.readerName ?: "Empty",
-        isActive = input.id?.isNotEmpty() ?: true
+        isActive = input.status == "on",
     )
 }

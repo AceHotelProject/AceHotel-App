@@ -2,10 +2,12 @@ package com.project.acehotel.features.dashboard.management.inventory
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +37,7 @@ import org.eclipse.paho.client.mqttv3.IMqttToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import timber.log.Timber
+import java.time.Instant
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,6 +52,7 @@ class InventoryFragment : Fragment(), IManagementSearch {
     @Inject
     lateinit var mqttClient: MQTTService
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -97,7 +101,7 @@ class InventoryFragment : Fragment(), IManagementSearch {
                         readerData = reader.data
 
                         tvInventoryReaderStatus.text = "Aktif"
-                        tvInventoryPowerGain.text = "${reader.data?.powerGain.toString()} dB"
+                        tvInventoryPowerGain.text = "${reader.data?.tagExpired.toString()} dB"
                         tvInventoryReadInterval.text = "${reader.data?.readInterval.toString()} ms"
                         tvInventoryDate.text = DateUtils.getDateThisDay2()
                     }
@@ -220,6 +224,7 @@ class InventoryFragment : Fragment(), IManagementSearch {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleRefreshLayout(filter: String) {
         binding.apply {
             svInventory.viewTreeObserver.addOnScrollChangedListener {
@@ -234,6 +239,7 @@ class InventoryFragment : Fragment(), IManagementSearch {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchInventoryItems(query: String) {
         var type = ""
         var name = ""
@@ -317,11 +323,16 @@ class InventoryFragment : Fragment(), IManagementSearch {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initInventoryRecyclerView(listInventory: List<Inventory>?) {
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvListInventory.layoutManager = layoutManager
 
-        val adapter = InventoryListAdapter(listInventory)
+        val sortedListInventory = listInventory?.sortedByDescending { item ->
+            item.historyList.maxByOrNull { it.date }?.date?.let { Instant.parse(it) }
+        }
+
+        val adapter = InventoryListAdapter(sortedListInventory)
         binding.rvListInventory.adapter = adapter
 
         adapter.setOnItemClickCallback(object : InventoryListAdapter.OnItemClickCallback {
@@ -356,6 +367,7 @@ class InventoryFragment : Fragment(), IManagementSearch {
         binding.refInventory.isRefreshing = isLoading
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onSearchQuery(query: String) {
         fetchInventoryItems(query)
     }

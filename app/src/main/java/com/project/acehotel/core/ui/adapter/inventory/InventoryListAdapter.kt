@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.project.acehotel.core.domain.inventory.model.Inventory
 import com.project.acehotel.core.utils.DateUtils
 import com.project.acehotel.databinding.ItemListInventoryBinding
+import timber.log.Timber
 
 class InventoryListAdapter(private val listInventory: List<Inventory>?) :
     RecyclerView.Adapter<InventoryListAdapter.ViewHolder>() {
@@ -31,6 +32,8 @@ class InventoryListAdapter(private val listInventory: List<Inventory>?) :
 
         holder.binding.apply {
             if (data != null) {
+                Timber.tag("INVENTORY").e(data.historyList.last().date)
+
                 chipInventoryCardType.setStatus(data.type)
                 tvInventoryCardName.text = data.name
                 tvInventoryCardDesc.text =
