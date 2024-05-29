@@ -1,10 +1,12 @@
 <!-- git remote add origin https|ssh:path/to/the/repository.git  -->
 <!-- git pull origin main --rebase -->
 
+<div align="center">
 <h1> AceHotel - Hotel Management App with IOT Integration </h1>
 <a href="https://github.com/AceHotelProject/AceHotel-App">
     <img src="./img/acehotel.png" alt="readme-project-template">
 </a>
+</div>
 
 <!-- You can make badge by read on official documentation at https://shields.io/badges -->
 
