@@ -1,8 +1,8 @@
 <!-- git remote add origin https|ssh:path/to/the/repository.git  -->
 <!-- git pull origin main --rebase -->
-<div align="center">
+
 <h1> [Project Name] </h1>
-<a href="https://github.com/zero-911/readme-project-template/header.png">
+<a href="https://github.com/AceHotelProject/AceHotel-App">
     <img src="./img/header.png" alt="readme-project-template">
 </a>
 
@@ -24,12 +24,14 @@
 <a href="#-reference">Reference</a>&nbsp;&bull;&nbsp;
 <a href="#-issue">Issue</a>&nbsp;&bull;&nbsp;
 <a href="#-license">License</a>&nbsp;&bull;&nbsp;
-<a href="#-author">Author</a>
+<a href="#-author">I Putu Krisna Erlangga</a>
 </p>
 
 ## 📄 Introduction
 
-`[Project Name]`is a Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id rhoncus dapibus, diam nunc faucibus nisi, vel tincidunt nisl nunc vitae libero. Donec euismod, diam id rhoncus dapibus, diam nunc faucibus nisi, vel tincidunt nisl nunc vitae libero.
+This application addresses the need to enhance efficiency and service quality across multiple branches of Ace Hotel Surabaya. The hotel owner and staff faced various challenges, including booking management, inventory, room management, branch coordination, and financial oversight. Additionally, the owner struggled with employee supervision and monitoring hotel statistics.
+
+To tackle these issues, I devised over 12 complex features across more than 40 interfaces in the creation of `AceHotel` application. The application emphasizes a user-friendly system, featuring a dashboard and the use of a floating action button (FAB) to allow users to quickly access important features. It also incorporates user role validation, ensuring that each user can only access features relevant to their specific job at the hotel. Moreover, the application integrates IoT technology, including a Tag and Reader to facilitate monitoring and tracking of the hotel's inventory in real-time.
 
 ## 💻 Tech Stack
 
@@ -37,12 +39,19 @@
 
 <!-- You can search the logo with https://simpleicons.org and copy the name in logo=copyhere same with color after badge/YourText-YourColor-->
 
--
--
+- Kotlin
+- Android Studio
+- Postman
+- Retrofit
+- Hilt
+- DataStore
+- Room
+- NotificationManager
+- WorkManager
 
 ## ⚙️ Installation
 
-1. Clone this repository `git clone https://github.com/zer0-911/readme-project-template.git` or click `Clone or Download` button and then click `Download ZIP`
+1. Clone this repository `git clone https://github.com/AceHotelProject/AceHotel-App.git` or click `Clone or Download` button and then click `Download ZIP`
 2. Open this project in Android Studio
 3. Make sure your Android Virtual Device (AVD) is already activated
 4. Run the app
@@ -58,11 +67,14 @@
 
 <!-- If Needed -->
 
-- [Google](https://www.google.com)
-
+- [Clean Architecture](https://developer.android.com/topic/architecture)
+- [Hilt Dependency Injection](https://developer.android.com/training/dependency-injection/hilt-android)
+- [Retrofit](https://square.github.io/retrofit/)
+- [Room](https://developer.android.com/training/data-storage/room/)
+  
 ## 🚩 Issue
 
-If you found a bug or an issue, please report by opening a new issue on [this repository](https://github.com/zer0-911/paper-drone/issues).
+If you found a bug or an issue, please report by opening a new issue on [this repository](https://github.com/AceHotelProject/AceHotel-App/issues).
 
 ## 📝 License
 
