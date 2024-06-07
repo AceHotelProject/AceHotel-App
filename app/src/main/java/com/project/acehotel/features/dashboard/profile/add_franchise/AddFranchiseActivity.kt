@@ -1493,7 +1493,7 @@ class AddFranchiseActivity : AppCompatActivity() {
         private const val FLAG_HOTEL_UPDATE = "hotel_update"
 
         private const val HOTEL_ID = "hotel_id"
-
+            
         private const val IMAGE_SOURCE = "image_source"
 
         private const val DEFAULT_INITIAL_PASSWORD = "hotel12345"

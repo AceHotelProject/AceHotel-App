@@ -47,15 +47,17 @@ class HomeFragment : Fragment(), IUserLayout {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkUserRole()
+        if (binding != null) {
+            checkUserRole()
 
-        initialRecyclerView()
+            initialRecyclerView()
 
-        handleRefresh()
+            handleRefresh()
+        }
     }
 
     private fun checkUserRole() {
-        homeViewModel.getUser().observe(requireActivity()) { user ->
+        homeViewModel.getUser().observe(viewLifecycleOwner) { user ->
             user.user?.role?.let {
                 changeLayoutByUser(it)
             }
@@ -99,6 +101,7 @@ class HomeFragment : Fragment(), IUserLayout {
         val date = DateUtils.getDateThisDay()
 
         homeViewModel.executeGetListBookingByHotel(date).observe(requireActivity()) { booking ->
+            if (_binding == null) return@observe
             when (booking) {
                 is Resource.Error -> {
                     showLoading(false)

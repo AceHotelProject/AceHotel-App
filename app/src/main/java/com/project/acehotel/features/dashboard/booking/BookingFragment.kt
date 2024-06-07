@@ -40,7 +40,7 @@ class BookingFragment : Fragment(), IUserLayout {
     }
 
     private fun checkUserRole() {
-        bookingViewModel.getUser().observe(requireActivity()) { user ->
+        bookingViewModel.getUser().observe(viewLifecycleOwner) { user ->
             user.user?.role?.let { changeLayoutByUser(it) }
         }
     }

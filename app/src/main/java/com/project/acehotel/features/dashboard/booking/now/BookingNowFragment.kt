@@ -63,7 +63,7 @@ class BookingNowFragment : Fragment(), IManagementSearch {
 
         val filterDate = DateUtils.getDateThisDay()
         bookingNowViewModel.executeGetPagingListBookingByHotel(filterDate, false, visitorName)
-            .observe(this) { booking ->
+            .observe(viewLifecycleOwner) { booking ->
                 lifecycleScope.launch {
 
                     adapter.submitData(booking)

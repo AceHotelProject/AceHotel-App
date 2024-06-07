@@ -100,7 +100,8 @@ class InventoryFragment : Fragment(), IManagementSearch {
                     binding.apply {
                         readerData = reader.data
 
-                        tvInventoryReaderStatus.text = "Aktif"
+                        tvInventoryReaderStatus.text =
+                            if (reader.data?.isActive == true) "Aktif" else "Tidak Aktif"
                         tvInventoryPowerGain.text = "${reader.data?.tagExpired.toString()} dB"
                         tvInventoryReadInterval.text = "${reader.data?.readInterval.toString()} ms"
                         tvInventoryDate.text = DateUtils.getDateThisDay2()

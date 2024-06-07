@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Reader(
     val id: String,
-    val powerGain: Int,
+    val tagExpired: Int,
     val readInterval: Int,
     val readerName: String,
     val isActive: Boolean

@@ -43,14 +43,14 @@ class ProfileFragment : Fragment(), IUserLayout {
     }
 
     private fun checkUserRole() {
-        profileViewModel.getUser().observe(requireActivity()) { user ->
+        profileViewModel.getUser().observe(viewLifecycleOwner) { user ->
             user.user?.role?.let { changeLayoutByUser(it) }
         }
     }
 
     private fun initUserInfo() {
         binding.apply {
-            profileViewModel.getUser().observe(this@ProfileFragment) { user ->
+            profileViewModel.getUser().observe(viewLifecycleOwner) { user ->
                 tvUserEmail.text = user.user?.email
                 tvUsername.text = user.user?.username
                 chipUserRole.setStatus(user.user?.role?.role ?: "role")

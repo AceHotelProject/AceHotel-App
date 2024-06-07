@@ -43,7 +43,7 @@ class LogoutDialog : DialogFragment() {
     }
 
     private fun logoutUser() {
-        profileViewModel.getUser().observe(this) { user ->
+        profileViewModel.getUser().observe(requireActivity()) { user ->
             if (user != null) {
                 profileViewModel.deleteUser(user)
                 profileViewModel.deleteToken()
@@ -55,9 +55,10 @@ class LogoutDialog : DialogFragment() {
                 btnLogoutYes?.isEnabled = false
 
                 val intentToSplash = Intent(requireContext(), SplashActivity::class.java)
-                intentToSplash.flags =
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                intentToSplash.flags =
+//                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intentToSplash)
+                requireActivity().finish()
             }
         }
     }

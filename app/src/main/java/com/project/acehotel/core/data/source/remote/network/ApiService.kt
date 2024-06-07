@@ -6,7 +6,11 @@ import com.project.acehotel.core.data.source.remote.response.booking.AddBookingR
 import com.project.acehotel.core.data.source.remote.response.booking.BookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.ListBookingResponse
 import com.project.acehotel.core.data.source.remote.response.booking.PayBookingResponse
-import com.project.acehotel.core.data.source.remote.response.hotel.*
+import com.project.acehotel.core.data.source.remote.response.hotel.CreateHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.HotelRecapResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.HotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResponse
+import com.project.acehotel.core.data.source.remote.response.hotel.ManageHotelResultItem
 import com.project.acehotel.core.data.source.remote.response.images.UploadImagesResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryDetailResponse
 import com.project.acehotel.core.data.source.remote.response.inventory.InventoryListResponse
@@ -15,14 +19,29 @@ import com.project.acehotel.core.data.source.remote.response.note.NoteResponse
 import com.project.acehotel.core.data.source.remote.response.room.CheckoutBody
 import com.project.acehotel.core.data.source.remote.response.room.ListRoomResponse
 import com.project.acehotel.core.data.source.remote.response.room.RoomResponse
-import com.project.acehotel.core.data.source.remote.response.tag.*
+import com.project.acehotel.core.data.source.remote.response.tag.AddTagResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsByIdResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ListTagsResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ReaderQueryResponse
+import com.project.acehotel.core.data.source.remote.response.tag.ReaderResponse
 import com.project.acehotel.core.data.source.remote.response.user.ListUserResponse
 import com.project.acehotel.core.data.source.remote.response.user.UserResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.ListVisitorResponse
 import com.project.acehotel.core.data.source.remote.response.visitor.VisitorResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Path
+import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 
 interface ApiService {
@@ -137,7 +156,7 @@ interface ApiService {
 
     @GET("tag/id/{readerId}")
     suspend fun getTagById(
-        @Path("id") readerId: String
+        @Path("readerId") readerId: String
     ): ListTagsByIdResponse
 
     @GET("tag")
@@ -162,7 +181,7 @@ interface ApiService {
     suspend fun updateReader(
         @Path("id") readerId: String,
 
-        @Field("power_gain") powerGain: String,
+        @Field("tag_expired") powerGain: String,
         @Field("read_interval") readInterval: String
     ): ReaderResponse
 

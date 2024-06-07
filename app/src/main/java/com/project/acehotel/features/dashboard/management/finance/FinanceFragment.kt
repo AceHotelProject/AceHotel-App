@@ -59,7 +59,7 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
     }
 
     private fun checkUserRole() {
-        financeViewModel.getUser().observe(requireActivity()) { user ->
+        financeViewModel.getUser().observe(viewLifecycleOwner) { user ->
             user.user?.role?.let { changeLayoutByUser(it) }
         }
     }
@@ -116,13 +116,13 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
         var totalRevenue = 0
         var totalBooking = 0
 
-        financeViewModel.getSelectedHotelData().observe(requireActivity()) { hotel ->
+        financeViewModel.getSelectedHotelData().observe(viewLifecycleOwner) { hotel ->
             exclusiveRoomPrice = hotel.exclusiveRoomPrice
             regularRoomPrice = hotel.regularRoomPrice
         }
 
         financeViewModel.executeGetListBookingByHotel(filterDate)
-            .observe(requireActivity()) { booking ->
+            .observe(viewLifecycleOwner) { booking ->
                 when (booking) {
                     is Resource.Error -> {
                         showLoading(false)
@@ -178,7 +178,7 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
         binding.rvFinanceHistory.layoutManager = layoutManager
 
         financeViewModel.executeGetPagingListBookingByHotel(filterDate, true, "")
-            .observe(requireActivity()) { booking ->
+            .observe(viewLifecycleOwner) { booking ->
                 lifecycleScope.launch {
                     adapter.submitData(booking)
                 }
@@ -237,11 +237,12 @@ class FinanceFragment : Fragment(), IManagementSearch, IUserLayout {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
 
         _binding = null
     }
+
 
     companion object {
         private const val BOOKING_DATA = "booking_data"

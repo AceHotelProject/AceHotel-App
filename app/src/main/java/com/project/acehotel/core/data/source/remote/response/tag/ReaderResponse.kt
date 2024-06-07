@@ -4,15 +4,18 @@ import com.google.gson.annotations.SerializedName
 
 data class ReaderResponse(
 
-	@field:SerializedName("read_interval")
-	val readInterval: Int? = null,
+    @field:SerializedName("read_interval")
+    val readInterval: Int? = null,
 
-	@field:SerializedName("reader_name")
-	val readerName: String? = null,
+    @field:SerializedName("reader_name")
+    val readerName: String? = null,
 
-	@field:SerializedName("power_gain")
-	val powerGain: Int? = null,
+    @field:SerializedName("tag_expired")
+    val tagExpired: Int? = null,
 
-	@field:SerializedName("id")
-	val id: String? = null
+    @field:SerializedName("status")
+    val status: String? = null,
+
+    @field:SerializedName("id")
+    val id: String? = null
 )

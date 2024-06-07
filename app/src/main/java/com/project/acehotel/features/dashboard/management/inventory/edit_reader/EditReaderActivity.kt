@@ -36,20 +36,20 @@ class EditReaderActivity : AppCompatActivity() {
 
         handleButtonBack()
 
-        enableRefresh(false)
-
         handleEditText()
 
         handleSaveButton()
 
         validateToken()
+
+        enableRefresh(false)
     }
 
     private fun initReaderData() {
         val readerData = Gson().fromJson(intent.getStringExtra(READER_DATA), Reader::class.java)
 
         binding.apply {
-            edEditReaderPower.setText(readerData.powerGain.toString())
+            edEditReaderPower.setText(readerData.tagExpired.toString())
             edEditReaderRead.setText(readerData.readInterval.toString())
             tbReader.isChecked = readerData.isActive
             edEditReaderDate.setText(DateUtils.getDateThisDay2())
@@ -128,16 +128,19 @@ class EditReaderActivity : AppCompatActivity() {
                                     showToast(reader.message.toString())
                                 }
                             }
+
                             is Resource.Loading -> {
                                 showLoading(true)
                                 isButtonEnabled(false)
                             }
+
                             is Resource.Message -> {
                                 showLoading(false)
                                 isButtonEnabled(true)
 
                                 Timber.tag("EditReaderActivity").d(reader.message)
                             }
+
                             is Resource.Success -> {
                                 showLoading(false)
                                 isButtonEnabled(true)
@@ -161,16 +164,19 @@ class EditReaderActivity : AppCompatActivity() {
                                 showToast(reader.message.toString())
                             }
                         }
+
                         is Resource.Loading -> {
                             showLoading(true)
                             isButtonEnabled(false)
                         }
+
                         is Resource.Message -> {
                             showLoading(false)
                             isButtonEnabled(true)
 
                             Timber.tag("EditReaderActivity").d(reader.message)
                         }
+
                         is Resource.Success -> {
                             showLoading(false)
                             isButtonEnabled(true)
